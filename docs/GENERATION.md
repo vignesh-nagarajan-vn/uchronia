@@ -7,7 +7,9 @@
 3. **Era loop** ✅ — per era: `derive-pressures` (3–7 tensions read off the state, §4.3) → `era-generate` (snapshot + pressures + dial + distance) → dual review → commit → convergence scan. One `POST /api/branches/:id/generate` runs seed + all eras to the horizon.
 4. **Convergence scan** ✅ — after each era, accepted events are compared against nearby baseline anchors; genuine matches become `ConvergencePoint`s and flag their events (P3)
 5. **Lazy expanders** ✅ — event detail (conditioned on causes/effects and the state *as of that event*), era deep-dives (essay over pressures + events, flips status to `expanded`), and branch-local biographies (held to every ledger line). All fill exactly once; detail on a shared pre-fork event is the same history for every descendant, so the fill is shared. Routes: `POST /api/branches/:b/events/:id/expand` · `/eras/:id/expand` · `/entities/:id/biography`. Artifacts land at M8.
-6. Branch fork with optional sub-POD (M7)
+6. **Branch fork** ✅ — `POST /api/branches/:id/fork {eventId, name?, subPodText?}`: the optional sub-POD is normalized to a clean statement; the child's era plan starts at the fork year (2-year sub-seed window, then widening) and its first own era opens with the sub-divergence landing. `GET /api/compare?a=&b=` aligns two branches (shared prefix + divergence point) or a branch against the curated record (`b=baseline`).
+
+**Parallel-branch slugs.** Slugs are timeline-unique but visibility is branch-local, so a branch may introduce an entity whose slug lives on a segment it cannot see (a live model couldn't know either). Draft resolution renames deterministically (`slug-2`, …) with a streamed warning; batch-internal references keep the original handle.
 
 ## Era planning & resume
 
