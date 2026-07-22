@@ -3,11 +3,15 @@
 ## Stages (§4.1)
 
 1. **POD intake** ✅ — freeform text → normalized `PointOfDivergence` + baseline-context summary (runs inside `POST /api/timelines`)
-2. **Seed consequences** ✅ — years ~0–2 after the POD: 3–5 high-confidence events (no wildcards, plausibility ≥ 0.6), founding the entity roster; `POST /api/branches/:id/generate`
-3. **Dual review** ✅ (per batch) — machine validator → critic → accept / regenerate (≤2) / mark disputed; era loop with pressures lands at M5
-4. Convergence scan against baseline anchors (M5)
+2. **Seed consequences** ✅ — years ~0–2 after the POD: 3–5 high-confidence events (no wildcards, plausibility ≥ 0.6), founding the entity roster
+3. **Era loop** ✅ — per era: `derive-pressures` (3–7 tensions read off the state, §4.3) → `era-generate` (snapshot + pressures + dial + distance) → dual review → commit → convergence scan. One `POST /api/branches/:id/generate` runs seed + all eras to the horizon.
+4. **Convergence scan** ✅ — after each era, accepted events are compared against nearby baseline anchors; genuine matches become `ConvergencePoint`s and flag their events (P3)
 5. Lazy expanders: event detail, biographies, era deep-dive (M6), artifacts (M8)
 6. Branch fork with optional sub-POD (M7)
+
+## Era planning & resume
+
+`planEraSpans(originYear, horizonEnd)` (`core/src/pipeline/plan.ts`) fixes a branch's era plan up front: a 2-year seed window, then Fibonacci-widening spans (8, 13, 21, 34, 55, …) — disciplined near the POD, roomy decades out (P2). Era ordinals index straight into the plan, so **an interrupted run resumes at `plan[ownEras.length]`** — no reseeding, no duplicates. Batch size grows with distance: `4 + min(3, ⌊distance/40⌋)`. Origin year is the POD for roots, the fork event's year for children (M7).
 
 ## Structured output
 
@@ -53,8 +57,15 @@ Templates in `packages/core/src/prompts/`, one file each, `id` + semver `version
 | `seed-consequences` | First 0–2 years: disciplined events + entity roster + era header | 1.0.0 | generation |
 | `critic-review` | Skeptical-historian verdicts over one draft batch | 1.0.0 | critic |
 | `regenerate-event` | One bounded replacement for a flagged draft | 1.0.0 | generation |
+| `derive-pressures` | 3–7 named tensions from the state snapshot (+ dial's attractor pull) | 1.0.0 | critic |
+| `era-generate` | One era of consequences from snapshot + pressures + dial + distance | 1.0.0 | generation |
+| `convergence-scan` | Conservative rhyme-detection against baseline anchors | 1.0.0 | critic |
 
-*(derive-pressures, era-generate, convergence-scan, event-expand, entity-biography, era-deepdive, artifact-\* land at M5–M8.)*
+*(event-expand, entity-biography, era-deepdive, artifact-\* land at M6–M8.)*
+
+## Baseline dataset
+
+`packages/core/data/baseline.json` — **203 hand-curated anchors** spanning 4000 BC → 2000 CE across every region and all five lenses (`provenance: "curated"`). Powers the record spine (F7), convergence candidates (anchors within an era-width+25y window of each era's midpoint), and the pressures step's attractor hints at high dial values.
 
 ## Dual review — critic rubric & retry flow (§4.5, P4)
 

@@ -9,7 +9,7 @@ Mirrors §13 of the master prompt ([MASTER_PROMPT reference](../CLAUDE.md)). Upd
 | M2 — Persistence & API skeleton | ✅ 2026-07-22 | Drizzle schema + committed migrations, Repo layer, LLMProvider port + structured repair loop, deterministic MockProvider (pod intake works for arbitrary text), CRUD/import/export/branch-view routes; 81 tests green |
 | M3 — Generation v1 | ✅ 2026-07-22 | Seed pipeline (drafts→resolution→clone-validation→commit), dial mapping, AnthropicProvider (structured outputs via output_config.format, streaming, typed errors), SSE generate route with persist-before-stream and clean abort; mock parity incl. flavor banks; 96 tests green |
 | M4 — Critic & validation loop | ✅ 2026-07-22 | refineBatch dual review: clone-validated machine rules + critic rubric, bounded regeneration, drop vs dispute sentencing, wildcard plausibility floor, CritiqueReports persisted + streamed; retry/dispute/drop paths each tested |
-| M5 — Era engine | ⬜ | |
+| M5 — Era engine | ✅ 2026-07-22 | Fibonacci era plan with resume-by-ordinal, pressures step (+ dial attractor pull), era-generate, convergence scan against the record; baseline.json authored (203 curated anchors); mock demo paths (revise at era 1, dispute at era 2); 106 tests green |
 | M6 — Lazy expansion | ⬜ | |
 | M7 — Branching | ⬜ | |
 | M8 — Artifacts | ⬜ | |

@@ -56,4 +56,4 @@ Every row carries `provenance`: `generated` (model, templateId, templateVersion,
 
 ## Baseline dataset
 
-`packages/core/data/baseline.json` — ~200 curated real-history anchors (authored at M5) powering the record spine (F7) and convergence detection. `provenance: "curated"`, never generated.
+`packages/core/data/baseline.json` — 203 hand-curated real-history anchors (4000 BC → 2000 CE, every region, all five lenses) powering the record spine (F7), convergence detection, and high-dial attractor hints. `provenance: "curated"`, never generated.

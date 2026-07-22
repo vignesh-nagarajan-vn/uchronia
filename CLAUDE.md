@@ -34,8 +34,9 @@ packages/schemas   Zod-first schemas + inferred types + fixtures (zero deps beyo
 packages/core      Pure engine. IO only via injected ports (provider/clock/rng/idgen).
   src/world.ts       World store: structural-sharing fork resolution, state replay, guards
   src/validator.ts   machine validator (8 pure rules) — validateBranch/validateWorld
-  src/pipeline/      run.ts (orchestrator), drafts.ts (LLM drafts→rows), structured.ts
-                     (zod + bounded repair loop), events.ts (PipelineEvent stream types)
+  src/pipeline/      run.ts (seed + era loop + convergence), plan.ts (era spans, resume),
+                     critic.ts (dual review), drafts.ts (LLM drafts→rows), structured.ts
+                     (zod + repair loop), context.ts (state summaries), events.ts (stream types)
   src/prompts/       registry + templates (pod-normalize, seed-consequences, …) + fragments
   src/mock/          MockProvider + per-template handlers + flavor banks
   src/dial.ts        determinism dial → concrete generation parameters (§4.4)
