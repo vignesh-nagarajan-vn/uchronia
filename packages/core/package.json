@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@uchronia/schemas": "workspace:*",
+    "ulid": "^3.0.1",
     "zod": "^4.1.12"
   },
   "devDependencies": {
