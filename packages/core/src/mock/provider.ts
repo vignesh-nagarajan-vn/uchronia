@@ -2,6 +2,12 @@ import type { LLMProvider, StructuredRequest, StructuredResult } from '../llm.js
 import { ProviderResponseError } from '../llm.js'
 import type { Rng } from '../rng.js'
 import { seededRng } from '../rng.js'
+import {
+  mockArtifactEncyclopedia,
+  mockArtifactLetter,
+  mockArtifactNewspaper,
+  mockArtifactPoster,
+} from './artifacts.js'
 import { mockConvergenceScan } from './convergence.js'
 import { mockCriticReview, mockRegenerateEvent } from './critic.js'
 import { mockEraGenerate } from './era.js'
@@ -57,4 +63,8 @@ const DEFAULT_HANDLERS: Record<string, MockHandler> = {
   'event-expand': mockEventExpand,
   'era-deepdive': mockEraDeepDive,
   'entity-biography': mockBiography,
+  'artifact-newspaper': mockArtifactNewspaper,
+  'artifact-letter': mockArtifactLetter,
+  'artifact-encyclopedia': mockArtifactEncyclopedia,
+  'artifact-poster': mockArtifactPoster,
 }
