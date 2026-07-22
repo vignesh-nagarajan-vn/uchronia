@@ -3,6 +3,7 @@ import { ProviderResponseError } from '../llm.js'
 import type { Rng } from '../rng.js'
 import { seededRng } from '../rng.js'
 import { mockPodNormalize } from './pod-normalize.js'
+import { mockSeedConsequences } from './seed.js'
 
 export type MockHandler = (args: unknown, rng: Rng) => unknown
 
@@ -42,4 +43,5 @@ export class MockProvider implements LLMProvider {
 
 const DEFAULT_HANDLERS: Record<string, MockHandler> = {
   'pod-normalize': mockPodNormalize,
+  'seed-consequences': mockSeedConsequences,
 }
