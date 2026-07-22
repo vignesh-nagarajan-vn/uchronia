@@ -1,10 +1,10 @@
-# CLAUDE.md — agent onboarding contract
+# CLAUDE.md: agent onboarding contract
 
 This file is the single source of truth for any agent session in this repository. A fresh agent reading only this file must be able to work productively. **Last verified: 2026-07-22 (v0.1.0).**
 
 ## 1. What Uchronia is
 
-**Uchronia** (yoo-KROH-nee-uh; 1876, the temporal counterpart of *utopia* — a time that never was) is an alternate-history engine: *git rebase for history*. The user picks or writes a **Point of Divergence (POD)** and watches history re-derive itself era by era, drills into events, reads in-world biographies and fake primary sources, forks sub-branches, and compares everything against the real record.
+**Uchronia** (yoo-KROH-nee-uh; 1876, the temporal counterpart of *utopia*, a time that never was) is an alternate-history engine: *git rebase for history*. The user picks or writes a **Point of Divergence (POD)** and watches history re-derive itself era by era, drills into events, reads in-world biographies and fake primary sources, forks sub-branches, and compares everything against the real record.
 
 It is not a listicle generator. It is a lightweight causal simulation wearing a literary interface: generation is grounded in explicit, mutable world-state; every claim is auditable through a causal graph; a machine validator plus a skeptical LLM critic police consistency; prose is the surface, the graph is the truth.
 
@@ -14,12 +14,12 @@ The build is driven by a master prompt (mirrored expectations live throughout `d
 
 | Term | Meaning |
 | --- | --- |
-| **POD** | Point of Divergence — the moment history splits (e.g. "Constantinople holds, 1453") |
+| **POD** | Point of Divergence: the moment history splits (e.g. "Constantinople holds, 1453") |
 | **branch** | One derived history. The root branch descends from the POD; forks create child branches with structural sharing (no copying; parent-chain walk up to the fork event) |
 | **era** | A span of years on a branch; unit of generation (skeleton → expanded) |
 | **dial** | Determinism control 0–100: butterfly (contingency compounds) → railroad (structural attractors pull history back) |
 | **lens** | Register filter: political / technological / cultural / economic / daily-life |
-| **convergence** | A divergent event that rhymes back into a real-history baseline anchor — first-class marks |
+| **convergence** | A divergent event that rhymes back into a real-history baseline anchor; surfaced as first-class marks |
 | **disputed** | An event the critic kept flagging after bounded retries; kept, visibly marked, critic notes attached |
 | **record vs. ink** | *Record* = curated real history (Prussian blue, `provenance: curated`). *Ink* = generated content (iron-gall ink, full provenance: model, template id+version, timestamp, mock/live) |
 | **pressures** | 3–7 named tensions derived from world-state, feeding the next era's generation |
@@ -33,7 +33,7 @@ packages/schemas   Zod-first schemas + inferred types + fixtures (zero deps beyo
   src/fixtures/      hand-built "Constantinople holds" world (import via @uchronia/schemas/fixtures)
 packages/core      Pure engine. IO only via injected ports (provider/clock/rng/idgen).
   src/world.ts       World store: structural-sharing fork resolution, state replay, guards
-  src/validator.ts   machine validator (8 pure rules) — validateBranch/validateWorld
+  src/validator.ts   machine validator (8 pure rules): validateBranch/validateWorld
   src/pipeline/      run.ts (seed + era loop + convergence), plan.ts (era spans, resume),
                      critic.ts (dual review), drafts.ts (LLM drafts→rows), structured.ts
                      (zod + repair loop), context.ts (state summaries), events.ts (stream types)
@@ -47,26 +47,26 @@ packages/core      Pure engine. IO only via injected ports (provider/clock/rng/i
 apps/server        Hono. Routes + SSE, AnthropicProvider, Drizzle + better-sqlite3.
   src/config.ts      env parsing; ANTHROPIC_API_KEY lives here and only here
   src/deps.ts        ServerDeps injection (repo/provider/idgen/clock); tests build their own
-  src/providers/     anthropic.ts — live provider (structured outputs, streaming, typed errors)
+  src/providers/     anthropic.ts: live provider (structured outputs, streaming, typed errors)
   src/app.ts         app factory + error→HTTP mapping; src/index.ts = listener
   src/routes/        meta (config/baseline), timelines (CRUD+import/export+compare),
                      branches (view + md/html export), generate (SSE; persist-before-stream),
                      expand (event/era/entity), fork, artifacts
-  src/views.ts       assembleBranchView — World → BranchView
+  src/views.ts       assembleBranchView: World → BranchView
   src/exporters.ts   renderMarkdown + renderStaticHtml (self-contained, no-JS edition)
   src/db/            schema.ts (drizzle), client.ts (open+migrate), repo.ts
   drizzle/           committed SQL migrations (regenerate: pnpm migrate after schema edits)
 apps/web           Vite + React. RED THREAD interface (docs/DESIGN.md is binding)
-  src/styles/        index.css — all §7 tokens (Survey + Nitrate themes), fonts via @fontsource
+  src/styles/        index.css: all §7 tokens (Survey + Nitrate themes), fonts via @fontsource
   src/lib/           api.ts (typed client) · sse.ts + generation.ts (stream → query cache) ·
                      theme.tsx · thread-geometry.ts (red-thread curves) · gallery.ts · format.ts
   src/components/    Shell, Stamp, EventCard, EraHeader, RecordTick, ThreadOverlay,
                      DialControl, ForkDialog, ShortcutsDialog
   src/views/         Atlas (composer+catalogue), TimelineView (virtualized spine),
                      EventDetail, Dossier, DeltaView, CompareView, ArtifactReader, SettingsView
-  e2e/               journey.spec.ts — the §11.3 Playwright journey (mock mode)
+  e2e/               journey.spec.ts: the §11.3 Playwright journey (mock mode)
 docs/              ARCHITECTURE, DATA_MODEL, GENERATION, DESIGN(+NOTES), TESTING, ROADMAP, adr/
-demo/              the-unburnt-library.uchronia.json — importable showcase timeline
+demo/              the-unburnt-library.uchronia.json (importable showcase timeline)
 ```
 
 Dependency direction: web → server → core → schemas (schemas shared by all). The pipeline lives in `packages/core/src/pipeline/` (from M3); prompts in `packages/core/src/prompts/` (from M3).
@@ -87,7 +87,7 @@ pnpm typecheck              # tsc --noEmit, all packages
 pnpm lint                   # biome check (format + lint)
 pnpm lint:fix               # biome check --write
 pnpm build                  # all packages (web: vite build; server: esbuild bundle)
-pnpm migrate                # drizzle-kit generate — new migration after schema edits
+pnpm migrate                # drizzle-kit generate: new migration after schema edits
                             # (migrations APPLY automatically at server start)
 pnpm e2e                    # playwright mock-mode journey (boots server+web itself, keyless;
                             # first run: pnpm --filter @uchronia/web exec playwright install chromium)
@@ -110,11 +110,11 @@ Per package: `pnpm --filter @uchronia/<schemas|core|server|web> <script>`.
 
 - Schemas are Zod-first in `packages/schemas`; everything an LLM produces is validated before touching any store. Summary + fork semantics: [docs/DATA_MODEL.md](docs/DATA_MODEL.md).
 - Pipeline: POD intake → seed consequences → era loop (snapshot + pressures + dial → validate → critique → accept/regenerate/dispute) → convergence scan; lazy expanders for detail/biographies/artifacts. Details + prompt registry + dial mapping: [docs/GENERATION.md](docs/GENERATION.md).
-- Design system RED THREAD: [docs/DESIGN.md](docs/DESIGN.md) — finalized before the first UI commit (§7.8) and binding for all UI work; realization log in [docs/DESIGN_NOTES.md](docs/DESIGN_NOTES.md). Two hard rules worth repeating: record blue is reserved for attested history, thread red for divergence/causality — neither is ever decoration.
+- Design system RED THREAD: [docs/DESIGN.md](docs/DESIGN.md), finalized before the first UI commit (§7.8) and binding for all UI work; realization log in [docs/DESIGN_NOTES.md](docs/DESIGN_NOTES.md). Two hard rules worth repeating: record blue is reserved for attested history, thread red for divergence/causality; neither is ever decoration.
 
 ## 7. Engineering conventions
 
-- **Commits**: Conventional Commits, `type(scope): imperative subject ≤ 72 chars`. Types: feat fix test docs chore refactor perf ci. Scopes: repo schemas core server web prompts design docs ci. Atomic — one logical change (+ its tests + its doc updates); never mix features, or refactor with feature. 5–15 commits per milestone. Push at milestone boundaries.
+- **Commits**: Conventional Commits, `type(scope): imperative subject ≤ 72 chars`. Types: feat fix test docs chore refactor perf ci. Scopes: repo schemas core server web prompts design docs ci. Atomic: one logical change (+ its tests + its doc updates); never mix features, or refactor with feature. 5–15 commits per milestone. Push at milestone boundaries.
 - **Code**: TS strict, no `any` (Biome enforces). `packages/core` stays pure (IO via injected ports only). All LLM output Zod-validated at the boundary. Typed error taxonomy. Secrets never logged/committed/sent to client.
 - **Tests**: matrix in [docs/TESTING.md](docs/TESTING.md). A milestone is done only when its acceptance criteria pass.
 - **Docs**: see the sync directive below. ADRs in `docs/adr/` for every deviation from the master prompt.
@@ -122,7 +122,7 @@ Per package: `pnpm --filter @uchronia/<schemas|core|server|web> <script>`.
 
 ## 8. Current status
 
-**v0.1.0 shipped** — all milestones M0–M12 complete; see [docs/ROADMAP.md](docs/ROADMAP.md) for the honest per-milestone record and open threads (notably: live mode is wired but untested against the real API from this machine; M9–M12 landed as consolidated commits per user direction). The full mock-mode product works keyless: `UCHRONIA_MOCK=1 pnpm dev`, or import `demo/the-unburnt-library.uchronia.json` from Settings.
+**v0.1.0 shipped**: all milestones M0–M12 complete; see [docs/ROADMAP.md](docs/ROADMAP.md) for the honest per-milestone record and open threads (notably: live mode is wired but untested against the real API from this machine; M9–M12 landed as consolidated commits per user direction). The full mock-mode product works keyless: `UCHRONIA_MOCK=1 pnpm dev`, or import `demo/the-unburnt-library.uchronia.json` from Settings.
 
 ## 9. Documentation sync directive (binding)
 

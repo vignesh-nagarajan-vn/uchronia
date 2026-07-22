@@ -14,13 +14,13 @@ As specified in §6: pnpm workspaces · TypeScript strict everywhere, no `any` �
 Choices the spec left open, resolved here:
 
 1. **Node**: `engines >= 22.12`. CI pins Node 22 (the spec's LTS); local development on Node 24 is supported and exercised.
-2. **Zod v4** — current major; native `z.toJSONSchema` is useful for structured-output plumbing.
-3. **Source exports** — internal packages export TypeScript source directly (`"exports": "./src/index.ts"`). Vitest, tsx, Vite, and esbuild all consume TS source; no build orchestration or project references needed. "Build" per package is `tsc --noEmit` (types are the artifact) except the deployable apps: web bundles via Vite, server bundles via esbuild (`better-sqlite3` external — native module).
+2. **Zod v4**: current major; native `z.toJSONSchema` is useful for structured-output plumbing.
+3. **Source exports**: internal packages export TypeScript source directly (`"exports": "./src/index.ts"`). Vitest, tsx, Vite, and esbuild all consume TS source; no build orchestration or project references needed. "Build" per package is `tsc --noEmit` (types are the artifact) except the deployable apps: web bundles via Vite, server bundles via esbuild (`better-sqlite3` external, a native module).
 4. **ULIDs** via the `ulid` package, wrapped behind an injected `IdGen` port so tests and mock mode can use deterministic factories.
 5. **Routing** in the web app via `react-router` in plain library mode (not the framework). Ephemeral UI state lives in React state/context; Zustand stays out unless a real need appears (per §6).
-6. **Fonts self-hosted** via `@fontsource/*` (IM Fell English, Spectral, IBM Plex Mono) — no external font CDN, works offline, CSP-clean.
-7. **pnpm ≥ 10 build allowlist** — `onlyBuiltDependencies: [better-sqlite3, esbuild]` in `pnpm-workspace.yaml`, since pnpm blocks postinstall scripts by default.
-8. **Anthropic structured outputs** — the SDK's current mechanism is `output_config.format` (JSON schema), verified against the API docs at build time; model IDs `claude-sonnet-4-6` (generation) and `claude-haiku-4-5-20251001` (critic) confirmed active. Both are configuration (`UCHRONIA_MODEL_*`), not constants.
+6. **Fonts self-hosted** via `@fontsource/*` (IM Fell English, Spectral, IBM Plex Mono): no external font CDN, works offline, CSP-clean.
+7. **pnpm ≥ 10 build allowlist**: `onlyBuiltDependencies: [better-sqlite3, esbuild]` in `pnpm-workspace.yaml`, since pnpm blocks postinstall scripts by default.
+8. **Anthropic structured outputs**: the SDK's current mechanism is `output_config.format` (JSON schema), verified against the API docs at build time; model IDs `claude-sonnet-4-6` (generation) and `claude-haiku-4-5-20251001` (critic) confirmed active. Both are configuration (`UCHRONIA_MODEL_*`), not constants.
 
 ## Consequences
 

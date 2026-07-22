@@ -13,4 +13,4 @@ What we chose.
 
 ## Consequences
 
-What follows — good, bad, and deferred.
+What follows: good, bad, and deferred.
