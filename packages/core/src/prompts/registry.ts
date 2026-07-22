@@ -1,3 +1,9 @@
+import {
+  artifactEncyclopedia,
+  artifactLetter,
+  artifactNewspaper,
+  artifactPoster,
+} from './artifacts.js'
 import { convergenceScan } from './convergence-scan.js'
 import { criticReview } from './critic-review.js'
 import { derivePressures } from './derive-pressures.js'
@@ -25,6 +31,10 @@ export const PROMPT_REGISTRY: Record<string, PromptTemplate<any, any>> = {
   [eventExpand.id]: eventExpand,
   [eraDeepDive.id]: eraDeepDive,
   [entityBiography.id]: entityBiography,
+  [artifactNewspaper.id]: artifactNewspaper,
+  [artifactLetter.id]: artifactLetter,
+  [artifactEncyclopedia.id]: artifactEncyclopedia,
+  [artifactPoster.id]: artifactPoster,
 }
 
 export function templateVersions(): Array<{ id: string; version: string; role: string }> {
