@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest'
-import { createApp } from './app.js'
 import { loadConfig } from './config.js'
+import { makeTestApp } from './test-helpers.js'
 
 describe('server app', () => {
   it('reports health and mock mode', async () => {
-    const app = createApp(loadConfig({ UCHRONIA_MOCK: '1' }))
+    const { app } = makeTestApp()
     const res = await app.request('/api/health')
     expect(res.status).toBe(200)
     expect(await res.json()).toEqual({ ok: true, mock: true })
