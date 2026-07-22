@@ -1,0 +1,75 @@
+import { z } from 'zod'
+import { Artifact } from './artifact.js'
+import { Branch } from './branch.js'
+import { ConvergencePoint } from './convergence.js'
+import { CausalEdge } from './edge.js'
+import { EntityBiography, EntityView } from './entity.js'
+import { Era } from './era.js'
+import { EventView } from './event.js'
+import { Lens } from './lens.js'
+import { PointOfDivergence } from './pod.js'
+import { Dial, Timeline, TimelineSettings } from './timeline.js'
+
+/**
+ * API contracts shared by server and web. The client parses responses against
+ * these — the same schemas that validated the data on the way in.
+ */
+
+export const TimelineSummary = z.object({
+  id: z.string(),
+  title: z.string(),
+  createdAt: z.iso.datetime(),
+  settings: TimelineSettings,
+  branchCount: z.number().int(),
+  eventCount: z.number().int(),
+})
+export type TimelineSummary = z.infer<typeof TimelineSummary>
+
+export const CreateTimelineRequest = z.object({
+  podText: z.string().min(4).max(2000),
+  title: z.string().min(1).max(120).optional(),
+  dial: Dial.optional(),
+  horizonYears: z.number().int().min(10).max(3000).optional(),
+  lenses: z.array(Lens).min(1).optional(),
+})
+export type CreateTimelineRequest = z.infer<typeof CreateTimelineRequest>
+
+export const CreateTimelineResponse = z.object({
+  timeline: Timeline,
+  pod: PointOfDivergence,
+  rootBranch: Branch,
+})
+export type CreateTimelineResponse = z.infer<typeof CreateTimelineResponse>
+
+export const ConfigResponse = z.object({
+  mock: z.boolean(),
+  keyConfigured: z.boolean(),
+  models: z.object({ generation: z.string(), critic: z.string() }),
+  defaults: z.object({
+    dial: Dial,
+    horizonYears: z.number().int(),
+    lenses: z.array(Lens),
+  }),
+})
+export type ConfigResponse = z.infer<typeof ConfigResponse>
+
+/** The workhorse read: one branch fully resolved for rendering. */
+export const BranchView = z.object({
+  timeline: Timeline,
+  pod: PointOfDivergence,
+  branch: Branch,
+  branches: z.array(Branch),
+  eras: z.array(Era),
+  events: z.array(EventView),
+  entities: z.array(EntityView),
+  edges: z.array(CausalEdge),
+  convergences: z.array(ConvergencePoint),
+  artifacts: z.array(Artifact),
+  biographies: z.array(EntityBiography),
+})
+export type BranchView = z.infer<typeof BranchView>
+
+export const ImportResponse = z.object({
+  timelineId: z.string(),
+})
+export type ImportResponse = z.infer<typeof ImportResponse>
