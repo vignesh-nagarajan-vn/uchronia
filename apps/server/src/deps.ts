@@ -9,6 +9,7 @@ import {
 import type { ServerConfig } from './config.js'
 import { openDatabase } from './db/client.js'
 import { Repo } from './db/repo.js'
+import { AnthropicProvider } from './providers/anthropic.js'
 
 /** Everything the routes need, injected — tests build their own. */
 export interface ServerDeps {
@@ -21,8 +22,10 @@ export interface ServerDeps {
 
 export function createDeps(config: ServerConfig): ServerDeps {
   const db = openDatabase(config.dbPath)
-  // Live AnthropicProvider is wired at M3; until then live mode degrades to mock.
-  const provider: LLMProvider = new MockProvider()
+  const provider: LLMProvider =
+    config.mock || config.apiKey === undefined
+      ? new MockProvider()
+      : new AnthropicProvider({ apiKey: config.apiKey, models: config.models })
   return {
     config,
     repo: new Repo(db),
