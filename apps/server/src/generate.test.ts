@@ -31,7 +31,7 @@ async function createTimeline(app: Awaited<ReturnType<typeof makeTestApp>>['app'
 }
 
 describe('POST /api/branches/:id/generate — SSE', () => {
-  it('streams a full seed run and persists exactly what it streamed', async () => {
+  it('streams a full run to the horizon and persists exactly what it streamed', async () => {
     const { app } = makeTestApp()
     const created = await createTimeline(app)
 
@@ -46,19 +46,27 @@ describe('POST /api/branches/:id/generate — SSE', () => {
     expect(types[0]).toBe('run.started')
     expect(types.at(-1)).toBe('run.completed')
     expect(types).toContain('era.started')
-    expect(types).toContain('era.completed')
+    expect(types).toContain('critique.completed')
+    expect(types).toContain('convergence.found')
 
     const accepted = events.filter((e) => e.event === 'event.accepted')
-    expect(accepted.length).toBeGreaterThanOrEqual(3)
+    const eraStarts = events.filter((e) => e.event === 'era.started')
+    expect(accepted.length).toBeGreaterThanOrEqual(20)
+    expect(eraStarts.length).toBeGreaterThanOrEqual(5)
 
     // What streamed is what persisted.
     const view = BranchView.parse(
       await (await app.request(`/api/branches/${created.rootBranch.id}/view`)).json(),
     )
     expect(view.events).toHaveLength(accepted.length)
-    expect(view.eras).toHaveLength(1)
-    expect(view.entities.length).toBeGreaterThanOrEqual(3)
-    expect(view.edges.length).toBeGreaterThanOrEqual(2)
+    expect(view.eras).toHaveLength(eraStarts.length)
+    expect(view.entities.length).toBeGreaterThanOrEqual(4)
+    expect(view.edges.length).toBeGreaterThanOrEqual(10)
+    expect(view.convergences.length).toBeGreaterThanOrEqual(1)
+    // The demo dispute path persisted with critic notes.
+    const disputed = view.events.filter((e) => e.flags.disputed)
+    expect(disputed.length).toBeGreaterThanOrEqual(1)
+    expect(disputed[0]?.criticNotes?.length).toBeGreaterThanOrEqual(1)
     // Ledger-bearing entities have state derived from the streamed deltas.
     const withState = view.entities.filter((e) => e.changeLog.length > 0)
     expect(withState.length).toBeGreaterThanOrEqual(2)

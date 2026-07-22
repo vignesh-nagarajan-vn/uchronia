@@ -61,39 +61,66 @@ async function collect(gen: AsyncGenerator<PipelineEvent>): Promise<PipelineEven
   return out
 }
 
-describe('runGeneration — seed stage (mock)', () => {
-  it('seeds a fresh root branch with a disciplined first era', async () => {
+describe('runGeneration — full pipeline (mock)', () => {
+  it('generates seed plus the era loop out to the horizon', async () => {
     const { world, branchId } = freshWorld()
     const events = await collect(runGeneration(ctx(), world, branchId))
 
     expect(events[0]).toEqual({ type: 'run.started', branchId })
     expect(events.at(-1)).toEqual({ type: 'run.completed', branchId })
 
-    const accepted = events.filter((e) => e.type === 'event.accepted')
-    expect(accepted.length).toBeGreaterThanOrEqual(3)
-    const created = events.filter((e) => e.type === 'entity.created')
-    expect(created.length).toBeGreaterThanOrEqual(3)
+    // 150-year horizon → seed era + widening eras (2,8,13,21,34,55,17-clip).
+    const eras = world.resolveEras(branchId)
+    expect(eras.length).toBeGreaterThanOrEqual(5)
+    expect(eras[0]?.ordinal).toBe(0)
+    expect(eras.at(-1)?.endYear).toBe(-48 + 150)
 
-    // The world was mutated in step with the stream.
+    // Later eras carry pressures (§4.3); the seed does not.
+    expect(eras[0]?.pressures).toEqual([])
+    for (const era of eras.slice(1)) {
+      expect(era.pressures.length).toBeGreaterThanOrEqual(3)
+      expect(era.pressures.length).toBeLessThanOrEqual(7)
+    }
+
+    // The stream matches the store.
+    const accepted = events.filter((e) => e.type === 'event.accepted')
     const resolved = world.resolveEvents(branchId)
     expect(resolved).toHaveLength(accepted.length)
-    expect(world.resolveEras(branchId)).toHaveLength(1)
+    expect(resolved.length).toBeGreaterThanOrEqual(20)
 
-    // Seed discipline: high confidence, no wildcards, within two years.
-    for (const event of resolved) {
+    // Seed discipline holds for the first era.
+    for (const event of resolved.filter((e) => e.eraId === eras[0]?.id)) {
       expect(event.wildcard).toBe(false)
       expect(event.plausibility.score).toBeGreaterThanOrEqual(0.6)
       expect(event.distanceFromPod).toBeLessThanOrEqual(2)
-      expect(event.deltas.length).toBeGreaterThanOrEqual(1)
-      expect(event.provenance).toMatchObject({ kind: 'generated', mode: 'mock' })
     }
 
-    // P6: the batch spans registers beyond the political.
+    // P6 across the whole run: registers beyond the political.
     const lenses = new Set(resolved.flatMap((e) => e.lenses))
-    expect(lenses.has('economic') || lenses.has('daily-life')).toBe(true)
+    expect(lenses.has('economic')).toBe(true)
+    expect(lenses.has('daily-life') || lenses.has('cultural')).toBe(true)
 
-    // Causal edges exist and the machine validator is satisfied.
-    expect(world.resolveEdges(branchId).length).toBeGreaterThanOrEqual(2)
+    // The demo dual-review paths fired: at least one disputed event survives,
+    // visibly marked, with critic notes attached (P4).
+    const disputed = resolved.filter((e) => e.flags.disputed)
+    expect(disputed.length).toBeGreaterThanOrEqual(1)
+    expect(disputed[0]?.criticNotes?.length).toBeGreaterThanOrEqual(1)
+    // And the fixable cliche was repaired rather than committed.
+    expect(resolved.some((e) => /\bsuddenly\b/i.test(e.summary))).toBe(false)
+
+    // Convergence points exist and mark their events (P3).
+    const convergences = world.resolveConvergences(branchId)
+    expect(convergences.length).toBeGreaterThanOrEqual(1)
+    for (const point of convergences) {
+      expect(world.getEvent(point.eventId).flags.convergence).toBe(true)
+    }
+    const convergenceFrames = events.filter((e) => e.type === 'convergence.found')
+    expect(convergenceFrames).toHaveLength(convergences.length)
+
+    // Critique reports were persisted for every era.
+    expect(world.critiqueReports().length).toBe(eras.length)
+
+    // And the machine validator is satisfied by the whole branch.
     expect(validateBranch(world, branchId)).toEqual([])
   })
 
@@ -105,7 +132,32 @@ describe('runGeneration — seed stage (mock)', () => {
     expect(a.world.toAggregate()).toEqual(b.world.toAggregate())
   })
 
-  it('does not reseed a branch that already has events', async () => {
+  it('resumes an interrupted run at the next unwritten era', async () => {
+    const { world, branchId } = freshWorld()
+    // One ctx across both runs — like the server, whose idgen outlives runs.
+    const sharedCtx = ctx()
+    // Interrupt after the third era completes.
+    let eraCount = 0
+    const run = runGeneration(sharedCtx, world, branchId)
+    for await (const ev of run) {
+      if (ev.type === 'era.completed') {
+        eraCount++
+        if (eraCount === 3) break
+      }
+    }
+    await run.return(undefined)
+    expect(world.ownEras(branchId)).toHaveLength(3)
+
+    // A second run continues — no reseeding, no duplicate eras.
+    await collect(runGeneration(sharedCtx, world, branchId))
+    const eras = world.ownEras(branchId)
+    expect(eras.length).toBeGreaterThanOrEqual(5)
+    expect(new Set(eras.map((e) => e.ordinal)).size).toBe(eras.length)
+    expect(eras.at(-1)?.endYear).toBe(-48 + 150)
+    expect(validateBranch(world, branchId)).toEqual([])
+  })
+
+  it('does nothing on a branch already generated to the horizon', async () => {
     const { world, branchId } = freshWorld()
     await collect(runGeneration(ctx(), world, branchId))
     const countAfterFirst = world.resolveEvents(branchId).length
