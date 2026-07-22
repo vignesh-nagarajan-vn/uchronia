@@ -1,0 +1,373 @@
+import type {
+  Artifact,
+  Branch,
+  CausalEdge,
+  ConvergencePoint,
+  CritiqueIssue,
+  CritiqueReport,
+  Entity,
+  EntityBiography,
+  Era,
+  Event,
+  PointOfDivergence,
+  Timeline,
+  TimelineAggregate,
+  TimelineSettings,
+  TimelineSummary,
+} from '@uchronia/schemas'
+import { count, eq, inArray } from 'drizzle-orm'
+import type { Db } from './client.js'
+import * as t from './schema.js'
+
+type EventRow = typeof t.events.$inferSelect
+
+function rowToEvent(row: EventRow): Event {
+  return {
+    id: row.id,
+    branchId: row.branchId,
+    eraId: row.eraId,
+    ordinal: row.ordinal,
+    date: { year: row.year, label: row.dateLabel },
+    title: row.title,
+    summary: row.summary,
+    detail: row.detail,
+    entityIds: row.entityIds,
+    deltas: row.deltas,
+    lenses: row.lenses,
+    plausibility: row.plausibility,
+    distanceFromPod: row.distanceFromPod,
+    wildcard: row.wildcard,
+    flags: { disputed: row.disputed, convergence: row.convergence },
+    criticNotes: row.criticNotes ?? null,
+    provenance: row.provenance,
+  }
+}
+
+function eventToRow(e: Event): typeof t.events.$inferInsert {
+  return {
+    id: e.id,
+    branchId: e.branchId,
+    eraId: e.eraId,
+    ordinal: e.ordinal,
+    year: e.date.year,
+    dateLabel: e.date.label,
+    title: e.title,
+    summary: e.summary,
+    detail: e.detail,
+    entityIds: e.entityIds,
+    deltas: e.deltas,
+    lenses: e.lenses,
+    plausibility: e.plausibility,
+    distanceFromPod: e.distanceFromPod,
+    wildcard: e.wildcard,
+    disputed: e.flags.disputed,
+    convergence: e.flags.convergence,
+    criticNotes: e.criticNotes,
+    provenance: e.provenance,
+  }
+}
+
+/**
+ * The repository: SQLite rows ↔ domain objects. Reads hydrate whole timeline
+ * aggregates (core's World does the thinking); writes are row-granular so the
+ * pipeline can persist accepted history as it streams.
+ */
+export class Repo {
+  constructor(private readonly db: Db) {}
+
+  timelineExists(id: string): boolean {
+    return (
+      this.db.select({ id: t.timelines.id }).from(t.timelines).where(eq(t.timelines.id, id)).all()
+        .length > 0
+    )
+  }
+
+  listTimelines(): TimelineSummary[] {
+    const rows = this.db.select().from(t.timelines).all()
+    return rows.map((row) => {
+      const branchCount =
+        this.db
+          .select({ n: count() })
+          .from(t.branches)
+          .where(eq(t.branches.timelineId, row.id))
+          .get()?.n ?? 0
+      const branchIds = this.db
+        .select({ id: t.branches.id })
+        .from(t.branches)
+        .where(eq(t.branches.timelineId, row.id))
+        .all()
+        .map((b) => b.id)
+      const eventCount =
+        branchIds.length === 0
+          ? 0
+          : (this.db
+              .select({ n: count() })
+              .from(t.events)
+              .where(inArray(t.events.branchId, branchIds))
+              .get()?.n ?? 0)
+      return {
+        id: row.id,
+        title: row.title,
+        createdAt: row.createdAt,
+        settings: row.settings,
+        branchCount,
+        eventCount,
+      }
+    })
+  }
+
+  branchTimelineId(branchId: string): string | null {
+    const row = this.db
+      .select({ timelineId: t.branches.timelineId })
+      .from(t.branches)
+      .where(eq(t.branches.id, branchId))
+      .get()
+    return row?.timelineId ?? null
+  }
+
+  createTimeline(timeline: Timeline, pod: PointOfDivergence, rootBranch: Branch): void {
+    this.db.transaction((tx) => {
+      tx.insert(t.timelines)
+        .values({
+          id: timeline.id,
+          title: timeline.title,
+          createdAt: timeline.createdAt,
+          settings: timeline.settings,
+        })
+        .run()
+      tx.insert(t.pods)
+        .values({
+          id: pod.id,
+          timelineId: pod.timelineId,
+          raw: pod.raw,
+          statement: pod.statement,
+          year: pod.year,
+          dateLabel: pod.dateLabel,
+          region: pod.region,
+          mechanism: pod.mechanism,
+          baselineContext: pod.baselineContext,
+          provenance: pod.provenance,
+        })
+        .run()
+      tx.insert(t.branches).values(rootBranch).run()
+    })
+  }
+
+  loadAggregate(timelineId: string): TimelineAggregate | null {
+    const timeline = this.db.select().from(t.timelines).where(eq(t.timelines.id, timelineId)).get()
+    if (!timeline) return null
+    const podRow = this.db.select().from(t.pods).where(eq(t.pods.timelineId, timelineId)).get()
+    if (!podRow) return null
+
+    const branchRows = this.db
+      .select()
+      .from(t.branches)
+      .where(eq(t.branches.timelineId, timelineId))
+      .all()
+    const branchIds = branchRows.map((b) => b.id)
+
+    const eraRows = branchIds.length
+      ? this.db.select().from(t.eras).where(inArray(t.eras.branchId, branchIds)).all()
+      : []
+    const eventRows = branchIds.length
+      ? this.db.select().from(t.events).where(inArray(t.events.branchId, branchIds)).all()
+      : []
+    const entityRows = this.db
+      .select()
+      .from(t.entities)
+      .where(eq(t.entities.timelineId, timelineId))
+      .all()
+    const edgeRows = branchIds.length
+      ? this.db.select().from(t.edges).where(inArray(t.edges.branchId, branchIds)).all()
+      : []
+    const eventIds = eventRows.map((e) => e.id)
+    const artifactRows = eventIds.length
+      ? this.db.select().from(t.artifacts).where(inArray(t.artifacts.eventId, eventIds)).all()
+      : []
+    const convergenceRows = branchIds.length
+      ? this.db
+          .select()
+          .from(t.convergencePoints)
+          .where(inArray(t.convergencePoints.branchId, branchIds))
+          .all()
+      : []
+    const critiqueRows = branchIds.length
+      ? this.db
+          .select()
+          .from(t.critiqueReports)
+          .where(inArray(t.critiqueReports.branchId, branchIds))
+          .all()
+      : []
+    const biographyRows = branchIds.length
+      ? this.db.select().from(t.biographies).where(inArray(t.biographies.branchId, branchIds)).all()
+      : []
+
+    return {
+      formatVersion: 1,
+      timeline: {
+        id: timeline.id,
+        title: timeline.title,
+        createdAt: timeline.createdAt,
+        settings: timeline.settings,
+      },
+      pod: {
+        id: podRow.id,
+        timelineId: podRow.timelineId,
+        raw: podRow.raw,
+        statement: podRow.statement,
+        year: podRow.year,
+        dateLabel: podRow.dateLabel,
+        region: podRow.region,
+        mechanism: podRow.mechanism,
+        baselineContext: podRow.baselineContext,
+        provenance: podRow.provenance,
+      },
+      branches: branchRows.map((b) => ({ ...b, subPod: b.subPod ?? null })),
+      eras: eraRows,
+      events: eventRows.map(rowToEvent),
+      entities: entityRows,
+      edges: edgeRows,
+      artifacts: artifactRows,
+      convergencePoints: convergenceRows,
+      critiqueReports: critiqueRows.map((c) => ({ ...c, eraId: c.eraId ?? null })),
+      biographies: biographyRows,
+    }
+  }
+
+  /** Bulk insert a whole aggregate (import). Caller checks for collisions first. */
+  saveAggregate(agg: TimelineAggregate): void {
+    this.db.transaction((tx) => {
+      tx.insert(t.timelines)
+        .values({
+          id: agg.timeline.id,
+          title: agg.timeline.title,
+          createdAt: agg.timeline.createdAt,
+          settings: agg.timeline.settings,
+        })
+        .run()
+      tx.insert(t.pods)
+        .values({
+          id: agg.pod.id,
+          timelineId: agg.pod.timelineId,
+          raw: agg.pod.raw,
+          statement: agg.pod.statement,
+          year: agg.pod.year,
+          dateLabel: agg.pod.dateLabel,
+          region: agg.pod.region,
+          mechanism: agg.pod.mechanism,
+          baselineContext: agg.pod.baselineContext,
+          provenance: agg.pod.provenance,
+        })
+        .run()
+      if (agg.branches.length) tx.insert(t.branches).values(agg.branches).run()
+      if (agg.eras.length) tx.insert(t.eras).values(agg.eras).run()
+      if (agg.events.length) tx.insert(t.events).values(agg.events.map(eventToRow)).run()
+      if (agg.entities.length) tx.insert(t.entities).values(agg.entities).run()
+      if (agg.edges.length) tx.insert(t.edges).values(agg.edges).run()
+      if (agg.artifacts.length) tx.insert(t.artifacts).values(agg.artifacts).run()
+      if (agg.convergencePoints.length)
+        tx.insert(t.convergencePoints).values(agg.convergencePoints).run()
+      if (agg.critiqueReports.length) tx.insert(t.critiqueReports).values(agg.critiqueReports).run()
+      if (agg.biographies.length) tx.insert(t.biographies).values(agg.biographies).run()
+    })
+  }
+
+  deleteTimeline(timelineId: string): boolean {
+    if (!this.timelineExists(timelineId)) return false
+    this.db.transaction((tx) => {
+      const branchIds = tx
+        .select({ id: t.branches.id })
+        .from(t.branches)
+        .where(eq(t.branches.timelineId, timelineId))
+        .all()
+        .map((b) => b.id)
+      if (branchIds.length) {
+        const eventIds = tx
+          .select({ id: t.events.id })
+          .from(t.events)
+          .where(inArray(t.events.branchId, branchIds))
+          .all()
+          .map((e) => e.id)
+        if (eventIds.length) {
+          tx.delete(t.artifacts).where(inArray(t.artifacts.eventId, eventIds)).run()
+        }
+        tx.delete(t.convergencePoints).where(inArray(t.convergencePoints.branchId, branchIds)).run()
+        tx.delete(t.critiqueReports).where(inArray(t.critiqueReports.branchId, branchIds)).run()
+        tx.delete(t.biographies).where(inArray(t.biographies.branchId, branchIds)).run()
+        tx.delete(t.edges).where(inArray(t.edges.branchId, branchIds)).run()
+        tx.delete(t.events).where(inArray(t.events.branchId, branchIds)).run()
+        tx.delete(t.eras).where(inArray(t.eras.branchId, branchIds)).run()
+      }
+      tx.delete(t.entities).where(eq(t.entities.timelineId, timelineId)).run()
+      tx.delete(t.branches).where(eq(t.branches.timelineId, timelineId)).run()
+      tx.delete(t.pods).where(eq(t.pods.timelineId, timelineId)).run()
+      tx.delete(t.timelines).where(eq(t.timelines.id, timelineId)).run()
+    })
+    return true
+  }
+
+  // ---------------------------------------------- row-granular writes (pipeline)
+
+  insertBranch(branch: Branch): void {
+    this.db.insert(t.branches).values(branch).run()
+  }
+
+  insertEra(era: Era): void {
+    this.db.insert(t.eras).values(era).run()
+  }
+
+  insertEvent(event: Event): void {
+    this.db.insert(t.events).values(eventToRow(event)).run()
+  }
+
+  insertEntity(entity: Entity): void {
+    this.db.insert(t.entities).values(entity).run()
+  }
+
+  insertEdge(edge: CausalEdge): void {
+    this.db.insert(t.edges).values(edge).run()
+  }
+
+  insertArtifact(artifact: Artifact): void {
+    this.db.insert(t.artifacts).values(artifact).run()
+  }
+
+  insertConvergence(point: ConvergencePoint): void {
+    this.db.insert(t.convergencePoints).values(point).run()
+  }
+
+  insertCritique(report: CritiqueReport): void {
+    this.db.insert(t.critiqueReports).values(report).run()
+  }
+
+  insertBiography(bio: EntityBiography): void {
+    this.db.insert(t.biographies).values(bio).run()
+  }
+
+  updateEventDetail(eventId: string, detail: string): void {
+    this.db.update(t.events).set({ detail }).where(eq(t.events.id, eventId)).run()
+  }
+
+  updateEventFlags(
+    eventId: string,
+    flags: { disputed?: boolean; convergence?: boolean; criticNotes?: CritiqueIssue[] | null },
+  ): void {
+    this.db.update(t.events).set(flags).where(eq(t.events.id, eventId)).run()
+  }
+
+  updateEraDetail(eraId: string, detail: string): void {
+    this.db.update(t.eras).set({ detail, status: 'expanded' }).where(eq(t.eras.id, eraId)).run()
+  }
+
+  updateEraAfterGeneration(era: Era): void {
+    this.db
+      .update(t.eras)
+      .set({ title: era.title, summary: era.summary, pressures: era.pressures, status: era.status })
+      .where(eq(t.eras.id, era.id))
+      .run()
+  }
+
+  updateTimelineSettings(timelineId: string, settings: TimelineSettings): void {
+    this.db.update(t.timelines).set({ settings }).where(eq(t.timelines.id, timelineId)).run()
+  }
+}

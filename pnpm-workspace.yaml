@@ -2,7 +2,9 @@ packages:
   - packages/*
   - apps/*
 
-# pnpm blocks postinstall scripts by default; these native/binary deps need theirs.
+# pnpm blocks postinstall scripts by default; esbuild needs its own.
+# better-sqlite3 v13 ships prebuilt N-API binaries inside the package — the
+# implicit node-gyp rebuild (triggered by its binding.gyp) must be suppressed.
 allowBuilds:
   esbuild: true
-  better-sqlite3: true
+  better-sqlite3: false
