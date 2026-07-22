@@ -5,7 +5,7 @@ Mirrors §13 of the master prompt ([MASTER_PROMPT reference](../CLAUDE.md)). Upd
 | Milestone | Status | Notes |
 | --- | --- | --- |
 | M0 — Foundation | ✅ 2026-07-22 | Workspace, CI, Vitest wired (17 tests green), docs skeletons, CLAUDE.md v1, ADR-0001 |
-| M1 — Schemas & engine store | ⬜ | |
+| M1 — Schemas & engine store | ✅ 2026-07-22 | Full §3 schema set + fixture world; World store with normalized structural-sharing forks, state replay, pre-fork guards; validator v1 (8 rules, each tested); 58 tests green |
 | M2 — Persistence & API skeleton | ⬜ | |
 | M3 — Generation v1 | ⬜ | |
 | M4 — Critic & validation loop | ⬜ | |

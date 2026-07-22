@@ -29,7 +29,13 @@ The build is driven by a master prompt (mirrored expectations live throughout `d
 
 ```
 packages/schemas   Zod-first schemas + inferred types + fixtures (zero deps beyond zod)
+  src/*.ts           one file per §3 type; llm.ts = draft shapes the LLM emits
+  src/fixtures/      hand-built "Constantinople holds" world (import via @uchronia/schemas/fixtures)
 packages/core      Pure engine. IO only via injected ports (provider/clock/rng/idgen).
+  src/world.ts       World store: structural-sharing fork resolution, state replay, guards
+  src/validator.ts   machine validator (8 pure rules) — validateBranch/validateWorld
+  src/ports.ts       Clock/IdGen ports (+ sequentialIdGen for deterministic tests)
+  src/errors.ts      typed error taxonomy
   src/rng.ts         seeded deterministic RNG (mock + tests)
   src/prompts/       prompt registry (one file per template, id + semver version)  [M3+]
   data/baseline.json curated real-history anchors (skeleton until M5)
