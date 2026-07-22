@@ -1,0 +1,234 @@
+import type {
+  CritiqueIssue,
+  CritiqueReport,
+  DraftEvent,
+  Era,
+  EventVerdict,
+  GeneratedProvenance,
+} from '@uchronia/schemas'
+import type { DialParams } from '../dial.js'
+import { criticReview } from '../prompts/critic-review.js'
+import { regenerateEvent } from '../prompts/regenerate-event.js'
+import type { World } from '../world.js'
+import { summarizeRecentEvents, summarizeState } from './context.js'
+import type { PipelineCtx } from './ctx.js'
+import {
+  type DraftContext,
+  dropBackwardsEdges,
+  type ResolvedBatch,
+  resolveDrafts,
+} from './drafts.js'
+import { generateStructured } from './structured.js'
+import { validateBatchOnClone } from './validate.js'
+
+const MAX_REVISIONS = 2
+
+export interface RefinedBatch {
+  batch: ResolvedBatch
+  /** Final per-event verdicts for the committed events. */
+  verdicts: EventVerdict[]
+  /** Draft refs dropped because machine rules still failed after retries. */
+  droppedRefs: string[]
+  warnings: string[]
+}
+
+interface Assessment {
+  /** ref → machine-rule failures (hard: cannot commit). */
+  machine: Map<string, string[]>
+  /** ref → critic issues. */
+  criticIssues: Map<string, CritiqueIssue[]>
+  /** ref → critic verdict. */
+  criticVerdict: Map<string, 'pass' | 'revise' | 'dispute'>
+  batch: ResolvedBatch
+}
+
+/**
+ * The dual review (§P4): machine validator + skeptical critic over one batch
+ * of drafts, with bounded regeneration. Machine failures that survive retries
+ * are dropped (graph rules cannot be argued with); critic objections that
+ * survive retries commit visibly marked disputed with the notes attached.
+ */
+export async function refineBatch(args: {
+  ctx: PipelineCtx
+  world: World
+  branchId: string
+  era: Era
+  drafts: DraftEvent[]
+  dial: DialParams
+  provenance: GeneratedProvenance
+}): Promise<RefinedBatch> {
+  const { ctx, world, branchId, era, dial, provenance } = args
+  const warnings: string[] = []
+
+  // Dial rule (d): wildcards below the plausibility floor never reach review.
+  let drafts = args.drafts.filter((draft) => {
+    if (draft.wildcard && draft.plausibility.score < dial.wildcardPlausibilityFloor) {
+      warnings.push(
+        `wildcard "${draft.title}" discarded below the plausibility floor (${draft.plausibility.score} < ${dial.wildcardPlausibilityFloor.toFixed(2)})`,
+      )
+      return false
+    }
+    return true
+  })
+
+  const draftCtx = (): DraftContext => ({
+    world,
+    branchId,
+    eraId: era.id,
+    idgen: ctx.idgen,
+    clock: ctx.clock,
+    provenance,
+  })
+
+  const criticContext = {
+    podStatement: world.pod.statement,
+    eraTitle: era.title,
+    eraSpan: `${era.startYear}–${era.endYear}`,
+    stateSummary: summarizeState(world, branchId),
+    recentEvents: summarizeRecentEvents(world, branchId),
+  }
+
+  const assess = async (
+    candidate: DraftEvent[],
+    criticTargets: Set<string> | null,
+  ): Promise<Assessment> => {
+    const batch = dropBackwardsEdges(resolveDrafts(draftCtx(), candidate))
+    warnings.push(...batch.warnings.splice(0))
+
+    const machine = new Map<string, string[]>()
+    const eventIdToRef = new Map([...batch.refToEventId].map(([ref, id]) => [id, ref]))
+    for (const issue of validateBatchOnClone(world, branchId, era, batch)) {
+      const ref = issue.eventId ? eventIdToRef.get(issue.eventId) : undefined
+      const key = ref ?? '(batch)'
+      machine.set(key, [...(machine.get(key) ?? []), `${issue.rule}: ${issue.message}`])
+    }
+
+    const criticIssues = new Map<string, CritiqueIssue[]>()
+    const criticVerdict = new Map<string, 'pass' | 'revise' | 'dispute'>()
+    const toReview = criticTargets ? candidate.filter((d) => criticTargets.has(d.ref)) : candidate
+    if (toReview.length > 0) {
+      const review = await generateStructured(ctx.provider, criticReview, {
+        ...criticContext,
+        drafts: toReview,
+      })
+      for (const verdict of review.value.verdicts) {
+        criticIssues.set(verdict.ref, verdict.issues)
+        criticVerdict.set(verdict.ref, verdict.verdict)
+      }
+    }
+    return { machine, criticIssues, criticVerdict, batch }
+  }
+
+  // First full assessment.
+  let assessment = await assess(drafts, null)
+  const finalVerdict = new Map(assessment.criticVerdict)
+  const finalIssues = new Map(assessment.criticIssues)
+
+  for (let attempt = 0; attempt < MAX_REVISIONS; attempt++) {
+    const needsRevision = drafts.filter((draft) => {
+      const machineBad = (assessment.machine.get(draft.ref) ?? []).length > 0
+      const criticSaysRevise = finalVerdict.get(draft.ref) === 'revise'
+      return machineBad || criticSaysRevise
+    })
+    if (needsRevision.length === 0) break
+
+    const revisedRefs = new Set<string>()
+    const revised = await Promise.all(
+      needsRevision.map(async (draft) => {
+        const issues = [
+          ...(assessment.machine.get(draft.ref) ?? []),
+          ...(finalIssues.get(draft.ref) ?? []).map((i) => `${i.type} (${i.severity}): ${i.note}`),
+        ]
+        const replacement = await generateStructured(ctx.provider, regenerateEvent, {
+          podStatement: criticContext.podStatement,
+          eraTitle: criticContext.eraTitle,
+          eraSpan: criticContext.eraSpan,
+          stateSummary: criticContext.stateSummary,
+          draft,
+          issues,
+        })
+        revisedRefs.add(draft.ref)
+        return replacement.value.event
+      }),
+    )
+    const byRef = new Map(revised.map((d) => [d.ref, d]))
+    drafts = drafts.map((d) => byRef.get(d.ref) ?? d)
+
+    assessment = await assess(drafts, revisedRefs)
+    for (const ref of revisedRefs) {
+      finalVerdict.set(ref, assessment.criticVerdict.get(ref) ?? 'pass')
+      finalIssues.set(ref, assessment.criticIssues.get(ref) ?? [])
+    }
+  }
+
+  // Sentence pass: drop what the machine still rejects; mark what the critic
+  // still objects to; commit the rest clean.
+  const droppedRefs: string[] = []
+  const disputedRefs = new Set<string>()
+  for (const draft of drafts) {
+    if ((assessment.machine.get(draft.ref) ?? []).length > 0) {
+      droppedRefs.push(draft.ref)
+      warnings.push(
+        `"${draft.title}" dropped — machine rules still failing after ${MAX_REVISIONS} revisions: ${(assessment.machine.get(draft.ref) ?? []).join('; ')}`,
+      )
+      continue
+    }
+    const verdict = finalVerdict.get(draft.ref)
+    if (verdict === 'dispute' || verdict === 'revise') {
+      disputedRefs.add(draft.ref)
+    }
+  }
+  const batchIssues = assessment.machine.get('(batch)') ?? []
+  if (batchIssues.length > 0) {
+    warnings.push(`batch-level validation issues: ${batchIssues.join('; ')}`)
+  }
+
+  const kept = drafts.filter((d) => !droppedRefs.includes(d.ref))
+  let batch = dropBackwardsEdges(resolveDrafts(draftCtx(), kept))
+  warnings.push(...batch.warnings.splice(0))
+
+  // Attach disputes to the final resolved events.
+  batch = {
+    ...batch,
+    events: batch.events.map((event) => {
+      const ref = [...batch.refToEventId].find(([, id]) => id === event.id)?.[0]
+      if (ref && disputedRefs.has(ref)) {
+        return {
+          ...event,
+          flags: { ...event.flags, disputed: true },
+          criticNotes: finalIssues.get(ref) ?? [],
+        }
+      }
+      return event
+    }),
+  }
+
+  const verdicts: EventVerdict[] = []
+  for (const [ref, eventId] of batch.refToEventId) {
+    verdicts.push({
+      eventId,
+      issues: finalIssues.get(ref) ?? [],
+      verdict: disputedRefs.has(ref) ? 'dispute' : 'pass',
+    })
+  }
+
+  return { batch, verdicts, droppedRefs, warnings }
+}
+
+export function buildCritiqueReport(
+  ctx: PipelineCtx,
+  branchId: string,
+  eraId: string | null,
+  verdicts: EventVerdict[],
+  provenance: GeneratedProvenance,
+): CritiqueReport {
+  return {
+    id: ctx.idgen.next(),
+    branchId,
+    batchId: ctx.idgen.next(),
+    eraId,
+    verdicts,
+    createdAt: ctx.clock.now().toISOString(),
+    provenance,
+  }
+}

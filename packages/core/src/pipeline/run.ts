@@ -1,58 +1,13 @@
-import type { Era, GeneratedProvenance } from '@uchronia/schemas'
+import type { Era } from '@uchronia/schemas'
 import { dialParams } from '../dial.js'
 import { GenerationValidationError } from '../errors.js'
-import type { LLMProvider } from '../llm.js'
-import type { Clock, IdGen } from '../ports.js'
 import { seedConsequences } from '../prompts/seed-consequences.js'
-import type { PromptTemplate } from '../prompts/types.js'
-import { validateBranch } from '../validator.js'
-import { World } from '../world.js'
-import { dropBackwardsEdges, type ResolvedBatch, resolveDrafts } from './drafts.js'
+import type { World } from '../world.js'
+import { buildCritiqueReport, refineBatch } from './critic.js'
+import { makeProvenance, type PipelineCtx } from './ctx.js'
+import type { ResolvedBatch } from './drafts.js'
 import type { PipelineEvent } from './events.js'
 import { generateStructured } from './structured.js'
-
-export interface PipelineCtx {
-  provider: LLMProvider
-  idgen: IdGen
-  clock: Clock
-}
-
-export function makeProvenance(
-  ctx: PipelineCtx,
-  template: Pick<PromptTemplate<unknown, unknown>, 'id' | 'version'>,
-  model: string,
-): GeneratedProvenance {
-  return {
-    kind: 'generated',
-    model,
-    templateId: template.id,
-    templateVersion: template.version,
-    generatedAt: ctx.clock.now().toISOString(),
-    mode: ctx.provider.mode,
-  }
-}
-
-/**
- * Trial-apply a resolved batch on a clone of the world and run the machine
- * validator. Returns the issues attributable to the batch — the real world is
- * untouched until the caller commits.
- */
-export function validateBatchOnClone(
-  world: World,
-  branchId: string,
-  era: Era,
-  batch: ResolvedBatch,
-): string[] {
-  const clone = World.fromAggregate(world.toAggregate())
-  const preexisting = new Set(validateBranch(clone, branchId).map((i) => i.message))
-  if (!clone.ownEras(branchId).some((e) => e.id === era.id)) clone.addEra(era)
-  for (const entity of batch.newEntities) clone.addEntity(entity)
-  for (const event of batch.events) clone.addEvent(event)
-  for (const edge of batch.edges) clone.addEdge(edge)
-  return validateBranch(clone, branchId)
-    .filter((issue) => !preexisting.has(issue.message))
-    .map((issue) => `${issue.rule}: ${issue.message}`)
-}
 
 /** Commit a resolved batch into the world, yielding pipeline events in ink order. */
 export function* commitBatch(world: World, batch: ResolvedBatch): Generator<PipelineEvent> {
@@ -79,9 +34,10 @@ export function* commitBatch(world: World, batch: ResolvedBatch): Generator<Pipe
 }
 
 /**
- * Generation v1 (§4.1 stages 2): seed consequences for a fresh branch. The
- * era loop (stage 3) extends this generator at M5; the critic loop wires in
- * at M4. Mutates `world` as it goes — the caller persists the event stream.
+ * The generation run (§4.1): seed consequences for a fresh root branch, each
+ * batch passing the dual review — machine validator + skeptical critic with
+ * bounded regeneration (§P4). The era loop (stage 3) extends this at M5.
+ * Mutates `world` in step with the events it yields; the caller persists.
  */
 export async function* runGeneration(
   ctx: PipelineCtx,
@@ -123,23 +79,30 @@ export async function* runGeneration(
       provenance,
     }
 
-    const batch = dropBackwardsEdges(
-      resolveDrafts(
-        { world, branchId, eraId: era.id, idgen: ctx.idgen, clock: ctx.clock, provenance },
-        generated.value.events,
-      ),
-    )
-    for (const warning of batch.warnings) yield { type: 'warning', message: warning }
-
-    const issues = validateBatchOnClone(world, branchId, era, batch)
-    if (issues.length > 0) {
-      // M4 turns this into the regenerate → dispute loop; v1 fails loudly.
-      throw new GenerationValidationError(seedConsequences.id, issues)
+    const refined = await refineBatch({
+      ctx,
+      world,
+      branchId,
+      era,
+      drafts: generated.value.events,
+      dial,
+      provenance,
+    })
+    for (const warning of refined.warnings) yield { type: 'warning', message: warning }
+    if (refined.batch.events.length === 0) {
+      throw new GenerationValidationError(seedConsequences.id, [
+        'every seed event was dropped by the dual review',
+        ...refined.warnings,
+      ])
     }
 
     world.addEra(era)
     yield { type: 'era.started', era }
-    yield* commitBatch(world, batch)
+    yield* commitBatch(world, refined.batch)
+
+    const report = buildCritiqueReport(ctx, branchId, era.id, refined.verdicts, provenance)
+    world.addCritique(report)
+    yield { type: 'critique.completed', report }
     yield { type: 'era.completed', era }
   }
 

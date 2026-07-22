@@ -4,8 +4,9 @@ import { MockProvider } from '../mock/provider.js'
 import { fixedClock, sequentialIdGen } from '../ports.js'
 import { validateBranch } from '../validator.js'
 import { World } from '../world.js'
+import type { PipelineCtx } from './ctx.js'
 import type { PipelineEvent } from './events.js'
-import { type PipelineCtx, runGeneration } from './run.js'
+import { runGeneration } from './run.js'
 
 const NOW = '2026-07-22T12:00:00.000Z'
 

@@ -17,12 +17,6 @@ function persistPipelineEvent(deps: ServerDeps, ev: PipelineEvent): void {
       deps.repo.insertEvent(ev.event)
       for (const edge of ev.edges) deps.repo.insertEdge(edge)
       break
-    case 'event.disputed':
-      deps.repo.updateEventFlags(ev.event.id, {
-        disputed: true,
-        criticNotes: ev.event.criticNotes,
-      })
-      break
     case 'critique.completed':
       deps.repo.insertCritique(ev.report)
       break
