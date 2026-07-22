@@ -1,4 +1,6 @@
+import { criticReview } from './critic-review.js'
 import { podNormalize } from './pod-normalize.js'
+import { regenerateEvent } from './regenerate-event.js'
 import { seedConsequences } from './seed-consequences.js'
 import type { PromptTemplate } from './types.js'
 
@@ -11,6 +13,8 @@ import type { PromptTemplate } from './types.js'
 export const PROMPT_REGISTRY: Record<string, PromptTemplate<any, any>> = {
   [podNormalize.id]: podNormalize,
   [seedConsequences.id]: seedConsequences,
+  [criticReview.id]: criticReview,
+  [regenerateEvent.id]: regenerateEvent,
 }
 
 export function templateVersions(): Array<{ id: string; version: string; role: string }> {
