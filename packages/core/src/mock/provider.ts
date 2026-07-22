@@ -2,6 +2,7 @@ import type { LLMProvider, StructuredRequest, StructuredResult } from '../llm.js
 import { ProviderResponseError } from '../llm.js'
 import type { Rng } from '../rng.js'
 import { seededRng } from '../rng.js'
+import { mockCriticReview, mockRegenerateEvent } from './critic.js'
 import { mockPodNormalize } from './pod-normalize.js'
 import { mockSeedConsequences } from './seed.js'
 
@@ -44,4 +45,6 @@ export class MockProvider implements LLMProvider {
 const DEFAULT_HANDLERS: Record<string, MockHandler> = {
   'pod-normalize': mockPodNormalize,
   'seed-consequences': mockSeedConsequences,
+  'critic-review': mockCriticReview,
+  'regenerate-event': mockRegenerateEvent,
 }
