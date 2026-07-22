@@ -10,6 +10,7 @@ import { Hono } from 'hono'
 import { ZodError } from 'zod'
 import type { ServerDeps } from './deps.js'
 import { ApiError } from './http-error.js'
+import { artifactRoutes } from './routes/artifacts.js'
 import { branchRoutes } from './routes/branches.js'
 import { expandRoutes } from './routes/expand.js'
 import { forkRoutes } from './routes/fork.js'
@@ -27,6 +28,7 @@ export function createApp(deps: ServerDeps): Hono {
   app.route('/api', generateRoutes(deps))
   app.route('/api', expandRoutes(deps))
   app.route('/api', forkRoutes(deps))
+  app.route('/api', artifactRoutes(deps))
 
   app.onError((err, c) => {
     if (err instanceof ApiError) {
