@@ -306,6 +306,21 @@ export function mockEraGenerate(rawArgs: unknown, rng: Rng): EraBatchOut {
     ]
   }
 
+  // A forked branch's first own era opens with its sub-divergence landing.
+  if (args.subPodStatement && args.ordinal === 0 && events[0]) {
+    const first = events[0]
+    first.title = 'The second divergence lands'
+    first.summary = `${args.subPodStatement} From here the branch keeps its own ledger: ${first.summary}`
+    first.deltas = [
+      ...first.deltas,
+      {
+        entitySlug: roster.nation.slug,
+        patch: [{ key: 'subDivergence', value: args.subPodStatement.slice(0, 80) }],
+        note: 'The branch records its own point of departure.',
+      },
+    ]
+  }
+
   // Demo paths (deterministic): ordinal 1 carries a fixable cliche;
   // ordinal 2 carries a claim the critic will keep but dispute.
   if (args.ordinal === 1 && events[2]) {
