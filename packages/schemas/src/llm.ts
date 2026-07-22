@@ -22,18 +22,29 @@ export type DraftRef = z.infer<typeof DraftRef>
 export const CauseRef = z.string().regex(/^[de]\d+$/, 'cause refs look like e12 or d2')
 export type CauseRef = z.infer<typeof CauseRef>
 
+/**
+ * State facts travel as typed key/value pairs, not records: strict structured
+ * outputs require additionalProperties:false, which open maps cannot satisfy.
+ * The engine folds pairs into StateRecords at draft resolution.
+ */
+export const StateFact = z.object({
+  key: z.string().min(1),
+  value: z.union([z.string(), z.number(), z.boolean()]),
+})
+export type StateFact = z.infer<typeof StateFact>
+
 export const DraftNewEntity = z.object({
   slug: Slug,
   name: z.string().min(1),
   type: z.enum(ENTITY_TYPES),
   description: z.string().min(1),
-  initialState: z.record(z.string(), z.union([z.string(), z.number(), z.boolean()])),
+  initialState: z.array(StateFact).min(1),
 })
 export type DraftNewEntity = z.infer<typeof DraftNewEntity>
 
 export const DraftDelta = z.object({
   entitySlug: Slug,
-  patch: z.record(z.string(), z.union([z.string(), z.number(), z.boolean()])),
+  patch: z.array(StateFact).min(1),
   note: z.string().min(1),
 })
 export type DraftDelta = z.infer<typeof DraftDelta>
@@ -73,19 +84,13 @@ export const PodNormalizedOut = z.object({
 })
 export type PodNormalizedOut = z.infer<typeof PodNormalizedOut>
 
-/** seed-consequences output: years ~0–2, few and disciplined. */
-export const SeedBatchOut = z.object({
-  events: z.array(DraftEvent).min(2).max(6),
-})
-export type SeedBatchOut = z.infer<typeof SeedBatchOut>
-
 /** derive-pressures output. */
 export const PressuresOut = z.object({
   pressures: z.array(Pressure).min(3).max(7),
 })
 export type PressuresOut = z.infer<typeof PressuresOut>
 
-/** era-generate output. */
+/** seed-consequences and era-generate output: an era header plus its drafts. */
 export const EraBatchOut = z.object({
   title: z.string().min(1),
   summary: z.string().min(1),

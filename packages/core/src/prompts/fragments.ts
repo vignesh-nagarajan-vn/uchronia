@@ -22,4 +22,4 @@ export const HANDLE_CONVENTIONS = `Reference conventions (follow exactly):
 - Entities are referenced by their kebab-case slug (e.g. byzantine-empire). Reference an existing slug from the roster, or introduce a new entity in newEntities and then reference its slug.
 - Prior accepted events are referenced as e<number> exactly as listed in the context.
 - Label your own drafts d1, d2, … in order, and use those labels in within-batch cause references.
-- State patches are flat records of scalar facts (strings, numbers, booleans) — legible ledger lines, not nested data.`
+- State patches are lists of {key, value} facts with scalar values (string, number, or boolean) — legible ledger lines like {"key": "literacyRate", "value": 0.09}, never nested data.`

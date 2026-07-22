@@ -73,7 +73,7 @@ describe('LLM draft schemas', () => {
     deltas: [
       {
         entitySlug: 'byzantine-empire',
-        patch: { grainSecurity: 'convoyed' },
+        patch: [{ key: 'grainSecurity', value: 'convoyed' }],
         note: 'The city eats on a schedule negotiated by others.',
       },
     ],
