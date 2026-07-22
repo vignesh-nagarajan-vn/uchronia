@@ -6,7 +6,7 @@
 2. **Seed consequences** ✅ — years ~0–2 after the POD: 3–5 high-confidence events (no wildcards, plausibility ≥ 0.6), founding the entity roster
 3. **Era loop** ✅ — per era: `derive-pressures` (3–7 tensions read off the state, §4.3) → `era-generate` (snapshot + pressures + dial + distance) → dual review → commit → convergence scan. One `POST /api/branches/:id/generate` runs seed + all eras to the horizon.
 4. **Convergence scan** ✅ — after each era, accepted events are compared against nearby baseline anchors; genuine matches become `ConvergencePoint`s and flag their events (P3)
-5. Lazy expanders: event detail, biographies, era deep-dive (M6), artifacts (M8)
+5. **Lazy expanders** ✅ — event detail (conditioned on causes/effects and the state *as of that event*), era deep-dives (essay over pressures + events, flips status to `expanded`), and branch-local biographies (held to every ledger line). All fill exactly once; detail on a shared pre-fork event is the same history for every descendant, so the fill is shared. Routes: `POST /api/branches/:b/events/:id/expand` · `/eras/:id/expand` · `/entities/:id/biography`. Artifacts land at M8.
 6. Branch fork with optional sub-POD (M7)
 
 ## Era planning & resume
@@ -60,8 +60,11 @@ Templates in `packages/core/src/prompts/`, one file each, `id` + semver `version
 | `derive-pressures` | 3–7 named tensions from the state snapshot (+ dial's attractor pull) | 1.0.0 | critic |
 | `era-generate` | One era of consequences from snapshot + pressures + dial + distance | 1.0.0 | generation |
 | `convergence-scan` | Conservative rhyme-detection against baseline anchors | 1.0.0 | critic |
+| `event-expand` | Expanded narrative from state-at-event + causal neighborhood | 1.0.0 | generation |
+| `era-deepdive` | Era essay over pressures and events | 1.0.0 | generation |
+| `entity-biography` | In-timeline biography held to the ledger | 1.0.0 | generation |
 
-*(event-expand, entity-biography, era-deepdive, artifact-\* land at M6–M8.)*
+*(artifact-\* land at M8.)*
 
 ## Baseline dataset
 
