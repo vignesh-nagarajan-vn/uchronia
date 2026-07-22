@@ -1,0 +1,25 @@
+{
+  "name": "uchronia",
+  "private": true,
+  "version": "0.0.1",
+  "description": "An alternate-history engine — git rebase for history.",
+  "packageManager": "pnpm@11.16.0",
+  "engines": {
+    "node": ">=22.12"
+  },
+  "scripts": {
+    "dev": "pnpm --parallel --filter @uchronia/server --filter @uchronia/web dev",
+    "dev:server": "pnpm --filter @uchronia/server dev",
+    "dev:web": "pnpm --filter @uchronia/web dev",
+    "build": "pnpm -r build",
+    "test": "pnpm -r test",
+    "typecheck": "pnpm -r typecheck",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "migrate": "pnpm --filter @uchronia/server migrate",
+    "e2e": "pnpm --filter @uchronia/web e2e"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.5.5"
+  }
+}

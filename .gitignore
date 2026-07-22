@@ -1,0 +1,30 @@
+# dependencies
+node_modules/
+
+# builds
+dist/
+*.tsbuildinfo
+
+# environment — secrets never committed
+.env
+.env.local
+
+# runtime data
+data/
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+
+# test output
+coverage/
+playwright-report/
+test-results/
+blob-report/
+
+# editor / os
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
