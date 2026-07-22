@@ -12,6 +12,7 @@ import type { ServerDeps } from './deps.js'
 import { ApiError } from './http-error.js'
 import { branchRoutes } from './routes/branches.js'
 import { expandRoutes } from './routes/expand.js'
+import { forkRoutes } from './routes/fork.js'
 import { generateRoutes } from './routes/generate.js'
 import { metaRoutes } from './routes/meta.js'
 import { timelineRoutes } from './routes/timelines.js'
@@ -25,6 +26,7 @@ export function createApp(deps: ServerDeps): Hono {
   app.route('/api', branchRoutes(deps))
   app.route('/api', generateRoutes(deps))
   app.route('/api', expandRoutes(deps))
+  app.route('/api', forkRoutes(deps))
 
   app.onError((err, c) => {
     if (err instanceof ApiError) {
