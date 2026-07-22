@@ -65,8 +65,12 @@ Templates in `packages/core/src/prompts/`, one file each, `id` + semver `version
 | `event-expand` | Expanded narrative from state-at-event + causal neighborhood | 1.0.0 | generation |
 | `era-deepdive` | Era essay over pressures and events | 1.0.0 | generation |
 | `entity-biography` | In-timeline biography held to the ledger | 1.0.0 | generation |
+| `artifact-newspaper` | Diegetic front page (era-appropriate masthead, columns, notices) | 1.0.0 | generation |
+| `artifact-letter` | Diegetic personal letter (news arriving slantwise) | 1.0.0 | generation |
+| `artifact-encyclopedia` | Entry from an in-world reference work, decades on | 1.0.0 | generation |
+| `artifact-poster` | Proclamation / bill / propaganda sheet with an issuer | 1.0.0 | generation |
 
-*(artifact-\* land at M8.)*
+**Artifacts (F8):** `POST /api/branches/:b/events/:id/artifacts {kind}` — conditioned on the state *as of the event*, one document per (event, kind); asking again returns the same document (the reader deserves a stable source). All four are HTML/CSS typographic compositions client-side — no image generation.
 
 ## Baseline dataset
 

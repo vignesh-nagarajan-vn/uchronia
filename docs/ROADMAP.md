@@ -12,7 +12,7 @@ Mirrors §13 of the master prompt ([MASTER_PROMPT reference](../CLAUDE.md)). Upd
 | M5 — Era engine | ✅ 2026-07-22 | Fibonacci era plan with resume-by-ordinal, pressures step (+ dial attractor pull), era-generate, convergence scan against the record; baseline.json authored (203 curated anchors); mock demo paths (revise at era 1, dispute at era 2); 106 tests green |
 | M6 — Lazy expansion | ✅ 2026-07-22 | Event detail (state-at-event conditioning), era deep-dives, branch-local biographies — fill-once semantics incl. shared pre-fork fills; routes + persistence; lens tagging was already first-class at generation (M3). 120 tests green |
 | M7 — Branching | ✅ 2026-07-22 | Fork endpoint with sub-POD normalization; child era plans from the fork year; compare endpoint (branch↔branch with shared-prefix/divergence-point, branch↔baseline); invisible-slug collision renaming in draft resolution; multi-level fork tests (grandchild) green end to end |
-| M8 — Artifacts | ⬜ | |
+| M8 — Artifacts | ✅ 2026-07-22 | Four diegetic generators with per-kind schemas and period-aware mock content (era-bucketed mastheads, notices, in-world encyclopedia voice); (event, kind)-stable documents; route + persistence; 133 tests green |
 | M9 — Web foundation | ⬜ | |
 | M10 — Web depth | ⬜ | |
 | M11 — Export & polish | ⬜ | |
