@@ -39,9 +39,14 @@ packages/core      Pure engine. IO only via injected ports (provider/clock/rng/i
   src/rng.ts         seeded deterministic RNG (mock + tests)
   src/prompts/       prompt registry (one file per template, id + semver version)  [M3+]
   data/baseline.json curated real-history anchors (skeleton until M5)
-apps/server        Hono. Routes + SSE, AnthropicProvider, Drizzle + better-sqlite3.
+apps/server        Hono. Routes + SSE, AnthropicProvider [M3], Drizzle + better-sqlite3.
   src/config.ts      env parsing; ANTHROPIC_API_KEY lives here and only here
-  src/app.ts         Hono app factory (testable), src/index.ts = listener
+  src/deps.ts        ServerDeps injection (repo/provider/idgen/clock); tests build their own
+  src/app.ts         app factory + error→HTTP mapping; src/index.ts = listener
+  src/routes/        meta (config/baseline), timelines (CRUD+import/export), branches (view)
+  src/views.ts       assembleBranchView — World → BranchView
+  src/db/            schema.ts (drizzle), client.ts (open+migrate), repo.ts
+  drizzle/           committed SQL migrations (regenerate: pnpm migrate after schema edits)
 apps/web           Vite + React. RED THREAD interface (docs/DESIGN.md) [M9+]
 docs/              ARCHITECTURE, DATA_MODEL, GENERATION, DESIGN(+NOTES), TESTING, ROADMAP, adr/
 ```
@@ -64,7 +69,8 @@ pnpm typecheck              # tsc --noEmit, all packages
 pnpm lint                   # biome check (format + lint)
 pnpm lint:fix               # biome check --write
 pnpm build                  # all packages (web: vite build; server: esbuild bundle)
-pnpm migrate                # drizzle migrations [lands at M2]
+pnpm migrate                # drizzle-kit generate — new migration after schema edits
+                            # (migrations APPLY automatically at server start)
 pnpm e2e                    # playwright mock-mode journey [lands at M10]
 ```
 

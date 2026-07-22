@@ -6,7 +6,7 @@ Mirrors §13 of the master prompt ([MASTER_PROMPT reference](../CLAUDE.md)). Upd
 | --- | --- | --- |
 | M0 — Foundation | ✅ 2026-07-22 | Workspace, CI, Vitest wired (17 tests green), docs skeletons, CLAUDE.md v1, ADR-0001 |
 | M1 — Schemas & engine store | ✅ 2026-07-22 | Full §3 schema set + fixture world; World store with normalized structural-sharing forks, state replay, pre-fork guards; validator v1 (8 rules, each tested); 58 tests green |
-| M2 — Persistence & API skeleton | ⬜ | |
+| M2 — Persistence & API skeleton | ✅ 2026-07-22 | Drizzle schema + committed migrations, Repo layer, LLMProvider port + structured repair loop, deterministic MockProvider (pod intake works for arbitrary text), CRUD/import/export/branch-view routes; 81 tests green |
 | M3 — Generation v1 | ⬜ | |
 | M4 — Critic & validation loop | ⬜ | |
 | M5 — Era engine | ⬜ | |
@@ -20,6 +20,7 @@ Mirrors §13 of the master prompt ([MASTER_PROMPT reference](../CLAUDE.md)). Upd
 
 ## Open threads
 
+- Until M3 wires `AnthropicProvider`, live mode (key present) still runs on the MockProvider — `createDeps` notes this.
 - CI includes a Playwright job from M10 onward (no e2e tests exist before then).
 - `packages/core/data/baseline.json` is a 3-anchor skeleton until authored at M5.
 - Push access verified 2026-07-22 via Windows Credential Manager (`git:https://github.com`); milestone-boundary pushes are unblocked.
