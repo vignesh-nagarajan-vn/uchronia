@@ -1,4 +1,5 @@
 import { podNormalize } from './pod-normalize.js'
+import { seedConsequences } from './seed-consequences.js'
 import type { PromptTemplate } from './types.js'
 
 /**
@@ -9,6 +10,7 @@ import type { PromptTemplate } from './types.js'
 // biome-ignore lint/suspicious/noExplicitAny: heterogenous registry; call sites use the typed exports
 export const PROMPT_REGISTRY: Record<string, PromptTemplate<any, any>> = {
   [podNormalize.id]: podNormalize,
+  [seedConsequences.id]: seedConsequences,
 }
 
 export function templateVersions(): Array<{ id: string; version: string; role: string }> {
