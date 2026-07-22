@@ -2,6 +2,7 @@ import { convergenceScan } from './convergence-scan.js'
 import { criticReview } from './critic-review.js'
 import { derivePressures } from './derive-pressures.js'
 import { eraGenerate } from './era-generate.js'
+import { entityBiography, eraDeepDive, eventExpand } from './expanders.js'
 import { podNormalize } from './pod-normalize.js'
 import { regenerateEvent } from './regenerate-event.js'
 import { seedConsequences } from './seed-consequences.js'
@@ -21,6 +22,9 @@ export const PROMPT_REGISTRY: Record<string, PromptTemplate<any, any>> = {
   [derivePressures.id]: derivePressures,
   [eraGenerate.id]: eraGenerate,
   [convergenceScan.id]: convergenceScan,
+  [eventExpand.id]: eventExpand,
+  [eraDeepDive.id]: eraDeepDive,
+  [entityBiography.id]: entityBiography,
 }
 
 export function templateVersions(): Array<{ id: string; version: string; role: string }> {
