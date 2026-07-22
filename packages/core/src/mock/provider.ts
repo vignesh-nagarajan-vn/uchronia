@@ -5,6 +5,7 @@ import { seededRng } from '../rng.js'
 import { mockConvergenceScan } from './convergence.js'
 import { mockCriticReview, mockRegenerateEvent } from './critic.js'
 import { mockEraGenerate } from './era.js'
+import { mockBiography, mockEraDeepDive, mockEventExpand } from './expanders.js'
 import { mockPodNormalize } from './pod-normalize.js'
 import { mockDerivePressures } from './pressures.js'
 import { mockSeedConsequences } from './seed.js'
@@ -53,4 +54,7 @@ const DEFAULT_HANDLERS: Record<string, MockHandler> = {
   'derive-pressures': mockDerivePressures,
   'era-generate': mockEraGenerate,
   'convergence-scan': mockConvergenceScan,
+  'event-expand': mockEventExpand,
+  'era-deepdive': mockEraDeepDive,
+  'entity-biography': mockBiography,
 }
