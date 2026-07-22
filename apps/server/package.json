@@ -1,0 +1,32 @@
+{
+  "name": "@uchronia/server",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "start": "tsx src/index.ts",
+    "start:mock": "cross-env UCHRONIA_MOCK=1 tsx src/index.ts",
+    "build": "esbuild src/index.ts --bundle --platform=node --format=esm --outfile=dist/index.js --external:better-sqlite3 --banner:js=\"import { createRequire } from 'node:module'; const require = createRequire(import.meta.url);\"",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.19.6",
+    "@uchronia/core": "workspace:*",
+    "@uchronia/schemas": "workspace:*",
+    "hono": "^4.10.4",
+    "zod": "^4.1.12"
+  },
+  "devDependencies": {
+    "@types/node": "^22.18.0",
+    "@vitest/coverage-v8": "^3.2.4",
+    "cross-env": "^10.0.0",
+    "esbuild": "^0.25.10",
+    "tsx": "^4.20.4",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4"
+  }
+}
