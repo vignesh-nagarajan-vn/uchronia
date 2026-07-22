@@ -1,6 +1,6 @@
 # CLAUDE.md — agent onboarding contract
 
-This file is the single source of truth for any agent session in this repository. A fresh agent reading only this file must be able to work productively. **Last verified: 2026-07-22 (M0).**
+This file is the single source of truth for any agent session in this repository. A fresh agent reading only this file must be able to work productively. **Last verified: 2026-07-22 (v0.1.0).**
 
 ## 1. What Uchronia is
 
@@ -43,19 +43,30 @@ packages/core      Pure engine. IO only via injected ports (provider/clock/rng/i
   src/llm.ts         LLMProvider port + provider error taxonomy
   src/ports.ts       Clock/IdGen ports (+ sequentialIdGen for deterministic tests)
   src/errors.ts      typed error taxonomy   src/rng.ts  seeded RNG
-  src/baseline.ts    curated baseline loader; data/baseline.json (skeleton until M5)
+  src/baseline.ts    curated baseline loader; data/baseline.json (203 curated anchors)
 apps/server        Hono. Routes + SSE, AnthropicProvider, Drizzle + better-sqlite3.
   src/config.ts      env parsing; ANTHROPIC_API_KEY lives here and only here
   src/deps.ts        ServerDeps injection (repo/provider/idgen/clock); tests build their own
   src/providers/     anthropic.ts — live provider (structured outputs, streaming, typed errors)
   src/app.ts         app factory + error→HTTP mapping; src/index.ts = listener
-  src/routes/        meta (config/baseline), timelines (CRUD+import/export), branches (view),
-                     generate (SSE pipeline runs; persist-before-stream)
+  src/routes/        meta (config/baseline), timelines (CRUD+import/export+compare),
+                     branches (view + md/html export), generate (SSE; persist-before-stream),
+                     expand (event/era/entity), fork, artifacts
   src/views.ts       assembleBranchView — World → BranchView
+  src/exporters.ts   renderMarkdown + renderStaticHtml (self-contained, no-JS edition)
   src/db/            schema.ts (drizzle), client.ts (open+migrate), repo.ts
   drizzle/           committed SQL migrations (regenerate: pnpm migrate after schema edits)
-apps/web           Vite + React. RED THREAD interface (docs/DESIGN.md) [M9+]
+apps/web           Vite + React. RED THREAD interface (docs/DESIGN.md is binding)
+  src/styles/        index.css — all §7 tokens (Survey + Nitrate themes), fonts via @fontsource
+  src/lib/           api.ts (typed client) · sse.ts + generation.ts (stream → query cache) ·
+                     theme.tsx · thread-geometry.ts (red-thread curves) · gallery.ts · format.ts
+  src/components/    Shell, Stamp, EventCard, EraHeader, RecordTick, ThreadOverlay,
+                     DialControl, ForkDialog, ShortcutsDialog
+  src/views/         Atlas (composer+catalogue), TimelineView (virtualized spine),
+                     EventDetail, Dossier, DeltaView, CompareView, ArtifactReader, SettingsView
+  e2e/               journey.spec.ts — the §11.3 Playwright journey (mock mode)
 docs/              ARCHITECTURE, DATA_MODEL, GENERATION, DESIGN(+NOTES), TESTING, ROADMAP, adr/
+demo/              the-unburnt-library.uchronia.json — importable showcase timeline
 ```
 
 Dependency direction: web → server → core → schemas (schemas shared by all). The pipeline lives in `packages/core/src/pipeline/` (from M3); prompts in `packages/core/src/prompts/` (from M3).
@@ -78,7 +89,8 @@ pnpm lint:fix               # biome check --write
 pnpm build                  # all packages (web: vite build; server: esbuild bundle)
 pnpm migrate                # drizzle-kit generate — new migration after schema edits
                             # (migrations APPLY automatically at server start)
-pnpm e2e                    # playwright mock-mode journey [lands at M10]
+pnpm e2e                    # playwright mock-mode journey (boots server+web itself, keyless;
+                            # first run: pnpm --filter @uchronia/web exec playwright install chromium)
 ```
 
 Per package: `pnpm --filter @uchronia/<schemas|core|server|web> <script>`.
@@ -98,7 +110,7 @@ Per package: `pnpm --filter @uchronia/<schemas|core|server|web> <script>`.
 
 - Schemas are Zod-first in `packages/schemas`; everything an LLM produces is validated before touching any store. Summary + fork semantics: [docs/DATA_MODEL.md](docs/DATA_MODEL.md).
 - Pipeline: POD intake → seed consequences → era loop (snapshot + pressures + dial → validate → critique → accept/regenerate/dispute) → convergence scan; lazy expanders for detail/biographies/artifacts. Details + prompt registry + dial mapping: [docs/GENERATION.md](docs/GENERATION.md).
-- Design system RED THREAD: [docs/DESIGN.md](docs/DESIGN.md) — must be finalized before any UI code (§7.8 of the brief).
+- Design system RED THREAD: [docs/DESIGN.md](docs/DESIGN.md) — finalized before the first UI commit (§7.8) and binding for all UI work; realization log in [docs/DESIGN_NOTES.md](docs/DESIGN_NOTES.md). Two hard rules worth repeating: record blue is reserved for attested history, thread red for divergence/causality — neither is ever decoration.
 
 ## 7. Engineering conventions
 
@@ -110,7 +122,7 @@ Per package: `pnpm --filter @uchronia/<schemas|core|server|web> <script>`.
 
 ## 8. Current status
 
-M0 (foundation) in progress — see [docs/ROADMAP.md](docs/ROADMAP.md) for live status and open threads. No UI yet (by design; DESIGN.md gates M9). Engine milestones M1+ pending.
+**v0.1.0 shipped** — all milestones M0–M12 complete; see [docs/ROADMAP.md](docs/ROADMAP.md) for the honest per-milestone record and open threads (notably: live mode is wired but untested against the real API from this machine; M9–M12 landed as consolidated commits per user direction). The full mock-mode product works keyless: `UCHRONIA_MOCK=1 pnpm dev`, or import `demo/the-unburnt-library.uchronia.json` from Settings.
 
 ## 9. Documentation sync directive (binding)
 

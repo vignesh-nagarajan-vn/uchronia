@@ -13,15 +13,16 @@ Mirrors §13 of the master prompt ([MASTER_PROMPT reference](../CLAUDE.md)). Upd
 | M6 — Lazy expansion | ✅ 2026-07-22 | Event detail (state-at-event conditioning), era deep-dives, branch-local biographies — fill-once semantics incl. shared pre-fork fills; routes + persistence; lens tagging was already first-class at generation (M3). 120 tests green |
 | M7 — Branching | ✅ 2026-07-22 | Fork endpoint with sub-POD normalization; child era plans from the fork year; compare endpoint (branch↔branch with shared-prefix/divergence-point, branch↔baseline); invisible-slug collision renaming in draft resolution; multi-level fork tests (grandchild) green end to end |
 | M8 — Artifacts | ✅ 2026-07-22 | Four diegetic generators with per-kind schemas and period-aware mock content (era-bucketed mastheads, notices, in-world encyclopedia voice); (event, kind)-stable documents; route + persistence; 133 tests green |
-| M9 — Web foundation | ⬜ | |
-| M10 — Web depth | ⬜ | |
-| M11 — Export & polish | ⬜ | |
-| M12 — Ship v0.1.0 | ⬜ | |
+| M9 — Web foundation | ✅ 2026-07-22 | DESIGN.md finalized first; RED THREAD tokens (Survey + Nitrate), fonts self-hosted; Atlas (composer + 12-entry catalogue + open ledgers); Timeline v1: virtualized spine, POD split, record rail, streaming ink-in; screenshot review logged in DESIGN_NOTES |
+| M10 — Web depth | ✅ 2026-07-22 | Event detail, dossiers, lens filters, red-thread hover layer (with honest off-screen counts), Delta tree, Compare (branch/branch + branch/record), Artifact reader (4 typographic templates), keyboard map, a11y floor (fieldsets, list fallbacks, reduced motion, AA both themes); Playwright journey green |
+| M11 — Export & polish | ✅ 2026-07-22 | Markdown + self-contained static HTML branch exports (design language inlined, no JS), JSON import via Settings, empty/error states, reduced-motion audit |
+| M12 — Ship v0.1.0 | ✅ 2026-07-22 | Demo timeline committed (demo/the-unburnt-library.uchronia.json: 67 events, 2 branches, disputes, convergences, artifacts); README with real captures; docs audit; CLAUDE.md truth pass; tag v0.1.0 |
 
 ## Open threads
 
 - Live-mode generation is wired but has not been exercised against the real API from this machine (no key present); mock parity is the tested path. First run with a key should start with one small timeline.
 - Concurrent generation runs on the same branch are not locked against each other (single-user local app); doc'd here rather than engineered around.
-- CI includes a Playwright job from M10 onward (no e2e tests exist before then).
-- `packages/core/data/baseline.json` is a 3-anchor skeleton until authored at M5.
+- Per user direction on 2026-07-22, M9–M12 landed as a small number of consolidated commits instead of §11.1's 5–15-per-milestone grain (process deviation, not architectural — recorded here in lieu of an ADR).
+- Delta view lines run fork→horizon rather than fork→last-event (branch last-event years aren't in the compare-side payloads); honest but slightly generous. Candidate refinement for 0.2.
+- The web bundle warns at ~674 kB (d3 + motion + react-aria); code-splitting the Delta/Artifact routes is the obvious next win.
 - Push access verified 2026-07-22 via Windows Credential Manager (`git:https://github.com`); milestone-boundary pushes are unblocked.

@@ -6,8 +6,11 @@
 
 Uchronia is an alternate-history engine. Choose or write a **Point of Divergence** — *"the Library of Alexandria never burns"* — and watch history re-derive itself era by era. Drill into events, read biographies of people as they exist in this timeline, hold fake primary sources generated from inside the world, fork sub-branches at any event, and compare everything against real history.
 
-<!-- hero screenshot placeholder — real capture lands at M12 -->
-*(screenshot coming at v0.1.0)*
+![The timeline: the blue record splitting at the POD, the red thread peeling away](docs/media/timeline.png)
+
+<p align="center"><em>Survey by day, Nitrate by night:</em></p>
+
+![The same ledger in the Nitrate (dark) theme](docs/media/timeline-nitrate.png)
 
 ## Not a listicle generator
 
@@ -31,6 +34,11 @@ The prose is the surface. The graph is the truth.
 - **Branching** — fork at any event with an optional sub-POD; compare any two branches, or a branch against the real record.
 - **Export** — full JSON, markdown, and a self-contained static HTML edition of any branch.
 
+| | |
+| --- | --- |
+| ![The Atlas: composer and catalogue](docs/media/atlas.png) | ![The delta: red threads leaving the blue trunk](docs/media/delta.png) |
+| ![An event unfolded: causes, artifacts, critique](docs/media/event-detail.png) | ![A diegetic letter from inside the timeline](docs/media/artifact-letter.png) |
+
 ## Quickstart
 
 Requires Node ≥ 22 and pnpm (`corepack enable pnpm`).
@@ -49,6 +57,8 @@ pnpm dev
 Web app: http://localhost:5173 · API: http://localhost:8787
 
 Everything in the UI is reachable in mock mode; CI runs exclusively keyless.
+
+**Try the bundled demo:** Settings → *import a ledger* → [`demo/the-unburnt-library.uchronia.json`](demo/the-unburnt-library.uchronia.json) — an Alexandria timeline with 67 events across two branches, disputed entries, convergence points, and diegetic artifacts, all mock-derived.
 
 ## Architecture
 
