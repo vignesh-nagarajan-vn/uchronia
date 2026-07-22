@@ -34,16 +34,22 @@ packages/schemas   Zod-first schemas + inferred types + fixtures (zero deps beyo
 packages/core      Pure engine. IO only via injected ports (provider/clock/rng/idgen).
   src/world.ts       World store: structural-sharing fork resolution, state replay, guards
   src/validator.ts   machine validator (8 pure rules) — validateBranch/validateWorld
+  src/pipeline/      run.ts (orchestrator), drafts.ts (LLM drafts→rows), structured.ts
+                     (zod + bounded repair loop), events.ts (PipelineEvent stream types)
+  src/prompts/       registry + templates (pod-normalize, seed-consequences, …) + fragments
+  src/mock/          MockProvider + per-template handlers + flavor banks
+  src/dial.ts        determinism dial → concrete generation parameters (§4.4)
+  src/llm.ts         LLMProvider port + provider error taxonomy
   src/ports.ts       Clock/IdGen ports (+ sequentialIdGen for deterministic tests)
-  src/errors.ts      typed error taxonomy
-  src/rng.ts         seeded deterministic RNG (mock + tests)
-  src/prompts/       prompt registry (one file per template, id + semver version)  [M3+]
-  data/baseline.json curated real-history anchors (skeleton until M5)
-apps/server        Hono. Routes + SSE, AnthropicProvider [M3], Drizzle + better-sqlite3.
+  src/errors.ts      typed error taxonomy   src/rng.ts  seeded RNG
+  src/baseline.ts    curated baseline loader; data/baseline.json (skeleton until M5)
+apps/server        Hono. Routes + SSE, AnthropicProvider, Drizzle + better-sqlite3.
   src/config.ts      env parsing; ANTHROPIC_API_KEY lives here and only here
   src/deps.ts        ServerDeps injection (repo/provider/idgen/clock); tests build their own
+  src/providers/     anthropic.ts — live provider (structured outputs, streaming, typed errors)
   src/app.ts         app factory + error→HTTP mapping; src/index.ts = listener
-  src/routes/        meta (config/baseline), timelines (CRUD+import/export), branches (view)
+  src/routes/        meta (config/baseline), timelines (CRUD+import/export), branches (view),
+                     generate (SSE pipeline runs; persist-before-stream)
   src/views.ts       assembleBranchView — World → BranchView
   src/db/            schema.ts (drizzle), client.ts (open+migrate), repo.ts
   drizzle/           committed SQL migrations (regenerate: pnpm migrate after schema edits)
