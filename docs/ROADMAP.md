@@ -4,7 +4,7 @@ Mirrors §13 of the master prompt ([MASTER_PROMPT reference](../CLAUDE.md)). Upd
 
 | Milestone | Status | Notes |
 | --- | --- | --- |
-| M0 — Foundation | 🔨 in progress | Workspace, CI, docs skeletons, CLAUDE.md v1 |
+| M0 — Foundation | ✅ 2026-07-22 | Workspace, CI, Vitest wired (17 tests green), docs skeletons, CLAUDE.md v1, ADR-0001 |
 | M1 — Schemas & engine store | ⬜ | |
 | M2 — Persistence & API skeleton | ⬜ | |
 | M3 — Generation v1 | ⬜ | |
@@ -22,4 +22,4 @@ Mirrors §13 of the master prompt ([MASTER_PROMPT reference](../CLAUDE.md)). Upd
 
 - CI includes a Playwright job from M10 onward (no e2e tests exist before then).
 - `packages/core/data/baseline.json` is a 3-anchor skeleton until authored at M5.
-- Push access to GitHub not yet verified from this machine (no `gh` auth); will attempt at the M0 boundary and record the outcome here.
+- Push access verified 2026-07-22 via Windows Credential Manager (`git:https://github.com`); milestone-boundary pushes are unblocked.
