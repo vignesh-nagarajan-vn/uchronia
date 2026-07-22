@@ -1,0 +1,114 @@
+@import '@fontsource/im-fell-english/400.css';
+@import '@fontsource/im-fell-english/400-italic.css';
+@import '@fontsource/spectral/400.css';
+@import '@fontsource/spectral/400-italic.css';
+@import '@fontsource/spectral/500.css';
+@import '@fontsource/spectral/600.css';
+@import '@fontsource/spectral/600-italic.css';
+@import '@fontsource/ibm-plex-mono/400.css';
+@import '@fontsource/ibm-plex-mono/500.css';
+@import 'tailwindcss';
+
+/* RED THREAD tokens — see docs/DESIGN.md. Color carries meaning:
+   record blue = attested history only; thread red = divergence/causality only. */
+@theme {
+  --color-paper: #e8eae3;
+  --color-paper-raised: #eff1eb;
+  --color-ink: #22261f;
+  --color-ink-faded: #5c6157;
+  --color-record: #174a7c;
+  --color-thread: #a8281a;
+  --color-thread-wash: rgba(168, 40, 26, 0.1);
+  --color-record-wash: rgba(23, 74, 124, 0.08);
+  --color-rule: #c6cabf;
+
+  --color-lens-political: #4a4e45;
+  --color-lens-technological: #4f5d5c;
+  --color-lens-cultural: #6d4e63;
+  --color-lens-economic: #6b5e3f;
+  --color-lens-daily-life: #57604a;
+
+  --font-fell: 'IM Fell English', 'Iowan Old Style', 'Palatino Linotype', serif;
+  --font-body: 'Spectral', Georgia, 'Times New Roman', serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'Cascadia Mono', monospace;
+}
+
+:root[data-theme='dark'] {
+  --color-paper: #0f1420;
+  --color-paper-raised: #161c2b;
+  --color-ink: #ede8dc;
+  --color-ink-faded: #a9a395;
+  --color-record: #7fa9d9;
+  --color-thread: #d96a55;
+  --color-thread-wash: rgba(217, 106, 85, 0.14);
+  --color-record-wash: rgba(127, 169, 217, 0.12);
+  --color-rule: #2a3245;
+
+  --color-lens-political: #9aa08f;
+  --color-lens-technological: #8fa6a4;
+  --color-lens-cultural: #b391a8;
+  --color-lens-economic: #b3a37d;
+  --color-lens-daily-life: #9aa688;
+}
+
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
+@layer base {
+  html {
+    background: var(--color-paper);
+  }
+  body {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection {
+    background: var(--color-thread-wash);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-thread);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      /* biome-ignore lint/complexity/noImportantStyles: reduced-motion must win every specificity war */
+      animation-duration: 0.01ms !important;
+      /* biome-ignore lint/complexity/noImportantStyles: reduced-motion must win every specificity war */
+      animation-iteration-count: 1 !important;
+      /* biome-ignore lint/complexity/noImportantStyles: reduced-motion must win every specificity war */
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer utilities {
+  .font-fell {
+    font-family: var(--font-fell);
+  }
+  .font-data {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: 0.01em;
+  }
+  .stamp {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+  }
+  /* The ledger sheet: flat, ruled, faintly raised. No shadows-as-elevation. */
+  .sheet {
+    background: var(--color-paper-raised);
+    border: 1px solid var(--color-rule);
+    border-radius: 2px;
+  }
+  .thread-dim {
+    opacity: 0.35;
+    transition: opacity 160ms ease;
+  }
+}

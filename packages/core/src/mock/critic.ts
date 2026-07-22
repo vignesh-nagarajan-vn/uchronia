@@ -67,11 +67,12 @@ export function mockCriticReview(rawArgs: unknown, rng: Rng): CritiqueOut {
  */
 export function mockRegenerateEvent(rawArgs: unknown, _rng: Rng): RegeneratedEventOut {
   const { draft } = rawArgs as RegenerateArgs
+  const repairedSummary = draft.summary
+    .replace(/\bsuddenly\b/gi, 'over the following season')
+    .replace(/\bgreat war\b/gi, 'widening confrontation, itemized in levy rolls,')
   const repaired: DraftEvent = {
     ...draft,
-    summary: draft.summary
-      .replace(/\bsuddenly\b/gi, 'over the following season')
-      .replace(/\bgreat war\b/gi, 'widening confrontation, itemized in levy rolls,'),
+    summary: repairedSummary.charAt(0).toUpperCase() + repairedSummary.slice(1),
     plausibility: {
       score: Math.min(1, draft.plausibility.score + 0.05),
       rationale: `${draft.plausibility.rationale} Revised after review: the mechanism is now named instead of asserted.`,

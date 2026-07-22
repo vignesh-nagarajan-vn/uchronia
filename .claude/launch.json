@@ -1,0 +1,14 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "uchronia",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["dev"],
+      "port": 5173,
+      "env": {
+        "UCHRONIA_MOCK": "1"
+      }
+    }
+  ]
+}

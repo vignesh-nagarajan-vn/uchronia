@@ -6,7 +6,13 @@
   },
   "files": {
     "ignoreUnknown": true,
-    "includes": ["**", "!apps/server/drizzle", "!packages/core/data", "!**/*.gen.ts"]
+    "includes": [
+      "**",
+      "!apps/server/drizzle",
+      "!packages/core/data",
+      "!apps/web/src/styles",
+      "!**/*.gen.ts"
+    ]
   },
   "formatter": {
     "enabled": true,

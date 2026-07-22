@@ -1,0 +1,175 @@
+import { useQueryClient } from '@tanstack/react-query'
+import type { BranchView, EntityView, EventView } from '@uchronia/schemas'
+import { useCallback, useRef, useState } from 'react'
+import { streamGeneration } from './sse.js'
+
+export interface GenerationState {
+  status: 'idle' | 'running' | 'done' | 'error'
+  currentEra: string | null
+  error: string | null
+  /** Event ids that arrived over this stream — the ink-in set. */
+  freshIds: Set<string>
+}
+
+/**
+ * Drive one generation run, applying each SSE frame to the branch-view cache
+ * so events ink into the ledger as they are accepted (§4.8). On completion the
+ * canonical view is refetched.
+ */
+export function useGeneration(branchId: string) {
+  const queryClient = useQueryClient()
+  const [state, setState] = useState<GenerationState>({
+    status: 'idle',
+    currentEra: null,
+    error: null,
+    freshIds: new Set(),
+  })
+  const abortRef = useRef<AbortController | null>(null)
+
+  const stop = useCallback(() => {
+    abortRef.current?.abort()
+  }, [])
+
+  const start = useCallback(async () => {
+    if (abortRef.current) return
+    const controller = new AbortController()
+    abortRef.current = controller
+    const freshIds = new Set<string>()
+    setState({ status: 'running', currentEra: null, error: null, freshIds })
+
+    const key = ['branch-view', branchId]
+    const update = (fn: (view: BranchView) => BranchView) => {
+      queryClient.setQueryData<BranchView>(key, (old) => (old ? fn(old) : old))
+    }
+
+    try {
+      for await (const frame of streamGeneration(branchId, controller.signal)) {
+        const data = frame.data as Record<string, unknown>
+        switch (frame.event) {
+          case 'era.started': {
+            const era = data.era as BranchView['eras'][number]
+            setState((s) => ({ ...s, currentEra: era.title }))
+            update((view) =>
+              view.eras.some((e) => e.id === era.id)
+                ? view
+                : { ...view, eras: [...view.eras, era] },
+            )
+            break
+          }
+          case 'era.completed': {
+            const era = data.era as BranchView['eras'][number]
+            update((view) => ({
+              ...view,
+              eras: view.eras.map((e) => (e.id === era.id ? era : e)),
+            }))
+            break
+          }
+          case 'entity.created': {
+            const entity = data.entity as BranchView['entities'][number]
+            const withView: EntityView = {
+              ...entity,
+              state: { ...entity.initialState },
+              changeLog: [],
+            }
+            update((view) =>
+              view.entities.some((e) => e.id === entity.id)
+                ? view
+                : { ...view, entities: [...view.entities, withView] },
+            )
+            break
+          }
+          case 'event.accepted': {
+            const event = data.event as BranchView['events'][number] & { causes?: string[] }
+            const edges = (data.edges ?? []) as BranchView['edges']
+            freshIds.add(event.id)
+            update((view) => {
+              if (view.events.some((e) => e.id === event.id)) return view
+              const eventView: EventView = {
+                ...event,
+                causes: edges.map((e) => e.id),
+                effects: [],
+              }
+              // Keep entity ledgers live as deltas land.
+              const entities = view.entities.map((entity) => {
+                const deltas = event.deltas.filter((d) => d.entityId === entity.id)
+                if (deltas.length === 0) return entity
+                let nextState = entity.state
+                const lines = deltas.map((d) => {
+                  nextState = { ...nextState, ...d.patch }
+                  return {
+                    eventId: event.id,
+                    year: event.date.year,
+                    dateLabel: event.date.label,
+                    patch: d.patch,
+                    note: d.note,
+                  }
+                })
+                return { ...entity, state: nextState, changeLog: [...entity.changeLog, ...lines] }
+              })
+              const effectsByEvent = new Map<string, string[]>()
+              for (const edge of edges) {
+                effectsByEvent.set(edge.fromEventId, [
+                  ...(effectsByEvent.get(edge.fromEventId) ?? []),
+                  edge.id,
+                ])
+              }
+              return {
+                ...view,
+                events: [
+                  ...view.events.map((e) =>
+                    effectsByEvent.has(e.id)
+                      ? { ...e, effects: [...e.effects, ...(effectsByEvent.get(e.id) ?? [])] }
+                      : e,
+                  ),
+                  eventView,
+                ],
+                edges: [...view.edges, ...edges],
+                entities,
+              }
+            })
+            break
+          }
+          case 'convergence.found': {
+            const point = data.point as BranchView['convergences'][number]
+            const eventId = data.eventId as string
+            update((view) => ({
+              ...view,
+              convergences: [...view.convergences, point],
+              events: view.events.map((e) =>
+                e.id === eventId ? { ...e, flags: { ...e.flags, convergence: true } } : e,
+              ),
+            }))
+            break
+          }
+          case 'run.error': {
+            setState((s) => ({
+              ...s,
+              status: 'error',
+              error: String((data as { message?: string }).message ?? 'generation failed'),
+            }))
+            break
+          }
+          default:
+            break
+        }
+      }
+      setState((s) => (s.status === 'error' ? s : { ...s, status: 'done', currentEra: null }))
+    } catch (error) {
+      if (!controller.signal.aborted) {
+        setState((s) => ({
+          ...s,
+          status: 'error',
+          error: error instanceof Error ? error.message : 'generation failed',
+        }))
+      } else {
+        setState((s) => ({ ...s, status: 'done', currentEra: null }))
+      }
+    } finally {
+      abortRef.current = null
+      // Re-sync the canonical view (effects arrays, flags, reports).
+      void queryClient.invalidateQueries({ queryKey: key })
+    }
+  }, [branchId, queryClient])
+
+  return { state, start, stop }
+}

@@ -1,0 +1,112 @@
+import {
+  type Artifact,
+  BranchView,
+  CompareView,
+  ConfigResponse,
+  type CreateTimelineRequest,
+  CreateTimelineResponse,
+  type EntityBiography,
+  type Era,
+  type Event,
+  ForkResponse,
+  TimelineAggregate,
+  TimelineSummary,
+} from '@uchronia/schemas'
+import { z } from 'zod'
+
+/** Typed API client. Every response is parsed with the shared schemas. */
+
+export class ApiError extends Error {
+  readonly status: number
+  constructor(status: number, message: string) {
+    super(message)
+    this.status = status
+  }
+}
+
+async function request<T>(path: string, init?: RequestInit): Promise<T> {
+  const res = await fetch(path, {
+    headers: init?.body ? { 'content-type': 'application/json' } : undefined,
+    ...init,
+  })
+  if (!res.ok) {
+    let message = `${res.status}`
+    try {
+      const body = (await res.json()) as { message?: string; error?: string }
+      message = body.message ?? body.error ?? message
+    } catch {
+      // keep the status text
+    }
+    throw new ApiError(res.status, message)
+  }
+  if (res.status === 204) return undefined as T
+  return (await res.json()) as T
+}
+
+export const api = {
+  config: async () => ConfigResponse.parse(await request('/api/config')),
+
+  listTimelines: async () => z.array(TimelineSummary).parse(await request('/api/timelines')),
+
+  createTimeline: async (body: CreateTimelineRequest) =>
+    CreateTimelineResponse.parse(
+      await request('/api/timelines', { method: 'POST', body: JSON.stringify(body) }),
+    ),
+
+  deleteTimeline: (id: string) => request<void>(`/api/timelines/${id}`, { method: 'DELETE' }),
+
+  branchView: async (branchId: string) =>
+    BranchView.parse(await request(`/api/branches/${branchId}/view`)),
+
+  expandEvent: async (branchId: string, eventId: string) =>
+    (
+      await request<{ event: Event }>(`/api/branches/${branchId}/events/${eventId}/expand`, {
+        method: 'POST',
+      })
+    ).event,
+
+  expandEra: async (branchId: string, eraId: string) =>
+    (
+      await request<{ era: Era }>(`/api/branches/${branchId}/eras/${eraId}/expand`, {
+        method: 'POST',
+      })
+    ).era,
+
+  biography: async (branchId: string, entityId: string) =>
+    (
+      await request<{ biography: EntityBiography }>(
+        `/api/branches/${branchId}/entities/${entityId}/biography`,
+        { method: 'POST' },
+      )
+    ).biography,
+
+  fork: async (branchId: string, body: { eventId: string; name?: string; subPodText?: string }) =>
+    ForkResponse.parse(
+      await request(`/api/branches/${branchId}/fork`, {
+        method: 'POST',
+        body: JSON.stringify(body),
+      }),
+    ),
+
+  generateArtifact: async (branchId: string, eventId: string, kind: Artifact['kind']) =>
+    (
+      await request<{ artifact: Artifact }>(
+        `/api/branches/${branchId}/events/${eventId}/artifacts`,
+        { method: 'POST', body: JSON.stringify({ kind }) },
+      )
+    ).artifact,
+
+  compare: async (a: string, b: string) =>
+    CompareView.parse(await request(`/api/compare?a=${a}&b=${b}`)),
+
+  importAggregate: async (aggregate: unknown) =>
+    request<{ timelineId: string }>('/api/import', {
+      method: 'POST',
+      body: JSON.stringify(aggregate),
+    }),
+
+  exportAggregate: async (timelineId: string) =>
+    TimelineAggregate.parse(await request(`/api/timelines/${timelineId}/export.json`)),
+
+  exportJsonUrl: (timelineId: string) => `/api/timelines/${timelineId}/export.json`,
+}
