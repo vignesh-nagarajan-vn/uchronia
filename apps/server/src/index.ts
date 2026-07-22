@@ -1,9 +1,11 @@
 import { serve } from '@hono/node-server'
 import { createApp } from './app.js'
 import { loadConfig } from './config.js'
+import { createDeps } from './deps.js'
 
 const config = loadConfig()
-const app = createApp(config)
+const deps = createDeps(config)
+const app = createApp(deps)
 
 serve({ fetch: app.fetch, port: config.port }, (info) => {
   const mode = config.mock ? 'mock' : 'live'
