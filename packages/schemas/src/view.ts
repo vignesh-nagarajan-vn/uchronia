@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { Artifact } from './artifact.js'
 import { Branch } from './branch.js'
-import { ConvergencePoint } from './convergence.js'
+import { BaselineAnchor, ConvergencePoint } from './convergence.js'
 import { CausalEdge } from './edge.js'
 import { EntityBiography, EntityView } from './entity.js'
 import { Era } from './era.js'
@@ -73,3 +73,41 @@ export const ImportResponse = z.object({
   timelineId: z.string(),
 })
 export type ImportResponse = z.infer<typeof ImportResponse>
+
+export const ForkRequest = z.object({
+  eventId: z.string().min(1),
+  name: z.string().min(1).max(120).optional(),
+  subPodText: z.string().min(4).max(2000).optional(),
+})
+export type ForkRequest = z.infer<typeof ForkRequest>
+
+export const ForkResponse = z.object({
+  branch: Branch,
+})
+export type ForkResponse = z.infer<typeof ForkResponse>
+
+/** One side of a comparison: a branch resolved to its spine. */
+const CompareSide = z.object({
+  branch: Branch,
+  eras: z.array(Era),
+  events: z.array(EventView),
+})
+
+export const CompareView = z.object({
+  timeline: Timeline,
+  pod: PointOfDivergence,
+  a: CompareSide,
+  /** Either another branch, or the curated record. */
+  b: z.union([
+    CompareSide,
+    z.object({
+      baseline: z.literal(true),
+      anchors: z.array(BaselineAnchor),
+    }),
+  ]),
+  /** Events visible on both sides (branch↔branch), in a's order. */
+  sharedEventIds: z.array(z.string()),
+  /** The last shared event — where the two lines part. */
+  divergesAfterEventId: z.string().nullable(),
+})
+export type CompareView = z.infer<typeof CompareView>
