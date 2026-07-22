@@ -9,8 +9,8 @@ dist/
 .env
 .env.local
 
-# runtime data
-data/
+# runtime data (SQLite lives under apps/server/data; packages/core/data is source!)
+apps/server/data/
 *.db
 *.db-journal
 *.db-wal
