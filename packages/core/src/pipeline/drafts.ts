@@ -78,10 +78,24 @@ export function resolveDrafts(ctx: DraftContext, drafts: DraftEvent[]): Resolved
         )
         continue
       }
+      // Slugs are timeline-unique but visibility is branch-local: a sibling
+      // branch this one cannot see may already own the slug. Rename
+      // deterministically — parallel histories are allowed their own
+      // "Improved Method"; batch-internal references keep using the original.
+      let storedSlug = def.slug
+      let n = 2
+      while (world.entityBySlug(storedSlug)) {
+        storedSlug = `${def.slug}-${n++}`
+      }
+      if (storedSlug !== def.slug) {
+        warnings.push(
+          `entity slug "${def.slug}" is taken on an invisible branch; stored as "${storedSlug}"`,
+        )
+      }
       const entity: Entity = {
         id: idgen.next(),
         timelineId: world.timeline.id,
-        slug: def.slug,
+        slug: storedSlug,
         type: def.type,
         name: def.name,
         description: def.description,
