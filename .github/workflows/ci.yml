@@ -37,3 +37,17 @@ jobs:
 
       - name: Build
         run: pnpm build
+
+      - name: Install Playwright chromium
+        run: pnpm --filter @uchronia/web exec playwright install --with-deps chromium
+
+      - name: Journey (mock mode)
+        run: pnpm e2e
+
+      - name: Upload journey trace on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: apps/web/test-results/
+          retention-days: 7

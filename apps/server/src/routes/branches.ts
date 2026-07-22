@@ -1,6 +1,7 @@
 import { World } from '@uchronia/core'
 import { Hono } from 'hono'
 import type { ServerDeps } from '../deps.js'
+import { renderMarkdown, renderStaticHtml } from '../exporters.js'
 import { ApiError } from '../http-error.js'
 import { assembleBranchView } from '../views.js'
 
@@ -8,14 +9,32 @@ export function branchRoutes(deps: ServerDeps): Hono {
   const app = new Hono()
   const { repo } = deps
 
-  app.get('/branches/:id/view', (c) => {
-    const branchId = c.req.param('id')
+  const worldFor = (branchId: string): World => {
     const timelineId = repo.branchTimelineId(branchId)
     if (!timelineId) throw new ApiError(404, 'not-found', 'branch not found')
     const aggregate = repo.loadAggregate(timelineId)
     if (!aggregate) throw new ApiError(404, 'not-found', 'timeline not found')
-    const world = World.fromAggregate(aggregate)
-    return c.json(assembleBranchView(world, branchId))
+    return World.fromAggregate(aggregate)
+  }
+
+  app.get('/branches/:id/view', (c) => {
+    const branchId = c.req.param('id')
+    return c.json(assembleBranchView(worldFor(branchId), branchId))
+  })
+
+  app.get('/branches/:id/export.md', (c) => {
+    const branchId = c.req.param('id')
+    const markdown = renderMarkdown(worldFor(branchId), branchId)
+    c.header('Content-Type', 'text/markdown; charset=utf-8')
+    c.header('Content-Disposition', `attachment; filename="uchronia-${branchId}.md"`)
+    return c.body(markdown)
+  })
+
+  app.get('/branches/:id/export.html', (c) => {
+    const branchId = c.req.param('id')
+    const html = renderStaticHtml(worldFor(branchId), branchId)
+    c.header('Content-Disposition', `inline; filename="uchronia-${branchId}.html"`)
+    return c.html(html)
   })
 
   return app
