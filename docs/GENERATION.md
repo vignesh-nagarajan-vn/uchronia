@@ -4,7 +4,7 @@
 
 1. **POD intake** ✅ — freeform text → normalized `PointOfDivergence` + baseline-context summary (runs inside `POST /api/timelines`)
 2. **Seed consequences** ✅ — years ~0–2 after the POD: 3–5 high-confidence events (no wildcards, plausibility ≥ 0.6), founding the entity roster; `POST /api/branches/:id/generate`
-3. Era loop (M4–M5): state snapshot + pressures + dial + distance → candidates → machine validator → critic → accept / regenerate (≤2) / mark disputed → commit deltas → advance
+3. **Dual review** ✅ (per batch) — machine validator → critic → accept / regenerate (≤2) / mark disputed; era loop with pressures lands at M5
 4. Convergence scan against baseline anchors (M5)
 5. Lazy expanders: event detail, biographies, era deep-dive (M6), artifacts (M8)
 6. Branch fork with optional sub-POD (M7)
@@ -51,9 +51,30 @@ Templates in `packages/core/src/prompts/`, one file each, `id` + semver `version
 | --- | --- | --- | --- |
 | `pod-normalize` | Freeform POD → normalized record + baseline context | 1.0.0 | utility |
 | `seed-consequences` | First 0–2 years: disciplined events + entity roster + era header | 1.0.0 | generation |
+| `critic-review` | Skeptical-historian verdicts over one draft batch | 1.0.0 | critic |
+| `regenerate-event` | One bounded replacement for a flagged draft | 1.0.0 | generation |
 
-*(derive-pressures, era-generate, critic-review, regenerate-event, convergence-scan, event-expand, entity-biography, era-deepdive, artifact-\* land at M4–M8.)*
+*(derive-pressures, era-generate, convergence-scan, event-expand, entity-biography, era-deepdive, artifact-\* land at M5–M8.)*
 
-## Critic rubric (§4.5)
+## Dual review — critic rubric & retry flow (§4.5, P4)
 
-Documented at M4. Issue types (already in schemas): anachronism · contradiction-with-state · implausible-leap · teleology · great-man-overreach · presentism · cliche-collapse · tone. Verdicts: pass / revise / dispute. The critic verdicts; it never rewrites.
+Every batch passes two reviewers in `refineBatch` (`core/src/pipeline/critic.ts`):
+
+1. **Machine validator** — the batch is trial-applied to a clone of the world; rule failures are attributed back to draft refs. Machine rules cannot be argued with.
+2. **Critic** (`critic-review`, critic-tier model) — a skeptical historian judging ONLY against the state snapshot, prior events, the POD, and the rubric: *anachronism · contradiction-with-state · implausible-leap · teleology · great-man-overreach · presentism · cliche-collapse · tone*. It verdicts, never rewrites: **pass** (commit; "note" issues allowed) · **revise** (fixable — worth one regeneration) · **dispute** (unsound in a way regeneration won't fix — keep it visible with notes).
+
+Retry flow, bounded at 2 revisions per batch:
+
+```
+drafts → [wildcards under the dial floor discarded]
+       → assess (machine + critic)
+       → while any draft has machine failures or verdict=revise (≤2 rounds):
+           regenerate-event per flagged draft (issues attached) → re-assess
+       → sentence:
+           machine still failing → DROPPED (warning streamed)
+           critic still objecting → COMMITTED, flags.disputed + criticNotes attached
+           otherwise → committed clean
+       → CritiqueReport persisted; critique.completed streamed
+```
+
+An entirely-dropped batch raises `GenerationValidationError` (fails loudly). Disputed events flow through the normal `event.accepted` SSE frame with `flags.disputed` set — the ledger shows the mark and the critic's notes travel with the event.

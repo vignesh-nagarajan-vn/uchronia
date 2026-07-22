@@ -8,7 +8,7 @@ Mirrors §13 of the master prompt ([MASTER_PROMPT reference](../CLAUDE.md)). Upd
 | M1 — Schemas & engine store | ✅ 2026-07-22 | Full §3 schema set + fixture world; World store with normalized structural-sharing forks, state replay, pre-fork guards; validator v1 (8 rules, each tested); 58 tests green |
 | M2 — Persistence & API skeleton | ✅ 2026-07-22 | Drizzle schema + committed migrations, Repo layer, LLMProvider port + structured repair loop, deterministic MockProvider (pod intake works for arbitrary text), CRUD/import/export/branch-view routes; 81 tests green |
 | M3 — Generation v1 | ✅ 2026-07-22 | Seed pipeline (drafts→resolution→clone-validation→commit), dial mapping, AnthropicProvider (structured outputs via output_config.format, streaming, typed errors), SSE generate route with persist-before-stream and clean abort; mock parity incl. flavor banks; 96 tests green |
-| M4 — Critic & validation loop | ⬜ | |
+| M4 — Critic & validation loop | ✅ 2026-07-22 | refineBatch dual review: clone-validated machine rules + critic rubric, bounded regeneration, drop vs dispute sentencing, wildcard plausibility floor, CritiqueReports persisted + streamed; retry/dispute/drop paths each tested |
 | M5 — Era engine | ⬜ | |
 | M6 — Lazy expansion | ⬜ | |
 | M7 — Branching | ⬜ | |
