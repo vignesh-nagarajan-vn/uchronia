@@ -10,6 +10,31 @@ const ERA_TITLES = [
   'The News Travels',
 ]
 
+/** Variant tails for the divergence event, so parallel mock worlds read differently. */
+const LANDING_TAILS = [
+  (city: string) =>
+    `In ${city}, the first weeks pass in wary normality: couriers carry the news outward, and those who grasp what has changed are mostly those paid to worry about it.`,
+  (city: string) =>
+    `${city} takes the news the way ports take weather — schedules shift before opinions do, and the harbormaster knows before the council does.`,
+  (city: string) =>
+    `In ${city} the criers say little and the letter-writers say too much; between them, a usable account of the new situation takes a season to form.`,
+]
+
+const RIVAL_OPENINGS = [
+  (rival: string) =>
+    `Reports reaching ${rival} force a quiet revision of plans laid under the old assumptions. Envoys are reassigned, an inventory is taken, and a policy that had seemed settled is reopened — without any public admission that anything has changed.`,
+  (rival: string) =>
+    `In the chanceries of ${rival}, the first response is to ask for better copies of the dispatches. The second is to move money. Only the third, months later, is anything resembling a policy.`,
+  (rival: string) =>
+    `${rival} greets the news with practiced calm and private arithmetic: garrison rosters are recounted, grain contracts re-read, and an heirloom map quietly redrawn.`,
+]
+
+const ERA_SUMMARIES = [
+  'The divergence lands and the world absorbs it: records are taken, prices move, and the neighbors begin to recalculate. Nothing irreversible has happened yet — except the thing itself.',
+  'Two years of consequences arrive in the order consequences always do: first prices, then postures, then paperwork. The great structures hold; their assumptions do not.',
+  'The world does not change so much as re-file itself: what was certain becomes pending, and clerks inherit the first draft of the new history.',
+]
+
 const DIVERGENCE_TITLES: Record<string, string[]> = {
   knowledge: ['The archive stands', 'The copyists keep working', 'What was not lost'],
   disease: ['The wards stay quiet', 'A sickness that never spreads', 'The spared season'],
@@ -48,7 +73,7 @@ export function mockSeedConsequences(rawArgs: unknown, rng: Rng): EraBatchOut {
     title: rng.pick(
       DIVERGENCE_TITLES[pod.mechanism] ?? DIVERGENCE_TITLES.politics ?? ['The divergence lands'],
     ),
-    summary: `${pod.statement} In ${flavor.city}, the first weeks pass in wary normality: couriers carry the news outward, and those who grasp what has changed are mostly those paid to worry about it.`,
+    summary: `${pod.statement} ${rng.pick(LANDING_TAILS)(flavor.city)}`,
     lenses: [mechanismLens],
     entitySlugs: [flavor.nationSlug, person.slug],
     newEntities: [
@@ -167,7 +192,7 @@ export function mockSeedConsequences(rawArgs: unknown, rng: Rng): EraBatchOut {
     year: y + 2,
     dateLabel: label(y + 2, 3),
     title: `${flavor.rival.charAt(0).toUpperCase() + flavor.rival.slice(1)} recalculates`,
-    summary: `Reports reaching ${flavor.rival} force a quiet revision of plans laid under the old assumptions. Envoys are reassigned, an inventory is taken, and a policy that had seemed settled is reopened — without any public admission that anything has changed.`,
+    summary: rng.pick(RIVAL_OPENINGS)(flavor.rival),
     lenses: ['political'],
     entitySlugs: [flavor.rivalSlug],
     newEntities: [
@@ -203,7 +228,7 @@ export function mockSeedConsequences(rawArgs: unknown, rng: Rng): EraBatchOut {
 
   return {
     title: rng.pick(ERA_TITLES),
-    summary: `The divergence lands and the world absorbs it: records are taken, prices move, and the neighbors begin to recalculate. Nothing irreversible has happened yet — except the thing itself.`,
+    summary: rng.pick(ERA_SUMMARIES),
     events: [d1, d2, d3, d4],
   }
 }

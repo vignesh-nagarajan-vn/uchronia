@@ -10,7 +10,7 @@ const MECHANISM_KEYWORDS: Array<[Mechanism, RegExp]> = [
   ['disease', /\b(plague|disease|pandemic|epidemic|pox|influenza|penicillin|vaccine|cholera)/i],
   [
     'technology',
-    /\b(engine|steam|machine|invention|process|haber|apollo|rocket|electri|telegraph|computer|fleet)/i,
+    /\b(engine|steam|machine|invention|process|haber|apollo|rocket|electri|telegraph|computer|fleet|flight|flyer|aviation|aircraft|airplane|wright|automobile|railway|railroad|radio|transistor|internet)/i,
   ],
   ['economics', /\b(trade|bank|market|coin|currency|tax|merchant|silk road|economic)/i],
   ['environment', /\b(storm|climate|volcan|drought|flood|earthquake|carrington|famine|harvest)/i],
@@ -33,18 +33,70 @@ const REGION_KEYWORDS: Array<[string, RegExp]> = [
     'Europe',
     /\b(europe|london|paris|mainz|vienna|germany|france|england|spain|italy|russia|1848)/i,
   ],
-  ['North America', /\b(america|united states|usa|apollo|nasa|mexico)/i],
+  [
+    'North America',
+    /\b(america|united states|usa|apollo|nasa|mexico|kitty hawk|wright|carolina|canada)/i,
+  ],
   ['Africa', /\b(africa|mali|ethiopia|congo|timbuktu)/i],
 ]
 
 const TITLE_BANKS: Record<Mechanism, string[]> = {
-  knowledge: ['The Unburnt Archive', 'The Long Library', 'A Republic of Letters'],
-  disease: ['The Spared Generation', 'The Quiet Wards', 'A World Less Mourned'],
-  politics: ['The Road Not Signed', 'A Crown Withheld', 'The Standing Wall'],
-  technology: ['The Early Engine', 'The Patient Machine', 'Sparks Out of Season'],
-  economics: ['The Other Ledger', 'Coin and Consequence', 'The Unbroken Exchange'],
-  environment: ['The Sky That Held', 'A Kinder Season', 'The Unfallen Ash'],
-  culture: ['The Second Canon', 'A Different Congregation', 'The Altered Chorus'],
+  knowledge: [
+    'The Unburnt Archive',
+    'The Long Library',
+    'A Republic of Letters',
+    'The Kept Catalogue',
+    'What the Copyists Saved',
+    'The Margin Notes of Another Age',
+  ],
+  disease: [
+    'The Spared Generation',
+    'The Quiet Wards',
+    'A World Less Mourned',
+    'The Fever That Never Came',
+    'A Census of the Living',
+    'The Unrung Bells',
+  ],
+  politics: [
+    'The Road Not Signed',
+    'A Crown Withheld',
+    'The Standing Wall',
+    'The Treaty of Another Spring',
+    'An Empire of Second Thoughts',
+    'The Unsummoned Council',
+  ],
+  technology: [
+    'The Early Engine',
+    'The Patient Machine',
+    'Sparks Out of Season',
+    'The Workshop Century',
+    'An Age of Other Instruments',
+    'The Blueprint That Waited',
+  ],
+  economics: [
+    'The Other Ledger',
+    'Coin and Consequence',
+    'The Unbroken Exchange',
+    'A Different Rate of Interest',
+    'The Long Invoice',
+    'Markets of the Might-Have-Been',
+  ],
+  environment: [
+    'The Sky That Held',
+    'A Kinder Season',
+    'The Unfallen Ash',
+    'The Patient Weather',
+    'A Harvest Rewritten',
+    'The Year Without a Ruin',
+  ],
+  culture: [
+    'The Second Canon',
+    'A Different Congregation',
+    'The Altered Chorus',
+    'The Liturgy of Elsewhere',
+    'A Fashion for Other Truths',
+    'The Custom That Outlived Its Century',
+  ],
 }
 
 const CONTEXT_CLAUSES: Record<Mechanism, string> = {
