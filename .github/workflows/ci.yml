@@ -13,7 +13,7 @@ concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
-# Everything runs keyless in mock mode — no secrets in CI (§11.4).
+# Everything runs keyless in mock mode; no secrets in CI (§11.4).
 env:
   UCHRONIA_MOCK: '1'
 

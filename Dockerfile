@@ -1,4 +1,4 @@
-# Uchronia — single-container edition.
+# Uchronia, the single-container edition.
 #
 #   docker build -t uchronia .
 #   docker run -p 8787:8787 -v uchronia-data:/data uchronia
@@ -17,7 +17,7 @@ COPY . .
 RUN pnpm install --frozen-lockfile
 RUN pnpm --filter @uchronia/web build
 
-# The runtime keeps the workspace (tsx runs the server from source — simple,
+# The runtime keeps the workspace (tsx runs the server from source: simple,
 # identical to dev, and better-sqlite3's prebuilt binary comes along free).
 FROM node:22-bookworm-slim
 RUN corepack enable pnpm

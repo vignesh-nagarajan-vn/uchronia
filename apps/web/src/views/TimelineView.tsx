@@ -454,7 +454,7 @@ export function TimelineView() {
             type="search"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="search the ledger — /"
+            placeholder="search the ledger"
             aria-label="search events by title, summary, or entity"
             className="w-[190px] rounded-[2px] border border-rule bg-paper px-2 py-0.5 font-data text-[12px] placeholder:text-ink-faded/70"
           />
@@ -472,7 +472,7 @@ export function TimelineView() {
           {running ? (
             <span className="flex items-center gap-2">
               <span className="stamp text-thread" role="status">
-                deriving{generation.state.currentEra ? ` — ${generation.state.currentEra}` : '…'}
+                deriving{generation.state.currentEra ? `: ${generation.state.currentEra}` : '…'}
               </span>
               <button
                 type="button"
@@ -513,7 +513,7 @@ export function TimelineView() {
       {/* What the sighted watch ink in, screen readers hear era by era. */}
       <p className="sr-only" aria-live="polite">
         {running
-          ? `deriving ${generation.state.currentEra ?? ''} — ${generation.state.freshIds.size} events so far`
+          ? `deriving ${generation.state.currentEra ?? ''}, ${generation.state.freshIds.size} events so far`
           : generation.state.freshIds.size > 0
             ? `derivation finished with ${generation.state.freshIds.size} new events`
             : ''}

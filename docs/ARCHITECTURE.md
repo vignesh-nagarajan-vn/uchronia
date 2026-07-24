@@ -11,7 +11,7 @@ apps/web ──▶ apps/server ──▶ packages/core ──▶ packages/schema
 
 - **packages/schemas**: Zod schemas, inferred types, fixtures, and the shared API contracts (`view.ts`: `BranchView`, `CreateTimelineRequest`, …). Zero runtime deps beyond zod. Everything an LLM produces is validated against these before it touches any store; the web client parses responses against the same schemas.
 - **packages/core**: the pure engine. World store (fork resolution, state replay), machine validator, prompt registry, `LLMProvider` port, structured-generation repair loop, `MockProvider`, curated baseline. No IO except through injected ports.
-- **apps/server**: Hono on Node. Routes + SSE, `AnthropicProvider`, persistence via Drizzle + better-sqlite3, and the markdown/static-HTML exporters (`src/exporters.ts`). `ANTHROPIC_API_KEY` lives here and only here. Every `/api` route sits behind a 16 MB body limit and an env-driven CORS allowlist (`UCHRONIA_CORS_ORIGINS`); with `UCHRONIA_STATIC_DIR` set it also serves the built web app with SPA fallback (single-container deployment — see `docs/DEPLOY.md`).
+- **apps/server**: Hono on Node. Routes + SSE, `AnthropicProvider`, persistence via Drizzle + better-sqlite3, and the markdown/static-HTML exporters (`src/exporters.ts`). `ANTHROPIC_API_KEY` lives here and only here. Every `/api` route sits behind a 16 MB body limit and an env-driven CORS allowlist (`UCHRONIA_CORS_ORIGINS`); with `UCHRONIA_STATIC_DIR` set it also serves the built web app with SPA fallback (single-container deployment; see `docs/DEPLOY.md`).
 - **apps/web**: Vite + React. The RED THREAD interface (binding spec: `docs/DESIGN.md`). TanStack Router/Query for data, TanStack Virtual for the spine, d3 only for thread geometry math, Motion for ink-in, React Aria for dialogs/sliders. The SSE client (`src/lib/sse.ts` + `generation.ts`) folds pipeline frames straight into the query cache so streaming and refetching share one source of truth.
 
 ## Ports
@@ -59,7 +59,7 @@ POD intake (stage 1) already runs synchronously inside `POST /api/timelines`.
 
 ## Exports
 
-Three formats, all server-rendered: full-timeline JSON (`GET /api/timelines/:id/export.json`, re-importable via `POST /api/import`), branch markdown (`GET /api/branches/:id/export.md`), and a self-contained static HTML edition (`GET /api/branches/:id/export.html`) with the RED THREAD design language inlined — including its typefaces, embedded as woff2 data URIs: no scripts, no external requests, readable decades from now. Lifecycle endpoints round the API out: `PATCH /api/timelines/:id` (rename, dial, horizon extension), `POST /api/branches/:b/events/:id/regenerate` (a fresh telling in place), `DELETE /api/branches/:id` (leaf branches only).
+Three formats, all server-rendered: full-timeline JSON (`GET /api/timelines/:id/export.json`, re-importable via `POST /api/import`), branch markdown (`GET /api/branches/:id/export.md`), and a self-contained static HTML edition (`GET /api/branches/:id/export.html`) with the RED THREAD design language inlined, including its typefaces embedded as woff2 data URIs: no scripts, no external requests, readable decades from now. Lifecycle endpoints round the API out: `PATCH /api/timelines/:id` (rename, dial, horizon extension), `POST /api/branches/:b/events/:id/regenerate` (a fresh telling in place), `DELETE /api/branches/:id` (leaf branches only).
 
 ## Error taxonomy → HTTP
 

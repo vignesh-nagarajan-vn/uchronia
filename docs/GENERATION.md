@@ -13,11 +13,11 @@
 
 ## Era planning & resume
 
-`planEraSpans(originYear, horizonEnd)` (`core/src/pipeline/plan.ts`) fixes a branch's era plan up front: a 2-year seed window, then Fibonacci-widening spans (8, 13, 21, 34, 55, …): disciplined near the POD, roomy decades out (P2). Era ordinals index straight into the plan, so **an interrupted run resumes at `plan[ownEras.length]`**: no reseeding, no duplicates. Batch size grows with distance: `4 + min(3, ⌊distance/40⌋)`. Origin year is the POD for roots, the fork event's year for children (M7) — and **P2 discipline is measured from the branch's own origin**, so a branch forked a century downstream still opens with a tight, wildcard-free first era (`podDistanceYears` separately tells the prompt how far the root divergence lies).
+`planEraSpans(originYear, horizonEnd)` (`core/src/pipeline/plan.ts`) fixes a branch's era plan up front: a 2-year seed window, then Fibonacci-widening spans (8, 13, 21, 34, 55, …): disciplined near the POD, roomy decades out (P2). Era ordinals index straight into the plan, so **an interrupted run resumes at `plan[ownEras.length]`**: no reseeding, no duplicates. Batch size grows with distance: `4 + min(3, ⌊distance/40⌋)`. Origin year is the POD for roots, the fork event's year for children (M7), and **P2 discipline is measured from the branch's own origin**: a branch forked a century downstream still opens with a tight, wildcard-free first era (`podDistanceYears` separately tells the prompt how far the root divergence lies).
 
 ## Structured output
 
-All LLM output is structured JSON validated against `packages/schemas`. Every call flows through `generateStructured` (`core/src/pipeline/structured.ts`): parse → Zod-validate → bounded repair loop (max 2 re-asks with the validation errors attached) → `GenerationValidationError`, loudly. Calls carry the run's `AbortSignal` (checked before every attempt and passed into the provider's HTTP layer) and report `TokenUsage` into the ctx's usage sink — the server sums it against `UCHRONIA_MAX_RUN_TOKENS` (default 3M tokens/run; 0 disables) and aborts cleanly at the ceiling.
+All LLM output is structured JSON validated against `packages/schemas`. Every call flows through `generateStructured` (`core/src/pipeline/structured.ts`): parse → Zod-validate → bounded repair loop (max 2 re-asks with the validation errors attached) → `GenerationValidationError`, loudly. Calls carry the run's `AbortSignal` (checked before every attempt and passed into the provider's HTTP layer) and report `TokenUsage` into the ctx's usage sink; the server sums it against `UCHRONIA_MAX_RUN_TOKENS` (default 3M tokens/run; 0 disables) and aborts cleanly at the ceiling.
 
 The live `AnthropicProvider` (`apps/server/src/providers/anthropic.ts`) uses the SDK's current structured-output mechanism (`output_config.format` via `zodOutputFormat`) with streaming (`messages.stream` + `finalMessage`) so era batches stay under HTTP timeouts, SDK retry/backoff for 429/5xx, one automatic retry with a doubled budget on `max_tokens` truncation (ceiling 16k), abort-signal passthrough, per-call token usage, and the typed provider error taxonomy at the boundary (user aborts map to `GenerationAbortedError`). Because strict structured outputs require `additionalProperties: false`, LLM-facing state patches travel as `{key, value}` fact lists, folded into `StateRecord`s at draft resolution.
 
@@ -27,7 +27,7 @@ Handles, never ULIDs: entity **slugs**, `e<n>` = 1-based position in the branch'
 
 `POST /api/branches/:id/generate` returns SSE. Each frame's `event:` is the pipeline event type; `data:` is the JSON `PipelineEvent`:
 
-`run.started` → (`era.started` → (`entity.created`* `event.accepted`)* `era.completed`)* → `run.completed`, with `warning` frames interleaved and `run.error {code, message}` on failure. `event.disputed`, `critique.completed` (M4) and `convergence.found` (M5) join the era cycle. Every mutation is **persisted before it is streamed**: what the client saw is what the database holds; a client abort cancels in-flight provider calls via the AbortSignal and keeps everything accepted so far. One run per branch at a time — a concurrent `POST` 409s (`generation-active`), with a unique `(branch_id, ordinal)` index as the database backstop. Before a run starts, a half-persisted trailing era from a crash (events but no critique report) is rolled back and regenerated, with a streamed warning. `run.completed` carries the run's summed token usage; a budget-ceiling stop streams `run.error {code: "budget-exceeded"}`. In mock mode `UCHRONIA_MOCK_PACE_MS` (set by `pnpm dev:mock` to 250) holds each accepted event briefly so the ink-in is visible.
+`run.started` → (`era.started` → (`entity.created`* `event.accepted`)* `era.completed`)* → `run.completed`, with `warning` frames interleaved and `run.error {code, message}` on failure. `event.disputed`, `critique.completed` (M4) and `convergence.found` (M5) join the era cycle. Every mutation is **persisted before it is streamed**: what the client saw is what the database holds; a client abort cancels in-flight provider calls via the AbortSignal and keeps everything accepted so far. One run per branch at a time: a concurrent `POST` 409s (`generation-active`), with a unique `(branch_id, ordinal)` index as the database backstop. Before a run starts, a half-persisted trailing era from a crash (events but no critique report) is rolled back and regenerated, with a streamed warning. `run.completed` carries the run's summed token usage; a budget-ceiling stop streams `run.error {code: "budget-exceeded"}`. In mock mode `UCHRONIA_MOCK_PACE_MS` (set by `pnpm dev:mock` to 250) holds each accepted event briefly so the ink-in is visible.
 
 ## Model routing
 
@@ -36,7 +36,7 @@ Handles, never ULIDs: entity **slugs**, `e<n>` = 1-based position in the branch'
 | generation | `claude-sonnet-4-6` | `UCHRONIA_MODEL_GENERATION` |
 | critic + cheap utility | `claude-haiku-4-5-20251001` | `UCHRONIA_MODEL_CRITIC` |
 
-Role → model happens inside the provider; templates declare `role`. Mock mode (`UCHRONIA_MOCK=1`, or no key present) swaps the whole app onto the deterministic `MockProvider`: seeded per request, identical inputs → identical fixtures; arbitrary PODs work (intake reads years/mechanism/region from text — including aviation-age technology and North American markers; seed generation draws period- and region-appropriate names from era-bucketed flavor banks, with seeded sentence variants and six titles per mechanism so parallel ledgers read differently). CI runs exclusively in mock.
+Role → model happens inside the provider; templates declare `role`. Mock mode (`UCHRONIA_MOCK=1`, or no key present) swaps the whole app onto the deterministic `MockProvider`: seeded per request, identical inputs → identical fixtures; arbitrary PODs work (intake reads years/mechanism/region from text, including aviation-age technology and North American markers; seed generation draws period- and region-appropriate names from era-bucketed flavor banks, with seeded sentence variants and six titles per mechanism so parallel ledgers read differently). CI runs exclusively in mock.
 
 ## Dial mapping (§4.4)
 
@@ -46,10 +46,10 @@ Role → model happens inside the provider; templates declare `role`. Mock mode 
 | --- | --- |
 | (a) Prompt language | Three bands (butterfly < 34, balanced 34–66, railroad > 67), each with attractor-strength wording embedding the numeric dial, injected into every generation system prompt |
 | (b) Wildcard budget | `round(lerp(3 → 0.4, r) × min(1, distance/60))` per batch: more wildcards for butterfly histories, none near the POD for anyone |
-| (c) Convergence pressure | `r` (0–1), fed to the pressures step (M5); the attractor block is always present when anchors exist, its stance graded by band — context-only (butterfly) → may-pull (balanced) → should-pull (railroad) — so no mid-band cliff |
+| (c) Convergence pressure | `r` (0–1), fed to the pressures step (M5); the attractor block is always present when anchors exist, its stance graded by band (context-only for butterfly, may-pull for balanced, should-pull for railroad), so no mid-band cliff |
 | (d) Wildcard plausibility floor | `lerp(0.15 → 0.45, r)`: wildcards scoring below the floor are discarded before commit |
 
-The **critic is dial-aware**: its system prompt embeds the same attractor language and instructs that under a low dial, surprising-but-caused outcomes are the intended product — implausible-leap weighs whether cited causes carry the outcome, never resemblance to the familiar record.
+The **critic is dial-aware**: its system prompt embeds the same attractor language and instructs that under a low dial, surprising-but-caused outcomes are the intended product: implausible-leap weighs whether cited causes carry the outcome, never resemblance to the familiar record.
 
 ## Prompt registry (§4.7)
 
@@ -76,9 +76,9 @@ Templates in `packages/core/src/prompts/`, one file each, `id` + semver `version
 
 ## Baseline dataset
 
-`packages/core/data/baseline.json`: **203 hand-curated anchors** spanning 4000 BC → 2000 CE across every region and all five lenses (`provenance: "curated"`). Powers the record spine (F7), convergence candidates (anchors within an era-width+25y window of each era's midpoint), and the pressures step's attractor hints. `anchorsNear` ranks by **theatre before year**: same region (or global) first, adjacent regions second, the rest in the tail — an Alexandrian divergence no longer draws its attractors from Ming China, while off-region anchors still fill sparse periods. The scan prompt names each candidate's theatre and demands the causal road for any cross-theatre match.
+`packages/core/data/baseline.json`: **203 hand-curated anchors** spanning 4000 BC → 2000 CE across every region and all five lenses (`provenance: "curated"`). Powers the record spine (F7), convergence candidates (anchors within an era-width+25y window of each era's midpoint), and the pressures step's attractor hints. `anchorsNear` ranks by **theatre before year**: same region (or global) first, adjacent regions second, the rest in the tail: an Alexandrian divergence no longer draws its attractors from Ming China, while off-region anchors still fill sparse periods. The scan prompt names each candidate's theatre and demands the causal road for any cross-theatre match.
 
-**State snapshot budgeting.** `summarizeState` ranks entities by how recently history touched them, withholds the coldest beyond a cap (default 40, with an honest count), trims each line to its most recently written facts (default 14), and collapses ended entities into a terse `no longer extant` line — late-era prompts stop growing without bound.
+**State snapshot budgeting.** `summarizeState` ranks entities by how recently history touched them, withholds the coldest beyond a cap (default 40, with an honest count), trims each line to its most recently written facts (default 14), and collapses ended entities into a terse `no longer extant` line; late-era prompts stop growing without bound.
 
 **Entity lifecycle.** A delta may carry `ends: true` (death, dissolution). Endedness is replay-derived and therefore branch-local for free; the roster drops the dead, the validator's `no-posthumous-mutation` rule makes them unarguable, and era-generate is told that people age.
 
@@ -103,4 +103,4 @@ drafts → [wildcards under the dial floor discarded]
        → CritiqueReport persisted; critique.completed streamed
 ```
 
-An entirely-dropped batch raises `GenerationValidationError` (fails loudly). A convergence-scan failure after the era has committed degrades to a streamed warning — the era stands, unscanned — since aborting would strand a half-finished era for resume to skip. Disputed events flow through the normal `event.accepted` SSE frame with `flags.disputed` set: the ledger shows the mark and the critic's notes travel with the event.
+An entirely-dropped batch raises `GenerationValidationError` (fails loudly). A convergence-scan failure after the era has committed degrades to a streamed warning (the era stands, unscanned), since aborting would strand a half-finished era for resume to skip. Disputed events flow through the normal `event.accepted` SSE frame with `flags.disputed` set: the ledger shows the mark and the critic's notes travel with the event.

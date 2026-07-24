@@ -330,7 +330,7 @@ export function EventDetail() {
               onClick={() => regenerate.mutate()}
               disabled={regenerate.isPending}
               className="rounded-[2px] border border-rule px-4 py-1.5 text-[15px] text-ink-faded hover:bg-paper-raised hover:text-ink disabled:opacity-40"
-              title="a fresh telling of this event — same position, same causes, new texture"
+              title="a fresh telling of this event: same position, same causes, new texture"
             >
               {regenerate.isPending ? 'Retelling…' : 'Tell it again'}
             </button>

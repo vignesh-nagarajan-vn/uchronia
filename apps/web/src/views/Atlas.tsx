@@ -180,7 +180,7 @@ export function Atlas() {
           >
             {loadDemo.isPending ? 'binding the showcase ledger…' : 'load the showcase chronicle'}
           </button>{' '}
-          — 67 events of an Alexandria that never burned
+          (67 events of an Alexandria that never burned)
         </p>
       )}
       {demoError && (
@@ -285,7 +285,7 @@ export function Atlas() {
                 Burn this ledger?
               </Heading>
               <p className="mt-2 text-[14.5px] text-ink-faded">
-                “{burning.title}” — {burning.eventCount} events across {burning.branchCount}{' '}
+                “{burning.title}”: {burning.eventCount} events across {burning.branchCount}{' '}
                 {burning.branchCount === 1 ? 'branch' : 'branches'}. Burning is permanent; export it
                 first if you may want it back.
               </p>

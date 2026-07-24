@@ -34,7 +34,7 @@ Two things the spec words as fields are deliberately **derived**:
 
 State values are scalars or string lists, never nested JSON. Ledger lines must read like a ledger; depth belongs in prose.
 
-3. **Entity endedness**: a delta may carry `ends: true` (death, dissolution). Because death is replay-derived like all state, it is branch-local for free — a sibling branch that cannot see the ending event still sees the entity alive, and two branches may each end the same entity in their own way. `TimelineSummary.rootBranchId` is likewise derived at list time so clients can open a ledger without fetching its full aggregate.
+3. **Entity endedness**: a delta may carry `ends: true` (death, dissolution). Because death is replay-derived like all state, it is branch-local for free: a sibling branch that cannot see the ending event still sees the entity alive, and two branches may each end the same entity in their own way. `TimelineSummary.rootBranchId` is likewise derived at list time so clients can open a ledger without fetching its full aggregate.
 
 ## Fork semantics: structural sharing
 
