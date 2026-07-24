@@ -11,7 +11,7 @@ import { criticReview } from '../prompts/critic-review.js'
 import { regenerateEvent } from '../prompts/regenerate-event.js'
 import type { World } from '../world.js'
 import { summarizeRecentEvents, summarizeState } from './context.js'
-import type { PipelineCtx } from './ctx.js'
+import { callOpts, type PipelineCtx } from './ctx.js'
 import {
   type DraftContext,
   dropBackwardsEdges,
@@ -107,12 +107,17 @@ export async function refineBatch(args: {
     const criticVerdict = new Map<string, 'pass' | 'revise' | 'dispute'>()
     const toReview = criticTargets ? candidate.filter((d) => criticTargets.has(d.ref)) : candidate
     if (toReview.length > 0) {
-      const review = await generateStructured(ctx.provider, criticReview, {
-        ...criticContext,
-        dial,
-        causeGlossary: buildCauseGlossary(world, branchId, candidate),
-        drafts: toReview,
-      })
+      const review = await generateStructured(
+        ctx.provider,
+        criticReview,
+        {
+          ...criticContext,
+          dial,
+          causeGlossary: buildCauseGlossary(world, branchId, candidate),
+          drafts: toReview,
+        },
+        callOpts(ctx),
+      )
       for (const verdict of review.value.verdicts) {
         criticIssues.set(verdict.ref, verdict.issues)
         criticVerdict.set(verdict.ref, verdict.verdict)
@@ -141,14 +146,19 @@ export async function refineBatch(args: {
           ...(assessment.machine.get(draft.ref) ?? []),
           ...(finalIssues.get(draft.ref) ?? []).map((i) => `${i.type} (${i.severity}): ${i.note}`),
         ]
-        const replacement = await generateStructured(ctx.provider, regenerateEvent, {
-          podStatement: criticContext.podStatement,
-          eraTitle: criticContext.eraTitle,
-          eraSpan: criticContext.eraSpan,
-          stateSummary: criticContext.stateSummary,
-          draft,
-          issues,
-        })
+        const replacement = await generateStructured(
+          ctx.provider,
+          regenerateEvent,
+          {
+            podStatement: criticContext.podStatement,
+            eraTitle: criticContext.eraTitle,
+            eraSpan: criticContext.eraSpan,
+            stateSummary: criticContext.stateSummary,
+            draft,
+            issues,
+          },
+          callOpts(ctx),
+        )
         revisedRefs.add(draft.ref)
         return replacement.value.event
       }),

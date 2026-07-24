@@ -23,6 +23,14 @@ export interface StructuredRequest {
   args: unknown
   /** Stable string the mock seeds its RNG with. */
   seedKey: string
+  /** Cooperative cancellation: live providers pass this to their HTTP layer. */
+  signal?: AbortSignal
+}
+
+/** What one completion cost, when the provider knows. */
+export interface TokenUsage {
+  inputTokens: number
+  outputTokens: number
 }
 
 export interface StructuredResult {
@@ -31,6 +39,8 @@ export interface StructuredResult {
   raw: string
   model: string
   mode: ProviderMode
+  /** Absent for providers that meter nothing (the mock). */
+  usage?: TokenUsage
 }
 
 /** The port. Implementations: MockProvider (core), AnthropicProvider (server). */

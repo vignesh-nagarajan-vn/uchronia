@@ -1,5 +1,7 @@
 import type { Branch, PointOfDivergence, Timeline } from '@uchronia/schemas'
 import { describe, expect, it } from 'vitest'
+import { GenerationAbortedError } from '../errors.js'
+import type { LLMProvider } from '../llm.js'
 import { MockProvider } from '../mock/provider.js'
 import { fixedClock, sequentialIdGen } from '../ports.js'
 import { validateBranch } from '../validator.js'
@@ -154,6 +156,55 @@ describe('runGeneration — full pipeline (mock)', () => {
     expect(eras.length).toBeGreaterThanOrEqual(5)
     expect(new Set(eras.map((e) => e.ordinal)).size).toBe(eras.length)
     expect(eras.at(-1)?.endYear).toBe(-48 + 150)
+    expect(validateBranch(world, branchId)).toEqual([])
+  })
+
+  it('aborts cooperatively between eras, leaving committed history valid', async () => {
+    const { world, branchId } = freshWorld()
+    const controller = new AbortController()
+    const abortingCtx: PipelineCtx = { ...ctx(), signal: controller.signal }
+
+    let eraCount = 0
+    const run = runGeneration(abortingCtx, world, branchId)
+    await expect(async () => {
+      for await (const ev of run) {
+        if (ev.type === 'era.completed') {
+          eraCount++
+          if (eraCount === 2) controller.abort()
+        }
+      }
+    }).rejects.toThrow(GenerationAbortedError)
+
+    // Whatever committed before the abort stands, whole and valid.
+    expect(world.ownEras(branchId).length).toBeGreaterThanOrEqual(2)
+    expect(validateBranch(world, branchId)).toEqual([])
+  })
+
+  it('degrades a failed convergence scan to a warning instead of losing the era', async () => {
+    const { world, branchId } = freshWorld()
+    const inner = new MockProvider()
+    const flaky: LLMProvider = {
+      mode: inner.mode,
+      complete: (request) => {
+        if (request.templateId === 'convergence-scan') {
+          throw new Error('the scanner is on strike')
+        }
+        return inner.complete(request)
+      },
+    }
+    const events = await collect(
+      runGeneration({ ...ctx(), provider: flaky }, world, branchId),
+    )
+
+    expect(events.at(-1)).toEqual({ type: 'run.completed', branchId })
+    expect(
+      events.some(
+        (e) => e.type === 'warning' && e.message.includes('convergence scan failed'),
+      ),
+    ).toBe(true)
+    // Every era still completed and the branch validates; no convergences exist.
+    expect(world.ownEras(branchId).length).toBeGreaterThanOrEqual(5)
+    expect(world.resolveConvergences(branchId)).toEqual([])
     expect(validateBranch(world, branchId)).toEqual([])
   })
 

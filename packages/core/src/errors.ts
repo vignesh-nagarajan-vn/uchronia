@@ -42,3 +42,13 @@ export class GenerationValidationError extends UchroniaError {
     this.issues = issues
   }
 }
+
+/**
+ * The run was cancelled cooperatively (client disconnect, budget ceiling).
+ * Not a failure: everything committed before the abort stands.
+ */
+export class GenerationAbortedError extends UchroniaError {
+  constructor(reason = 'generation aborted') {
+    super('generation-aborted', reason)
+  }
+}

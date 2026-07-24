@@ -1,5 +1,5 @@
-import { GenerationValidationError } from '../errors.js'
-import type { LLMProvider, ProviderMode } from '../llm.js'
+import { GenerationAbortedError, GenerationValidationError } from '../errors.js'
+import type { LLMProvider, ProviderMode, StructuredRequest, TokenUsage } from '../llm.js'
 import type { PromptTemplate } from '../prompts/types.js'
 import { buildRequest } from '../prompts/types.js'
 
@@ -9,25 +9,39 @@ export interface GeneratedValue<T> {
   mode: ProviderMode
 }
 
+/** Per-call options threaded from the pipeline ctx (see callOpts). */
+export interface CallOpts {
+  signal?: AbortSignal
+  /** Invoked once per completed provider call that reported usage. */
+  onUsage?: (usage: TokenUsage, templateId: string, model: string) => void
+}
+
 const MAX_REPAIRS = 2
 
 /**
  * The structured-output boundary (§4.2): every LLM call in the pipeline goes
  * through here. Output is Zod-validated; on failure the model is re-asked with
  * the validation errors attached, at most {@link MAX_REPAIRS} times, then the
- * batch fails loudly with a GenerationValidationError.
+ * batch fails loudly with a GenerationValidationError. Aborts are checked
+ * before every attempt and the signal rides the request into the provider.
  */
 export async function generateStructured<A, T>(
   provider: LLMProvider,
   template: PromptTemplate<A, T>,
   args: A,
+  opts?: CallOpts,
 ): Promise<GeneratedValue<T>> {
-  const base = buildRequest(template, args)
-  let request = base
+  const base: StructuredRequest = {
+    ...buildRequest(template, args),
+    ...(opts?.signal ? { signal: opts.signal } : {}),
+  }
+  let request: StructuredRequest = base
   let issues: string[] = []
 
   for (let attempt = 0; attempt <= MAX_REPAIRS; attempt++) {
+    if (opts?.signal?.aborted) throw new GenerationAbortedError()
     const result = await provider.complete(request)
+    if (result.usage) opts?.onUsage?.(result.usage, template.id, result.model)
 
     let candidate: unknown = result.value
     if (candidate === undefined || candidate === null) {
@@ -52,10 +66,10 @@ export async function generateStructured<A, T>(
 }
 
 function withRepair(
-  base: ReturnType<typeof buildRequest>,
+  base: StructuredRequest,
   previousRaw: string,
   issues: string[],
-): ReturnType<typeof buildRequest> {
+): StructuredRequest {
   const preview = previousRaw.length > 4000 ? `${previousRaw.slice(0, 4000)}…` : previousRaw
   return {
     ...base,

@@ -2,7 +2,7 @@ import type { EntityBiography, Era, Event } from '@uchronia/schemas'
 import { NotFoundError } from '../errors.js'
 import { entityBiography, eraDeepDive, eventExpand } from '../prompts/expanders.js'
 import type { World } from '../world.js'
-import { makeProvenance, type PipelineCtx } from './ctx.js'
+import { callOpts, makeProvenance, type PipelineCtx } from './ctx.js'
 import { generateStructured } from './structured.js'
 
 /**
@@ -63,7 +63,7 @@ export async function expandEvent(
     stateSummary: stateLines.join('\n'),
     causeSummaries,
     effectSummaries,
-  })
+  }, callOpts(ctx))
   return world.setEventDetail(eventId, generated.value.detail)
 }
 
@@ -96,7 +96,7 @@ export async function expandEra(
       (p) => `${p.name} (${p.kind}, ${p.intensity}): ${p.description}`,
     ),
     eventLines,
-  })
+  }, callOpts(ctx))
   return world.setEraDetail(eraId, generated.value.detail)
 }
 
@@ -131,7 +131,7 @@ export async function writeBiography(
     stateLine,
     ledgerLines,
     relatedEvents,
-  })
+  }, callOpts(ctx))
   return world.setBiography({
     id: ctx.idgen.next(),
     entityId,

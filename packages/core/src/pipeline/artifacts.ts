@@ -9,7 +9,7 @@ import {
 } from '../prompts/artifacts.js'
 import type { PromptTemplate } from '../prompts/types.js'
 import type { World } from '../world.js'
-import { makeProvenance, type PipelineCtx } from './ctx.js'
+import { callOpts, makeProvenance, type PipelineCtx } from './ctx.js'
 import { generateStructured } from './structured.js'
 
 const TEMPLATES: Record<
@@ -65,7 +65,7 @@ export async function generateArtifact(
     stateSummary: stateLines.join('\n'),
     region: world.pod.region,
     distanceYears: event.distanceFromPod,
-  })
+  }, callOpts(ctx))
 
   const artifact: Artifact = {
     id: ctx.idgen.next(),

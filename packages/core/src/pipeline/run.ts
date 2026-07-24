@@ -1,7 +1,7 @@
-import type { ConvergencePoint, Era } from '@uchronia/schemas'
+import type { ConvergencePoint, ConvergenceScanOut, Era } from '@uchronia/schemas'
 import { anchorsNear } from '../baseline.js'
 import { dialParams } from '../dial.js'
-import { GenerationValidationError } from '../errors.js'
+import { GenerationAbortedError, GenerationValidationError } from '../errors.js'
 import { convergenceScan } from '../prompts/convergence-scan.js'
 import { derivePressures } from '../prompts/derive-pressures.js'
 import { eraGenerate } from '../prompts/era-generate.js'
@@ -9,10 +9,10 @@ import { seedConsequences } from '../prompts/seed-consequences.js'
 import type { World } from '../world.js'
 import { summarizeRecentEvents, summarizeState } from './context.js'
 import { buildCritiqueReport, type RefinedBatch, refineBatch } from './critic.js'
-import { makeProvenance, type PipelineCtx } from './ctx.js'
+import { callOpts, makeProvenance, type PipelineCtx } from './ctx.js'
 import type { PipelineEvent } from './events.js'
 import { eraBatchSize, planEraSpans } from './plan.js'
-import { generateStructured } from './structured.js'
+import { type GeneratedValue, generateStructured } from './structured.js'
 
 /** Commit a resolved batch into the world, yielding pipeline events in ink order. */
 export function* commitBatch(world: World, batch: RefinedBatch['batch']): Generator<PipelineEvent> {
@@ -85,7 +85,7 @@ export async function* runGeneration(
         baselineContext: pod.baselineContext,
       },
       dial,
-    })
+    }, callOpts(ctx))
     const provenance = makeProvenance(ctx, seedConsequences, generated.model)
     const era: Era = {
       id: ctx.idgen.next(),
@@ -106,6 +106,7 @@ export async function* runGeneration(
   // ---- Stage 3: the era loop ---------------------------------------------
   const startIndex = Math.max(isRoot ? 1 : 0, world.ownEras(branchId).length)
   for (let i = startIndex; i < plan.length; i++) {
+    if (ctx.signal?.aborted) throw new GenerationAbortedError()
     const span = plan[i]
     if (!span) break
     // P2 discipline is measured from this branch's OWN divergence — a child
@@ -134,7 +135,7 @@ export async function* runGeneration(
       dial,
       attractorHints,
       previousPressures,
-    })
+    }, callOpts(ctx))
 
     const batchSize = eraBatchSize(distance)
     const eraOut = await generateStructured(ctx.provider, eraGenerate, {
@@ -157,7 +158,7 @@ export async function* runGeneration(
       wildcardBudget: dial.wildcardBudget(distance),
       dial,
       subPodStatement: branch.subPod?.statement ?? null,
-    })
+    }, callOpts(ctx))
     const provenance = makeProvenance(ctx, eraGenerate, eraOut.model)
 
     const era: Era = {
@@ -215,19 +216,34 @@ async function* runReviewedEra(
   })
   if (candidates.length > 0) {
     const idToRef = new Map([...refined.batch.refToEventId].map(([ref, id]) => [id, ref]))
-    const scan = await generateStructured(ctx.provider, convergenceScan, {
-      podStatement: world.pod.statement,
-      region: world.pod.region,
-      events: refined.batch.events.map((e) => ({
-        ref: idToRef.get(e.id) ?? 'd0',
-        year: e.date.year,
-        title: e.title,
-        summary: e.summary,
-      })),
-      candidates,
-    })
+    // The era is already committed; a failed scan must not undo it. Degrade to
+    // a warning and let the era stand unscanned — aborts still propagate.
+    let scan: GeneratedValue<ConvergenceScanOut> | null
+    try {
+      scan = await generateStructured(ctx.provider, convergenceScan, {
+        podStatement: world.pod.statement,
+        region: world.pod.region,
+        events: refined.batch.events.map((e) => ({
+          ref: idToRef.get(e.id) ?? 'd0',
+          year: e.date.year,
+          title: e.title,
+          summary: e.summary,
+        })),
+        candidates,
+      }, callOpts(ctx))
+    } catch (error) {
+      if (error instanceof GenerationAbortedError) throw error
+      scan = null
+      const message = error instanceof Error ? error.message : String(error)
+      yield {
+        type: 'warning',
+        message: `convergence scan failed for era "${era.title}" — the era stands, unscanned: ${message}`,
+      }
+    }
     const candidateIds = new Set(candidates.map((c) => c.id))
-    for (const match of scan.value.matches) {
+    const matches = scan === null ? [] : scan.value.matches
+    const scanModel = scan === null ? '' : scan.model
+    for (const match of matches) {
       const eventId = refined.batch.refToEventId.get(match.ref)
       if (!eventId || !candidateIds.has(match.anchorId)) {
         yield {
@@ -242,7 +258,7 @@ async function* runReviewedEra(
         eventId,
         anchorId: match.anchorId,
         similarityNote: match.similarityNote,
-        provenance: makeProvenance(ctx, convergenceScan, scan.model),
+        provenance: makeProvenance(ctx, convergenceScan, scanModel),
       }
       world.addConvergence(point)
       world.markConvergence(branchId, eventId)

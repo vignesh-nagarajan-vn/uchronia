@@ -1,7 +1,7 @@
 import type { Branch, SubPod } from '@uchronia/schemas'
 import { podNormalize } from '../prompts/pod-normalize.js'
 import type { World } from '../world.js'
-import type { PipelineCtx } from './ctx.js'
+import { callOpts, type PipelineCtx } from './ctx.js'
 import { generateStructured } from './structured.js'
 
 export interface ForkArgs {
@@ -20,9 +20,12 @@ export interface ForkArgs {
 export async function forkBranch(ctx: PipelineCtx, world: World, args: ForkArgs): Promise<Branch> {
   let subPod: SubPod | null = null
   if (args.subPodRaw && args.subPodRaw.trim().length > 0) {
-    const normalized = await generateStructured(ctx.provider, podNormalize, {
-      raw: args.subPodRaw,
-    })
+    const normalized = await generateStructured(
+      ctx.provider,
+      podNormalize,
+      { raw: args.subPodRaw },
+      callOpts(ctx),
+    )
     subPod = { raw: args.subPodRaw, statement: normalized.value.statement }
   }
 
