@@ -115,9 +115,12 @@ export async function* runGeneration(
     const recentEvents = summarizeRecentEvents(world, branchId)
 
     // §4.3 pressures, with the dial's convergence-pressure term (§4.4c).
-    const attractorHints = anchorsNear(midYear, halfWidth + 30)
-      .slice(0, 5)
-      .map((a) => a.title)
+    // Attractors come from the POD's own theatre first — a distant region's
+    // record is not a channel this history can rhyme into.
+    const attractorHints = anchorsNear(midYear, halfWidth + 30, {
+      region: pod.region,
+      limit: 5,
+    }).map((a) => a.title)
     const pressuresOut = await generateStructured(ctx.provider, derivePressures, {
       podStatement: pod.statement,
       stateSummary,
@@ -196,11 +199,15 @@ async function* runReviewedEra(
   // ---- Stage 4: convergence scan (§P3) -----------------------------------
   const midYear = Math.round((era.startYear + era.endYear) / 2)
   const halfWidth = Math.ceil((era.endYear - era.startYear) / 2)
-  const candidates = anchorsNear(midYear, halfWidth + 25).slice(0, 8)
+  const candidates = anchorsNear(midYear, halfWidth + 25, {
+    region: world.pod.region,
+    limit: 8,
+  })
   if (candidates.length > 0) {
     const idToRef = new Map([...refined.batch.refToEventId].map(([ref, id]) => [id, ref]))
     const scan = await generateStructured(ctx.provider, convergenceScan, {
       podStatement: world.pod.statement,
+      region: world.pod.region,
       events: refined.batch.events.map((e) => ({
         ref: idToRef.get(e.id) ?? 'd0',
         year: e.date.year,
