@@ -19,7 +19,7 @@ Choices the spec left open, resolved here:
 4. **ULIDs** via the `ulid` package, wrapped behind an injected `IdGen` port so tests and mock mode can use deterministic factories.
 5. **Routing** in the web app via `react-router` in plain library mode (not the framework). Ephemeral UI state lives in React state/context; Zustand stays out unless a real need appears (per §6).
 6. **Fonts self-hosted** via `@fontsource/*` (IM Fell English, Spectral, IBM Plex Mono): no external font CDN, works offline, CSP-clean.
-7. **pnpm ≥ 10 build allowlist**: `onlyBuiltDependencies: [better-sqlite3, esbuild]` in `pnpm-workspace.yaml`, since pnpm blocks postinstall scripts by default.
+7. **pnpm ≥ 10 build allowlist**: `allowBuilds: { esbuild: true, better-sqlite3: false }` in `pnpm-workspace.yaml`, since pnpm blocks postinstall scripts by default — esbuild needs its install script; better-sqlite3 v13 ships prebuilt N-API binaries, so its implicit node-gyp rebuild is deliberately suppressed. (This ADR originally documented the older `onlyBuiltDependencies` key; the file is the authority.)
 8. **Anthropic structured outputs**: the SDK's current mechanism is `output_config.format` (JSON schema), verified against the API docs at build time; model IDs `claude-sonnet-4-6` (generation) and `claude-haiku-4-5-20251001` (critic) confirmed active. Both are configuration (`UCHRONIA_MODEL_*`), not constants.
 
 ## Consequences

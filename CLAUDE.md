@@ -1,6 +1,6 @@
 # CLAUDE.md: agent onboarding contract
 
-This file is the single source of truth for any agent session in this repository. A fresh agent reading only this file must be able to work productively. **Last verified: 2026-07-22 (v0.1.0).**
+This file is the single source of truth for any agent session in this repository. A fresh agent reading only this file must be able to work productively. **Last verified: 2026-07-23 (v0.1.0 + the 0.2 hardening series).**
 
 ## 1. What Uchronia is
 
@@ -32,28 +32,34 @@ packages/schemas   Zod-first schemas + inferred types + fixtures (zero deps beyo
   src/*.ts           one file per §3 type; llm.ts = draft shapes the LLM emits
   src/fixtures/      hand-built "Constantinople holds" world (import via @uchronia/schemas/fixtures)
 packages/core      Pure engine. IO only via injected ports (provider/clock/rng/idgen).
-  src/world.ts       World store: structural-sharing fork resolution, state replay, guards
-  src/validator.ts   machine validator (8 pure rules): validateBranch/validateWorld
-  src/pipeline/      run.ts (seed + era loop + convergence), plan.ts (era spans, resume),
-                     critic.ts (dual review), drafts.ts (LLM drafts→rows), structured.ts
-                     (zod + repair loop), context.ts (state summaries), events.ts (stream types)
+  src/world.ts       World store: structural-sharing fork resolution, state replay,
+                     derived entity endedness (endedEntities), in-place event replacement, guards
+  src/validator.ts   machine validator (9 pure rules incl. no-posthumous-mutation)
+  src/pipeline/      run.ts (seed + era loop + convergence; abort-aware), plan.ts (era
+                     spans, resume), critic.ts (dual review + cause glossary), drafts.ts
+                     (LLM drafts→rows), regenerate.ts (in-place event retelling),
+                     structured.ts (zod + repair loop + signal/usage), context.ts
+                     (budgeted state summaries, causal-annotated recents), events.ts
   src/prompts/       registry + templates (pod-normalize, seed-consequences, …) + fragments
   src/mock/          MockProvider + per-template handlers + flavor banks
   src/dial.ts        determinism dial → concrete generation parameters (§4.4)
-  src/llm.ts         LLMProvider port + provider error taxonomy
+  src/llm.ts         LLMProvider port (signal + usage) + provider error taxonomy
   src/ports.ts       Clock/IdGen ports (+ sequentialIdGen for deterministic tests)
   src/errors.ts      typed error taxonomy   src/rng.ts  seeded RNG
   src/baseline.ts    curated baseline loader; data/baseline.json (203 curated anchors)
 apps/server        Hono. Routes + SSE, AnthropicProvider, Drizzle + better-sqlite3.
   src/config.ts      env parsing; ANTHROPIC_API_KEY lives here and only here
   src/deps.ts        ServerDeps injection (repo/provider/idgen/clock); tests build their own
-  src/providers/     anthropic.ts: live provider (structured outputs, streaming, typed errors)
-  src/app.ts         app factory + error→HTTP mapping; src/index.ts = listener
-  src/routes/        meta (config/baseline), timelines (CRUD+import/export+compare),
-                     branches (view + md/html export), generate (SSE; persist-before-stream),
-                     expand (event/era/entity), fork, artifacts
+  src/providers/     anthropic.ts: live provider (structured outputs, streaming,
+                     truncation retry, abort passthrough, usage; injectable client + tests)
+  src/app.ts         app factory + CORS/body-limit + error→HTTP mapping;
+                     src/index.ts = listener + optional static web serving (DEPLOY.md)
+  src/routes/        meta (config/baseline), timelines (CRUD+PATCH+validated import+export),
+                     branches (view + md/html export + leaf DELETE), generate (SSE;
+                     persist-before-stream; per-branch lock; era healing; token ceiling),
+                     expand (event/era/entity + regenerate-in-place), fork, artifacts
   src/views.ts       assembleBranchView: World → BranchView
-  src/exporters.ts   renderMarkdown + renderStaticHtml (self-contained, no-JS edition)
+  src/exporters.ts   renderMarkdown + renderStaticHtml (self-contained, fonts embedded)
   src/db/            schema.ts (drizzle), client.ts (open+migrate), repo.ts
   drizzle/           committed SQL migrations (regenerate: pnpm migrate after schema edits)
 apps/web           Vite + React. RED THREAD interface (docs/DESIGN.md is binding)
@@ -61,12 +67,15 @@ apps/web           Vite + React. RED THREAD interface (docs/DESIGN.md is binding
   src/lib/           api.ts (typed client) · sse.ts + generation.ts (stream → query cache) ·
                      theme.tsx · thread-geometry.ts (red-thread curves) · gallery.ts · format.ts
   src/components/    Shell, Stamp, EventCard, EraHeader, RecordTick, ThreadOverlay,
-                     DialControl, ForkDialog, ShortcutsDialog
-  src/views/         Atlas (composer+catalogue), TimelineView (virtualized spine),
-                     EventDetail, Dossier, DeltaView, CompareView, ArtifactReader, SettingsView
+                     DialControl, ForkDialog, ShortcutsDialog, ErrorBoundary
+  src/views/         all lazy-loaded: Atlas (composer+catalogue+rename/burn dialogs+
+                     demo loader), TimelineView (virtualized spine, search, multi-lens,
+                     stop control), EventDetail (prev/next, retell, copy link), Dossier,
+                     DeltaView, CompareView, ArtifactReader, SettingsView
   e2e/               journey.spec.ts: the §11.3 Playwright journey (mock mode)
 docs/              ARCHITECTURE, DATA_MODEL, GENERATION, DESIGN(+NOTES), TESTING, ROADMAP, adr/
-demo/              the-unburnt-library.uchronia.json (importable showcase timeline)
+demo/              the-unburnt-library.uchronia.json (showcase; one-click load from Atlas)
+Dockerfile         single-container edition (mock by default; docs/DEPLOY.md)
 ```
 
 Dependency direction: web → server → core → schemas (schemas shared by all). The pipeline lives in `packages/core/src/pipeline/` (from M3); prompts in `packages/core/src/prompts/` (from M3).
@@ -78,9 +87,9 @@ corepack enable pnpm        # once per machine (pnpm 11.x)
 pnpm install                # install everything
 
 pnpm dev                    # server (8787) + web (5173) in parallel
+pnpm dev:mock               # same, keyless mock mode + demo pacing (cross-platform)
 pnpm dev:server             # server only (tsx watch)
 pnpm dev:web                # web only (vite)
-UCHRONIA_MOCK=1 pnpm dev    # full demo without an API key
 
 pnpm test                   # vitest, all packages
 pnpm typecheck              # tsc --noEmit, all packages
@@ -104,7 +113,11 @@ Per package: `pnpm --filter @uchronia/<schemas|core|server|web> <script>`.
 | `UCHRONIA_MODEL_GENERATION` | Overrides generation model | `claude-sonnet-4-6` |
 | `UCHRONIA_MODEL_CRITIC` | Overrides critic/utility model | `claude-haiku-4-5-20251001` |
 | `UCHRONIA_PORT` | Server port | `8787` |
-| `UCHRONIA_DB` | SQLite file path | `./data/uchronia.db` (relative to apps/server) |
+| `UCHRONIA_DB` | SQLite file path | `./data/uchronia.db` (resolved absolute, logged at boot) |
+| `UCHRONIA_MAX_RUN_TOKENS` | Per-run token ceiling (live) | `3000000`; `0` disables |
+| `UCHRONIA_MOCK_PACE_MS` | Mock demo pacing per event | `0` (`dev:mock` sets 250) |
+| `UCHRONIA_STATIC_DIR` | Serve built web app from server | unset (dev uses vite proxy) |
+| `UCHRONIA_CORS_ORIGINS` | CORS allowlist (comma-separated) | empty = same-origin only |
 
 ## 6. Data model & pipeline
 
@@ -122,7 +135,7 @@ Per package: `pnpm --filter @uchronia/<schemas|core|server|web> <script>`.
 
 ## 8. Current status
 
-**v0.1.0 shipped**: all milestones M0–M12 complete; see [docs/ROADMAP.md](docs/ROADMAP.md) for the honest per-milestone record and open threads (notably: live mode is wired but untested against the real API from this machine; M9–M12 landed as consolidated commits per user direction). The full mock-mode product works keyless: `UCHRONIA_MOCK=1 pnpm dev`, or import `demo/the-unburnt-library.uchronia.json` from Settings.
+**v0.1.0 shipped + the 0.2 hardening series landed (2026-07-23)**: all milestones M0–M12 complete, then a ~15-commit audit-driven pass — graph-fed generation, region-aware convergence, entity lifecycle (9th validator rule), dial-aware critic, generation locking + import validation + era healing, abort/usage/cost ceiling, lifecycle routes (PATCH timeline, regenerate event, delete branch), web code-splitting + interaction depth, CI matrix, Docker, Pages demo. See [docs/ROADMAP.md](docs/ROADMAP.md) for the honest record and open threads (notably: live mode is provider-unit-tested and cost-capped but still unexercised against the real API from this machine). The full mock-mode product works keyless: `pnpm dev:mock`, then "load the showcase chronicle" on the empty Atlas. Deployment posture: [docs/DEPLOY.md](docs/DEPLOY.md) + ADR-0003 (mock is public, live is local).
 
 ## 9. Documentation sync directive (binding)
 

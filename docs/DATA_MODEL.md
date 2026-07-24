@@ -11,7 +11,7 @@ Authoritative schemas live in `packages/schemas` (Zod-first; TypeScript types ar
 | `Branch` | `branch.ts` | parent pointer + fork event + optional sub-POD. Root has null parent |
 | `Era` | `era.ts` | per-branch, ordinal, year range, pressures[], status skeleton/expanded, lazy `detail` |
 | `Event` | `event.ts` | per-branch ordinal, date {year, label}, summary, lazy `detail`, entityIds, **deltas**, lenses, plausibility {score, rationale}, distanceFromPod, wildcard, flags {disputed, convergence}, criticNotes |
-| `Entity` | `entity.ts` | slug (LLM handle), type, name, description, initialState, introducedByEventId (null = seeded) |
+| `Entity` | `entity.ts` | slug (LLM handle), type, name, description, initialState, introducedByEventId (null = seeded). Lifecycle is replay-derived: a `StateDelta` with `ends: true` ends the entity on branches that see it; `EntityView` carries the derived `endedByEventId` |
 | `CausalEdge` | `edge.ts` | branch-owned, kind ∈ causes/enables/prevents/accelerates/delays, strength 0–1 |
 | `Artifact` | `artifact.ts` | per-kind structured bodies (newspaper/letter/encyclopedia/poster), stylingHints |
 | `ConvergencePoint` | `convergence.ts` | event ↔ baseline anchor + similarity note |
@@ -34,6 +34,8 @@ Two things the spec words as fields are deliberately **derived**:
 
 State values are scalars or string lists, never nested JSON. Ledger lines must read like a ledger; depth belongs in prose.
 
+3. **Entity endedness**: a delta may carry `ends: true` (death, dissolution). Because death is replay-derived like all state, it is branch-local for free — a sibling branch that cannot see the ending event still sees the entity alive, and two branches may each end the same entity in their own way. `TimelineSummary.rootBranchId` is likewise derived at list time so clients can open a ledger without fetching its full aggregate.
+
 ## Fork semantics: structural sharing
 
 Implemented in `packages/core/src/world.ts`.
@@ -48,7 +50,7 @@ Implemented in `packages/core/src/world.ts`.
 
 `packages/core/src/validator.ts`: pure rules over a branch's resolved view, each independently tested (§11.3 minimum set + two extras):
 
-`dates-monotonic` (within an era) · `event-within-era` · `edge-endpoints-exist` (incl. own-branch visibility) · `entities-exist` · `deltas-apply` (no mutation before introduction, per branch) · `plausibility-range` · `era-overlap` · `fork-normalized`. Pre-fork immutability is enforced at the store boundary (guards throw), covered by store unit tests.
+`dates-monotonic` (within an era) · `event-within-era` · `edge-endpoints-exist` (incl. own-branch visibility) · `entities-exist` · `deltas-apply` (no mutation before introduction, per branch) · `no-posthumous-mutation` (nothing mutates an entity after its terminal delta, branch-locally) · `plausibility-range` · `era-overlap` · `fork-normalized`. Pre-fork immutability is enforced at the store boundary (guards throw), covered by store unit tests. Imports run the whole validator before anything persists (`POST /api/import` → 422 on failure).
 
 ## Provenance
 

@@ -11,7 +11,7 @@ apps/web ──▶ apps/server ──▶ packages/core ──▶ packages/schema
 
 - **packages/schemas**: Zod schemas, inferred types, fixtures, and the shared API contracts (`view.ts`: `BranchView`, `CreateTimelineRequest`, …). Zero runtime deps beyond zod. Everything an LLM produces is validated against these before it touches any store; the web client parses responses against the same schemas.
 - **packages/core**: the pure engine. World store (fork resolution, state replay), machine validator, prompt registry, `LLMProvider` port, structured-generation repair loop, `MockProvider`, curated baseline. No IO except through injected ports.
-- **apps/server**: Hono on Node. Routes + SSE, `AnthropicProvider`, persistence via Drizzle + better-sqlite3, and the markdown/static-HTML exporters (`src/exporters.ts`). `ANTHROPIC_API_KEY` lives here and only here.
+- **apps/server**: Hono on Node. Routes + SSE, `AnthropicProvider`, persistence via Drizzle + better-sqlite3, and the markdown/static-HTML exporters (`src/exporters.ts`). `ANTHROPIC_API_KEY` lives here and only here. Every `/api` route sits behind a 16 MB body limit and an env-driven CORS allowlist (`UCHRONIA_CORS_ORIGINS`); with `UCHRONIA_STATIC_DIR` set it also serves the built web app with SPA fallback (single-container deployment — see `docs/DEPLOY.md`).
 - **apps/web**: Vite + React. The RED THREAD interface (binding spec: `docs/DESIGN.md`). TanStack Router/Query for data, TanStack Virtual for the spine, d3 only for thread geometry math, Motion for ink-in, React Aria for dialogs/sliders. The SSE client (`src/lib/sse.ts` + `generation.ts`) folds pipeline frames straight into the query cache so streaming and refetching share one source of truth.
 
 ## Ports
@@ -51,14 +51,16 @@ GET /api/branches/:id/view
 2. Server hydrates the branch's world from SQLite into core's `World`.
 3. Core's pipeline runs (seed → era loop → convergence scan), yielding typed pipeline events.
 4. Server persists each accepted row via `Repo` and forwards the event down the SSE stream.
-5. Client inks events into the timeline as they arrive; aborting the request cancels the run cleanly.
+5. Client inks events into the timeline as they arrive; aborting the request (Stop button, tab close) cancels in-flight provider calls via AbortSignal and keeps everything accepted so far.
+
+One run per branch at a time (a concurrent request 409s; a unique `(branch_id, ordinal)` index backstops it), a half-persisted trailing era from a crash is healed before the run starts, and token usage is summed against `UCHRONIA_MAX_RUN_TOKENS`.
 
 POD intake (stage 1) already runs synchronously inside `POST /api/timelines`.
 
 ## Exports
 
-Three formats, all server-rendered: full-timeline JSON (`GET /api/timelines/:id/export.json`, re-importable via `POST /api/import`), branch markdown (`GET /api/branches/:id/export.md`), and a self-contained static HTML edition (`GET /api/branches/:id/export.html`) with the RED THREAD design language inlined: no scripts, no external requests, readable decades from now.
+Three formats, all server-rendered: full-timeline JSON (`GET /api/timelines/:id/export.json`, re-importable via `POST /api/import`), branch markdown (`GET /api/branches/:id/export.md`), and a self-contained static HTML edition (`GET /api/branches/:id/export.html`) with the RED THREAD design language inlined — including its typefaces, embedded as woff2 data URIs: no scripts, no external requests, readable decades from now. Lifecycle endpoints round the API out: `PATCH /api/timelines/:id` (rename, dial, horizon extension), `POST /api/branches/:b/events/:id/regenerate` (a fresh telling in place), `DELETE /api/branches/:id` (leaf branches only).
 
 ## Error taxonomy → HTTP
 
-`ApiError` (route-level) · `NotFoundError` → 404 · `IntegrityError`/`PreForkImmutableError` → 409 · `ZodError` → 400 · `GenerationValidationError` → 502 · `ProviderAuthError` → 503, other `ProviderError` → 502 · anything else → 500. Mapping lives in `apps/server/src/app.ts`.
+`ApiError` (route-level) · `NotFoundError` → 404 · `IntegrityError`/`PreForkImmutableError` → 409 · `ZodError` → 400 · `GenerationAbortedError` → 400 · `GenerationValidationError` → 502 · `ProviderAuthError` → 503, other `ProviderError` → 502 · anything else → 500. One envelope everywhere: `{error, message, issues?}`. Mapping lives in `apps/server/src/app.ts`.
