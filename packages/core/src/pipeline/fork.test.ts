@@ -1,7 +1,9 @@
 import type { Branch, PointOfDivergence, Timeline } from '@uchronia/schemas'
 import { describe, expect, it } from 'vitest'
+import type { LLMProvider, StructuredRequest } from '../llm.js'
 import { MockProvider } from '../mock/provider.js'
 import { fixedClock, sequentialIdGen } from '../ports.js'
+import type { EraGenerateArgs } from '../prompts/era-generate.js'
 import { validateWorld } from '../validator.js'
 import { World } from '../world.js'
 import type { PipelineCtx } from './ctx.js'
@@ -148,6 +150,41 @@ describe('forking end to end (mock)', () => {
       )
       expect(new Set(states).size).toBeGreaterThanOrEqual(2)
     }
+  })
+
+  it('opens a forked branch as tightly as a fresh root (P2 from the fork year)', async () => {
+    const { world, rootId, ctx } = freshWorld()
+    await drain(runGeneration(ctx, world, rootId))
+    const rootEvents = world.resolveEvents(rootId)
+    // Fork late — decades downstream of the root POD.
+    const forkEvent = rootEvents[rootEvents.length - 2]
+    if (!forkEvent) throw new Error('missing fork event')
+    expect(forkEvent.date.year).toBeGreaterThan(world.pod.year + 30)
+
+    const child = await forkBranch(ctx, world, {
+      viewedBranchId: rootId,
+      forkEventId: forkEvent.id,
+    })
+
+    const requests: StructuredRequest[] = []
+    const spy: LLMProvider = {
+      mode: ctx.provider.mode,
+      complete: (request) => {
+        requests.push(request)
+        return ctx.provider.complete(request)
+      },
+    }
+    await drain(runGeneration({ ...ctx, provider: spy }, world, child.id))
+
+    const firstEra = requests.find((r) => r.templateId === 'era-generate')
+    if (!firstEra) throw new Error('child generated no era')
+    const args = firstEra.args as EraGenerateArgs
+    // Discipline measured from the fork, not the root POD: a tight first era.
+    expect(args.distanceYears).toBe(0)
+    expect(args.batchSize).toBe(4)
+    expect(args.wildcardBudget).toBe(0)
+    // While the narrative frame still knows how far the root divergence lies.
+    expect(args.podDistanceYears).toBeGreaterThan(30)
   })
 
   it('forks without a sub-POD, naming the branch after the fork event', async () => {

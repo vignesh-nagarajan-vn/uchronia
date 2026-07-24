@@ -109,6 +109,8 @@ export async function refineBatch(args: {
     if (toReview.length > 0) {
       const review = await generateStructured(ctx.provider, criticReview, {
         ...criticContext,
+        dial,
+        causeGlossary: buildCauseGlossary(world, branchId, candidate),
         drafts: toReview,
       })
       for (const verdict of review.value.verdicts) {
@@ -213,6 +215,44 @@ export async function refineBatch(args: {
   }
 
   return { batch, verdicts, droppedRefs, warnings }
+}
+
+/**
+ * Resolve every cause ref the drafts cite to a title the critic can weigh —
+ * without this the "stated causes cannot carry the weight" criterion is
+ * unjudgeable, since e<n>/d<n> handles carry no meaning on their own.
+ */
+export function buildCauseGlossary(
+  world: World,
+  branchId: string,
+  drafts: DraftEvent[],
+): string {
+  const visible = world.resolveEvents(branchId)
+  const byRef = new Map(drafts.map((d) => [d.ref, d]))
+  const lines: string[] = []
+  const seen = new Set<string>()
+  for (const draft of drafts) {
+    for (const cause of draft.causes) {
+      if (seen.has(cause.ref)) continue
+      seen.add(cause.ref)
+      if (cause.ref.startsWith('e')) {
+        const event = visible[Number(cause.ref.slice(1)) - 1]
+        lines.push(
+          event
+            ? `${cause.ref} = ${event.title} (${event.date.label}): ${event.summary}`
+            : `${cause.ref} = (resolves to no event — treat as an unsupported cause)`,
+        )
+      } else {
+        const other = byRef.get(cause.ref)
+        lines.push(
+          other
+            ? `${cause.ref} = ${other.title} (draft in this batch)`
+            : `${cause.ref} = (no such draft — treat as an unsupported cause)`,
+        )
+      }
+    }
+  }
+  return lines.length > 0 ? lines.join('\n') : '(no causes cited by any draft)'
 }
 
 export function buildCritiqueReport(

@@ -7,7 +7,14 @@ export interface EraGenerateArgs {
   podStatement: string
   span: { startYear: number; endYear: number }
   ordinal: number
+  /**
+   * Years since this branch's OWN divergence (the fork, for children) — the
+   * P2 discipline gradient. A branch forked a century downstream still opens
+   * with few, local, high-confidence consequences.
+   */
   distanceYears: number
+  /** Years since the root point of divergence, for narrative framing. */
+  podDistanceYears: number
   pressures: Pressure[]
   stateSummary: string
   recentEvents: string
@@ -25,8 +32,11 @@ export interface EraGenerateArgs {
  */
 export const eraGenerate: PromptTemplate<EraGenerateArgs, EraBatchOut> = {
   id: 'era-generate',
-  version: '1.0.0',
-  changelog: ['1.0.0 — initial template'],
+  version: '1.1.0',
+  changelog: [
+    '1.0.0 — initial template',
+    '1.1.0 — discipline measured from the branch origin; recent events carry causal marks; chain-extension mandate',
+  ],
   role: 'generation',
   schemaName: 'EraBatchOut',
   schema: EraBatchOut,
@@ -45,6 +55,7 @@ ${HANDLE_CONVENTIONS}`,
     podStatement,
     span,
     distanceYears,
+    podDistanceYears,
     pressures,
     stateSummary,
     recentEvents,
@@ -58,14 +69,14 @@ ${HANDLE_CONVENTIONS}`,
       .join('\n')
     const roster = entityRoster.map((e) => `- ${e.slug} (${e.type}): ${e.name}`).join('\n')
     const subPod = subPodStatement
-      ? `\nThis branch carries a further divergence of its own: ${subPodStatement}\n`
+      ? `\nThis branch carries a further divergence of its own, ${distanceYears} years before this era: ${subPodStatement}\n`
       : ''
     const wildcardRule =
       wildcardBudget > 0
         ? `Exactly ${wildcardBudget} of the events should be wildcards (wildcard: true): lower-probability contingencies a chronicler would call surprising — still causally reachable from the state, never arbitrary. Score their plausibility honestly (it will be lower).`
         : `No wildcards in this era (wildcard: false everywhere): every event should be structurally implied by the pressures.`
 
-    return `Point of divergence, ${distanceYears} years before this era: ${podStatement}
+    return `Point of divergence, ${podDistanceYears} years before this era: ${podStatement}
 ${subPod}
 Era to generate: years ${span.startYear} to ${span.endYear}.
 
@@ -85,7 +96,7 @@ Generate ${batchSize} events for this era. Rules:
 - Every event's year lies within ${span.startYear}–${span.endYear}; order them chronologically.
 - ${wildcardRule}
 - Every event carries at least one state delta with a ledger-style note. Introduce at most 2 new entities across the whole era, only when the story genuinely needs a new actor.
-- Claim causes: most events should cite at least one cause (e<n> or d<n>); use kinds precisely (causes / enables / prevents / accelerates / delays).
+- Claim causes: most events should cite at least one cause (e<n> or d<n>); use kinds precisely (causes / enables / prevents / accelerates / delays). The recent events show their own parents as [from e<n>] — prefer extending those live chains or visibly closing them over opening disconnected new ones.
 - Spread lenses: across the era, at least one event must be primarily economic and at least one cultural or daily-life. ${distanceYears > 30 ? 'This far from the divergence, second-order consequences dominate: prices, schooling, custom, language.' : ''}
 - Also return the era's title (the mood of this span, not its verdict) and a 1–2 sentence summary.`
   },

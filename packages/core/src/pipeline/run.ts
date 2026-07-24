@@ -108,11 +108,15 @@ export async function* runGeneration(
   for (let i = startIndex; i < plan.length; i++) {
     const span = plan[i]
     if (!span) break
-    const distance = Math.max(0, span.startYear - pod.year)
+    // P2 discipline is measured from this branch's OWN divergence — a child
+    // forked a century downstream opens as tightly as a fresh root would.
+    const distance = Math.max(0, span.startYear - originYear)
+    const podDistance = Math.max(0, span.startYear - pod.year)
     const midYear = Math.round((span.startYear + span.endYear) / 2)
     const halfWidth = Math.ceil((span.endYear - span.startYear) / 2)
     const stateSummary = summarizeState(world, branchId)
     const recentEvents = summarizeRecentEvents(world, branchId)
+    const previousPressures = world.ownEras(branchId)[i - 1]?.pressures ?? []
 
     // §4.3 pressures, with the dial's convergence-pressure term (§4.4c).
     // Attractors come from the POD's own theatre first — a distant region's
@@ -126,9 +130,10 @@ export async function* runGeneration(
       stateSummary,
       recentEvents,
       nextSpan: span,
-      distanceYears: distance,
+      distanceYears: podDistance,
       dial,
       attractorHints,
+      previousPressures,
     })
 
     const batchSize = eraBatchSize(distance)
@@ -137,6 +142,7 @@ export async function* runGeneration(
       span,
       ordinal: i,
       distanceYears: distance,
+      podDistanceYears: podDistance,
       pressures: pressuresOut.value.pressures,
       stateSummary,
       recentEvents,
