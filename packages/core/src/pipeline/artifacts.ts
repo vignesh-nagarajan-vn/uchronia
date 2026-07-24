@@ -1,4 +1,5 @@
 import type { Artifact, ArtifactKind } from '@uchronia/schemas'
+import { dialParams } from '../dial.js'
 import { NotFoundError } from '../errors.js'
 import {
   type ArtifactArgs,
@@ -68,6 +69,7 @@ export async function generateArtifact(
       stateSummary: stateLines.join('\n'),
       region: world.pod.region,
       distanceYears: event.distanceFromPod,
+      voice: dialParams(world.timeline.settings.dial).voiceLanguage,
     },
     callOpts(ctx),
   )

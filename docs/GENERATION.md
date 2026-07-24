@@ -53,24 +53,24 @@ The **critic is dial-aware**: its system prompt embeds the same attractor langua
 
 ## Prompt registry (§4.7)
 
-Templates in `packages/core/src/prompts/`, one file each, `id` + semver `version` + changelog. Shared fragments (`fragments.ts`, v1.0.0): `ANTI_CLICHE_MANDATES` (P6), `SENSITIVE_HISTORY_STANCE` (§12), `HANDLE_CONVENTIONS`.
+Templates in `packages/core/src/prompts/`, one file each, `id` + semver `version` + changelog. Shared fragments (`fragments.ts`, v1.1.0): `ANTI_CLICHE_MANDATES` (P6), `SENSITIVE_HISTORY_STANCE` (§12), `HUMAN_VOICE` (the humanity mandate: chronicler's hand, banned stock phrasing, no em dashes), `HANDLE_CONVENTIONS`. The dial adds `voiceLanguage`, a prose register that frays at butterfly settings (clipped entries, asides, un-erased corrections) and steadies to a clerk's calm at railroad; every reader-facing template embeds it. Belt and suspenders: `generateStructured` scrubs any em dash out of validated output before it can reach a store (en dashes in ranges survive).
 
 | Template | Purpose | Version | Role |
 | --- | --- | --- | --- |
 | `pod-normalize` | Freeform POD → normalized record + baseline context | 1.0.0 | utility |
-| `seed-consequences` | First 0–2 years: disciplined events + entity roster + era header | 1.0.0 | generation |
-| `critic-review` | Skeptical-historian verdicts over one draft batch (dial-calibrated; causes arrive resolved) | 1.1.0 | critic |
-| `regenerate-event` | One bounded replacement for a flagged draft; also drives the user-facing `POST …/events/:id/regenerate` (a fresh telling in place, clone-validated) | 1.0.0 | generation |
-| `derive-pressures` | 3–7 named tensions from the state snapshot (+ graded attractor pull; previous pressures must be carried or discharged) | 1.1.0 | critic |
-| `era-generate` | One era of consequences from snapshot + pressures + dial + distance (chain-extension mandate; entity lifecycle via `ends:true`) | 1.2.0 | generation |
-| `convergence-scan` | Conservative rhyme-detection against baseline anchors (theatre-aware) | 1.1.0 | critic |
-| `event-expand` | Expanded narrative from state-at-event + causal neighborhood | 1.0.0 | generation |
-| `era-deepdive` | Era essay over pressures and events | 1.0.0 | generation |
-| `entity-biography` | In-timeline biography held to the ledger | 1.0.0 | generation |
-| `artifact-newspaper` | Diegetic front page (era-appropriate masthead, columns, notices) | 1.0.0 | generation |
-| `artifact-letter` | Diegetic personal letter (news arriving slantwise) | 1.0.0 | generation |
-| `artifact-encyclopedia` | Entry from an in-world reference work, decades on | 1.0.0 | generation |
-| `artifact-poster` | Proclamation / bill / propaganda sheet with an issuer | 1.0.0 | generation |
+| `seed-consequences` | First 0–2 years: disciplined events + entity roster + era header | 1.1.0 | generation |
+| `critic-review` | Skeptical-historian verdicts over one draft batch (dial-calibrated; causes arrive resolved; machine mannerisms are tone violations) | 1.2.0 | critic |
+| `regenerate-event` | One bounded replacement for a flagged draft; also drives the user-facing `POST …/events/:id/regenerate` (a fresh telling in place, clone-validated) | 1.1.0 | generation |
+| `derive-pressures` | 3–7 named tensions from the state snapshot (+ graded attractor pull; previous pressures must be carried or discharged) | 1.2.0 | critic |
+| `era-generate` | One era of consequences from snapshot + pressures + dial + distance (chain-extension mandate; entity lifecycle via `ends:true`) | 1.3.0 | generation |
+| `convergence-scan` | Conservative rhyme-detection against baseline anchors (theatre-aware) | 1.2.0 | critic |
+| `event-expand` | Expanded narrative from state-at-event + causal neighborhood | 1.1.0 | generation |
+| `era-deepdive` | Era essay over pressures and events | 1.1.0 | generation |
+| `entity-biography` | In-timeline biography held to the ledger | 1.1.0 | generation |
+| `artifact-newspaper` | Diegetic front page (era-appropriate masthead, columns, notices) | 1.1.0 | generation |
+| `artifact-letter` | Diegetic personal letter (news arriving slantwise) | 1.1.0 | generation |
+| `artifact-encyclopedia` | Entry from an in-world reference work, decades on | 1.1.0 | generation |
+| `artifact-poster` | Proclamation / bill / propaganda sheet with an issuer | 1.1.0 | generation |
 
 **Artifacts (F8):** `POST /api/branches/:b/events/:id/artifacts {kind}`: conditioned on the state *as of the event*, one document per (event, kind); asking again returns the same document (the reader deserves a stable source). All four are HTML/CSS typographic compositions client-side; no image generation.
 

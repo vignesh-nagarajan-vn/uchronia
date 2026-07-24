@@ -15,6 +15,7 @@ All notable changes to Uchronia. The format follows [Keep a Changelog](https://k
 - Deployment: single-container Dockerfile (mock-mode public demo safe by default), `UCHRONIA_STATIC_DIR` static serving with SPA fallback, and zero-config Vercel support (`vercel.json` + a catch-all `api/index.ts` function, `/tmp` SQLite, showcase seeding via `UCHRONIA_SEED_DEMO`).
 - Mock demo pacing (`UCHRONIA_MOCK_PACE_MS`) so the ink-in moment is visible keyless.
 - Brand assets: the Uchronia seal on the Atlas and the README masthead, and a favicon set from the split-hourglass mark (`apps/web/public/`).
+- A human voice for the chronicle: every reader-facing prompt embeds a humanity mandate (chronicler's hand, banned stock phrasing, no em dashes), and the prose register tracks the dial, fraying at butterfly settings and steadying at railroad. An output scrubber guarantees no em dash survives into any store; mock content follows the same house style.
 
 ### Changed
 

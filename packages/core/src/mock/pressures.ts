@@ -101,7 +101,7 @@ export function mockDerivePressures(rawArgs: unknown, rng: Rng): PressuresOut {
     pressures[pressures.length - 1] = {
       name: 'Pull of the old channels',
       kind: 'ideological',
-      description: `Structural forces bend this history back toward familiar outcomes — the shape of "${args.attractorHints[0]}" waits at the end of several roads.`,
+      description: `Structural forces bend this history back toward familiar outcomes; the shape of "${args.attractorHints[0]}" waits at the end of several roads.`,
       intensity: Math.round(args.dial.convergencePressure * 100) / 100,
     }
   }

@@ -156,6 +156,7 @@ export async function refineBatch(args: {
             stateSummary: criticContext.stateSummary,
             draft,
             issues,
+            voice: dial.voiceLanguage,
           },
           callOpts(ctx),
         )

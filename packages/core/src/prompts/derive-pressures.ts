@@ -25,17 +25,18 @@ export interface PressuresArgs {
  */
 export const derivePressures: PromptTemplate<PressuresArgs, PressuresOut> = {
   id: 'derive-pressures',
-  version: '1.1.0',
+  version: '1.2.0',
   changelog: [
     '1.0.0 — initial template',
     '1.1.0 — attractor language scales with the dial instead of a mid-band cliff; previous pressures must be carried or discharged',
+    '1.2.0 — prompt strings stop modeling the em dash',
   ],
   role: 'critic',
   schemaName: 'PressuresOut',
   schema: PressuresOut,
   maxTokens: 2500,
   system: ({ dial }) =>
-    `You read the state of a counterfactual world and name the tensions pressing on its next era — demographic, economic, technological, ideological, environmental. A pressure is not a prediction: it is a loaded spring, with a name, a mechanism, and an intensity.
+    `You read the state of a counterfactual world and name the tensions pressing on its next era: demographic, economic, technological, ideological, environmental. A pressure is not a prediction: it is a loaded spring, with a name, a mechanism, and an intensity.
 
 ${dial.attractorLanguage}
 
@@ -59,12 +60,12 @@ ${SENSITIVE_HISTORY_STANCE}`,
           ? 'Where the world-state permits, at least one pressure should pull toward these familiar channels.'
           : p >= 1 / 3
             ? 'Where the world-state already leans toward one of these channels, a pressure may pull that way; do not force it.'
-            : 'Treat these as context only — this history owes them nothing.'
+            : 'Treat these as context only; this history owes them nothing.'
       attractorBlock = `\nStructural attractors from the attested record near this span (convergence pressure ${p.toFixed(2)}): ${hints}. ${stance}\n`
     }
     const carryBlock =
       previousPressures.length > 0
-        ? `\nThe pressures that drove the previous era — account for each one: carry it forward, escalate it, or show it discharged. Do not silently forget a loaded spring:\n${previousPressures
+        ? `\nThe pressures that drove the previous era. Account for each one: carry it forward, escalate it, or show it discharged. Do not silently forget a loaded spring:\n${previousPressures
             .map((pr) => `- ${pr.name} (${pr.kind}, intensity ${pr.intensity})`)
             .join('\n')}\n`
         : ''

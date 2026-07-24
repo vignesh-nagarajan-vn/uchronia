@@ -15,14 +15,14 @@ const LANDING_TAILS = [
   (city: string) =>
     `In ${city}, the first weeks pass in wary normality: couriers carry the news outward, and those who grasp what has changed are mostly those paid to worry about it.`,
   (city: string) =>
-    `${city} takes the news the way ports take weather — schedules shift before opinions do, and the harbormaster knows before the council does.`,
+    `${city} takes the news the way ports take weather: schedules shift before opinions do, and the harbormaster knows before the council does.`,
   (city: string) =>
     `In ${city} the criers say little and the letter-writers say too much; between them, a usable account of the new situation takes a season to form.`,
 ]
 
 const RIVAL_OPENINGS = [
   (rival: string) =>
-    `Reports reaching ${rival} force a quiet revision of plans laid under the old assumptions. Envoys are reassigned, an inventory is taken, and a policy that had seemed settled is reopened — without any public admission that anything has changed.`,
+    `Reports reaching ${rival} force a quiet revision of plans laid under the old assumptions. Envoys are reassigned, an inventory is taken, and a policy that had seemed settled is reopened, without any public admission that anything has changed.`,
   (rival: string) =>
     `In the chanceries of ${rival}, the first response is to ask for better copies of the dispatches. The second is to move money. Only the third, months later, is anything resembling a policy.`,
   (rival: string) =>
@@ -30,7 +30,7 @@ const RIVAL_OPENINGS = [
 ]
 
 const ERA_SUMMARIES = [
-  'The divergence lands and the world absorbs it: records are taken, prices move, and the neighbors begin to recalculate. Nothing irreversible has happened yet — except the thing itself.',
+  'The divergence lands and the world absorbs it: records are taken, prices move, and the neighbors begin to recalculate. Nothing irreversible has happened yet, except the thing itself.',
   'Two years of consequences arrive in the order consequences always do: first prices, then postures, then paperwork. The great structures hold; their assumptions do not.',
   'The world does not change so much as re-file itself: what was certain becomes pending, and clerks inherit the first draft of the new history.',
 ]

@@ -25,38 +25,39 @@ export interface CriticArgs {
  */
 export const criticReview: PromptTemplate<CriticArgs, CritiqueOut> = {
   id: 'critic-review',
-  version: '1.1.0',
+  version: '1.2.0',
   changelog: [
     '1.0.0 — initial rubric',
     '1.1.0 — dial-calibrated plausibility bar; cause refs arrive resolved to titles',
+    '1.2.0 — machine mannerisms (em dashes, stock phrasing) are tone violations',
   ],
   role: 'critic',
   schemaName: 'CritiqueOut',
   schema: CritiqueOut,
   maxTokens: 4000,
   system: ({ dial }) =>
-    `You are a skeptical academic historian reviewing machine-generated counterfactual history. You are not the author and you never rewrite — you issue verdicts.
+    `You are a skeptical academic historian reviewing machine-generated counterfactual history. You are not the author and you never rewrite; you issue verdicts.
 
-Judge each draft ONLY against: the given world-state snapshot, the given prior events, the point of divergence, and this rubric —
+Judge each draft ONLY against: the given world-state snapshot, the given prior events, the point of divergence, and this rubric:
 - anachronism: technology, ideas, institutions, or language out of their time
 - contradiction-with-state: conflicts with a fact in the snapshot or a prior event
 - implausible-leap: an outcome whose stated causes cannot carry its weight
 - teleology: written toward a predetermined dramatic endpoint
 - great-man-overreach: individuals moving history that structures should move
 - presentism: actors reasoning with our categories instead of their own
-- cliche-collapse: reflexive drama — "and then a great war", sudden collapses without structural cause
-- tone: violations of the register below
+- cliche-collapse: reflexive drama ("and then a great war", sudden collapses without structural cause)
+- tone: violations of the register below, and machine mannerisms in the prose (em dashes anywhere, stock phrasing such as "testament to" or "pivotal moment", uniform sentence rhythm, summarizing closers)
 
 Calibrate implausible-leap to this history's determinism setting, which the author was instructed to follow:
 ${dial.attractorLanguage}
-Under a low dial, surprising-but-caused outcomes are the intended product — weigh whether the cited causes carry the outcome, never whether the outcome resembles the familiar record. Under a high dial, departures from structural expectation deserve the strictest scrutiny.
+Under a low dial, surprising-but-caused outcomes are the intended product; weigh whether the cited causes carry the outcome, never whether the outcome resembles the familiar record. Under a high dial, departures from structural expectation deserve the strictest scrutiny.
 
 ${SENSITIVE_HISTORY_STANCE}
 
 Verdict semantics:
-- pass — commit as is (minor notes allowed, severity "note")
-- revise — a fixable flaw; one regeneration attempt is worth it (severity "warning" or "fail")
-- dispute — unsound in a way regeneration will not fix; keep it visible, attach your notes (at least one "fail" issue)
+- pass: commit as is (minor notes allowed, severity "note")
+- revise: a fixable flaw; one regeneration attempt is worth it (severity "warning" or "fail")
+- dispute: unsound in a way regeneration will not fix; keep it visible, attach your notes (at least one "fail" issue)
 
 Return a verdict for EVERY draft ref. Do not invent refs.`,
   prompt: ({
@@ -72,7 +73,7 @@ Return a verdict for EVERY draft ref. Do not invent refs.`,
 
 Era under review: "${eraTitle}" (${eraSpan})
 
-World-state snapshot (ground truth — contradictions with this are failures):
+World-state snapshot (ground truth; contradictions with this are failures):
 ${stateSummary}
 
 Prior accepted events:

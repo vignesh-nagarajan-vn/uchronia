@@ -184,7 +184,7 @@ const archetypes: Archetype[] = [
     year,
     dateLabel: yearLabel,
     title: `${roster.rival.name} tests the new balance`,
-    summary: `${pressure.description} A probe at the margin — an envoy recalled, a toll raised, a garrison reinforced — measures how much the world has actually changed.`,
+    summary: `${pressure.description} A probe at the margin (an envoy recalled, a toll raised, a garrison reinforced) measures how much the world has actually changed.`,
     lenses: ['political'] as Lens[],
     entitySlugs: [roster.rival.slug, roster.nation.slug],
     newEntities: [],

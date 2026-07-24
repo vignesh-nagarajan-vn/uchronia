@@ -1,4 +1,5 @@
 import type { EntityBiography, Era, Event } from '@uchronia/schemas'
+import { dialParams } from '../dial.js'
 import { NotFoundError } from '../errors.js'
 import { entityBiography, eraDeepDive, eventExpand } from '../prompts/expanders.js'
 import type { World } from '../world.js'
@@ -66,6 +67,7 @@ export async function expandEvent(
       stateSummary: stateLines.join('\n'),
       causeSummaries,
       effectSummaries,
+      voice: dialParams(world.timeline.settings.dial).voiceLanguage,
     },
     callOpts(ctx),
   )
@@ -87,7 +89,7 @@ export async function expandEra(
   const eventLines = world
     .resolveEvents(branchId)
     .filter((e) => e.eraId === eraId)
-    .map((e) => `${e.title} (${e.date.label}) — ${e.summary}`)
+    .map((e) => `${e.title} (${e.date.label}) | ${e.summary}`)
 
   const generated = await generateStructured(
     ctx.provider,
@@ -104,6 +106,7 @@ export async function expandEra(
         (p) => `${p.name} (${p.kind}, ${p.intensity}): ${p.description}`,
       ),
       eventLines,
+      voice: dialParams(world.timeline.settings.dial).voiceLanguage,
     },
     callOpts(ctx),
   )
@@ -144,6 +147,7 @@ export async function writeBiography(
       stateLine,
       ledgerLines,
       relatedEvents,
+      voice: dialParams(world.timeline.settings.dial).voiceLanguage,
     },
     callOpts(ctx),
   )

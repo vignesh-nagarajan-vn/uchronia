@@ -6,7 +6,7 @@ const NOTE_TEMPLATES = [
   (a: string) =>
     `The same channel fills by another road: this history arrives where "${a}" already stood in the record.`,
   (a: string) =>
-    `Structure reasserts itself — the shape of "${a}" emerges here despite the divergence.`,
+    `Structure reasserts itself; the shape of "${a}" emerges here despite the divergence.`,
   (a: string) =>
     `Different causes, familiar outcome: the attested "${a}" finds its counterpart in this line.`,
 ]

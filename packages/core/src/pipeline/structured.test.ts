@@ -3,7 +3,7 @@ import { z } from 'zod'
 import { GenerationValidationError } from '../errors.js'
 import type { LLMProvider, StructuredRequest, StructuredResult } from '../llm.js'
 import type { PromptTemplate } from '../prompts/types.js'
-import { generateStructured } from './structured.js'
+import { generateStructured, scrubEmDashes } from './structured.js'
 
 const Out = z.object({ answer: z.number().int() })
 
@@ -93,5 +93,54 @@ describe('generateStructured — bounded repair loop', () => {
     }
     const out = await generateStructured(provider, template, { q: 'json please' })
     expect(out.value.answer).toBe(7)
+  })
+})
+
+describe('scrubEmDashes', () => {
+  it('replaces em dashes in strings with commas, preserving en dashes', () => {
+    expect(scrubEmDashes('the road — such as it was — held')).toBe('the road, such as it was, held')
+    expect(scrubEmDashes('word—word')).toBe('word, word')
+    expect(scrubEmDashes('1453–1455 stands')).toBe('1453–1455 stands')
+    expect(scrubEmDashes('— leading aside')).toBe('leading aside')
+  })
+
+  it('walks arrays and objects deeply without touching non-strings', () => {
+    const scrubbed = scrubEmDashes({
+      title: 'The ledger — kept',
+      n: 3,
+      ok: true,
+      list: ['a — b', { note: 'c — d' }],
+    })
+    expect(scrubbed).toEqual({
+      title: 'The ledger, kept',
+      n: 3,
+      ok: true,
+      list: ['a, b', { note: 'c, d' }],
+    })
+  })
+
+  it('applies at the generateStructured boundary', async () => {
+    const scrubTemplate: PromptTemplate<{ q: string }, { answer: string }> = {
+      id: 'test-scrub',
+      version: '1.0.0',
+      changelog: [],
+      role: 'generation',
+      schemaName: 'Out',
+      schema: z.object({ answer: z.string() }),
+      maxTokens: 100,
+      system: () => 'sys',
+      prompt: ({ q }) => q,
+    }
+    const provider: LLMProvider = {
+      mode: 'mock',
+      complete: async () => ({
+        value: { answer: 'history bent — but held' },
+        raw: '',
+        model: 'm',
+        mode: 'mock',
+      }),
+    }
+    const out = await generateStructured(provider, scrubTemplate, { q: 'x' })
+    expect(out.value.answer).toBe('history bent, but held')
   })
 })

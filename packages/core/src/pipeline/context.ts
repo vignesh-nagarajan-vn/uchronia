@@ -111,7 +111,7 @@ export function summarizeRecentEvents(world: World, branchId: string, limit = 12
         event.wildcard ? 'wildcard' : null,
       ].filter(Boolean)
       const suffix = marks.length > 0 ? ` [${marks.join('; ')}]` : ''
-      return `e${position} (${event.date.label}): ${event.title} — ${event.summary}${suffix}`
+      return `e${position} (${event.date.label}): ${event.title} | ${event.summary}${suffix}`
     })
     .join('\n')
 }

@@ -19,6 +19,30 @@ export interface CallOpts {
 const MAX_REPAIRS = 2
 
 /**
+ * House style, enforced rather than hoped for: no em dashes ever reach a
+ * store. The prompts forbid them; this is the guarantee when a model slips.
+ * Only U+2014/U+2015 are touched (en dashes in year ranges survive), and the
+ * transform runs after schema validation, where no field pattern admits an em
+ * dash, so validity is preserved.
+ */
+export function scrubEmDashes<T>(value: T): T {
+  if (typeof value === 'string') {
+    if (!/[—―]/.test(value)) return value
+    return value
+      .replace(/\s*[—―]+\s*/g, ', ')
+      .replace(/^, /, '')
+      .replace(/, $/, '') as T
+  }
+  if (Array.isArray(value)) return value.map((v) => scrubEmDashes(v)) as T
+  if (value !== null && typeof value === 'object') {
+    const out: Record<string, unknown> = {}
+    for (const [k, v] of Object.entries(value)) out[k] = scrubEmDashes(v)
+    return out as T
+  }
+  return value
+}
+
+/**
  * The structured-output boundary (§4.2): every LLM call in the pipeline goes
  * through here. Output is Zod-validated; on failure the model is re-asked with
  * the validation errors attached, at most {@link MAX_REPAIRS} times, then the
@@ -56,7 +80,7 @@ export async function generateStructured<A, T>(
 
     const parsed = template.schema.safeParse(candidate)
     if (parsed.success) {
-      return { value: parsed.data, model: result.model, mode: result.mode }
+      return { value: scrubEmDashes(parsed.data), model: result.model, mode: result.mode }
     }
     issues = parsed.error.issues.map((i) => `${i.path.join('.') || '(root)'}: ${i.message}`)
     request = withRepair(base, result.raw, issues)

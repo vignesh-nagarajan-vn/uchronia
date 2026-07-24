@@ -1,4 +1,5 @@
 import type { DraftEvent, Event, StateDelta, StateFact, StateRecord } from '@uchronia/schemas'
+import { dialParams } from '../dial.js'
 import { GenerationValidationError, NotFoundError, PreForkImmutableError } from '../errors.js'
 import { regenerateEvent } from '../prompts/regenerate-event.js'
 import { validateBranch } from '../validator.js'
@@ -93,6 +94,7 @@ export async function regenerateCommittedEvent(
       eraSpan: `${era.startYear}–${era.endYear}`,
       stateSummary: stateLines.join('\n'),
       draft,
+      voice: dialParams(world.timeline.settings.dial).voiceLanguage,
       issues: [
         guidance?.trim() ||
           'The reader asked for a fresh telling of this event: keep its causal role and position, change its texture, angle, and specifics.',

@@ -29,7 +29,7 @@ const NOTICES: Record<ReturnType<typeof eraBucket>, string[]> = {
   modern: [
     'Steam packet departs Tuesdays and Fridays, weather permitting. Berths from twelve shillings.',
     'Wanted: clerks with a fair hand and no opinions. Apply in writing to the registry.',
-    'Dr. Malloy’s Universal Tonic — now with less mercury. Ask your chemist.',
+    'Dr. Malloy’s Universal Tonic, now with less mercury. Ask your chemist.',
   ],
 }
 
@@ -41,11 +41,11 @@ export function mockArtifactNewspaper(rawArgs: unknown, _rng: Rng): NewspaperOut
   const stateFact = stateSummary.split('\n')[1]?.replace(/^- /, '') ?? ''
 
   return {
-    title: `${masthead} — ${event.dateLabel}`,
+    title: `${masthead}, ${event.dateLabel}`,
     body: {
       kind: 'newspaper',
       masthead,
-      dateline: `${flavor.city}, ${event.dateLabel} — price: what the crier asks`,
+      dateline: `${flavor.city}, ${event.dateLabel}; price: what the crier asks`,
       headline: event.title.toUpperCase(),
       subhead: 'From our own correspondents; the particulars as far as they can be known',
       columns: [
@@ -59,7 +59,7 @@ export function mockArtifactNewspaper(rawArgs: unknown, _rng: Rng): NewspaperOut
         {
           heading: `The view from the ${flavor.commodity} exchange`,
           paragraphs: [
-            `Prices answered before opinions did. Dealers in ${flavor.commodity} report the season's contracts rewritten twice in a fortnight, and the porters — who know first — have raised their rates.`,
+            `Prices answered before opinions did. Dealers in ${flavor.commodity} report the season's contracts rewritten twice in a fortnight, and the porters, who always know first, have raised their rates.`,
             stateFact
               ? `It is meanwhile reported that ${stateFact.split(':')[1]?.trim() ?? 'the accounts stand much as before'}.`
               : 'The accounts otherwise stand much as before.',
@@ -84,11 +84,11 @@ export function mockArtifactLetter(rawArgs: unknown, rng: Rng): LetterOut {
       to: 'my brother in the trade',
       place: flavor.city,
       dateLabel: event.dateLabel,
-      salutation: 'Brother —',
+      salutation: 'Brother,',
       paragraphs: [
         `You will have heard some version of it by now, so let me give you the true one before rumor improves it further. ${event.summary}`,
         `What it means for us: the ${flavor.commodity} contracts must be re-sworn, and I would not extend credit past the season until we see how the ${flavor.institution.replace(/^the /i, '')} settles. Aunt Zoe asks after your health and whether the northern road is safe; I have told her yes to the first and lied about the second.`,
-        `Send word by the first reliable carrier. And send the account-book — the real one.`,
+        `Send word by the first reliable carrier. And send the account-book. The real one.`,
       ],
       closing: 'Your brother, in haste,',
       signature: writer.name.split(' ')[0] ?? writer.name,

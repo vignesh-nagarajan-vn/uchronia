@@ -1,6 +1,11 @@
 import { EraBatchOut, type Pressure } from '@uchronia/schemas'
 import type { DialParams } from '../dial.js'
-import { ANTI_CLICHE_MANDATES, HANDLE_CONVENTIONS, SENSITIVE_HISTORY_STANCE } from './fragments.js'
+import {
+  ANTI_CLICHE_MANDATES,
+  HANDLE_CONVENTIONS,
+  HUMAN_VOICE,
+  SENSITIVE_HISTORY_STANCE,
+} from './fragments.js'
 import type { PromptTemplate } from './types.js'
 
 export interface EraGenerateArgs {
@@ -32,11 +37,12 @@ export interface EraGenerateArgs {
  */
 export const eraGenerate: PromptTemplate<EraGenerateArgs, EraBatchOut> = {
   id: 'era-generate',
-  version: '1.2.0',
+  version: '1.3.0',
   changelog: [
     '1.0.0 — initial template',
     '1.1.0 — discipline measured from the branch origin; recent events carry causal marks; chain-extension mandate',
     '1.2.0 — entity lifecycle: terminal deltas (ends:true), roster excludes the dead',
+    '1.3.0 — human voice mandate; prose register frays or steadies with the dial',
   ],
   role: 'generation',
   schemaName: 'EraBatchOut',
@@ -46,6 +52,10 @@ export const eraGenerate: PromptTemplate<EraGenerateArgs, EraBatchOut> = {
     `You are the engine of an alternate-history simulation, deriving one era of consequences from explicit world-state. You are disciplined: every event mutates state, claims its causes honestly, and stays within its era.
 
 ${dial.attractorLanguage}
+
+${dial.voiceLanguage}
+
+${HUMAN_VOICE}
 
 ${ANTI_CLICHE_MANDATES}
 
