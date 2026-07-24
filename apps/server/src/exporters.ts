@@ -194,7 +194,7 @@ ${(artifactsByEvent.get(event.id) ?? []).map(artifactHtml).join('')}
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>${esc(world.timeline.title)} — Uchronia</title>
+<title>${esc(world.timeline.title)} · Uchronia</title>
 <style>
 ${embeddedFontCss()}
 :root{--paper:#e8eae3;--raised:#eff1eb;--ink:#22261f;--faded:#5c6157;--record:#174a7c;--thread:#a8281a;--rule:#c6cabf}
