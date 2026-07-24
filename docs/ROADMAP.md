@@ -24,10 +24,10 @@ A ~15-commit pass over the whole stack, from a full audit of v0.1.0. Highlights,
 
 - **Engine thesis deepened**: the causal graph now feeds generation (parents in prompts, resolved causes for the critic, carried pressures); convergence is region-aware; entities have a lifecycle (terminal deltas + a ninth validator rule); the critic calibrates to the dial; forks open disciplined from their own divergence; state snapshots are recency-budgeted.
 - **Corruption-proofing**: per-branch generation lock + unique `(branch_id, ordinal)` index; semantic import validation (422); partial-era healing on resume; non-fatal convergence scan.
-- **Live-mode readiness**: AbortSignal to the provider's HTTP layer, one doubled-budget retry on truncation, per-run token accounting with a hard ceiling (`UCHRONIA_MAX_RUN_TOKENS`), and the provider unit-tested via an injectable client. (Still not exercised against the real API from this machine — that caveat stands.)
+- **Live-mode readiness**: AbortSignal to the provider's HTTP layer, one doubled-budget retry on truncation, per-run token accounting with a hard ceiling (`UCHRONIA_MAX_RUN_TOKENS`), and the provider unit-tested via an injectable client. (Still not exercised against the real API from this machine; that caveat stands.)
 - **API completeness**: PATCH timeline (rename/dial/horizon-extend), regenerate-event-in-place, DELETE leaf branches, `rootBranchId` in summaries.
 - **Web**: route code-splitting (the ~674 kB warning is gone), Stop button + unmount abort, search + multi-lens, prev/next walking, real j/k focus, themed burn/rename dialogs, error boundary + 404, live-region announcements, one-click showcase loading.
-- **Packaging & presentation**: CI matrix (ubuntu/windows × node 22/24), Pages demo workflow, Dockerfile, CHANGELOG/CONTRIBUTING/SECURITY, `pnpm dev:mock` (the POSIX-only incantation is dead), mock pacing + variety, font-embedded HTML export.
+- **Packaging & presentation**: CI matrix (ubuntu/windows × node 22/24), Dockerfile, CHANGELOG/CONTRIBUTING/SECURITY, `pnpm dev:mock` (the POSIX-only incantation is dead), mock pacing + variety, font-embedded HTML export.
 
 ## Open threads
 
@@ -35,5 +35,4 @@ A ~15-commit pass over the whole stack, from a full audit of v0.1.0. Highlights,
 - Per user direction on 2026-07-22, M9–M12 landed as a small number of consolidated commits instead of §11.1's 5–15-per-milestone grain (process deviation, not architectural; recorded here in lieu of an ADR).
 - Delta view lines run fork→horizon rather than fork→last-event (branch last-event years aren't in the compare-side payloads); honest but slightly generous.
 - Deferred deliberately from the 0.2 series: user-authored events/entities (Provenance already models `kind: 'user'`), tombstone deletion of single events (dense ordinals make it structural), import-as-copy on id conflict (server-side id remapping), CompareView row virtualization, PNG/SVG export of the spine, soft-delete undo for burns, and a real sub-768px mobile layout beyond the wrap/height pass.
-- The Pages demo workflow needs a one-time repo setting (Settings → Pages → Source: GitHub Actions) before its first deploy succeeds.
 - Push access verified 2026-07-22 via Windows Credential Manager (`git:https://github.com`); milestone-boundary pushes are unblocked.

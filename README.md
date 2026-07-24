@@ -10,8 +10,6 @@
 
 Uchronia is an alternate-history engine. Choose or write a **Point of Divergence**, say *"the Library of Alexandria never burns"*, and watch history re-derive itself era by era. Drill into events, read biographies of people as they exist in this timeline, hold fake primary sources generated from inside the world, fork sub-branches at any event, and compare everything against real history.
 
-**[Read a finished chronicle in your browser →](https://vignesh-nagarajan-vn.github.io/uchronia/)** — the showcase ledger's self-contained export, no install.
-
 ![A divergence chosen from the catalogue, history streaming into the ledger past the blue anchors of the record, then red threads drawn to an event's causes on hover](docs/media/derivation.gif)
 
 <p align="center"><em>One keyless minute: choose a divergence, watch the ledger ink in beside the record, pull a thread.</em></p>
@@ -28,7 +26,7 @@ Uchronia is a lightweight causal simulation wearing a literary interface:
 
 - Generation is grounded in **explicit, mutable world-state** (entities, deltas, a causal graph), never in accumulated prose.
 - The graph feeds the loop: new eras must extend or close the causal chains of the old, and the skeptical critic judges every claimed cause **by what it actually cites**.
-- Every claim is **auditable** back through the graph, and a pure-code **machine validator** (nine rules, including *no posthumous mutation* — the dead stay dead) polices every batch beside the LLM critic.
+- Every claim is **auditable** back through the graph, and a pure-code **machine validator** (nine rules, including *no posthumous mutation*: the dead stay dead) polices every batch beside the LLM critic.
 
 The prose is the surface. The graph is the truth.
 
@@ -37,18 +35,17 @@ The prose is the surface. The graph is the truth.
 - **POD studio**: freeform divergence composer plus a curated gallery of twelve starting points, from the Bronze Age Collapse to a Carrington-class storm in 1989.
 - **The spine**: a vertical timeline where the Prussian-blue line of the real record visibly splits at your divergence, the red thread of the counterfactual peeling away from it. Search it, filter it by lens, walk it entirely from the keyboard.
 - **Red-thread causality**: hover any event and literal red threads draw to its causal ancestors and descendants.
-- **Determinism dial**: from *butterfly* (contingency compounds) to *railroad* (geography, demographics, and economics drag history back toward its attractors) — and the critic's plausibility bar moves with it.
+- **Determinism dial**: from *butterfly* (contingency compounds) to *railroad* (geography, demographics, and economics drag history back toward its attractors), and the critic's plausibility bar moves with it.
 - **Convergence detection**: the engine flags moments where your divergent timeline rhymes back into real history, ranked by the divergence's own theatre.
 - **Dossiers**: every person, nation, technology, and institution keeps a state ledger; biographies are written from inside the timeline; entities age, die, and dissolve for good.
 - **Diegetic artifacts**: newspaper front pages, personal letters, encyclopedia entries, and propaganda posters, typeset as period primary sources.
-- **Branching**: fork at any event with an optional sub-POD; compare any two branches, or a branch against the real record. Don't like an event? *Tell it again* — regenerated in place, validated before it lands.
-- **Export**: full JSON, markdown, and a self-contained static HTML edition of any branch — typefaces embedded, readable decades from now.
+- **Branching**: fork at any event with an optional sub-POD; compare any two branches, or a branch against the real record. Don't like an event? *Tell it again*: regenerated in place, validated before it lands.
+- **Export**: full JSON, markdown, and a self-contained static HTML edition of any branch (typefaces embedded, readable decades from now).
 
 | | |
 | --- | --- |
-| ![The Atlas: composer and catalogue](docs/media/atlas.png) | ![The delta: red threads leaving the blue trunk](docs/media/delta.png) |
-| ![An event unfolded: causes, artifacts, critique](docs/media/event-detail.png) | ![Two branches aligned for comparison](docs/media/compare.png) |
-| ![A diegetic letter from inside the timeline](docs/media/artifact-letter.png) | |
+| ![The delta: red threads leaving the blue trunk](docs/media/delta.png) | ![An event unfolded: causes, artifacts, critique](docs/media/event-detail.png) |
+| ![Two branches aligned for comparison](docs/media/compare.png) | ![A diegetic letter from inside the timeline](docs/media/artifact-letter.png) |
 
 ## Quickstart
 
@@ -57,7 +54,7 @@ Requires Node ≥ 22.12 and pnpm (`corepack enable pnpm`).
 ```sh
 pnpm install
 
-# Without an API key — the full product on the deterministic mock engine,
+# Without an API key: the full product on the deterministic mock engine,
 # with pacing on so you can watch history ink in (works on every OS):
 pnpm dev:mock
 
@@ -70,15 +67,15 @@ Web app: http://localhost:5173 · API: http://localhost:8787
 
 Everything in the UI is reachable in mock mode; CI runs exclusively keyless. On the empty atlas, click **load the showcase chronicle** for an instant 67-event, two-branch Alexandria timeline with disputes, convergences, and artifacts.
 
-Prefer a container? `docker build -t uchronia . && docker run -p 8787:8787 -v uchronia-data:/data uchronia` — one port, keyless, safe to host. See [docs/DEPLOY.md](docs/DEPLOY.md).
+Prefer a container? `docker build -t uchronia . && docker run -p 8787:8787 -v uchronia-data:/data uchronia`: one port, keyless, safe to host. See [docs/DEPLOY.md](docs/DEPLOY.md).
 
 <details>
 <summary><strong>Troubleshooting</strong></summary>
 
-- **`corepack enable pnpm` fails on Windows** — run the terminal elevated once, or `npm i -g corepack@latest` first (older corepack signatures expired).
-- **`UCHRONIA_MOCK=1 pnpm dev` errors in PowerShell** — that's POSIX syntax; use `pnpm dev:mock`, which is cross-platform (or `$env:UCHRONIA_MOCK='1'; pnpm dev`).
-- **better-sqlite3 build errors** — it ships prebuilt N-API binaries for Node 22/24 on all three OSes; `pnpm install` again after upgrading Node rather than mixing versions.
-- **Port taken** — `UCHRONIA_PORT` moves the API; the web dev server proxies `/api` to 8787 by default.
+- **`corepack enable pnpm` fails on Windows**: run the terminal elevated once, or `npm i -g corepack@latest` first (older corepack signatures expired).
+- **`UCHRONIA_MOCK=1 pnpm dev` errors in PowerShell**: that's POSIX syntax; use `pnpm dev:mock`, which is cross-platform (or `$env:UCHRONIA_MOCK='1'; pnpm dev`).
+- **better-sqlite3 build errors**: it ships prebuilt N-API binaries for Node 22/24 on all three OSes; `pnpm install` again after upgrading Node rather than mixing versions.
+- **Port taken**: `UCHRONIA_PORT` moves the API; the web dev server proxies `/api` to 8787 by default.
 
 </details>
 
@@ -121,7 +118,7 @@ The engine is specified, not just implemented: [ARCHITECTURE](docs/ARCHITECTURE.
 ## Philosophy
 
 1. **State-grounded generation.** Events mutate explicit entity state via recorded deltas; new generation conditions on the current state snapshot, never on prose. Consistency is enforced by the data model, not hoped for.
-2. **Ripple propagation.** Consequences radiate in waves: disciplined near the divergence — any divergence, including a fork's — freer decades out.
+2. **Ripple propagation.** Consequences radiate in waves: disciplined near the divergence (any divergence, including a fork's), freer decades out.
 3. **Determinism dial and convergence.** Contingency versus structural attractors is a user-facing control, and the moments where the counterfactual rhymes back into real history are surfaced as first-class marks.
 4. **Dual review.** A machine validator that cannot be argued with, and a skeptical historian-critic that flags anachronism, teleology, great-man overreach, presentism, and cliché collapse. What fails is regenerated; what persists in failing is kept but visibly marked *disputed*.
 5. **Lazy generation.** Skeleton first, depth on demand. Nothing dense is generated unread.

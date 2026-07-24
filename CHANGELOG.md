@@ -12,7 +12,7 @@ All notable changes to Uchronia. The format follows [Keep a Changelog](https://k
 - Lifecycle API: `PATCH /api/timelines/:id` (rename, dial, horizon extension), `POST .../events/:id/regenerate` (a fresh telling in place), `DELETE /api/branches/:id` (burn leaf branches).
 - Per-run token accounting with a hard ceiling (`UCHRONIA_MAX_RUN_TOKENS`), abort signals that reach the provider's HTTP layer, and a Stop button in the ledger.
 - Web: route-level code-splitting, ledger search (`/`), multi-lens filtering, prev/next event walking, copy-link, rename and themed burn dialogs, one-click showcase-chronicle loading, error boundary and 404 page, SSE live-region announcements.
-- Deployment: single-container Dockerfile (mock-mode public demo safe by default), `UCHRONIA_STATIC_DIR` static serving with SPA fallback, GitHub Pages workflow publishing the demo branch's static export.
+- Deployment: single-container Dockerfile (mock-mode public demo safe by default) and `UCHRONIA_STATIC_DIR` static serving with SPA fallback.
 - Mock demo pacing (`UCHRONIA_MOCK_PACE_MS`) so the ink-in moment is visible keyless.
 
 ### Changed
@@ -20,7 +20,7 @@ All notable changes to Uchronia. The format follows [Keep a Changelog](https://k
 - P2 discipline is measured from a branch's own divergence: late forks open as tightly as fresh roots.
 - The critic calibrates its plausibility bar to the determinism dial.
 - The state snapshot sent to prompts is budgeted by recency instead of growing without bound.
-- The static HTML export embeds its typefaces (Spectral, IM Fell English, IBM Plex Mono) as data URIs — self-contained now includes the typography.
+- The static HTML export embeds its typefaces (Spectral, IM Fell English, IBM Plex Mono) as data URIs; self-contained now includes the typography.
 - The attractor block in pressure derivation scales with the dial instead of cliffing mid-band.
 - Mock texture: wider keyword maps (aviation-age tech, more regions), six titles per mechanism, seeded sentence variants.
 
@@ -35,7 +35,7 @@ All notable changes to Uchronia. The format follows [Keep a Changelog](https://k
 - Keyboard walking (`j`/`k`) painted a focus ring without moving focus; shortcuts fired underneath open dialogs.
 - Opening a saved ledger downloaded the entire timeline export to find one branch id.
 
-## [0.1.0] — 2026-07-22
+## [0.1.0] - 2026-07-22
 
 Initial release: the full mock-mode product, keyless. POD intake, seed
 consequences, the era loop with dual review (machine validator + skeptical
