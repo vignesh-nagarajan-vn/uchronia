@@ -1,0 +1,10 @@
+.git
+node_modules
+**/node_modules
+**/dist
+**/test-results
+**/playwright-report
+apps/server/data
+docs/media
+.env
+.env.*

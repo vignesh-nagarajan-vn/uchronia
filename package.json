@@ -2,13 +2,14 @@
   "name": "uchronia",
   "private": true,
   "version": "0.1.0",
-  "description": "An alternate-history engine — git rebase for history.",
+  "description": "An alternate-history engine \u00e2\u20ac\u201d git rebase for history.",
   "packageManager": "pnpm@11.16.0",
   "engines": {
     "node": ">=22.12"
   },
   "scripts": {
     "dev": "pnpm --parallel --filter @uchronia/server --filter @uchronia/web dev",
+    "dev:mock": "cross-env UCHRONIA_MOCK=1 UCHRONIA_MOCK_PACE_MS=250 pnpm dev",
     "dev:server": "pnpm --filter @uchronia/server dev",
     "dev:web": "pnpm --filter @uchronia/web dev",
     "build": "pnpm -r build",
@@ -20,6 +21,7 @@
     "e2e": "pnpm --filter @uchronia/web e2e"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.5.5"
+    "@biomejs/biome": "^2.5.5",
+    "cross-env": "^7.0.3"
   }
 }
