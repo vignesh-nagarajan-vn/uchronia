@@ -79,11 +79,10 @@ test('the full journey, keyless', async ({ page }) => {
   })
   const childView = await branchViewFromUrl(page)
   expect(childView.events.some((e) => e.title === 'The second divergence lands')).toBe(true)
-  // Scroll the virtualized ledger to its end: the child's own history is there.
-  await page.getByTestId('timeline-scroll').evaluate((el) => {
-    el.scrollTop = el.scrollHeight
-  })
+  // The ledger search collapses the virtualized spine to the sub-divergence.
+  await page.getByRole('searchbox').fill('second divergence')
   await expect(page.getByText('The second divergence lands')).toBeVisible({ timeout: 10_000 })
+  await page.getByRole('searchbox').clear()
 
   // The delta view shows both branches.
   await page.getByRole('link', { name: 'delta', exact: true }).click()
