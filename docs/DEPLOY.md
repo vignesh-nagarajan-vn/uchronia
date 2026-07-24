@@ -7,8 +7,20 @@ Uchronia is local-first: a single-user app holding an API key. That shapes every
 | Goal | How | Cost | Notes |
 | --- | --- | --- | --- |
 | Show someone a finished chronicle | **A static HTML export** | free | `GET /api/branches/:id/export.html` is a single self-contained file (typefaces embedded, no scripts). Attach it to a GitHub Release, send it as a file, or drop it on any static host you choose. Zero backend, zero risk. |
-| Let people *play* with the product | **Docker container in mock mode** on Fly.io / Railway / Render / a VPS | ~free tier | The image defaults to `UCHRONIA_MOCK=1`: deterministic, keyless, safe to expose. One port serves web + API; mount a volume at `/data` for the SQLite file. |
+| Let people *play* with the product | **Vercel (one click)** or a **Docker container**, both in mock mode | ~free tier | Vercel: import the repo, zero configuration, ephemeral playground. Docker: durable history via a `/data` volume, on Fly.io / Railway / Render / a VPS. Both default keyless. |
 | Generate real history with a key | **Run it locally** (`pnpm dev`, or the container with `-e UCHRONIA_MOCK=0 -e ANTHROPIC_API_KEY=…`) | your tokens | **Never expose a live-mode instance publicly.** The server has no authentication; every visitor would spend your key. `UCHRONIA_MAX_RUN_TOKENS` (default 3M/run) caps the blast radius of any single run, but it is a seatbelt, not a lock. |
+
+## Vercel
+
+The repo carries a `vercel.json`, so "Import Project" on Vercel deploys with no dashboard settings: the web app builds statically (`apps/web/dist`), and the entire Hono API runs as one serverless function (`api/index.ts`, a catch-all behind `/api/*` rewrites; SSE streams within the function's 60s window).
+
+Serverless has no durable disk, and the setup leans into it instead of pretending otherwise:
+
+- The SQLite database lives at `/tmp/uchronia.db`, per warm instance. Histories survive while an instance stays warm and vanish when it recycles. A playground, not an archive; export anything you want to keep.
+- On cold start the showcase chronicle seeds an empty database (`UCHRONIA_SEED_DEMO`, default on under Vercel), so every visitor lands on 67 events of content rather than a blank atlas.
+- Mock pacing defaults on (250ms) so derivations visibly ink in.
+
+All three behaviors are plain env defaults triggered by `VERCEL=1` (see `apps/server/src/config.ts`) and overridable with the usual variables. Do not attach `ANTHROPIC_API_KEY` to a public Vercel deployment; the no-auth rule below applies with extra force when every cold start is a fresh anonymous playground.
 
 ## The container
 

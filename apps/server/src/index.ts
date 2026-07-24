@@ -5,9 +5,17 @@ import { serveStatic } from '@hono/node-server/serve-static'
 import { createApp } from './app.js'
 import { loadConfig } from './config.js'
 import { createDeps } from './deps.js'
+import { seedDemoIfEmpty } from './seed-demo.js'
 
 const config = loadConfig()
 const deps = createDeps(config)
+if (config.seedDemo) {
+  try {
+    seedDemoIfEmpty(deps)
+  } catch (error) {
+    console.warn('demo seeding failed; continuing with an empty ledger', error)
+  }
+}
 const app = createApp(deps)
 
 // Production single-container mode: serve the built web app next to the API.

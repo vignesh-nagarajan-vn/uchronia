@@ -9,11 +9,14 @@ export type Db = BetterSQLite3Database
 
 function migrationsFolder(): string {
   const here = dirname(fileURLToPath(import.meta.url))
-  // src/db/client.ts → apps/server/drizzle; bundled dist/index.js → apps/server/drizzle.
+  // src/db/client.ts → apps/server/drizzle; bundled dist/index.js →
+  // apps/server/drizzle; a serverless bundle runs from the repo root with the
+  // folder carried along via includeFiles.
   const candidates = [
     join(here, '..', '..', 'drizzle'),
     join(here, '..', 'drizzle'),
     join(process.cwd(), 'drizzle'),
+    join(process.cwd(), 'apps', 'server', 'drizzle'),
   ]
   const found = candidates.find((c) => existsSync(c))
   if (!found) throw new Error(`drizzle migrations folder not found near ${here}`)

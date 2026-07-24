@@ -7,6 +7,10 @@ settings:
 importers:
 
   .:
+    dependencies:
+      hono:
+        specifier: ^4.10.4
+        version: 4.12.31
     devDependencies:
       '@biomejs/biome':
         specifier: ^2.5.5

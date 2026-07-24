@@ -11,7 +11,7 @@ Uchronia holds an Anthropic API key server-side and has no authentication layer.
 Three tiers, each with its own mechanism, none pretending to be another:
 
 1. **Showcase**: the self-contained static HTML export of any branch, attached to a GitHub Release or handed around as a file. Deliberately not published under the account's GitHub Pages, which would serve it beneath the owner's personal domain; this project stays unassociated with it. No backend exists to secure.
-2. **Playable demo**: the Dockerfile, which **defaults to mock mode** (`UCHRONIA_MOCK=1`): deterministic, keyless, safe to expose publicly. One container serves web and API (`UCHRONIA_STATIC_DIR` + SPA fallback); history persists in a `/data` volume.
+2. **Playable demo**: two shapes, both defaulting to mock mode. The Dockerfile (one container serves web and API via `UCHRONIA_STATIC_DIR` + SPA fallback; history persists in a `/data` volume), and a zero-config Vercel setup (`vercel.json` + `api/index.ts` running the whole Hono app as one function, SQLite in `/tmp` per instance, showcase chronicle seeded on cold start). Serverless state is deliberately ephemeral: a playground, not an archive.
 3. **Live generation**: local only (`pnpm dev`, or the container with a key passed explicitly). Not for public exposure, ever, until an auth layer exists. `UCHRONIA_MAX_RUN_TOKENS` caps any single run's spend as a seatbelt, not a substitute for the rule.
 
 Rather than building auth for a single-user tool, the posture is enforced by defaults: every published artifact of this repo is keyless out of the box, and turning the key on requires two deliberate acts (`UCHRONIA_MOCK=0` *and* providing the key).

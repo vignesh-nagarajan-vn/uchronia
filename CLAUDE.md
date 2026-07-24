@@ -74,8 +74,11 @@ apps/web           Vite + React. RED THREAD interface (docs/DESIGN.md is binding
                      DeltaView, CompareView, ArtifactReader, SettingsView
   e2e/               journey.spec.ts: the §11.3 Playwright journey (mock mode)
 docs/              ARCHITECTURE, DATA_MODEL, GENERATION, DESIGN(+NOTES), TESTING, ROADMAP, adr/
-demo/              the-unburnt-library.uchronia.json (showcase; one-click load from Atlas)
+demo/              the-unburnt-library.uchronia.json (showcase; one-click load from Atlas;
+                   seeds empty databases when UCHRONIA_SEED_DEMO / Vercel)
 Dockerfile         single-container edition (mock by default; docs/DEPLOY.md)
+api/index.ts       Vercel edition: the whole Hono app as one serverless function
+vercel.json        zero-config Vercel deployment (static web + /api/* rewrites)
 ```
 
 Dependency direction: web → server → core → schemas (schemas shared by all). The pipeline lives in `packages/core/src/pipeline/` (from M3); prompts in `packages/core/src/prompts/` (from M3).
@@ -118,6 +121,7 @@ Per package: `pnpm --filter @uchronia/<schemas|core|server|web> <script>`.
 | `UCHRONIA_MOCK_PACE_MS` | Mock demo pacing per event | `0` (`dev:mock` sets 250) |
 | `UCHRONIA_STATIC_DIR` | Serve built web app from server | unset (dev uses vite proxy) |
 | `UCHRONIA_CORS_ORIGINS` | CORS allowlist (comma-separated) | empty = same-origin only |
+| `UCHRONIA_SEED_DEMO` | Seed the showcase into an empty DB at boot | off locally; on under Vercel |
 
 ## 6. Data model & pipeline
 

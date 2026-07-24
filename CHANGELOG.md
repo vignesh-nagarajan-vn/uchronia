@@ -12,7 +12,7 @@ All notable changes to Uchronia. The format follows [Keep a Changelog](https://k
 - Lifecycle API: `PATCH /api/timelines/:id` (rename, dial, horizon extension), `POST .../events/:id/regenerate` (a fresh telling in place), `DELETE /api/branches/:id` (burn leaf branches).
 - Per-run token accounting with a hard ceiling (`UCHRONIA_MAX_RUN_TOKENS`), abort signals that reach the provider's HTTP layer, and a Stop button in the ledger.
 - Web: route-level code-splitting, ledger search (`/`), multi-lens filtering, prev/next event walking, copy-link, rename and themed burn dialogs, one-click showcase-chronicle loading, error boundary and 404 page, SSE live-region announcements.
-- Deployment: single-container Dockerfile (mock-mode public demo safe by default) and `UCHRONIA_STATIC_DIR` static serving with SPA fallback.
+- Deployment: single-container Dockerfile (mock-mode public demo safe by default), `UCHRONIA_STATIC_DIR` static serving with SPA fallback, and zero-config Vercel support (`vercel.json` + a catch-all `api/index.ts` function, `/tmp` SQLite, showcase seeding via `UCHRONIA_SEED_DEMO`).
 - Mock demo pacing (`UCHRONIA_MOCK_PACE_MS`) so the ink-in moment is visible keyless.
 
 ### Changed
