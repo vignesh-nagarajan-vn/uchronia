@@ -1,4 +1,4 @@
-import { generateStructured, podNormalize } from '@uchronia/core'
+import { generateStructured, podNormalize, validateWorld, World } from '@uchronia/core'
 import {
   type Branch,
   CreateTimelineRequest,
@@ -96,6 +96,24 @@ export function timelineRoutes(deps: ServerDeps): Hono {
     const aggregate = TimelineAggregate.parse(await c.req.json())
     if (repo.timelineExists(aggregate.timeline.id)) {
       throw new ApiError(409, 'conflict', `timeline ${aggregate.timeline.id} already exists`)
+    }
+    // Shape is not enough: a schema-valid aggregate with broken references
+    // would persist cleanly and then 500 on every later read, forever. Hydrate
+    // and run the machine validator before anything touches the database.
+    let issues: string[]
+    try {
+      const world = World.fromAggregate(aggregate)
+      issues = validateWorld(world).map((i) => `${i.rule}: ${i.message}`)
+      for (const branch of world.allBranches()) world.resolveEvents(branch.id)
+    } catch (error) {
+      issues = [error instanceof Error ? error.message : String(error)]
+    }
+    if (issues.length > 0) {
+      throw new ApiError(
+        422,
+        'invalid-import',
+        `the ledger fails integrity checks: ${issues.slice(0, 5).join('; ')}${issues.length > 5 ? ` (+${issues.length - 5} more)` : ''}`,
+      )
     }
     repo.saveAggregate(aggregate)
     return c.json({ timelineId: aggregate.timeline.id }, 201)

@@ -370,4 +370,27 @@ export class Repo {
   updateTimelineSettings(timelineId: string, settings: TimelineSettings): void {
     this.db.update(t.timelines).set({ settings }).where(eq(t.timelines.id, timelineId)).run()
   }
+
+  updateTimelineTitle(timelineId: string, title: string): void {
+    this.db.update(t.timelines).set({ title }).where(eq(t.timelines.id, timelineId)).run()
+  }
+
+  /**
+   * Roll back one era and everything hanging off its events (resume healing).
+   * The caller guarantees nothing forked from these events.
+   */
+  deleteEraCascade(eraId: string, eventIds: string[]): void {
+    this.db.transaction((tx) => {
+      if (eventIds.length) {
+        tx.delete(t.artifacts).where(inArray(t.artifacts.eventId, eventIds)).run()
+        tx.delete(t.edges).where(inArray(t.edges.toEventId, eventIds)).run()
+        tx.delete(t.edges).where(inArray(t.edges.fromEventId, eventIds)).run()
+        tx.delete(t.convergencePoints).where(inArray(t.convergencePoints.eventId, eventIds)).run()
+        tx.delete(t.entities).where(inArray(t.entities.introducedByEventId, eventIds)).run()
+        tx.delete(t.events).where(inArray(t.events.id, eventIds)).run()
+      }
+      tx.delete(t.critiqueReports).where(eq(t.critiqueReports.eraId, eraId)).run()
+      tx.delete(t.eras).where(eq(t.eras.id, eraId)).run()
+    })
+  }
 }

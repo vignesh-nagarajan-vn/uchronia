@@ -1,4 +1,11 @@
-import { type PipelineEvent, runGeneration, UchroniaError, World } from '@uchronia/core'
+import {
+  GenerationAbortedError,
+  type PipelineEvent,
+  runGeneration,
+  type TokenUsage,
+  UchroniaError,
+  World,
+} from '@uchronia/core'
 import { Hono } from 'hono'
 import { streamSSE } from 'hono/streaming'
 import type { ServerDeps } from '../deps.js'
@@ -33,45 +40,127 @@ function persistPipelineEvent(deps: ServerDeps, ev: PipelineEvent): void {
 }
 
 /**
+ * A crash mid-era leaves the trailing era half-persisted: events without a
+ * critique report. Resume counts it as done and would skip it forever, so it
+ * is rolled back here (unless someone forked off it) and regenerated whole.
+ * Healthy eras always carry a critique report (M4+), so the test is exact.
+ */
+function healPartialTrailingEra(deps: ServerDeps, world: World, branchId: string): string | null {
+  const lastEra = world.ownEras(branchId).at(-1)
+  if (!lastEra) return null
+  const hasCritique = world
+    .critiqueReports()
+    .some((r) => r.branchId === branchId && r.eraId === lastEra.id)
+  if (hasCritique) return null
+  const eraEventIds = world
+    .ownEvents(branchId)
+    .filter((e) => e.eraId === lastEra.id)
+    .map((e) => e.id)
+  const forkedFrom = world
+    .allBranches()
+    .some((b) => b.forkEventId !== null && eraEventIds.includes(b.forkEventId))
+  if (forkedFrom) return null // someone built on it; keep it, uncritiqued
+  deps.repo.deleteEraCascade(lastEra.id, eraEventIds)
+  return lastEra.title
+}
+
+/**
  * POST /api/branches/:id/generate — run the pipeline, streaming pipeline
  * events as SSE (§4.8). Each mutation is persisted before it is streamed, so
  * whatever the client saw is exactly what the database holds; a client abort
- * stops generation at the next event boundary and keeps everything accepted
- * so far (the store is consistent after every accepted event).
+ * cancels in-flight provider calls via AbortSignal and keeps everything
+ * accepted so far. One run per branch at a time — a second request 409s
+ * instead of duplicating ordinals.
  */
 export function generateRoutes(deps: ServerDeps): Hono {
   const app = new Hono()
+  const activeBranches = new Set<string>()
+  const pace = deps.config.mockPaceMs
 
   app.post('/branches/:id/generate', (c) => {
     const branchId = c.req.param('id')
     const timelineId = deps.repo.branchTimelineId(branchId)
     if (!timelineId) throw new ApiError(404, 'not-found', 'branch not found')
-    const aggregate = deps.repo.loadAggregate(timelineId)
+    if (activeBranches.has(branchId)) {
+      throw new ApiError(409, 'generation-active', 'a derivation is already running on this branch')
+    }
+
+    let aggregate = deps.repo.loadAggregate(timelineId)
     if (!aggregate) throw new ApiError(404, 'not-found', 'timeline not found')
 
+    let healedEra: string | null = null
+    healedEra = healPartialTrailingEra(deps, World.fromAggregate(aggregate), branchId)
+    if (healedEra !== null) {
+      aggregate = deps.repo.loadAggregate(timelineId)
+      if (!aggregate) throw new ApiError(404, 'not-found', 'timeline not found')
+    }
+
     const world = World.fromAggregate(aggregate)
+    const controller = new AbortController()
+    const usage: TokenUsage = { inputTokens: 0, outputTokens: 0 }
+    let budgetExceeded = false
+    const onUsage = (u: TokenUsage) => {
+      usage.inputTokens += u.inputTokens
+      usage.outputTokens += u.outputTokens
+      const cap = deps.config.maxRunTokens
+      if (cap > 0 && usage.inputTokens + usage.outputTokens > cap && !budgetExceeded) {
+        budgetExceeded = true
+        controller.abort()
+      }
+    }
+
     const run = runGeneration(
-      { provider: deps.provider, idgen: deps.idgen, clock: deps.clock },
+      {
+        provider: deps.provider,
+        idgen: deps.idgen,
+        clock: deps.clock,
+        signal: controller.signal,
+        onUsage,
+      },
       world,
       branchId,
     )
 
+    activeBranches.add(branchId)
     return streamSSE(c, async (stream) => {
-      const abort = () => {
-        void run.return(undefined)
-      }
+      const abort = () => controller.abort()
       c.req.raw.signal.addEventListener('abort', abort)
       try {
+        if (healedEra !== null) {
+          await stream.writeSSE({
+            event: 'warning',
+            data: JSON.stringify({
+              type: 'warning',
+              message: `an interrupted run left era "${healedEra}" half-written; it was rolled back and will regenerate`,
+            }),
+          })
+        }
         for await (const ev of run) {
           persistPipelineEvent(deps, ev)
-          await stream.writeSSE({ event: ev.type, data: JSON.stringify(ev) })
+          const frame = ev.type === 'run.completed' ? { ...ev, usage } : ev
+          await stream.writeSSE({ event: ev.type, data: JSON.stringify(frame) })
+          if (pace > 0 && ev.type === 'event.accepted') {
+            await new Promise((r) => setTimeout(r, pace))
+          }
         }
       } catch (error) {
-        const code = error instanceof UchroniaError ? error.code : 'internal'
-        const message = error instanceof Error ? error.message : 'generation failed'
-        console.error('generation run failed', error)
+        if (error instanceof GenerationAbortedError && !budgetExceeded) {
+          return // client hung up; everything accepted so far is persisted
+        }
+        const code = budgetExceeded
+          ? 'budget-exceeded'
+          : error instanceof UchroniaError
+            ? error.code
+            : 'internal'
+        const message = budgetExceeded
+          ? `run stopped at the ${deps.config.maxRunTokens}-token ceiling; continue derivation to resume`
+          : error instanceof Error
+            ? error.message
+            : 'generation failed'
+        if (!budgetExceeded) console.error('generation run failed', error)
         await stream.writeSSE({ event: 'run.error', data: JSON.stringify({ code, message }) })
       } finally {
+        activeBranches.delete(branchId)
         c.req.raw.signal.removeEventListener('abort', abort)
       }
     })

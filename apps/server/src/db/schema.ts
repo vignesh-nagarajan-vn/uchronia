@@ -104,7 +104,12 @@ export const events = sqliteTable(
     criticNotes: text('critic_notes', { mode: 'json' }).$type<CritiqueIssue[] | null>(),
     provenance: text('provenance', { mode: 'json' }).$type<Provenance>().notNull(),
   },
-  (t) => [index('events_branch_idx').on(t.branchId), index('events_era_idx').on(t.eraId)],
+  (t) => [
+    index('events_branch_idx').on(t.branchId),
+    index('events_era_idx').on(t.eraId),
+    // Backstop against concurrent runs minting the same position twice.
+    uniqueIndex('events_branch_ordinal_uq').on(t.branchId, t.ordinal),
+  ],
 )
 
 export const entities = sqliteTable(
@@ -190,5 +195,8 @@ export const biographies = sqliteTable(
     biography: text('biography').notNull(),
     provenance: text('provenance', { mode: 'json' }).$type<Provenance>().notNull(),
   },
-  (t) => [uniqueIndex('biographies_entity_branch_uq').on(t.entityId, t.branchId)],
+  (t) => [
+    uniqueIndex('biographies_entity_branch_uq').on(t.entityId, t.branchId),
+    index('biographies_branch_idx').on(t.branchId),
+  ],
 )

@@ -86,6 +86,92 @@ describe('POST /api/branches/:id/generate — SSE', () => {
     expect(second.map((e) => e.event)).toEqual(['run.started', 'run.completed'])
   })
 
+  it('409s a second run while one is active on the same branch', async () => {
+    const { app } = makeTestApp()
+    const created = await createTimeline(app)
+
+    // Start the first run and hold its stream open at the first chunk.
+    const controller = new AbortController()
+    const first = await app.request(`/api/branches/${created.rootBranch.id}/generate`, {
+      method: 'POST',
+      signal: controller.signal,
+    })
+    const reader = first.body?.getReader()
+    if (!reader) throw new Error('expected a streaming body')
+    await reader.read()
+
+    const second = await app.request(`/api/branches/${created.rootBranch.id}/generate`, {
+      method: 'POST',
+    })
+    expect(second.status).toBe(409)
+    const body = (await second.json()) as { error: string }
+    expect(body.error).toBe('generation-active')
+
+    controller.abort()
+    await reader.cancel().catch(() => {})
+  })
+
+  it('heals a half-persisted trailing era before resuming', async () => {
+    const { app, deps } = makeTestApp()
+    const created = await createTimeline(app)
+    await (
+      await app.request(`/api/branches/${created.rootBranch.id}/generate`, { method: 'POST' })
+    ).text()
+
+    const before = BranchView.parse(
+      await (await app.request(`/api/branches/${created.rootBranch.id}/view`)).json(),
+    )
+    const eventCount = before.events.length
+    const lastEra = before.eras.at(-1)
+    if (!lastEra) throw new Error('expected eras')
+
+    // Simulate a crash mid-era: an era row + one event, but no critique report.
+    const phantomEra = {
+      ...lastEra,
+      id: '01ER000000000000000PHANT0M',
+      ordinal: lastEra.ordinal + 1,
+      startYear: lastEra.endYear,
+      endYear: lastEra.endYear + 10,
+      title: 'The Interrupted Era',
+      detail: null,
+    }
+    deps.repo.insertEra(phantomEra)
+    const lastEvent = before.events.at(-1)
+    if (!lastEvent) throw new Error('expected events')
+    deps.repo.insertEvent({
+      ...lastEvent,
+      id: '01EV000000000000000PHANT0M',
+      eraId: phantomEra.id,
+      ordinal: lastEvent.ordinal + 1,
+      title: 'A consequence that never finished persisting',
+    })
+
+    const resumed = parseSse(
+      await (
+        await app.request(`/api/branches/${created.rootBranch.id}/generate`, { method: 'POST' })
+      ).text(),
+    )
+    // The phantom era was rolled back (warning frame) and the run completed.
+    expect(
+      resumed.some(
+        (e) =>
+          e.event === 'warning' &&
+          typeof e.data === 'object' &&
+          e.data !== null &&
+          String((e.data as { message?: string }).message).includes('half-written'),
+      ),
+    ).toBe(true)
+    expect(resumed.at(-1)?.event).toBe('run.completed')
+
+    const after = BranchView.parse(
+      await (await app.request(`/api/branches/${created.rootBranch.id}/view`)).json(),
+    )
+    // No phantom rows survive, and nothing was double-generated.
+    expect(after.events.some((e) => e.id === '01EV000000000000000PHANT0M')).toBe(false)
+    expect(after.eras.some((e) => e.id === '01ER000000000000000PHANT0M')).toBe(false)
+    expect(after.events).toHaveLength(eventCount)
+  })
+
   it('404s for unknown branches', async () => {
     const { app } = makeTestApp()
     const res = await app.request('/api/branches/01BR00000000000000000000ZZ/generate', {

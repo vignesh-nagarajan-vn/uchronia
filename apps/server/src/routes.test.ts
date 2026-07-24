@@ -98,6 +98,21 @@ describe('aggregate round-trip through the API', () => {
     const res = await postJson(app, '/api/import', broken)
     expect(res.status).toBe(400)
   })
+
+  it('rejects schema-valid aggregates whose references are broken (422, nothing persisted)', async () => {
+    const { app } = makeTestApp()
+    const broken = fixtureAggregate()
+    const event = broken.events[0]
+    if (!event) throw new Error('fixture missing')
+    // Valid ULID, but no such era exists — every later read would 500 forever.
+    event.eraId = '01ER00000000000000000000ZZ'
+    const res = await postJson(app, '/api/import', broken)
+    expect(res.status).toBe(422)
+    const body = (await res.json()) as { error: string; message: string }
+    expect(body.error).toBe('invalid-import')
+    // The database stayed clean: the id is importable once the ledger is fixed.
+    expect((await postJson(app, '/api/import', fixtureAggregate())).status).toBe(201)
+  })
 })
 
 describe('GET /api/branches/:id/view', () => {

@@ -22,6 +22,11 @@ export type PipelineEvent =
   | { type: 'convergence.found'; point: ConvergencePoint; eventId: string }
   | { type: 'era.completed'; era: Era }
   | { type: 'warning'; message: string }
-  | { type: 'run.completed'; branchId: string }
+  /** usage is attached by the server from its per-run accounting. */
+  | {
+      type: 'run.completed'
+      branchId: string
+      usage?: { inputTokens: number; outputTokens: number }
+    }
 
 export type PipelineEventType = PipelineEvent['type']
