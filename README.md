@@ -1,4 +1,4 @@
-# Uchronia: Alternate History Engine
+# <img src="apps/web/public/uchronia-logo.png" alt="The Uchronia seal" width="56" /> Uchronia: Alternate History Engine
 
 **yoo-KROH-nee-uh** · *n.*, coined 1876 as the temporal counterpart of *utopia*: a time that never was.
 
@@ -14,11 +14,11 @@ Uchronia is an alternate-history engine. Choose or write a **Point of Divergence
 
 <p align="center"><em>One keyless minute: choose a divergence, watch the ledger ink in beside the record, pull a thread.</em></p>
 
-<p align="center"><em>Survey by day, Nitrate by night:</em></p>
-
 | | |
 | --- | --- |
 | ![The timeline in the Survey (light) theme: the blue record splitting at the POD, the red thread peeling away](docs/media/timeline.png) | ![The same ledger in the Nitrate (dark) theme](docs/media/timeline-nitrate.png) |
+
+<p align="center"><em>Survey by day, Nitrate by night.</em></p>
 
 ## Not a listicle generator
 
@@ -29,6 +29,57 @@ Uchronia is a lightweight causal simulation wearing a literary interface:
 - Every claim is **auditable** back through the graph, and a pure-code **machine validator** (nine rules, including *no posthumous mutation*: the dead stay dead) polices every batch beside the LLM critic.
 
 The prose is the surface. The graph is the truth.
+
+## Tech stack
+
+<p align="center"><b>Frontend</b></p>
+<p align="center">
+  <img src="https://img.shields.io/badge/React-20232a?style=for-the-badge&logo=react&logoColor=61DAFB">
+  <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white">
+  <img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white">
+  <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwindcss&logoColor=white">
+  <img src="https://img.shields.io/badge/TanStack_Query-FF4154?style=for-the-badge&logo=reactquery&logoColor=white">
+  <img src="https://img.shields.io/badge/TanStack_Virtual-FF4154?style=for-the-badge">
+  <img src="https://img.shields.io/badge/React_Aria-EC1000?style=for-the-badge">
+  <img src="https://img.shields.io/badge/Motion-0055FF?style=for-the-badge&logo=framer&logoColor=white">
+  <img src="https://img.shields.io/badge/D3.js-F9A03C?style=for-the-badge&logo=d3&logoColor=white">
+  <img src="https://img.shields.io/badge/IM_Fell_English-1F1F1F?style=for-the-badge">
+  <img src="https://img.shields.io/badge/Spectral-1F1F1F?style=for-the-badge">
+</p>
+
+<p align="center"><b>Backend</b></p>
+<p align="center">
+  <img src="https://img.shields.io/badge/Node.js-5FA04E?style=for-the-badge&logo=nodedotjs&logoColor=white">
+  <img src="https://img.shields.io/badge/Hono-E36002?style=for-the-badge&logo=hono&logoColor=white">
+  <img src="https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white">
+  <img src="https://img.shields.io/badge/Drizzle_ORM-C5F74F?style=for-the-badge&logo=drizzle&logoColor=black">
+  <img src="https://img.shields.io/badge/Zod-3E67B1?style=for-the-badge&logo=zod&logoColor=white">
+  <img src="https://img.shields.io/badge/Server--Sent_Events-1F1F1F?style=for-the-badge">
+</p>
+
+<p align="center"><b>AI Reasoning</b></p>
+<p align="center">
+  <img src="https://img.shields.io/badge/Anthropic_Claude-D97757?style=for-the-badge&logo=anthropic&logoColor=white">
+  <img src="https://img.shields.io/badge/Claude_Sonnet_4.6-D97757?style=for-the-badge&logo=anthropic&logoColor=white">
+  <img src="https://img.shields.io/badge/Claude_Haiku_4.5-D97757?style=for-the-badge&logo=anthropic&logoColor=white">
+  <img src="https://img.shields.io/badge/Anthropic_SDK-191919?style=for-the-badge&logo=anthropic&logoColor=white">
+  <img src="https://img.shields.io/badge/Structured_Outputs-191919?style=for-the-badge">
+</p>
+
+<p align="center"><b>Deployment &amp; Tooling</b></p>
+<p align="center">
+  <img src="https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white">
+  <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white">
+  <img src="https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white">
+  <img src="https://img.shields.io/badge/pnpm-F69220?style=for-the-badge&logo=pnpm&logoColor=white">
+  <img src="https://img.shields.io/badge/Vitest-6E9F18?style=for-the-badge&logo=vitest&logoColor=white">
+  <img src="https://img.shields.io/badge/Playwright-2EAD33?style=for-the-badge&logo=playwright&logoColor=white">
+  <img src="https://img.shields.io/badge/Biome-60A5FA?style=for-the-badge&logo=biome&logoColor=white">
+  <img src="https://img.shields.io/badge/esbuild-FFCF00?style=for-the-badge&logo=esbuild&logoColor=black">
+  <img src="https://img.shields.io/badge/tsx-3178C6?style=for-the-badge&logo=typescript&logoColor=white">
+  <img src="https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white">
+  <img src="https://img.shields.io/badge/Claude_Code-D97757?style=for-the-badge&logo=anthropic&logoColor=white">
+</p>
 
 ## Features
 
@@ -114,57 +165,6 @@ flowchart LR
     server --> SCH
     web --> SCH
 ```
-
-## Tech stack
-
-<p align="center"><b>Frontend</b></p>
-<p align="center">
-  <img src="https://img.shields.io/badge/React-20232a?style=for-the-badge&logo=react&logoColor=61DAFB">
-  <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white">
-  <img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white">
-  <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwindcss&logoColor=white">
-  <img src="https://img.shields.io/badge/TanStack_Query-FF4154?style=for-the-badge&logo=reactquery&logoColor=white">
-  <img src="https://img.shields.io/badge/TanStack_Virtual-FF4154?style=for-the-badge">
-  <img src="https://img.shields.io/badge/React_Aria-EC1000?style=for-the-badge">
-  <img src="https://img.shields.io/badge/Motion-0055FF?style=for-the-badge&logo=framer&logoColor=white">
-  <img src="https://img.shields.io/badge/D3.js-F9A03C?style=for-the-badge&logo=d3&logoColor=white">
-  <img src="https://img.shields.io/badge/IM_Fell_English-1F1F1F?style=for-the-badge">
-  <img src="https://img.shields.io/badge/Spectral-1F1F1F?style=for-the-badge">
-</p>
-
-<p align="center"><b>Backend</b></p>
-<p align="center">
-  <img src="https://img.shields.io/badge/Node.js-5FA04E?style=for-the-badge&logo=nodedotjs&logoColor=white">
-  <img src="https://img.shields.io/badge/Hono-E36002?style=for-the-badge&logo=hono&logoColor=white">
-  <img src="https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white">
-  <img src="https://img.shields.io/badge/Drizzle_ORM-C5F74F?style=for-the-badge&logo=drizzle&logoColor=black">
-  <img src="https://img.shields.io/badge/Zod-3E67B1?style=for-the-badge&logo=zod&logoColor=white">
-  <img src="https://img.shields.io/badge/Server--Sent_Events-1F1F1F?style=for-the-badge">
-</p>
-
-<p align="center"><b>AI Reasoning</b></p>
-<p align="center">
-  <img src="https://img.shields.io/badge/Anthropic_Claude-D97757?style=for-the-badge&logo=anthropic&logoColor=white">
-  <img src="https://img.shields.io/badge/Claude_Sonnet_4.6-D97757?style=for-the-badge&logo=anthropic&logoColor=white">
-  <img src="https://img.shields.io/badge/Claude_Haiku_4.5-D97757?style=for-the-badge&logo=anthropic&logoColor=white">
-  <img src="https://img.shields.io/badge/Anthropic_SDK-191919?style=for-the-badge&logo=anthropic&logoColor=white">
-  <img src="https://img.shields.io/badge/Structured_Outputs-191919?style=for-the-badge">
-</p>
-
-<p align="center"><b>Deployment &amp; Tooling</b></p>
-<p align="center">
-  <img src="https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white">
-  <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white">
-  <img src="https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white">
-  <img src="https://img.shields.io/badge/pnpm-F69220?style=for-the-badge&logo=pnpm&logoColor=white">
-  <img src="https://img.shields.io/badge/Vitest-6E9F18?style=for-the-badge&logo=vitest&logoColor=white">
-  <img src="https://img.shields.io/badge/Playwright-2EAD33?style=for-the-badge&logo=playwright&logoColor=white">
-  <img src="https://img.shields.io/badge/Biome-60A5FA?style=for-the-badge&logo=biome&logoColor=white">
-  <img src="https://img.shields.io/badge/esbuild-FFCF00?style=for-the-badge&logo=esbuild&logoColor=black">
-  <img src="https://img.shields.io/badge/tsx-3178C6?style=for-the-badge&logo=typescript&logoColor=white">
-  <img src="https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white">
-  <img src="https://img.shields.io/badge/Claude_Code-D97757?style=for-the-badge&logo=anthropic&logoColor=white">
-</p>
 
 ## Documentation
 

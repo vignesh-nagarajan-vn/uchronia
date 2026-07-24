@@ -28,3 +28,6 @@ Thumbs.db
 .idea/
 .vscode/*
 !.vscode/extensions.json
+
+# vercel project link (local)
+.vercel/

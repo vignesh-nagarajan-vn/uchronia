@@ -84,7 +84,14 @@ export function Atlas() {
 
   return (
     <Shell>
-      <section className="pt-14 pb-10 text-center">
+      <section className="pt-12 pb-10 text-center">
+        <img
+          src="/uchronia-logo.png"
+          alt=""
+          width={132}
+          height={127}
+          className="mx-auto mb-4 h-[127px] w-[132px] dark:brightness-[1.45]"
+        />
         <Wordmark large />
         <p className="mt-2 font-data text-[13px] text-ink-faded">
           yoo-KROH-nee-uh · a chronicle of times that never were

@@ -72,6 +72,7 @@ apps/web           Vite + React. RED THREAD interface (docs/DESIGN.md is binding
                      demo loader), TimelineView (virtualized spine, search, multi-lens,
                      stop control), EventDetail (prev/next, retell, copy link), Dossier,
                      DeltaView, CompareView, ArtifactReader, SettingsView
+  public/            brand assets: the seal (uchronia-logo.png) + favicon set
   e2e/               journey.spec.ts: the §11.3 Playwright journey (mock mode)
 docs/              ARCHITECTURE, DATA_MODEL, GENERATION, DESIGN(+NOTES), TESTING, ROADMAP, adr/
 demo/              the-unburnt-library.uchronia.json (showcase; one-click load from Atlas;

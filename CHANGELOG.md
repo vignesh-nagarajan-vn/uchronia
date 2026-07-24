@@ -14,6 +14,7 @@ All notable changes to Uchronia. The format follows [Keep a Changelog](https://k
 - Web: route-level code-splitting, ledger search (`/`), multi-lens filtering, prev/next event walking, copy-link, rename and themed burn dialogs, one-click showcase-chronicle loading, error boundary and 404 page, SSE live-region announcements.
 - Deployment: single-container Dockerfile (mock-mode public demo safe by default), `UCHRONIA_STATIC_DIR` static serving with SPA fallback, and zero-config Vercel support (`vercel.json` + a catch-all `api/index.ts` function, `/tmp` SQLite, showcase seeding via `UCHRONIA_SEED_DEMO`).
 - Mock demo pacing (`UCHRONIA_MOCK_PACE_MS`) so the ink-in moment is visible keyless.
+- Brand assets: the Uchronia seal on the Atlas and the README masthead, and a favicon set from the split-hourglass mark (`apps/web/public/`).
 
 ### Changed
 
