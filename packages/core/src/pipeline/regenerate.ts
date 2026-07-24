@@ -75,7 +75,8 @@ export async function regenerateCommittedEvent(
   const stateLines: string[] = []
   for (const entity of world.resolveEntities(branchId)) {
     const record =
-      stateBefore.get(entity.id) ?? (entity.introducedByEventId === null ? entity.initialState : null)
+      stateBefore.get(entity.id) ??
+      (entity.introducedByEventId === null ? entity.initialState : null)
     if (!record) continue
     const facts = Object.entries(record)
       .map(([k, v]) => `${k}=${renderValue(v)}`)

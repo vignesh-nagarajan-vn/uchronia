@@ -192,15 +192,11 @@ describe('runGeneration — full pipeline (mock)', () => {
         return inner.complete(request)
       },
     }
-    const events = await collect(
-      runGeneration({ ...ctx(), provider: flaky }, world, branchId),
-    )
+    const events = await collect(runGeneration({ ...ctx(), provider: flaky }, world, branchId))
 
     expect(events.at(-1)).toEqual({ type: 'run.completed', branchId })
     expect(
-      events.some(
-        (e) => e.type === 'warning' && e.message.includes('convergence scan failed'),
-      ),
+      events.some((e) => e.type === 'warning' && e.message.includes('convergence scan failed')),
     ).toBe(true)
     // Every era still completed and the branch validates; no convergences exist.
     expect(world.ownEras(branchId).length).toBeGreaterThanOrEqual(5)

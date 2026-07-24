@@ -1,6 +1,10 @@
 import type Anthropic from '@anthropic-ai/sdk'
 import { APIUserAbortError } from '@anthropic-ai/sdk'
-import { GenerationAbortedError, ProviderResponseError, type StructuredRequest } from '@uchronia/core'
+import {
+  GenerationAbortedError,
+  ProviderResponseError,
+  type StructuredRequest,
+} from '@uchronia/core'
 import { describe, expect, it } from 'vitest'
 import { z } from 'zod'
 import { AnthropicProvider } from './anthropic.js'
@@ -104,9 +108,9 @@ describe('AnthropicProvider', () => {
     const { client, calls } = fakeClient([new APIUserAbortError()])
     const provider = new AnthropicProvider(CONFIG, client)
     const controller = new AbortController()
-    await expect(
-      provider.complete(request({ signal: controller.signal })),
-    ).rejects.toThrow(GenerationAbortedError)
+    await expect(provider.complete(request({ signal: controller.signal }))).rejects.toThrow(
+      GenerationAbortedError,
+    )
     expect(calls[0]?.signal).toBe(controller.signal)
   })
 

@@ -1,10 +1,11 @@
 import { Dialog, Heading, Modal, ModalOverlay } from 'react-aria-components'
 
 const SHORTCUTS: Array<[string, string]> = [
-  ['j / k', 'walk events'],
+  ['j / k', 'walk events (moves focus)'],
   ['enter', 'open event'],
   ['f', 'fork at the focused event'],
   ['l', 'cycle lens filter'],
+  ['/', 'search the ledger'],
   ['b', 'delta view'],
   ['c', 'compare against the record'],
   ['e', 'export JSON'],

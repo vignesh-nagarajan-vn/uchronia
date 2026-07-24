@@ -15,7 +15,9 @@ const app = createApp(deps)
 if (config.staticDir) {
   const indexHtml = join(config.staticDir, 'index.html')
   if (!existsSync(indexHtml)) {
-    console.warn(`UCHRONIA_STATIC_DIR is set but ${indexHtml} does not exist; not serving static files`)
+    console.warn(
+      `UCHRONIA_STATIC_DIR is set but ${indexHtml} does not exist; not serving static files`,
+    )
   } else {
     const staticRoot = config.staticDir
     app.use('/*', serveStatic({ root: staticRoot }))

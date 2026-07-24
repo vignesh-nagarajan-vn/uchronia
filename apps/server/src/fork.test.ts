@@ -93,9 +93,7 @@ describe('fork + compare end to end', () => {
     expect(
       (await app.request(`/api/branches/${grand.branch.id}`, { method: 'DELETE' })).status,
     ).toBe(204)
-    expect((await app.request(`/api/branches/${branch.id}`, { method: 'DELETE' })).status).toBe(
-      204,
-    )
+    expect((await app.request(`/api/branches/${branch.id}`, { method: 'DELETE' })).status).toBe(204)
 
     // The parent is intact and the burned branch is gone.
     expect((await app.request(`/api/branches/${branch.id}/view`)).status).toBe(404)

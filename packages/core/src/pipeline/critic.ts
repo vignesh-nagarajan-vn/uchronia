@@ -232,11 +232,7 @@ export async function refineBatch(args: {
  * without this the "stated causes cannot carry the weight" criterion is
  * unjudgeable, since e<n>/d<n> handles carry no meaning on their own.
  */
-export function buildCauseGlossary(
-  world: World,
-  branchId: string,
-  drafts: DraftEvent[],
-): string {
+export function buildCauseGlossary(world: World, branchId: string, drafts: DraftEvent[]): string {
   const visible = world.resolveEvents(branchId)
   const byRef = new Map(drafts.map((d) => [d.ref, d]))
   const lines: string[] = []

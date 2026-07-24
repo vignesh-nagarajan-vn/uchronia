@@ -45,8 +45,15 @@ export function EventCard({
       )}
       onMouseEnter={() => onHoverChange?.(true)}
       onMouseLeave={() => onHoverChange?.(false)}
-      onFocus={() => onHoverChange?.(true)}
-      onBlur={() => onHoverChange?.(false)}
+      // Only fire on crossing the card boundary — focus moving between the
+      // title and an entity link inside the same card must not flicker the
+      // thread overlay.
+      onFocus={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget as Node | null)) onHoverChange?.(true)
+      }}
+      onBlur={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget as Node | null)) onHoverChange?.(false)
+      }}
       aria-description={
         related > 0
           ? `${event.causes.length} recorded causes, ${event.effects.length} effects`
@@ -61,13 +68,14 @@ export function EventCard({
           <h3 className="font-semibold leading-snug">
             <Link
               to={`${branchPath}/e/${event.id}`}
-              className="rounded-[2px] outline-offset-4 hover:underline decoration-rule underline-offset-4"
+              className="rounded-[2px] outline-offset-4 hover:underline decoration-rule underline-offset-4 after:absolute after:inset-0 after:content-['']"
             >
               {event.title}
             </Link>
           </h3>
           <p className="mt-0.5 line-clamp-2 text-[15px] text-ink/90">{event.summary}</p>
-          <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1">
+          {/* Raised above the stretched title link so entity links stay clickable. */}
+          <div className="relative z-10 mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1">
             <LensTicks lenses={event.lenses} />
             {event.entityIds.slice(0, 4).map((id) => {
               const entity = entities.get(id)

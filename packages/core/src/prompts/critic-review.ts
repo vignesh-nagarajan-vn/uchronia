@@ -59,7 +59,15 @@ Verdict semantics:
 - dispute — unsound in a way regeneration will not fix; keep it visible, attach your notes (at least one "fail" issue)
 
 Return a verdict for EVERY draft ref. Do not invent refs.`,
-  prompt: ({ podStatement, eraTitle, eraSpan, stateSummary, recentEvents, causeGlossary, drafts }) =>
+  prompt: ({
+    podStatement,
+    eraTitle,
+    eraSpan,
+    stateSummary,
+    recentEvents,
+    causeGlossary,
+    drafts,
+  }) =>
     `Point of divergence: ${podStatement}
 
 Era under review: "${eraTitle}" (${eraSpan})

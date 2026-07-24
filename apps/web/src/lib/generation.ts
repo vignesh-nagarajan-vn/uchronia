@@ -34,8 +34,7 @@ export function useGeneration(branchId: string) {
     if (abortRef.current) return
     const controller = new AbortController()
     abortRef.current = controller
-    const freshIds = new Set<string>()
-    setState({ status: 'running', currentEra: null, error: null, freshIds })
+    setState({ status: 'running', currentEra: null, error: null, freshIds: new Set() })
 
     const key = ['branch-view', branchId]
     const update = (fn: (view: BranchView) => BranchView) => {
@@ -81,7 +80,13 @@ export function useGeneration(branchId: string) {
           case 'event.accepted': {
             const event = data.event as BranchView['events'][number] & { causes?: string[] }
             const edges = (data.edges ?? []) as BranchView['edges']
-            freshIds.add(event.id)
+            // A new Set per event: the ink-in re-render is driven by state,
+            // not by a lucky concurrent cache update.
+            setState((s) => {
+              const next = new Set(s.freshIds)
+              next.add(event.id)
+              return { ...s, freshIds: next }
+            })
             update((view) => {
               if (view.events.some((e) => e.id === event.id)) return view
               const eventView: EventView = {

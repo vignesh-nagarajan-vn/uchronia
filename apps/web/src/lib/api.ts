@@ -8,9 +8,12 @@ import {
   type EntityBiography,
   type Era,
   type Event,
+  type EventView,
   ForkResponse,
   TimelineAggregate,
   TimelineSummary,
+  type UpdateTimelineRequest,
+  UpdateTimelineResponse,
 } from '@uchronia/schemas'
 import { z } from 'zod'
 
@@ -54,6 +57,21 @@ export const api = {
     ),
 
   deleteTimeline: (id: string) => request<void>(`/api/timelines/${id}`, { method: 'DELETE' }),
+
+  updateTimeline: async (id: string, body: UpdateTimelineRequest) =>
+    UpdateTimelineResponse.parse(
+      await request(`/api/timelines/${id}`, { method: 'PATCH', body: JSON.stringify(body) }),
+    ).timeline,
+
+  deleteBranch: (id: string) => request<void>(`/api/branches/${id}`, { method: 'DELETE' }),
+
+  regenerateEvent: async (branchId: string, eventId: string, guidance?: string) =>
+    (
+      await request<{ event: EventView }>(
+        `/api/branches/${branchId}/events/${eventId}/regenerate`,
+        { method: 'POST', body: JSON.stringify(guidance ? { guidance } : {}) },
+      )
+    ).event,
 
   branchView: async (branchId: string) =>
     BranchView.parse(await request(`/api/branches/${branchId}/view`)),

@@ -7,9 +7,9 @@ import {
   TimelineSummary,
   UpdateTimelineResponse,
 } from '@uchronia/schemas'
-import { z } from 'zod'
 import { FX, fixtureAggregate } from '@uchronia/schemas/fixtures'
 import { describe, expect, it } from 'vitest'
+import { z } from 'zod'
 import { makeTestApp, postJson } from './test-helpers.js'
 
 describe('meta routes', () => {
@@ -197,11 +197,9 @@ describe('timeline lifecycle routes', () => {
     const target = before.events.find((e) => e.id === FX.e1)
     if (!target) throw new Error('fixture event missing')
 
-    const res = await postJson(
-      app,
-      `/api/branches/${FX.rootBranch}/events/${FX.e1}/regenerate`,
-      { guidance: 'Tell it from the harbor, not the palace.' },
-    )
+    const res = await postJson(app, `/api/branches/${FX.rootBranch}/events/${FX.e1}/regenerate`, {
+      guidance: 'Tell it from the harbor, not the palace.',
+    })
     expect(res.status).toBe(200)
     const { event } = RegenerateEventResponse.parse(await res.json())
     expect(event.id).toBe(FX.e1)
@@ -222,7 +220,11 @@ describe('timeline lifecycle routes', () => {
     const { app } = makeTestApp()
     await postJson(app, '/api/import', fixtureAggregate())
     // e1 belongs to the root; the child branch sees it but does not own it.
-    const res = await postJson(app, `/api/branches/${FX.childBranch}/events/${FX.e1}/regenerate`, {})
+    const res = await postJson(
+      app,
+      `/api/branches/${FX.childBranch}/events/${FX.e1}/regenerate`,
+      {},
+    )
     expect(res.status).toBe(409)
   })
 })

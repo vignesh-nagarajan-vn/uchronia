@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { ARTIFACT_KINDS, type ArtifactKind } from '@uchronia/schemas'
+import { ARTIFACT_KINDS, type ArtifactKind, type BranchView } from '@uchronia/schemas'
 import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router'
 import { ForkDialog } from '../components/ForkDialog.js'
@@ -25,15 +25,38 @@ export function EventDetail() {
 
   const expand = useMutation({
     mutationFn: () => api.expandEvent(branchId, eventId),
-    onSuccess: () => void queryClient.invalidateQueries({ queryKey: ['branch-view', branchId] }),
+    // Patch the one event rather than refetching the whole branch view.
+    onSuccess: (expanded) =>
+      queryClient.setQueryData<BranchView>(['branch-view', branchId], (old) =>
+        old
+          ? {
+              ...old,
+              events: old.events.map((e) =>
+                e.id === expanded.id ? { ...e, detail: expanded.detail } : e,
+              ),
+            }
+          : old,
+      ),
   })
   const makeArtifact = useMutation({
     mutationFn: (kind: ArtifactKind) => api.generateArtifact(branchId, eventId, kind),
     onSuccess: (artifact) => {
-      void queryClient.invalidateQueries({ queryKey: ['branch-view', branchId] })
+      queryClient.setQueryData<BranchView>(['branch-view', branchId], (old) =>
+        old && !old.artifacts.some((a) => a.id === artifact.id)
+          ? { ...old, artifacts: [...old.artifacts, artifact] }
+          : old,
+      )
       navigate(`${branchPath}/artifact/${artifact.id}`)
     },
   })
+  const regenerate = useMutation({
+    mutationFn: () => api.regenerateEvent(branchId, eventId),
+    onSuccess: (fresh) =>
+      queryClient.setQueryData<BranchView>(['branch-view', branchId], (old) =>
+        old ? { ...old, events: old.events.map((e) => (e.id === fresh.id ? fresh : e)) } : old,
+      ),
+  })
+  const [copied, setCopied] = useState(false)
 
   if (view.isLoading)
     return (
@@ -65,6 +88,11 @@ export function EventDetail() {
     )
   }
 
+  const eventIndex = data.events.findIndex((e) => e.id === eventId)
+  const previous = eventIndex > 0 ? data.events[eventIndex - 1] : undefined
+  const next = eventIndex >= 0 ? data.events[eventIndex + 1] : undefined
+  const ownEvent = event.branchId === branchId
+
   const edgeById = new Map(data.edges.map((e) => [e.id, e]))
   const eventById = new Map(data.events.map((e) => [e.id, e]))
   const causes = event.causes
@@ -95,7 +123,32 @@ export function EventDetail() {
       }
     >
       <article className="mx-auto max-w-[720px] pt-8">
-        <p className="font-data text-[13px] text-ink-faded">{event.date.label}</p>
+        <nav
+          aria-label="walk the ledger"
+          className="flex items-baseline justify-between gap-4 border-b border-rule pb-2 font-data text-[12.5px]"
+        >
+          {previous ? (
+            <Link
+              to={`${branchPath}/e/${previous.id}`}
+              className="min-w-0 truncate text-ink-faded hover:text-ink"
+            >
+              ← {previous.title}
+            </Link>
+          ) : (
+            <span className="text-ink-faded/50">the divergence is the beginning</span>
+          )}
+          {next ? (
+            <Link
+              to={`${branchPath}/e/${next.id}`}
+              className="min-w-0 truncate text-right text-ink-faded hover:text-ink"
+            >
+              {next.title} →
+            </Link>
+          ) : (
+            <span className="text-right text-ink-faded/50">the horizon, for now</span>
+          )}
+        </nav>
+        <p className="mt-6 font-data text-[13px] text-ink-faded">{event.date.label}</p>
         <h1 className="mt-1 text-[26px] font-semibold leading-tight">{event.title}</h1>
         <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1">
           <LensTicks lenses={event.lenses} />
@@ -104,12 +157,7 @@ export function EventDetail() {
           {event.flags.convergence && <ConvergenceGlyph note={convergence?.similarityNote} />}
           {event.flags.disputed && <DisputedMark withNotes={false} />}
         </div>
-        <p
-          className="mt-1 font-data text-[12px] text-ink-faded"
-          title={event.plausibility.rationale}
-        >
-          {event.plausibility.rationale}
-        </p>
+        <p className="mt-1 font-data text-[12px] text-ink-faded">{event.plausibility.rationale}</p>
 
         <div className="mt-6 border-t border-rule pt-5 text-[16.5px] leading-[1.7]">
           <p>{event.summary}</p>
@@ -268,7 +316,7 @@ export function EventDetail() {
           </div>
         </section>
 
-        <div className="mt-10 border-t border-rule pt-4">
+        <div className="mt-10 flex flex-wrap items-center gap-3 border-t border-rule pt-4">
           <button
             type="button"
             onClick={() => setForking(true)}
@@ -276,6 +324,34 @@ export function EventDetail() {
           >
             Fork here
           </button>
+          {ownEvent && (
+            <button
+              type="button"
+              onClick={() => regenerate.mutate()}
+              disabled={regenerate.isPending}
+              className="rounded-[2px] border border-rule px-4 py-1.5 text-[15px] text-ink-faded hover:bg-paper-raised hover:text-ink disabled:opacity-40"
+              title="a fresh telling of this event — same position, same causes, new texture"
+            >
+              {regenerate.isPending ? 'Retelling…' : 'Tell it again'}
+            </button>
+          )}
+          <button
+            type="button"
+            onClick={() => {
+              void navigator.clipboard.writeText(window.location.href).then(() => {
+                setCopied(true)
+                setTimeout(() => setCopied(false), 2000)
+              })
+            }}
+            className="rounded-[2px] border border-rule px-4 py-1.5 font-data text-[13px] text-ink-faded hover:bg-paper-raised hover:text-ink"
+          >
+            {copied ? 'copied' : 'copy link'}
+          </button>
+          {regenerate.isError && (
+            <p className="w-full font-data text-[12px] text-thread" role="alert">
+              The retelling failed: {(regenerate.error as Error).message}
+            </p>
+          )}
         </div>
       </article>
 

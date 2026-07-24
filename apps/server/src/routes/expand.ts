@@ -1,4 +1,10 @@
-import { expandEra, expandEvent, regenerateCommittedEvent, World, writeBiography } from '@uchronia/core'
+import {
+  expandEra,
+  expandEvent,
+  regenerateCommittedEvent,
+  World,
+  writeBiography,
+} from '@uchronia/core'
 import { RegenerateEventRequest } from '@uchronia/schemas'
 import { Hono } from 'hono'
 import type { ServerDeps } from '../deps.js'

@@ -51,19 +51,24 @@ export async function expandEvent(
     stateLines.push(`- ${entity.slug} (${entity.type}, "${entity.name}"): ${facts}`)
   }
 
-  const generated = await generateStructured(ctx.provider, eventExpand, {
-    podStatement: world.pod.statement,
-    event: {
-      title: event.title,
-      summary: event.summary,
-      dateLabel: event.date.label,
-      year: event.date.year,
-      lenses: event.lenses,
+  const generated = await generateStructured(
+    ctx.provider,
+    eventExpand,
+    {
+      podStatement: world.pod.statement,
+      event: {
+        title: event.title,
+        summary: event.summary,
+        dateLabel: event.date.label,
+        year: event.date.year,
+        lenses: event.lenses,
+      },
+      stateSummary: stateLines.join('\n'),
+      causeSummaries,
+      effectSummaries,
     },
-    stateSummary: stateLines.join('\n'),
-    causeSummaries,
-    effectSummaries,
-  }, callOpts(ctx))
+    callOpts(ctx),
+  )
   return world.setEventDetail(eventId, generated.value.detail)
 }
 
@@ -84,19 +89,24 @@ export async function expandEra(
     .filter((e) => e.eraId === eraId)
     .map((e) => `${e.title} (${e.date.label}) — ${e.summary}`)
 
-  const generated = await generateStructured(ctx.provider, eraDeepDive, {
-    podStatement: world.pod.statement,
-    era: {
-      title: era.title,
-      summary: era.summary,
-      startYear: era.startYear,
-      endYear: era.endYear,
+  const generated = await generateStructured(
+    ctx.provider,
+    eraDeepDive,
+    {
+      podStatement: world.pod.statement,
+      era: {
+        title: era.title,
+        summary: era.summary,
+        startYear: era.startYear,
+        endYear: era.endYear,
+      },
+      pressureLines: era.pressures.map(
+        (p) => `${p.name} (${p.kind}, ${p.intensity}): ${p.description}`,
+      ),
+      eventLines,
     },
-    pressureLines: era.pressures.map(
-      (p) => `${p.name} (${p.kind}, ${p.intensity}): ${p.description}`,
-    ),
-    eventLines,
-  }, callOpts(ctx))
+    callOpts(ctx),
+  )
   return world.setEraDetail(eraId, generated.value.detail)
 }
 
@@ -125,13 +135,18 @@ export async function writeBiography(
     .filter((e) => e.entityIds.includes(entityId))
     .map((e) => `${e.title} (${e.date.label})`)
 
-  const generated = await generateStructured(ctx.provider, entityBiography, {
-    podStatement: world.pod.statement,
-    entity: { name: entity.name, type: entity.type, description: entity.description },
-    stateLine,
-    ledgerLines,
-    relatedEvents,
-  }, callOpts(ctx))
+  const generated = await generateStructured(
+    ctx.provider,
+    entityBiography,
+    {
+      podStatement: world.pod.statement,
+      entity: { name: entity.name, type: entity.type, description: entity.description },
+      stateLine,
+      ledgerLines,
+      relatedEvents,
+    },
+    callOpts(ctx),
+  )
   return world.setBiography({
     id: ctx.idgen.next(),
     entityId,

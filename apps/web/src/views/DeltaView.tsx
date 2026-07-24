@@ -8,7 +8,6 @@ import { useBranchView } from './TimelineView.js'
 
 interface BranchLine {
   branch: Branch
-  depth: number
   forkYear: number
   lastYear: number
   x: number
@@ -34,28 +33,28 @@ export function DeltaView() {
     const podYear = data.pod.year
     const horizonEnd = podYear + data.timeline.settings.horizonYears
 
-    const depthOf = (b: Branch): number => {
-      let depth = 0
-      let current: Branch | undefined = b
-      while (current?.parentBranchId) {
-        depth++
-        current = branches.find((x) => x.id === current?.parentBranchId)
-      }
-      return depth
-    }
-    const forkYearOf = (b: Branch): number => {
-      if (!b.forkEventId) return podYear
-      const forkEvent = data.events.find((e) => e.id === b.forkEventId)
-      return forkEvent?.date.year ?? podYear
-    }
+    // One pass for fork years — no per-branch scans over the event list.
+    const eventYearById = new Map(data.events.map((e) => [e.id, e.date.year]))
+    const forkYears = new Map(
+      branches.map((b) => [
+        b.id,
+        b.forkEventId === null ? podYear : (eventYearById.get(b.forkEventId) ?? podYear),
+      ]),
+    )
 
     // Assign columns: trunk at 0; children ordered by fork year.
-    const sorted = [...branches].sort((a, b) => forkYearOf(a) - forkYearOf(b))
+    const sorted = [...branches].sort(
+      (a, b) => (forkYears.get(a.id) ?? podYear) - (forkYears.get(b.id) ?? podYear),
+    )
     let column = 0
     const lines: BranchLine[] = sorted.map((branch) => {
-      const depth = depthOf(branch)
       const x = branch.parentBranchId === null ? 0 : ++column
-      return { branch, depth, forkYear: forkYearOf(branch), lastYear: horizonEnd, x }
+      return {
+        branch,
+        forkYear: forkYears.get(branch.id) ?? podYear,
+        lastYear: horizonEnd,
+        x,
+      }
     })
 
     const width = 220 + column * 150
@@ -209,7 +208,7 @@ export function DeltaView() {
                           type="checkbox"
                           checked={isSelected}
                           onChange={() => toggleSelect(line.branch.id)}
-                          className="mr-1 h-3 w-3 accent-[var(--color-thread)] align-middle"
+                          className="mr-1 h-3 w-3 accent-[var(--color-ink-faded)] align-middle"
                         />
                         compare
                       </label>

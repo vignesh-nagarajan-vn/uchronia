@@ -3,7 +3,7 @@ import { useVirtualizer } from '@tanstack/react-virtual'
 import type { BaselineAnchor, BranchView, EntityView, EventView, Lens } from '@uchronia/schemas'
 import { clsx } from 'clsx'
 import { motion, useReducedMotion } from 'motion/react'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router'
 import { EraHeader } from '../components/EraHeader.js'
 import { EventCard } from '../components/EventCard.js'
@@ -44,13 +44,19 @@ export function TimelineView() {
     staleTime: Number.POSITIVE_INFINITY,
   })
   const generation = useGeneration(branchId)
-  const [lensFilter, setLensFilter] = useState<Lens | null>(null)
+  const [lensSet, setLensSet] = useState<Set<Lens>>(new Set())
+  const [search, setSearch] = useState('')
   const [showRecord, setShowRecord] = useState(true)
   const [focusedEventIndex, setFocusedEventIndex] = useState(0)
   const [hoveredEventId, setHoveredEventId] = useState<string | null>(null)
   const [forkAt, setForkAt] = useState<EventView | null>(null)
   const [shortcutsOpen, setShortcutsOpen] = useState(false)
+  const searchRef = useRef<HTMLInputElement>(null)
   const reduced = useReducedMotion()
+
+  // Leaving the page must not leave the SSE stream running into a dead view.
+  const stopGeneration = generation.stop
+  useEffect(() => () => stopGeneration(), [stopGeneration])
 
   // Auto-derive when arriving from the Atlas (?derive=1) onto an empty branch.
   const shouldDerive = searchParams.get('derive') === '1'
@@ -74,9 +80,21 @@ export function TimelineView() {
   )
 
   const filteredEvents = useMemo(() => {
-    const events = data?.events ?? []
-    return lensFilter ? events.filter((e) => e.lenses.includes(lensFilter)) : events
-  }, [data?.events, lensFilter])
+    let events = data?.events ?? []
+    if (lensSet.size > 0) {
+      events = events.filter((e) => e.lenses.some((l) => lensSet.has(l)))
+    }
+    const query = search.trim().toLowerCase()
+    if (query.length > 0) {
+      events = events.filter(
+        (e) =>
+          e.title.toLowerCase().includes(query) ||
+          e.summary.toLowerCase().includes(query) ||
+          e.entityIds.some((id) => entitiesById.get(id)?.name.toLowerCase().includes(query)),
+      )
+    }
+    return events
+  }, [data?.events, lensSet, search, entitiesById])
 
   // Flatten eras/events (+ interleaved record anchors) into virtual rows.
   const rows = useMemo<Row[]>(() => {
@@ -152,21 +170,25 @@ export function TimelineView() {
   const [offscreen, setOffscreen] = useState<Map<string, [number, number]>>(new Map())
   // Recompute pins whenever the virtual window shifts under the hover.
   const virtualWindowSize = virtualizer.getVirtualItems().length
+  // Layout effect (not post-paint) so the threads land the same frame as the
+  // hover state, and one rect read per related card — the container rect is
+  // hoisted out of the loop so scrolling while hovering doesn't thrash layout.
   // biome-ignore lint/correctness/useExhaustiveDependencies(virtualWindowSize): deliberately extra — thread pins must re-measure when virtualization swaps rows
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!relatedIds || !hovered || !scrollRef.current) {
       setThreads([])
       setOffscreen(new Map())
       return
     }
     const container = scrollRef.current
+    const base = container.getBoundingClientRect()
+    const scrollTop = container.scrollTop
     const pins = new Map<string, number>()
     for (const el of container.querySelectorAll<HTMLElement>('[data-event-id]')) {
       const id = el.dataset.eventId
       if (id && relatedIds.has(id)) {
         const rect = el.getBoundingClientRect()
-        const base = container.getBoundingClientRect()
-        pins.set(id, rect.top - base.top + container.scrollTop + rect.height / 2)
+        pins.set(id, rect.top - base.top + scrollTop + rect.height / 2)
       }
     }
     const originY = pins.get(hovered.id)
@@ -198,10 +220,22 @@ export function TimelineView() {
   }, [relatedIds, hovered, data, virtualWindowSize])
 
   // ---- keyboard (§8) -------------------------------------------------------
+  // j/k moves REAL focus: the visual ring and the DOM focus are one thing, so
+  // screen readers announce the walked event and `f`/`enter` act on what the
+  // user last touched by any means.
   const scrollToEvent = useCallback(
     (index: number) => {
       const entry = eventRows[index]
-      if (entry) virtualizer.scrollToIndex(entry.i, { align: 'center' })
+      if (!entry || entry.row.kind !== 'event') return
+      virtualizer.scrollToIndex(entry.i, { align: 'center' })
+      const id = entry.row.event.id
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          scrollRef.current
+            ?.querySelector<HTMLElement>(`[data-event-id="${id}"] h3 a`)
+            ?.focus({ preventScroll: true })
+        })
+      })
     },
     [eventRows, virtualizer],
   )
@@ -210,6 +244,8 @@ export function TimelineView() {
       const target = e.target as HTMLElement
       if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || e.metaKey || e.ctrlKey)
         return
+      // Open dialogs own the keyboard; the ledger must not navigate under them.
+      if (forkAt || shortcutsOpen) return
       const focusedEntry = eventRows[focusedEventIndex]
       switch (e.key) {
         case 'j':
@@ -235,17 +271,22 @@ export function TimelineView() {
           if (focusedEntry?.row.kind === 'event') setForkAt(focusedEntry.row.event)
           break
         case 'l':
-          setLensFilter((prev) => {
-            const order: (Lens | null)[] = [
-              null,
+          setLensSet((prev) => {
+            const order: Lens[] = [
               'political',
               'technological',
               'cultural',
               'economic',
               'daily-life',
             ]
-            return order[(order.indexOf(prev) + 1) % order.length] ?? null
+            // Cycle: all → each single lens → all.
+            const current = prev.size === 1 ? ([...prev][0] ?? null) : null
+            const nextIndex = current === null ? 0 : order.indexOf(current) + 1
+            return nextIndex >= order.length ? new Set() : new Set([order[nextIndex] as Lens])
           })
+          break
+        case '/':
+          searchRef.current?.focus()
           break
         case 'b':
           navigate(`${branchPath}/delta`)
@@ -266,7 +307,17 @@ export function TimelineView() {
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [eventRows, focusedEventIndex, scrollToEvent, navigate, branchPath, branchId, timelineId])
+  }, [
+    eventRows,
+    focusedEventIndex,
+    scrollToEvent,
+    navigate,
+    branchPath,
+    branchId,
+    timelineId,
+    forkAt,
+    shortcutsOpen,
+  ])
 
   if (view.isLoading) {
     return (
@@ -354,16 +405,16 @@ export function TimelineView() {
         </div>
       }
     >
-      <div className="flex items-center justify-between gap-4 border-b border-rule py-2">
-        <fieldset className="flex items-center gap-2">
-          <legend className="sr-only">lens filter</legend>
+      <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border-rule py-2">
+        <fieldset className="flex flex-wrap items-center gap-2">
+          <legend className="sr-only">lens filter (multiple allowed)</legend>
           <button
             type="button"
-            onClick={() => setLensFilter(null)}
-            aria-pressed={lensFilter === null}
+            onClick={() => setLensSet(new Set())}
+            aria-pressed={lensSet.size === 0}
             className={clsx(
               'rounded-[2px] border px-2 py-0.5 font-data text-[12px]',
-              lensFilter === null ? 'border-ink-faded text-ink' : 'border-rule text-ink-faded',
+              lensSet.size === 0 ? 'border-ink-faded text-ink' : 'border-rule text-ink-faded',
             )}
           >
             all lenses
@@ -373,11 +424,18 @@ export function TimelineView() {
               <button
                 key={lens}
                 type="button"
-                onClick={() => setLensFilter((prev) => (prev === lens ? null : lens))}
-                aria-pressed={lensFilter === lens}
+                onClick={() =>
+                  setLensSet((prev) => {
+                    const next = new Set(prev)
+                    if (next.has(lens)) next.delete(lens)
+                    else next.add(lens)
+                    return next
+                  })
+                }
+                aria-pressed={lensSet.has(lens)}
                 className={clsx(
                   'rounded-[2px] border px-2 py-0.5 font-data text-[12px]',
-                  lensFilter === lens ? 'border-ink-faded text-ink' : 'border-rule text-ink-faded',
+                  lensSet.has(lens) ? 'border-ink-faded text-ink' : 'border-rule text-ink-faded',
                 )}
               >
                 <span
@@ -388,6 +446,15 @@ export function TimelineView() {
               </button>
             ),
           )}
+          <input
+            ref={searchRef}
+            type="search"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="search the ledger — /"
+            aria-label="search events by title, summary, or entity"
+            className="w-[190px] rounded-[2px] border border-rule bg-paper px-2 py-0.5 font-data text-[12px] placeholder:text-ink-faded/70"
+          />
         </fieldset>
         <div className="flex items-center gap-3">
           <label className="flex items-center gap-1.5 font-data text-[12px] text-ink-faded">
@@ -400,23 +467,57 @@ export function TimelineView() {
             the record
           </label>
           {running ? (
-            <span className="stamp text-thread" role="status">
-              deriving{generation.state.currentEra ? ` — ${generation.state.currentEra}` : '…'}
+            <span className="flex items-center gap-2">
+              <span className="stamp text-thread" role="status">
+                deriving{generation.state.currentEra ? ` — ${generation.state.currentEra}` : '…'}
+              </span>
+              <button
+                type="button"
+                onClick={() => generation.stop()}
+                className="rounded-[2px] border border-rule px-2.5 py-0.5 font-data text-[12px] text-ink-faded hover:text-ink"
+              >
+                Stop
+              </button>
             </span>
           ) : (
-            <button
-              type="button"
-              onClick={() => void generation.start()}
-              className="rounded-[2px] border border-thread px-2.5 py-0.5 font-data text-[12px] text-thread hover:bg-thread-wash"
-            >
-              {empty ? 'Derive history' : 'Continue derivation'}
-            </button>
+            <span className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  void api
+                    .updateTimeline(timelineId, {
+                      horizonYears: data.timeline.settings.horizonYears + 100,
+                    })
+                    .then(() => view.refetch())
+                }}
+                className="rounded-[2px] border border-rule px-2.5 py-0.5 font-data text-[12px] text-ink-faded hover:text-ink"
+                title="extend the horizon by a century; then continue the derivation"
+              >
+                +100y
+              </button>
+              <button
+                type="button"
+                onClick={() => void generation.start()}
+                className="rounded-[2px] border border-thread px-2.5 py-0.5 font-data text-[12px] text-thread hover:bg-thread-wash"
+              >
+                {empty ? 'Derive history' : 'Continue derivation'}
+              </button>
+            </span>
           )}
         </div>
       </div>
 
+      {/* What the sighted watch ink in, screen readers hear era by era. */}
+      <p className="sr-only" aria-live="polite">
+        {running
+          ? `deriving ${generation.state.currentEra ?? ''} — ${generation.state.freshIds.size} events so far`
+          : generation.state.freshIds.size > 0
+            ? `derivation finished with ${generation.state.freshIds.size} new events`
+            : ''}
+      </p>
+
       {generation.state.error && (
-        <p className="mt-2 font-data text-[12px] text-thread">
+        <p className="mt-2 font-data text-[12px] text-thread" role="alert">
           the derivation halted: {generation.state.error}
         </p>
       )}
@@ -431,7 +532,7 @@ export function TimelineView() {
       ) : (
         <div
           ref={scrollRef}
-          className="relative h-[calc(100vh-180px)] overflow-y-auto"
+          className="relative h-[calc(100dvh-190px)] overflow-y-auto max-sm:h-[calc(100dvh-230px)]"
           data-testid="timeline-scroll"
         >
           <div className="relative" style={{ height: virtualizer.getTotalSize() }}>

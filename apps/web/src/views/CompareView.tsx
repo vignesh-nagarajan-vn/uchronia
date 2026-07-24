@@ -7,10 +7,13 @@ import { EmptyState, ErrorState, Shell } from '../components/Shell.js'
 import { api } from '../lib/api.js'
 import { formatYear } from '../lib/format.js'
 
+/** The b side carries an explicit tag — never guessed from object shape. */
+type BSideItem = { kind: 'event'; event: EventView } | { kind: 'anchor'; anchor: BaselineAnchor }
+
 interface YearRow {
   year: number
   a: EventView[]
-  b: EventView[] | BaselineAnchor[]
+  b: BSideItem[]
 }
 
 /** V6 — Compare: two spines, one scroll; shared prefix washed in record blue. */
@@ -40,9 +43,9 @@ export function CompareView() {
     }
     for (const event of data.a.events) rowFor(event.date.year).a.push(event)
     if ('baseline' in data.b) {
-      for (const anchor of data.b.anchors) (rowFor(anchor.year).b as BaselineAnchor[]).push(anchor)
+      for (const anchor of data.b.anchors) rowFor(anchor.year).b.push({ kind: 'anchor', anchor })
     } else {
-      for (const event of data.b.events) (rowFor(event.date.year).b as EventView[]).push(event)
+      for (const event of data.b.events) rowFor(event.date.year).b.push({ kind: 'event', event })
     }
     return [...byYear.values()].sort((x, y) => x.year - y.year)
   }, [compare.data])
@@ -138,22 +141,23 @@ export function CompareView() {
                   versusBaseline ? 'border-l-2 border-record/40' : 'border-l-2 border-thread/40',
                 )}
               >
-                {(row.b as Array<EventView | BaselineAnchor>).map((item) =>
-                  'summary' in item && 'id' in item && !('flags' in item) ? (
-                    <p key={item.id} className="font-data text-[12.5px] leading-snug text-record">
-                      {item.title}
-                      <span className="mt-0.5 block text-record/75">{item.summary}</span>
+                {row.b.map((item) =>
+                  item.kind === 'anchor' ? (
+                    <p
+                      key={item.anchor.id}
+                      className="font-data text-[12.5px] leading-snug text-record"
+                    >
+                      {item.anchor.title}
+                      <span className="mt-0.5 block text-record/75">{item.anchor.summary}</span>
                     </p>
                   ) : (
                     <CompareCell
-                      key={(item as EventView).id}
-                      title={(item as EventView).title}
-                      summary={(item as EventView).summary}
-                      shared={shared.has((item as EventView).id)}
+                      key={item.event.id}
+                      title={item.event.title}
+                      summary={item.event.summary}
+                      shared={shared.has(item.event.id)}
                       href={
-                        versusBaseline
-                          ? undefined
-                          : `/t/${timelineId}/b/${b}/e/${(item as EventView).id}`
+                        versusBaseline ? undefined : `/t/${timelineId}/b/${b}/e/${item.event.id}`
                       }
                     />
                   ),

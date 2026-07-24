@@ -53,19 +53,24 @@ export async function generateArtifact(
   }
 
   const template = TEMPLATES[kind]
-  const generated = await generateStructured(ctx.provider, template, {
-    podStatement: world.pod.statement,
-    event: {
-      title: event.title,
-      summary: event.summary,
-      dateLabel: event.date.label,
-      year: event.date.year,
-      detail: event.detail,
+  const generated = await generateStructured(
+    ctx.provider,
+    template,
+    {
+      podStatement: world.pod.statement,
+      event: {
+        title: event.title,
+        summary: event.summary,
+        dateLabel: event.date.label,
+        year: event.date.year,
+        detail: event.detail,
+      },
+      stateSummary: stateLines.join('\n'),
+      region: world.pod.region,
+      distanceYears: event.distanceFromPod,
     },
-    stateSummary: stateLines.join('\n'),
-    region: world.pod.region,
-    distanceYears: event.distanceFromPod,
-  }, callOpts(ctx))
+    callOpts(ctx),
+  )
 
   const artifact: Artifact = {
     id: ctx.idgen.next(),

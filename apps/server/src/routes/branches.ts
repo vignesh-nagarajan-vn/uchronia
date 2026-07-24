@@ -44,11 +44,19 @@ export function branchRoutes(deps: ServerDeps): Hono {
     const world = worldFor(branchId)
     const branch = world.getBranch(branchId)
     if (branch.parentBranchId === null) {
-      throw new ApiError(409, 'root-branch', 'the root line is the timeline; delete the timeline instead')
+      throw new ApiError(
+        409,
+        'root-branch',
+        'the root line is the timeline; delete the timeline instead',
+      )
     }
     const children = repo.childBranchIds(branchId)
     if (children.length > 0) {
-      throw new ApiError(409, 'has-children', `${children.length} branch(es) fork from this line; burn them first`)
+      throw new ApiError(
+        409,
+        'has-children',
+        `${children.length} branch(es) fork from this line; burn them first`,
+      )
     }
     repo.deleteBranchCascade(branchId)
     return c.body(null, 204)

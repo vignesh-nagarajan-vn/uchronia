@@ -36,7 +36,10 @@ export function createApp(deps: ServerDeps): Hono {
     bodyLimit({
       maxSize: BODY_LIMIT_BYTES,
       onError: (c) =>
-        c.json({ error: 'payload-too-large', message: 'request body exceeds the 16 MB limit' }, 413),
+        c.json(
+          { error: 'payload-too-large', message: 'request body exceeds the 16 MB limit' },
+          413,
+        ),
     }),
   )
 

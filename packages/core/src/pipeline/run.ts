@@ -75,17 +75,22 @@ export async function* runGeneration(
       yield { type: 'run.completed', branchId }
       return
     }
-    const generated = await generateStructured(ctx.provider, seedConsequences, {
-      pod: {
-        statement: pod.statement,
-        year: pod.year,
-        dateLabel: pod.dateLabel,
-        region: pod.region,
-        mechanism: pod.mechanism,
-        baselineContext: pod.baselineContext,
+    const generated = await generateStructured(
+      ctx.provider,
+      seedConsequences,
+      {
+        pod: {
+          statement: pod.statement,
+          year: pod.year,
+          dateLabel: pod.dateLabel,
+          region: pod.region,
+          mechanism: pod.mechanism,
+          baselineContext: pod.baselineContext,
+        },
+        dial,
       },
-      dial,
-    }, callOpts(ctx))
+      callOpts(ctx),
+    )
     const provenance = makeProvenance(ctx, seedConsequences, generated.model)
     const era: Era = {
       id: ctx.idgen.next(),
@@ -126,39 +131,49 @@ export async function* runGeneration(
       region: pod.region,
       limit: 5,
     }).map((a) => a.title)
-    const pressuresOut = await generateStructured(ctx.provider, derivePressures, {
-      podStatement: pod.statement,
-      stateSummary,
-      recentEvents,
-      nextSpan: span,
-      distanceYears: podDistance,
-      dial,
-      attractorHints,
-      previousPressures,
-    }, callOpts(ctx))
+    const pressuresOut = await generateStructured(
+      ctx.provider,
+      derivePressures,
+      {
+        podStatement: pod.statement,
+        stateSummary,
+        recentEvents,
+        nextSpan: span,
+        distanceYears: podDistance,
+        dial,
+        attractorHints,
+        previousPressures,
+      },
+      callOpts(ctx),
+    )
 
     const batchSize = eraBatchSize(distance)
-    const eraOut = await generateStructured(ctx.provider, eraGenerate, {
-      podStatement: pod.statement,
-      span,
-      ordinal: i,
-      distanceYears: distance,
-      podDistanceYears: podDistance,
-      pressures: pressuresOut.value.pressures,
-      stateSummary,
-      recentEvents,
-      entityRoster: (() => {
-        const ended = world.endedEntities(branchId)
-        return world
-          .resolveEntities(branchId)
-          .filter((e) => !ended.has(e.id))
-          .map((e) => ({ slug: e.slug, name: e.name, type: e.type }))
-      })(),
-      batchSize,
-      wildcardBudget: dial.wildcardBudget(distance),
-      dial,
-      subPodStatement: branch.subPod?.statement ?? null,
-    }, callOpts(ctx))
+    const eraOut = await generateStructured(
+      ctx.provider,
+      eraGenerate,
+      {
+        podStatement: pod.statement,
+        span,
+        ordinal: i,
+        distanceYears: distance,
+        podDistanceYears: podDistance,
+        pressures: pressuresOut.value.pressures,
+        stateSummary,
+        recentEvents,
+        entityRoster: (() => {
+          const ended = world.endedEntities(branchId)
+          return world
+            .resolveEntities(branchId)
+            .filter((e) => !ended.has(e.id))
+            .map((e) => ({ slug: e.slug, name: e.name, type: e.type }))
+        })(),
+        batchSize,
+        wildcardBudget: dial.wildcardBudget(distance),
+        dial,
+        subPodStatement: branch.subPod?.statement ?? null,
+      },
+      callOpts(ctx),
+    )
     const provenance = makeProvenance(ctx, eraGenerate, eraOut.model)
 
     const era: Era = {
@@ -220,17 +235,22 @@ async function* runReviewedEra(
     // a warning and let the era stand unscanned — aborts still propagate.
     let scan: GeneratedValue<ConvergenceScanOut> | null
     try {
-      scan = await generateStructured(ctx.provider, convergenceScan, {
-        podStatement: world.pod.statement,
-        region: world.pod.region,
-        events: refined.batch.events.map((e) => ({
-          ref: idToRef.get(e.id) ?? 'd0',
-          year: e.date.year,
-          title: e.title,
-          summary: e.summary,
-        })),
-        candidates,
-      }, callOpts(ctx))
+      scan = await generateStructured(
+        ctx.provider,
+        convergenceScan,
+        {
+          podStatement: world.pod.statement,
+          region: world.pod.region,
+          events: refined.batch.events.map((e) => ({
+            ref: idToRef.get(e.id) ?? 'd0',
+            year: e.date.year,
+            title: e.title,
+            summary: e.summary,
+          })),
+          candidates,
+        },
+        callOpts(ctx),
+      )
     } catch (error) {
       if (error instanceof GenerationAbortedError) throw error
       scan = null
