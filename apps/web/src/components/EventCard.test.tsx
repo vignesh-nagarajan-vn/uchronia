@@ -46,6 +46,7 @@ const entities = new Map<string, EntityView>([
       provenance: { kind: 'user' },
       state: {},
       changeLog: [],
+      endedByEventId: null,
     },
   ],
 ])

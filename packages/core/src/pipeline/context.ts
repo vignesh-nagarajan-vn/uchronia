@@ -9,17 +9,28 @@ export function renderValue(value: StateValue): string {
 /**
  * Compact world-state snapshot for prompts: one line per living entity,
  * ledger-style. This is what generation and critique condition on (P1) —
- * never accumulated prose.
+ * never accumulated prose. Ended entities collapse into a terse terminal
+ * line: the model must know they are gone without carrying their ledgers.
  */
 export function summarizeState(world: World, branchId: string): string {
   const state = world.stateAt(branchId)
+  const ended = world.endedEntities(branchId)
   const lines: string[] = []
+  const gone: string[] = []
   for (const entity of world.resolveEntities(branchId)) {
+    const end = ended.get(entity.id)
+    if (end) {
+      gone.push(`${entity.slug} (${entity.type}, ended ${end.year})`)
+      continue
+    }
     const record = state.get(entity.id) ?? entity.initialState
     const facts = Object.entries(record)
       .map(([k, v]) => `${k}=${renderValue(v)}`)
       .join('; ')
     lines.push(`- ${entity.slug} (${entity.type}, "${entity.name}"): ${facts}`)
+  }
+  if (gone.length > 0) {
+    lines.push(`- no longer extant (never mutate these): ${gone.join('; ')}`)
   }
   return lines.length > 0 ? lines.join('\n') : '(no entities yet)'
 }

@@ -127,7 +127,12 @@ export function resolveDrafts(ctx: DraftContext, drafts: DraftEvent[]): Resolved
         )
         continue
       }
-      deltas.push({ entityId: id, patch: factsToRecord(delta.patch), note: delta.note })
+      deltas.push({
+        entityId: id,
+        patch: factsToRecord(delta.patch),
+        note: delta.note,
+        ends: delta.ends,
+      })
     }
 
     for (const cause of draft.causes) {

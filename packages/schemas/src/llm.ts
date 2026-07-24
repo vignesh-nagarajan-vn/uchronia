@@ -46,6 +46,8 @@ export const DraftDelta = z.object({
   entitySlug: Slug,
   patch: z.array(StateFact).min(1),
   note: z.string().min(1),
+  /** True when this event permanently ends the entity (death, dissolution). */
+  ends: z.boolean().optional(),
 })
 export type DraftDelta = z.infer<typeof DraftDelta>
 

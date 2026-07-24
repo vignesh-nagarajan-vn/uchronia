@@ -9,6 +9,7 @@ import {
   eraRangesNonOverlapping,
   eventWithinEra,
   forkNormalized,
+  noPosthumousMutation,
   plausibilityInRange,
   validateBranch,
   validateWorld,
@@ -131,6 +132,55 @@ describe('rule: deltas-apply', () => {
     })
     const issues = deltasApplyCleanly(world, FX.childBranch)
     expect(issues.map((i) => i.eventId)).toEqual([FX.e5])
+  })
+})
+
+describe('rule: no-posthumous-mutation', () => {
+  it('flags deltas on an entity after its terminal delta', () => {
+    const world = worldWith((agg) => {
+      const terminal = event(agg, FX.e0).deltas.find((d) => d.entityId === FX.ottomans)
+      if (!terminal) throw new Error('fixture delta missing')
+      terminal.ends = true
+    })
+    const issues = noPosthumousMutation(world, FX.rootBranch)
+    expect(issues.length).toBeGreaterThan(0)
+    expect(issues.every((i) => i.rule === 'no-posthumous-mutation')).toBe(true)
+    expect(issues.some((i) => i.eventId === FX.e1)).toBe(true)
+  })
+
+  it('allows further deltas within the ending event itself', () => {
+    const world = worldWith((agg) => {
+      // The LAST delta of the last root event ends the entity — nothing follows.
+      const last = agg.events
+        .filter((e) => e.branchId === FX.rootBranch)
+        .sort((a, b) => a.ordinal - b.ordinal)
+        .at(-1)
+      if (!last) throw new Error('no root events')
+      const target = last.deltas[0]
+      if (!target) throw new Error('no delta to end with')
+      target.ends = true
+    })
+    expect(noPosthumousMutation(world, FX.rootBranch)).toEqual([])
+  })
+
+  it('keeps death branch-local: a sibling that cannot see the ending sees no issue', () => {
+    const world = worldWith((agg) => {
+      // e4 is a post-fork root event, invisible to the child branch.
+      event(agg, FX.e4).deltas.push({
+        entityId: FX.ottomans,
+        patch: { status: 'dissolved' },
+        note: 'the sultanate dissolves',
+        ends: true,
+      })
+      // The child keeps mutating the same entity on its own segment.
+      event(agg, FX.e5).deltas.push({
+        entityId: FX.ottomans,
+        patch: { status: 'reforming' },
+        note: 'reform continues in this line',
+      })
+    })
+    expect(noPosthumousMutation(world, FX.childBranch)).toEqual([])
+    expect(noPosthumousMutation(world, FX.rootBranch)).toEqual([])
   })
 })
 

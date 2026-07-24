@@ -43,6 +43,12 @@ export type LedgerLine = z.infer<typeof LedgerLine>
 export const EntityView = Entity.extend({
   state: StateRecord,
   changeLog: z.array(LedgerLine),
+  /**
+   * Event whose terminal delta ended this entity on THIS branch; null while
+   * it lives. Derived by replay (see StateDelta.ends) — never stored, so a
+   * sibling branch that cannot see the ending event still shows it alive.
+   */
+  endedByEventId: UlidString.nullable().default(null),
 })
 export type EntityView = z.infer<typeof EntityView>
 

@@ -289,6 +289,27 @@ export class World {
     return state
   }
 
+  /**
+   * Entities ended on this branch, with the event that ended each — derived
+   * by replay of terminal deltas ({@link StateDelta.ends}), branch-local by
+   * construction. Optionally stop the walk at (and including) an event.
+   */
+  endedEntities(
+    branchId: string,
+    uptoEventId?: string,
+  ): Map<string, { eventId: string; year: number }> {
+    const ended = new Map<string, { eventId: string; year: number }>()
+    for (const event of this.resolveEvents(branchId)) {
+      for (const delta of event.deltas) {
+        if (delta.ends && !ended.has(delta.entityId)) {
+          ended.set(delta.entityId, { eventId: event.id, year: event.date.year })
+        }
+      }
+      if (event.id === uptoEventId) break
+    }
+    return ended
+  }
+
   /** The dossier ledger: every visible state change of one entity, in order. */
   changeLog(branchId: string, entityId: string): LedgerLine[] {
     this.getEntity(entityId)

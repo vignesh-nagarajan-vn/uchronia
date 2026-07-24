@@ -28,5 +28,13 @@ export const StateDelta = z.object({
   entityId: UlidString,
   patch: StateRecord.refine((p) => Object.keys(p).length > 0, 'patch must not be empty'),
   note: z.string().min(1),
+  /**
+   * Terminal delta: this event dissolves, kills, or permanently ends the
+   * entity. Death is replay-derived like all state — an entity is ended on a
+   * branch iff a visible delta says so, so a sibling that cannot see the
+   * event still knows it alive. Absent = not terminal, which keeps
+   * pre-lifecycle exports importing cleanly.
+   */
+  ends: z.boolean().optional(),
 })
 export type StateDelta = z.infer<typeof StateDelta>

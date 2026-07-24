@@ -146,9 +146,13 @@ export async function* runGeneration(
       pressures: pressuresOut.value.pressures,
       stateSummary,
       recentEvents,
-      entityRoster: world
-        .resolveEntities(branchId)
-        .map((e) => ({ slug: e.slug, name: e.name, type: e.type })),
+      entityRoster: (() => {
+        const ended = world.endedEntities(branchId)
+        return world
+          .resolveEntities(branchId)
+          .filter((e) => !ended.has(e.id))
+          .map((e) => ({ slug: e.slug, name: e.name, type: e.type }))
+      })(),
       batchSize,
       wildcardBudget: dial.wildcardBudget(distance),
       dial,

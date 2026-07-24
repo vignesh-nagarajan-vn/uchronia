@@ -11,6 +11,7 @@ export type RuleId =
   | 'edge-endpoints-exist'
   | 'entities-exist'
   | 'deltas-apply'
+  | 'no-posthumous-mutation'
   | 'plausibility-range'
   | 'era-overlap'
   | 'fork-normalized'
@@ -158,6 +159,33 @@ export const deltasApplyCleanly: Rule = (world, branchId) => {
   return issues
 }
 
+/**
+ * An entity ended by a terminal delta must never be mutated afterwards on the
+ * same branch. Endedness is replay-derived (StateDelta.ends), so the rule is
+ * branch-local for free: a sibling that cannot see the death sees no death.
+ * Deltas within the ending event itself are allowed (the death may set facts).
+ */
+export const noPosthumousMutation: Rule = (world, branchId) => {
+  const issues: ValidationIssue[] = []
+  const endedAt = new Map<string, string>()
+  for (const event of world.resolveEvents(branchId)) {
+    for (const delta of event.deltas) {
+      const endingEvent = endedAt.get(delta.entityId)
+      if (endingEvent !== undefined && endingEvent !== event.id) {
+        issues.push({
+          rule: 'no-posthumous-mutation',
+          eventId: event.id,
+          message: `event ${event.id} mutates entity ${delta.entityId}, which was ended by event ${endingEvent}`,
+        })
+      }
+    }
+    for (const delta of event.deltas) {
+      if (delta.ends && !endedAt.has(delta.entityId)) endedAt.set(delta.entityId, event.id)
+    }
+  }
+  return issues
+}
+
 /** Plausibility scores stay in [0,1] (§11.3; re-checked beyond the schema). */
 export const plausibilityInRange: Rule = (world, branchId) => {
   const issues: ValidationIssue[] = []
@@ -244,6 +272,7 @@ export const ALL_RULES: readonly Rule[] = [
   edgeEndpointsExist,
   entitiesExist,
   deltasApplyCleanly,
+  noPosthumousMutation,
   plausibilityInRange,
   eraRangesNonOverlapping,
 ]

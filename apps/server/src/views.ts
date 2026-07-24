@@ -21,10 +21,12 @@ export function assembleBranchView(world: World, branchId: string): BranchView {
   }))
 
   const state = world.stateAt(branchId)
+  const ended = world.endedEntities(branchId)
   const entities: EntityView[] = world.resolveEntities(branchId).map((entity) => ({
     ...entity,
     state: state.get(entity.id) ?? { ...entity.initialState },
     changeLog: world.changeLog(branchId, entity.id),
+    endedByEventId: ended.get(entity.id)?.eventId ?? null,
   }))
 
   return {
