@@ -57,6 +57,55 @@ describe('fork + compare end to end', () => {
     expect(compare.b.branch.id).toBe(created.rootBranch.id)
   })
 
+  it('burns a leaf branch cleanly, refuses roots and parents', async () => {
+    const { app } = makeTestApp()
+    const { created, view } = await generatedTimeline(app)
+    const forkEvent = view.events[2]
+    if (!forkEvent) throw new Error('no fork event')
+
+    const forked = await postJson(app, `/api/branches/${created.rootBranch.id}/fork`, {
+      eventId: forkEvent.id,
+    })
+    const { branch } = ForkResponse.parse(await forked.json())
+    await (await app.request(`/api/branches/${branch.id}/generate`, { method: 'POST' })).text()
+
+    // A root refuses.
+    const rootDel = await app.request(`/api/branches/${created.rootBranch.id}`, {
+      method: 'DELETE',
+    })
+    expect(rootDel.status).toBe(409)
+
+    // Fork a grandchild, then the middle branch refuses while it has children.
+    const childView = BranchView.parse(
+      await (await app.request(`/api/branches/${branch.id}/view`)).json(),
+    )
+    const ownEvent = childView.events.find((e) => e.branchId === branch.id)
+    if (!ownEvent) throw new Error('no own event')
+    const grand = ForkResponse.parse(
+      await (
+        await postJson(app, `/api/branches/${branch.id}/fork`, { eventId: ownEvent.id })
+      ).json(),
+    )
+    const midDel = await app.request(`/api/branches/${branch.id}`, { method: 'DELETE' })
+    expect(midDel.status).toBe(409)
+
+    // Leaves burn: grandchild, then the child.
+    expect(
+      (await app.request(`/api/branches/${grand.branch.id}`, { method: 'DELETE' })).status,
+    ).toBe(204)
+    expect((await app.request(`/api/branches/${branch.id}`, { method: 'DELETE' })).status).toBe(
+      204,
+    )
+
+    // The parent is intact and the burned branch is gone.
+    expect((await app.request(`/api/branches/${branch.id}/view`)).status).toBe(404)
+    const rootView = BranchView.parse(
+      await (await app.request(`/api/branches/${created.rootBranch.id}/view`)).json(),
+    )
+    expect(rootView.events.length).toBe(view.events.length)
+    expect(rootView.branches.some((b) => b.id === branch.id)).toBe(false)
+  })
+
   it('compares a branch against the curated record', async () => {
     const { app } = makeTestApp()
     const { created } = await generatedTimeline(app)

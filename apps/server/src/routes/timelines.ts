@@ -6,6 +6,7 @@ import {
   type PointOfDivergence,
   type Timeline,
   TimelineAggregate,
+  UpdateTimelineRequest,
 } from '@uchronia/schemas'
 import { Hono } from 'hono'
 import type { ServerDeps } from '../deps.js'
@@ -90,6 +91,43 @@ export function timelineRoutes(deps: ServerDeps): Hono {
     const deleted = repo.deleteTimeline(c.req.param('id'))
     if (!deleted) throw new ApiError(404, 'not-found', 'timeline not found')
     return c.body(null, 204)
+  })
+
+  // Rename, retune the dial, extend the horizon. The era plan is append-only,
+  // so a grown horizon simply gives "continue derivation" more road; shrinking
+  // would orphan committed eras and is refused.
+  app.patch('/timelines/:id', async (c) => {
+    const timelineId = c.req.param('id')
+    const body = UpdateTimelineRequest.parse(await c.req.json())
+    const aggregate = repo.loadAggregate(timelineId)
+    if (!aggregate) throw new ApiError(404, 'not-found', 'timeline not found')
+
+    if (
+      body.horizonYears !== undefined &&
+      body.horizonYears < aggregate.timeline.settings.horizonYears
+    ) {
+      throw new ApiError(
+        409,
+        'horizon-shrink',
+        `the horizon can only extend (currently ${aggregate.timeline.settings.horizonYears} years)`,
+      )
+    }
+
+    const settings = {
+      ...aggregate.timeline.settings,
+      ...(body.dial !== undefined ? { dial: body.dial } : {}),
+      ...(body.horizonYears !== undefined ? { horizonYears: body.horizonYears } : {}),
+      ...(body.defaultLenses !== undefined ? { defaultLenses: body.defaultLenses } : {}),
+    }
+    repo.updateTimelineSettings(timelineId, settings)
+    if (body.title !== undefined) repo.updateTimelineTitle(timelineId, body.title)
+
+    const timeline: Timeline = {
+      ...aggregate.timeline,
+      title: body.title ?? aggregate.timeline.title,
+      settings,
+    }
+    return c.json({ timeline })
   })
 
   app.post('/import', async (c) => {

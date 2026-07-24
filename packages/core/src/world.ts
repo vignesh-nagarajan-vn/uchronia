@@ -498,6 +498,29 @@ export class World {
     return updated
   }
 
+  /**
+   * Replace a committed event's narrative content in place (regeneration).
+   * Identity, position, era, and causal edges are immutable — only the owning
+   * branch may do this, and the caller validates the branch afterwards (the
+   * new deltas re-thread the replay).
+   */
+  replaceOwnEventContent(replacement: Event): Event {
+    const existing = this.assertOwnEvent(replacement.branchId, replacement.id)
+    if (
+      replacement.ordinal !== existing.ordinal ||
+      replacement.eraId !== existing.eraId ||
+      replacement.branchId !== existing.branchId
+    ) {
+      throw new IntegrityError(
+        `event replacement must keep id/ordinal/era (${existing.id} @ ${existing.ordinal})`,
+      )
+    }
+    for (const id of replacement.entityIds) this.getEntity(id)
+    for (const delta of replacement.deltas) this.getEntity(delta.entityId)
+    this.events.set(replacement.id, replacement)
+    return replacement
+  }
+
   /** Generation-time flagging; only the owning branch's run may do this. */
   markDisputed(branchId: string, eventId: string, notes: CritiqueIssue[]): Event {
     const event = this.assertOwnEvent(branchId, eventId)

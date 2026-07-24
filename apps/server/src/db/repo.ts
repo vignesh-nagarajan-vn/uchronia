@@ -83,35 +83,42 @@ export class Repo {
   }
 
   listTimelines(): TimelineSummary[] {
+    // Three queries total, not three per timeline — this backs the landing view.
     const rows = this.db.select().from(t.timelines).all()
+    const branchRows = this.db
+      .select({
+        id: t.branches.id,
+        timelineId: t.branches.timelineId,
+        parentBranchId: t.branches.parentBranchId,
+      })
+      .from(t.branches)
+      .all()
+    const eventCounts = this.db
+      .select({ branchId: t.events.branchId, n: count() })
+      .from(t.events)
+      .groupBy(t.events.branchId)
+      .all()
+
+    const eventsByBranch = new Map(eventCounts.map((r) => [r.branchId, r.n]))
+    const byTimeline = new Map<string, { count: number; events: number; rootId: string | null }>()
+    for (const b of branchRows) {
+      const agg = byTimeline.get(b.timelineId) ?? { count: 0, events: 0, rootId: null }
+      agg.count += 1
+      agg.events += eventsByBranch.get(b.id) ?? 0
+      if (b.parentBranchId === null) agg.rootId = b.id
+      byTimeline.set(b.timelineId, agg)
+    }
+
     return rows.map((row) => {
-      const branchCount =
-        this.db
-          .select({ n: count() })
-          .from(t.branches)
-          .where(eq(t.branches.timelineId, row.id))
-          .get()?.n ?? 0
-      const branchIds = this.db
-        .select({ id: t.branches.id })
-        .from(t.branches)
-        .where(eq(t.branches.timelineId, row.id))
-        .all()
-        .map((b) => b.id)
-      const eventCount =
-        branchIds.length === 0
-          ? 0
-          : (this.db
-              .select({ n: count() })
-              .from(t.events)
-              .where(inArray(t.events.branchId, branchIds))
-              .get()?.n ?? 0)
+      const agg = byTimeline.get(row.id)
       return {
         id: row.id,
         title: row.title,
         createdAt: row.createdAt,
         settings: row.settings,
-        branchCount,
-        eventCount,
+        branchCount: agg?.count ?? 0,
+        eventCount: agg?.events ?? 0,
+        rootBranchId: agg?.rootId ?? '',
       }
     })
   }
@@ -348,6 +355,11 @@ export class Repo {
     this.db.update(t.events).set({ detail }).where(eq(t.events.id, eventId)).run()
   }
 
+  /** Full content rewrite of one event (user-facing regeneration). */
+  updateEventContent(event: Event): void {
+    this.db.update(t.events).set(eventToRow(event)).where(eq(t.events.id, event.id)).run()
+  }
+
   updateEventFlags(
     eventId: string,
     flags: { disputed?: boolean; convergence?: boolean; criticNotes?: CritiqueIssue[] | null },
@@ -373,6 +385,43 @@ export class Repo {
 
   updateTimelineTitle(timelineId: string, title: string): void {
     this.db.update(t.timelines).set({ title }).where(eq(t.timelines.id, timelineId)).run()
+  }
+
+  /**
+   * Delete one leaf branch and everything it owns. The caller guarantees the
+   * branch has no children (their visible history would dangle).
+   */
+  deleteBranchCascade(branchId: string): void {
+    this.db.transaction((tx) => {
+      const eventIds = tx
+        .select({ id: t.events.id })
+        .from(t.events)
+        .where(eq(t.events.branchId, branchId))
+        .all()
+        .map((e) => e.id)
+      if (eventIds.length) {
+        tx.delete(t.artifacts).where(inArray(t.artifacts.eventId, eventIds)).run()
+        // Entities introduced by this branch's events are visible only here.
+        tx.delete(t.entities).where(inArray(t.entities.introducedByEventId, eventIds)).run()
+      }
+      tx.delete(t.edges).where(eq(t.edges.branchId, branchId)).run()
+      tx.delete(t.convergencePoints).where(eq(t.convergencePoints.branchId, branchId)).run()
+      tx.delete(t.critiqueReports).where(eq(t.critiqueReports.branchId, branchId)).run()
+      tx.delete(t.biographies).where(eq(t.biographies.branchId, branchId)).run()
+      tx.delete(t.events).where(eq(t.events.branchId, branchId)).run()
+      tx.delete(t.eras).where(eq(t.eras.branchId, branchId)).run()
+      tx.delete(t.branches).where(eq(t.branches.id, branchId)).run()
+    })
+  }
+
+  /** Branch ids that fork off the given branch. */
+  childBranchIds(branchId: string): string[] {
+    return this.db
+      .select({ id: t.branches.id })
+      .from(t.branches)
+      .where(eq(t.branches.parentBranchId, branchId))
+      .all()
+      .map((b) => b.id)
   }
 
   /**

@@ -2,8 +2,12 @@ import {
   BranchView,
   ConfigResponse,
   CreateTimelineResponse,
+  RegenerateEventResponse,
   TimelineAggregate,
+  TimelineSummary,
+  UpdateTimelineResponse,
 } from '@uchronia/schemas'
+import { z } from 'zod'
 import { FX, fixtureAggregate } from '@uchronia/schemas/fixtures'
 import { describe, expect, it } from 'vitest'
 import { makeTestApp, postJson } from './test-helpers.js'
@@ -139,5 +143,86 @@ describe('GET /api/branches/:id/view', () => {
     const { app } = makeTestApp()
     const res = await app.request('/api/branches/01BR00000000000000000000ZZ/view')
     expect(res.status).toBe(404)
+  })
+})
+
+describe('timeline lifecycle routes', () => {
+  it('lists timelines with rootBranchId and aggregate counts', async () => {
+    const { app } = makeTestApp()
+    await postJson(app, '/api/import', fixtureAggregate())
+    const list = z.array(TimelineSummary).parse(await (await app.request('/api/timelines')).json())
+    expect(list).toHaveLength(1)
+    expect(list[0]?.rootBranchId).toBe(FX.rootBranch)
+    expect(list[0]?.branchCount).toBe(2)
+    expect(list[0]?.eventCount).toBe(6)
+  })
+
+  it('renames, retunes the dial, and extends the horizon via PATCH', async () => {
+    const { app } = makeTestApp()
+    await postJson(app, '/api/import', fixtureAggregate())
+    const agg = fixtureAggregate()
+
+    const res = await app.request(`/api/timelines/${FX.timeline}`, {
+      method: 'PATCH',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ title: 'The Wall, Renamed', dial: 80, horizonYears: 400 }),
+    })
+    expect(res.status).toBe(200)
+    const { timeline } = UpdateTimelineResponse.parse(await res.json())
+    expect(timeline.title).toBe('The Wall, Renamed')
+    expect(timeline.settings.dial).toBe(80)
+    expect(timeline.settings.horizonYears).toBe(400)
+    expect(timeline.settings.horizonYears).toBeGreaterThan(agg.timeline.settings.horizonYears)
+
+    // Persisted, not just echoed.
+    const list = z.array(TimelineSummary).parse(await (await app.request('/api/timelines')).json())
+    expect(list[0]?.title).toBe('The Wall, Renamed')
+
+    // The horizon never shrinks.
+    const shrink = await app.request(`/api/timelines/${FX.timeline}`, {
+      method: 'PATCH',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ horizonYears: 20 }),
+    })
+    expect(shrink.status).toBe(409)
+  })
+
+  it('regenerates a committed event in place, keeping identity and position', async () => {
+    const { app } = makeTestApp()
+    await postJson(app, '/api/import', fixtureAggregate())
+
+    const before = BranchView.parse(
+      await (await app.request(`/api/branches/${FX.rootBranch}/view`)).json(),
+    )
+    const target = before.events.find((e) => e.id === FX.e1)
+    if (!target) throw new Error('fixture event missing')
+
+    const res = await postJson(
+      app,
+      `/api/branches/${FX.rootBranch}/events/${FX.e1}/regenerate`,
+      { guidance: 'Tell it from the harbor, not the palace.' },
+    )
+    expect(res.status).toBe(200)
+    const { event } = RegenerateEventResponse.parse(await res.json())
+    expect(event.id).toBe(FX.e1)
+    expect(event.ordinal).toBe(target.ordinal)
+    expect(event.eraId).toBe(target.eraId)
+    expect(event.detail).toBeNull()
+
+    // Persisted and the branch still validates end to end.
+    const after = BranchView.parse(
+      await (await app.request(`/api/branches/${FX.rootBranch}/view`)).json(),
+    )
+    const persisted = after.events.find((e) => e.id === FX.e1)
+    expect(persisted?.title).toBe(event.title)
+    expect(after.events).toHaveLength(before.events.length)
+  })
+
+  it('refuses to regenerate inherited history from a child branch', async () => {
+    const { app } = makeTestApp()
+    await postJson(app, '/api/import', fixtureAggregate())
+    // e1 belongs to the root; the child branch sees it but does not own it.
+    const res = await postJson(app, `/api/branches/${FX.childBranch}/events/${FX.e1}/regenerate`, {})
+    expect(res.status).toBe(409)
   })
 })

@@ -37,5 +37,22 @@ export function branchRoutes(deps: ServerDeps): Hono {
     return c.html(html)
   })
 
+  // Burn one branch. Roots are the timeline (delete that instead); branches
+  // with children would leave dangling shared history, so they refuse.
+  app.delete('/branches/:id', (c) => {
+    const branchId = c.req.param('id')
+    const world = worldFor(branchId)
+    const branch = world.getBranch(branchId)
+    if (branch.parentBranchId === null) {
+      throw new ApiError(409, 'root-branch', 'the root line is the timeline; delete the timeline instead')
+    }
+    const children = repo.childBranchIds(branchId)
+    if (children.length > 0) {
+      throw new ApiError(409, 'has-children', `${children.length} branch(es) fork from this line; burn them first`)
+    }
+    repo.deleteBranchCascade(branchId)
+    return c.body(null, 204)
+  })
+
   return app
 }

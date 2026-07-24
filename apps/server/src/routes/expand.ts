@@ -1,4 +1,5 @@
-import { expandEra, expandEvent, World, writeBiography } from '@uchronia/core'
+import { expandEra, expandEvent, regenerateCommittedEvent, World, writeBiography } from '@uchronia/core'
+import { RegenerateEventRequest } from '@uchronia/schemas'
 import { Hono } from 'hono'
 import type { ServerDeps } from '../deps.js'
 import { ApiError } from '../http-error.js'
@@ -28,6 +29,23 @@ export function expandRoutes(deps: ServerDeps): Hono {
     const era = await expandEra(ctx(), world, c.req.param('branchId'), c.req.param('eraId'))
     if (era.detail !== null) deps.repo.updateEraDetail(era.id, era.detail)
     return c.json({ era })
+  })
+
+  // A fresh telling of a committed event, in place — the reader's remedy for
+  // a flat or disputed entry. Validated on a clone before it lands.
+  app.post('/branches/:branchId/events/:eventId/regenerate', async (c) => {
+    const branchId = c.req.param('branchId')
+    const body = RegenerateEventRequest.parse(await c.req.json().catch(() => ({})))
+    const world = worldFor(branchId)
+    const event = await regenerateCommittedEvent(
+      ctx(),
+      world,
+      branchId,
+      c.req.param('eventId'),
+      body.guidance,
+    )
+    deps.repo.updateEventContent(event)
+    return c.json({ event: world.eventView(branchId, event.id) })
   })
 
   app.post('/branches/:branchId/entities/:entityId/biography', async (c) => {

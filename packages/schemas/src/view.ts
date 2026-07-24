@@ -22,6 +22,8 @@ export const TimelineSummary = z.object({
   settings: TimelineSettings,
   branchCount: z.number().int(),
   eventCount: z.number().int(),
+  /** The root branch, so opening a ledger needs no full-aggregate fetch. */
+  rootBranchId: z.string(),
 })
 export type TimelineSummary = z.infer<typeof TimelineSummary>
 
@@ -73,6 +75,38 @@ export const ImportResponse = z.object({
   timelineId: z.string(),
 })
 export type ImportResponse = z.infer<typeof ImportResponse>
+
+/**
+ * PATCH /timelines/:id — every field optional, at least one required.
+ * The horizon may only grow (the era plan is append-only by design);
+ * shrinking would orphan committed eras.
+ */
+export const UpdateTimelineRequest = z
+  .object({
+    title: z.string().min(1).max(120).optional(),
+    dial: Dial.optional(),
+    horizonYears: z.number().int().min(10).max(3000).optional(),
+    defaultLenses: z.array(Lens).min(1).optional(),
+  })
+  .refine((r) => Object.values(r).some((v) => v !== undefined), 'nothing to update')
+export type UpdateTimelineRequest = z.infer<typeof UpdateTimelineRequest>
+
+export const UpdateTimelineResponse = z.object({
+  timeline: Timeline,
+})
+export type UpdateTimelineResponse = z.infer<typeof UpdateTimelineResponse>
+
+/** POST /branches/:branchId/events/:eventId/regenerate */
+export const RegenerateEventRequest = z.object({
+  /** Optional reader guidance for the fresh telling. */
+  guidance: z.string().max(500).optional(),
+})
+export type RegenerateEventRequest = z.infer<typeof RegenerateEventRequest>
+
+export const RegenerateEventResponse = z.object({
+  event: EventView,
+})
+export type RegenerateEventResponse = z.infer<typeof RegenerateEventResponse>
 
 export const ForkRequest = z.object({
   eventId: z.string().min(1),
