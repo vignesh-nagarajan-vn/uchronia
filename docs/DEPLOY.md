@@ -12,7 +12,7 @@ Uchronia is local-first: a single-user app holding an API key. That shapes every
 
 ## Vercel
 
-The repo carries a `vercel.json`, so "Import Project" on Vercel deploys with no dashboard settings: the web app builds statically (`apps/web/dist`), and the entire Hono API runs as one serverless function (`api/index.ts`, a catch-all behind `/api/*` rewrites; SSE streams within the function's 60s window).
+The repo carries a `vercel.json`, so "Import Project" on Vercel deploys with no dashboard settings: the web app builds statically (mirrored to a root-level `dist/` so any framework preset's default output expectation is satisfied), and the entire Hono API runs as one serverless function (`api/index.ts`, a catch-all behind `/api/*` rewrites; SSE streams within the function's 60s window). No environment variables are required; Vercel's own `VERCEL=1` triggers every serverless default. Keep the dashboard's Root Directory empty (the repository root); everything else may stay at its defaults.
 
 Serverless has no durable disk, and the setup leans into it instead of pretending otherwise:
 
