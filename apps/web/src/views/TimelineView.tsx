@@ -104,12 +104,15 @@ export function TimelineView() {
     for (const event of filteredEvents) {
       byEra.set(event.eraId, [...(byEra.get(event.eraId) ?? []), event])
     }
+    // The interleave below assumes year order; the dataset groups by region.
     const anchors = showRecord
-      ? (baseline.data?.anchors ?? []).filter(
-          (a) =>
-            a.year >= data.pod.year &&
-            a.year <= data.pod.year + data.timeline.settings.horizonYears,
-        )
+      ? (baseline.data?.anchors ?? [])
+          .filter(
+            (a) =>
+              a.year >= data.pod.year &&
+              a.year <= data.pod.year + data.timeline.settings.horizonYears,
+          )
+          .sort((a, b) => a.year - b.year)
       : []
     let anchorIdx = 0
     let eventIndex = 0

@@ -7,7 +7,8 @@
       "runtimeArgs": ["dev"],
       "port": 5173,
       "env": {
-        "UCHRONIA_MOCK": "1"
+        "UCHRONIA_MOCK": "1",
+        "UCHRONIA_MOCK_PACE_MS": "250"
       }
     }
   ]

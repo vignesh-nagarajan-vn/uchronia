@@ -12,6 +12,10 @@ Uchronia is an alternate-history engine. Choose or write a **Point of Divergence
 
 **[Read a finished chronicle in your browser →](https://vignesh-nagarajan-vn.github.io/uchronia/)** — the showcase ledger's self-contained export, no install.
 
+![A divergence chosen from the catalogue, history streaming into the ledger past the blue anchors of the record, then red threads drawn to an event's causes on hover](docs/media/derivation.gif)
+
+<p align="center"><em>One keyless minute: choose a divergence, watch the ledger ink in beside the record, pull a thread.</em></p>
+
 ![The timeline: the blue record splitting at the POD, the red thread peeling away](docs/media/timeline.png)
 
 <p align="center"><em>Survey by day, Nitrate by night:</em></p>
