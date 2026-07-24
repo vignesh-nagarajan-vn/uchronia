@@ -28,6 +28,14 @@ const ADJACENT_REGIONS: Record<string, readonly string[]> = {
 
 const GLOBAL_REGION = 'the wider world'
 
+// The pod's region is model-written free text; match it caselessly.
+const ADJACENT_LOWER: ReadonlyMap<string, readonly string[]> = new Map(
+  Object.entries(ADJACENT_REGIONS).map(([region, neighbors]) => [
+    region.toLowerCase(),
+    neighbors.map((n) => n.toLowerCase()),
+  ]),
+)
+
 /**
  * Rank an anchor for a given POD region: 0 = same theatre (or either side is
  * global), 1 = adjacent theatre, 2 = elsewhere. Convergence is about the same
@@ -35,10 +43,11 @@ const GLOBAL_REGION = 'the wider world'
  * attractor for an Alexandrian divergence, however close its year.
  */
 function regionRank(anchorRegion: string, podRegion: string): number {
-  if (podRegion === GLOBAL_REGION || anchorRegion === GLOBAL_REGION) return 0
-  if (anchorRegion.toLowerCase() === podRegion.toLowerCase()) return 0
-  const neighbors = ADJACENT_REGIONS[podRegion] ?? []
-  return neighbors.some((n) => n.toLowerCase() === anchorRegion.toLowerCase()) ? 1 : 2
+  const anchor = anchorRegion.toLowerCase()
+  const pod = podRegion.toLowerCase()
+  if (pod === GLOBAL_REGION || anchor === GLOBAL_REGION) return 0
+  if (anchor === pod) return 0
+  return (ADJACENT_LOWER.get(pod) ?? []).includes(anchor) ? 1 : 2
 }
 
 /**

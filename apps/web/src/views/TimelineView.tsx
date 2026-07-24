@@ -524,6 +524,12 @@ export function TimelineView() {
           the derivation halted: {generation.state.error}
         </p>
       )}
+      {!running && generation.state.usage && (
+        <p className="mt-2 font-data text-[12px] text-ink-faded">
+          the run spent {generation.state.usage.inputTokens.toLocaleString()} tokens in,{' '}
+          {generation.state.usage.outputTokens.toLocaleString()} out
+        </p>
+      )}
 
       {empty && !running ? (
         <EmptyState title="A blank ledger.">

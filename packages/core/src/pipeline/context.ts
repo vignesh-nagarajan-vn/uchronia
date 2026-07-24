@@ -26,10 +26,25 @@ export function summarizeState(
   const ended = world.endedEntities(branchId)
 
   // One pass over visible history: when was each entity (and each of its
-  // state keys) last written? Initial facts count as written at introduction.
+  // state keys) last written? Initial facts count as written at introduction,
+  // so a freshly-introduced entity ranks as recent even before its first
+  // delta; POD-seeded entities count as present from before the first event.
+  const events = world.resolveEvents(branchId)
+  const eventIndex = new Map(events.map((e, i) => [e.id, i]))
+  const resolved = world.resolveEntities(branchId)
   const lastTouch = new Map<string, number>()
   const keyTouch = new Map<string, Map<string, number>>()
-  world.resolveEvents(branchId).forEach((event, i) => {
+  for (const entity of resolved) {
+    const introducedAt =
+      entity.introducedByEventId === null
+        ? -0.5
+        : (eventIndex.get(entity.introducedByEventId) ?? -1)
+    lastTouch.set(entity.id, introducedAt)
+    const keys = new Map<string, number>()
+    for (const key of Object.keys(entity.initialState)) keys.set(key, introducedAt)
+    keyTouch.set(entity.id, keys)
+  }
+  events.forEach((event, i) => {
     for (const delta of event.deltas) {
       lastTouch.set(delta.entityId, i)
       let keys = keyTouch.get(delta.entityId)
@@ -40,8 +55,6 @@ export function summarizeState(
       for (const key of Object.keys(delta.patch)) keys.set(key, i)
     }
   })
-
-  const resolved = world.resolveEntities(branchId)
   const orderIndex = new Map(resolved.map((e, i) => [e.id, i]))
   const living = resolved.filter((e) => !ended.has(e.id))
   const ranked = [...living].sort((a, b) => {

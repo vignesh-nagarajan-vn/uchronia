@@ -125,6 +125,7 @@ export function generateRoutes(deps: ServerDeps): Hono {
     return streamSSE(c, async (stream) => {
       const abort = () => controller.abort()
       c.req.raw.signal.addEventListener('abort', abort)
+      let pacedEvents = 0
       try {
         if (healedEra !== null) {
           await stream.writeSSE({
@@ -139,7 +140,10 @@ export function generateRoutes(deps: ServerDeps): Hono {
           persistPipelineEvent(deps, ev)
           const frame = ev.type === 'run.completed' ? { ...ev, usage } : ev
           await stream.writeSSE({ event: ev.type, data: JSON.stringify(frame) })
-          if (pace > 0 && ev.type === 'event.accepted') {
+          // Pace the first stretch only: the ink-in is a demo moment, and a
+          // long-horizon run must not walk into serverless time limits.
+          if (pace > 0 && ev.type === 'event.accepted' && pacedEvents < 60) {
+            pacedEvents += 1
             await new Promise((r) => setTimeout(r, pace))
           }
         }

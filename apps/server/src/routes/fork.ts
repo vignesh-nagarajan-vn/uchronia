@@ -20,7 +20,7 @@ export function forkRoutes(deps: ServerDeps): Hono {
     const body = ForkRequest.parse(await c.req.json())
     const world = worldFor(viewedBranchId)
     const branch = await forkBranch(
-      { provider: deps.provider, idgen: deps.idgen, clock: deps.clock },
+      { provider: deps.provider, idgen: deps.idgen, clock: deps.clock, signal: c.req.raw.signal },
       world,
       {
         viewedBranchId,

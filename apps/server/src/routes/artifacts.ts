@@ -21,7 +21,7 @@ export function artifactRoutes(deps: ServerDeps): Hono {
     const world = World.fromAggregate(aggregate)
 
     const { artifact, created } = await generateArtifact(
-      { provider: deps.provider, idgen: deps.idgen, clock: deps.clock },
+      { provider: deps.provider, idgen: deps.idgen, clock: deps.clock, signal: c.req.raw.signal },
       world,
       branchId,
       c.req.param('eventId'),

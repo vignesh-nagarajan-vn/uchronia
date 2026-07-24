@@ -36,6 +36,7 @@ All notable changes to Uchronia. The format follows [Keep a Changelog](https://k
 - Fork left the parent's branch list stale in the delta view.
 - Keyboard walking (`j`/`k`) painted a focus ring without moving focus; shortcuts fired underneath open dialogs.
 - Opening a saved ledger downloaded the entire timeline export to find one branch id.
+- One-shot LLM routes (POD intake, expand, retell, biography, artifacts, fork normalization) ignored the request's abort signal, so closing the tab kept billing the call in live mode; they now cancel with the request. Region adjacency ranking was case-sensitive against model-written region names. Freshly-introduced entities ranked as the quietest in the budgeted state snapshot instead of the most recent. The run's token usage, streamed on completion, is now actually shown in the ledger toolbar.
 
 ## [0.1.0] - 2026-07-22
 

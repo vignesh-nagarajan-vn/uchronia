@@ -22,7 +22,14 @@ export function timelineRoutes(deps: ServerDeps): Hono {
     const body = CreateTimelineRequest.parse(await c.req.json())
 
     // Stage 1 of the pipeline: POD intake (§4.1). Validated + repair-looped.
-    const normalized = await generateStructured(provider, podNormalize, { raw: body.podText })
+    const normalized = await generateStructured(
+      provider,
+      podNormalize,
+      { raw: body.podText },
+      {
+        signal: c.req.raw.signal,
+      },
+    )
     const pod = normalized.value
 
     const now = clock.now().toISOString()

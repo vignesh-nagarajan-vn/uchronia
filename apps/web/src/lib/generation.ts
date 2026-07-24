@@ -9,6 +9,8 @@ export interface GenerationState {
   error: string | null
   /** Event ids that arrived over this stream — the ink-in set. */
   freshIds: Set<string>
+  /** What the run cost, when the provider metered it (live mode). */
+  usage: { inputTokens: number; outputTokens: number } | null
 }
 
 /**
@@ -23,6 +25,7 @@ export function useGeneration(branchId: string) {
     currentEra: null,
     error: null,
     freshIds: new Set(),
+    usage: null,
   })
   const abortRef = useRef<AbortController | null>(null)
 
@@ -34,7 +37,7 @@ export function useGeneration(branchId: string) {
     if (abortRef.current) return
     const controller = new AbortController()
     abortRef.current = controller
-    setState({ status: 'running', currentEra: null, error: null, freshIds: new Set() })
+    setState({ status: 'running', currentEra: null, error: null, freshIds: new Set(), usage: null })
 
     const key = ['branch-view', branchId]
     const update = (fn: (view: BranchView) => BranchView) => {
@@ -144,6 +147,13 @@ export function useGeneration(branchId: string) {
                 e.id === eventId ? { ...e, flags: { ...e.flags, convergence: true } } : e,
               ),
             }))
+            break
+          }
+          case 'run.completed': {
+            const usage = data.usage as GenerationState['usage'] | undefined
+            if (usage && usage.inputTokens + usage.outputTokens > 0) {
+              setState((s) => ({ ...s, usage }))
+            }
             break
           }
           case 'run.error': {
