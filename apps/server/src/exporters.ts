@@ -1,8 +1,50 @@
+import { readFileSync } from 'node:fs'
+import { createRequire } from 'node:module'
 import type { World } from '@uchronia/core'
 import type { Artifact } from '@uchronia/schemas'
 
 function yearLabel(year: number): string {
   return year < 0 ? `${Math.abs(year)} BC` : String(year)
+}
+
+// ---------------------------------------------------------------- fonts
+// "Self-contained" must include the typography, or every reader without
+// these faces installed sees the design fall back to Palatino. The woff2
+// files embed as data URIs (≈160 KB once — cached across renders); if the
+// packages are unresolvable (exotic bundling), degrade to the system stacks
+// already present in the CSS rather than fail the export.
+
+const requireFromHere = createRequire(import.meta.url)
+
+function fontFace(family: string, packagePath: string, style: 'normal' | 'italic'): string {
+  try {
+    const file = requireFromHere.resolve(packagePath)
+    const data = readFileSync(file).toString('base64')
+    return `@font-face{font-family:'${family}';font-style:${style};font-weight:400;font-display:swap;src:url(data:font/woff2;base64,${data}) format('woff2')}`
+  } catch {
+    return ''
+  }
+}
+
+let fontCssCache: string | null = null
+function embeddedFontCss(): string {
+  if (fontCssCache === null) {
+    fontCssCache = [
+      fontFace('Spectral', '@fontsource/spectral/files/spectral-latin-400-normal.woff2', 'normal'),
+      fontFace('Spectral', '@fontsource/spectral/files/spectral-latin-400-italic.woff2', 'italic'),
+      fontFace(
+        'IM Fell English',
+        '@fontsource/im-fell-english/files/im-fell-english-latin-400-normal.woff2',
+        'normal',
+      ),
+      fontFace(
+        'IBM Plex Mono',
+        '@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff2',
+        'normal',
+      ),
+    ].join('\n')
+  }
+  return fontCssCache
 }
 
 /** F10 — a branch as readable markdown. */
@@ -154,6 +196,7 @@ ${(artifactsByEvent.get(event.id) ?? []).map(artifactHtml).join('')}
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${esc(world.timeline.title)} — Uchronia</title>
 <style>
+${embeddedFontCss()}
 :root{--paper:#e8eae3;--raised:#eff1eb;--ink:#22261f;--faded:#5c6157;--record:#174a7c;--thread:#a8281a;--rule:#c6cabf}
 @media (prefers-color-scheme: dark){:root{--paper:#0f1420;--raised:#161c2b;--ink:#ede8dc;--faded:#a9a395;--record:#7fa9d9;--thread:#d96a55;--rule:#2a3245}}
 *{box-sizing:border-box;margin:0}

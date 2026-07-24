@@ -27,6 +27,9 @@ export function openDatabase(path: string): Db {
   }
   const sqlite = new Database(path)
   if (path !== ':memory:') sqlite.pragma('journal_mode = WAL')
+  // Contending writers (a second process, a backup tool) wait instead of
+  // failing instantly with SQLITE_BUSY.
+  sqlite.pragma('busy_timeout = 5000')
   const db = drizzle(sqlite)
   migrate(db, { migrationsFolder: migrationsFolder() })
   return db

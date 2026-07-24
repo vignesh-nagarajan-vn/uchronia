@@ -1,4 +1,5 @@
 import {
+  GenerationAbortedError,
   GenerationValidationError,
   IntegrityError,
   NotFoundError,
@@ -7,6 +8,8 @@ import {
   ProviderError,
 } from '@uchronia/core'
 import { Hono } from 'hono'
+import { bodyLimit } from 'hono/body-limit'
+import { cors } from 'hono/cors'
 import { ZodError } from 'zod'
 import type { ServerDeps } from './deps.js'
 import { ApiError } from './http-error.js'
@@ -18,9 +21,24 @@ import { generateRoutes } from './routes/generate.js'
 import { metaRoutes } from './routes/meta.js'
 import { timelineRoutes } from './routes/timelines.js'
 
+/** Imports are the largest legitimate bodies; a demo ledger is ~200 KB. */
+const BODY_LIMIT_BYTES = 16 * 1024 * 1024
+
 /** Build the Hono app around injected deps. Tests drive it directly. */
 export function createApp(deps: ServerDeps): Hono {
   const app = new Hono()
+
+  if (deps.config.corsOrigins.length > 0) {
+    app.use('/api/*', cors({ origin: deps.config.corsOrigins }))
+  }
+  app.use(
+    '/api/*',
+    bodyLimit({
+      maxSize: BODY_LIMIT_BYTES,
+      onError: (c) =>
+        c.json({ error: 'payload-too-large', message: 'request body exceeds the 16 MB limit' }, 413),
+    }),
+  )
 
   app.route('/api', metaRoutes(deps))
   app.route('/api', timelineRoutes(deps))
@@ -30,16 +48,15 @@ export function createApp(deps: ServerDeps): Hono {
   app.route('/api', forkRoutes(deps))
   app.route('/api', artifactRoutes(deps))
 
+  // One envelope for every error: { error, message, issues? }.
   app.onError((err, c) => {
     if (err instanceof ApiError) {
       return c.json({ error: err.code, message: err.message }, err.status as 404)
     }
     if (err instanceof ZodError) {
+      const issues = err.issues.map((i) => `${i.path.join('.') || '(root)'}: ${i.message}`)
       return c.json(
-        {
-          error: 'invalid-request',
-          issues: err.issues.map((i) => `${i.path.join('.') || '(root)'}: ${i.message}`),
-        },
+        { error: 'invalid-request', message: `request failed validation: ${issues[0]}`, issues },
         400,
       )
     }
@@ -48,6 +65,9 @@ export function createApp(deps: ServerDeps): Hono {
     }
     if (err instanceof IntegrityError || err instanceof PreForkImmutableError) {
       return c.json({ error: err.code, message: err.message }, 409)
+    }
+    if (err instanceof GenerationAbortedError) {
+      return c.json({ error: err.code, message: err.message }, 400)
     }
     if (err instanceof GenerationValidationError) {
       return c.json({ error: err.code, message: err.message, issues: err.issues }, 502)
