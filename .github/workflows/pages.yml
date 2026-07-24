@@ -1,0 +1,73 @@
+name: Demo to Pages
+
+# Publishes the showcase chronicle as a zero-backend live demo: the server's
+# self-contained static HTML export of the demo ledger's main line, deployed
+# to GitHub Pages. One-time setup: repo Settings → Pages → Source: GitHub Actions.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+env:
+  UCHRONIA_MOCK: '1'
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Boot the server (mock mode)
+        run: |
+          pnpm --filter @uchronia/server start:mock &
+          for i in $(seq 1 30); do
+            curl -sf http://localhost:8787/api/health && break
+            sleep 1
+          done
+
+      - name: Import the showcase chronicle
+        run: |
+          curl -sf -X POST http://localhost:8787/api/import \
+            -H 'content-type: application/json' \
+            --data-binary @demo/the-unburnt-library.uchronia.json > /dev/null
+
+      - name: Export the main line as a static page
+        run: |
+          mkdir -p site
+          ROOT=$(curl -sf http://localhost:8787/api/timelines | node -p "JSON.parse(require('fs').readFileSync(0)).at(0).rootBranchId")
+          curl -sf "http://localhost:8787/api/branches/${ROOT}/export.html" -o site/index.html
+          test -s site/index.html
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: export
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
