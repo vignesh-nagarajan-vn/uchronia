@@ -4,7 +4,7 @@ Thanks for looking under the hood. Uchronia is a small, opinionated codebase; th
 
 ## Setup
 
-Node ≥ 22.12 and pnpm 11 (`corepack enable pnpm`), then:
+Node ≥ 22.13 (pnpm 11's own floor) and pnpm 11 (`corepack enable pnpm`), then:
 
 ```sh
 pnpm install

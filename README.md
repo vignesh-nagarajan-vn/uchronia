@@ -6,7 +6,7 @@
 
 [![CI](https://github.com/vignesh-nagarajan-vn/uchronia/actions/workflows/ci.yml/badge.svg)](https://github.com/vignesh-nagarajan-vn/uchronia/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-1a5fb4.svg)](LICENSE)
-[![Node ≥ 22.12](https://img.shields.io/badge/node-%E2%89%A5%2022.12-3c873a.svg)](package.json)
+[![Node ≥ 22.13](https://img.shields.io/badge/node-%E2%89%A5%2022.13-3c873a.svg)](package.json)
 
 Uchronia is an alternate-history engine. Choose or write a **Point of Divergence**, say *"the Library of Alexandria never burns"*, and watch history re-derive itself era by era. Drill into events, read biographies of people as they exist in this timeline, hold fake primary sources generated from inside the world, fork sub-branches at any event, and compare everything against real history.
 
@@ -100,7 +100,7 @@ The prose is the surface. The graph is the truth.
 
 ## Quickstart
 
-Requires Node ≥ 22.12 and pnpm (`corepack enable pnpm`).
+Requires Node ≥ 22.13 (pnpm 11's own floor) and pnpm (`corepack enable pnpm`).
 
 ```sh
 pnpm install
@@ -110,8 +110,8 @@ pnpm install
 pnpm dev:mock
 
 # With a key (live generation):
-cp .env.example .env   # put ANTHROPIC_API_KEY in .env (server-side only)
-pnpm dev
+cp .env.example .env   # uncomment ANTHROPIC_API_KEY and paste yours (server-side only;
+pnpm dev               # the server loads the repo-root .env, real env vars win)
 ```
 
 Web app: http://localhost:5173 · API: http://localhost:8787
@@ -120,7 +120,7 @@ Everything in the UI is reachable in mock mode; CI runs exclusively keyless. On 
 
 Prefer a container? `docker build -t uchronia . && docker run -p 8787:8787 -v uchronia-data:/data uchronia`: one port, keyless, safe to host. See [docs/DEPLOY.md](docs/DEPLOY.md).
 
-Or deploy your own playground in one click. The repo carries a `vercel.json`, so importing it on Vercel needs zero configuration: the web app deploys statically, the whole API runs as one serverless function, and the showcase chronicle seeds itself on cold start. Serverless state lives in `/tmp` per instance, so treat it as a playground, not an archive.
+Or deploy your own playground in one click. The repo carries a `vercel.json`, so importing it on Vercel needs no build settings: the web app deploys statically, the whole API runs as one **prebundled** serverless function (verified locally and in CI by `pnpm verify:vercel`), and the showcase chronicle seeds itself on cold start. Serverless state lives in `/tmp` per instance, so treat it as a playground, not an archive. Import steps and the full story: [docs/DEPLOY.md](docs/DEPLOY.md).
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvignesh-nagarajan-vn%2Fuchronia)
 
@@ -168,7 +168,7 @@ flowchart LR
 
 ## Documentation
 
-The engine is specified, not just implemented: [ARCHITECTURE](docs/ARCHITECTURE.md) (system map, ports, error taxonomy) · [DATA_MODEL](docs/DATA_MODEL.md) (schemas, fork semantics, the validator) · [GENERATION](docs/GENERATION.md) (pipeline stages, prompt registry, dial mapping, dual review) · [DESIGN](docs/DESIGN.md) (the binding RED THREAD spec) · [DEPLOY](docs/DEPLOY.md) (Pages demo, Docker, live-mode rules) · [TESTING](docs/TESTING.md) · [ROADMAP](docs/ROADMAP.md) (honest status, open threads) · [CONTRIBUTING](CONTRIBUTING.md) · decision records in [docs/adr](docs/adr/).
+The engine is specified, not just implemented: [ARCHITECTURE](docs/ARCHITECTURE.md) (system map, ports, error taxonomy) · [DATA_MODEL](docs/DATA_MODEL.md) (schemas, fork semantics, the validator) · [GENERATION](docs/GENERATION.md) (pipeline stages, prompt registry, dial mapping, dual review) · [DESIGN](docs/DESIGN.md) (the binding RED THREAD spec) · [DEPLOY](docs/DEPLOY.md) (static exports, Vercel, Docker, live-mode rules) · [TESTING](docs/TESTING.md) · [ROADMAP](docs/ROADMAP.md) (honest status, open threads) · [CONTRIBUTING](CONTRIBUTING.md) · decision records in [docs/adr](docs/adr/).
 
 ## Philosophy
 

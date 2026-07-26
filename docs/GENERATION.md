@@ -27,14 +27,16 @@ Handles, never ULIDs: entity **slugs**, `e<n>` = 1-based position in the branch'
 
 `POST /api/branches/:id/generate` returns SSE. Each frame's `event:` is the pipeline event type; `data:` is the JSON `PipelineEvent`:
 
-`run.started` → (`era.started` → (`entity.created`* `event.accepted`)* `era.completed`)* → `run.completed`, with `warning` frames interleaved and `run.error {code, message}` on failure. `event.disputed`, `critique.completed` (M4) and `convergence.found` (M5) join the era cycle. Every mutation is **persisted before it is streamed**: what the client saw is what the database holds; a client abort cancels in-flight provider calls via the AbortSignal and keeps everything accepted so far. One run per branch at a time: a concurrent `POST` 409s (`generation-active`), with a unique `(branch_id, ordinal)` index as the database backstop. Before a run starts, a half-persisted trailing era from a crash (events but no critique report) is rolled back and regenerated, with a streamed warning. `run.completed` carries the run's summed token usage; a budget-ceiling stop streams `run.error {code: "budget-exceeded"}`. In mock mode `UCHRONIA_MOCK_PACE_MS` (set by `pnpm dev:mock` to 250) holds each accepted event briefly so the ink-in is visible.
+`run.started` → (`era.started` → (`entity.created`* `event.accepted`)* `era.completed`)* → `run.completed`, with `warning` frames interleaved and `run.error {code, message}` on failure. `critique.completed` (M4) and `convergence.found` (M5) join the era cycle; disputed events ride the normal `event.accepted` frame with their flags set. Every mutation is **persisted before it is streamed**: what the client saw is what the database holds; a client abort cancels in-flight provider calls via the AbortSignal and keeps everything accepted so far. One run per branch at a time: a concurrent `POST` 409s (`generation-active`), with a unique `(branch_id, ordinal)` index as the database backstop. Before a run starts, a half-persisted trailing era from a crash (events but no critique report) is rolled back and regenerated, with a streamed warning. `run.completed` carries the run's summed token usage; a budget-ceiling stop streams `run.error {code: "budget-exceeded"}`. In mock mode `UCHRONIA_MOCK_PACE_MS` (set by `pnpm dev:mock` to 250) holds each accepted event briefly so the ink-in is visible.
 
 ## Model routing
 
 | Role | Default | Env override |
 | --- | --- | --- |
-| generation | `claude-sonnet-4-6` | `UCHRONIA_MODEL_GENERATION` |
+| generation | `claude-sonnet-5` | `UCHRONIA_MODEL_GENERATION` |
 | critic + cheap utility | `claude-haiku-4-5-20251001` | `UCHRONIA_MODEL_CRITIC` |
+
+The generation model must support structured outputs — the provider sends `output_config.format` on every call (`claude-sonnet-4-6`, the previous default, does not; overriding to it would 400 in live mode).
 
 Role → model happens inside the provider; templates declare `role`. Mock mode (`UCHRONIA_MOCK=1`, or no key present) swaps the whole app onto the deterministic `MockProvider`: seeded per request, identical inputs → identical fixtures; arbitrary PODs work (intake reads years/mechanism/region from text, including aviation-age technology and North American markers; seed generation draws period- and region-appropriate names from era-bucketed flavor banks, with seeded sentence variants and six titles per mechanism so parallel ledgers read differently). CI runs exclusively in mock.
 
@@ -44,7 +46,7 @@ Role → model happens inside the provider; templates declare `role`. Mock mode 
 
 | Effect | Mapping |
 | --- | --- |
-| (a) Prompt language | Three bands (butterfly < 34, balanced 34–66, railroad > 67), each with attractor-strength wording embedding the numeric dial, injected into every generation system prompt |
+| (a) Prompt language | Three bands (butterfly < 34, balanced 34–66, railroad ≥ 67), each with attractor-strength wording embedding the numeric dial, injected into every generation system prompt |
 | (b) Wildcard budget | `round(lerp(3 → 0.4, r) × min(1, distance/60))` per batch: more wildcards for butterfly histories, none near the POD for anyone |
 | (c) Convergence pressure | `r` (0–1), fed to the pressures step (M5); the attractor block is always present when anchors exist, its stance graded by band (context-only for butterfly, may-pull for balanced, should-pull for railroad), so no mid-band cliff |
 | (d) Wildcard plausibility floor | `lerp(0.15 → 0.45, r)`: wildcards scoring below the floor are discarded before commit |

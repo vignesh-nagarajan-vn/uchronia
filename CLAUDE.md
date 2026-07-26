@@ -1,6 +1,6 @@
 # CLAUDE.md: agent onboarding contract
 
-This file is the single source of truth for any agent session in this repository. A fresh agent reading only this file must be able to work productively. **Last verified: 2026-07-23 (v0.1.0 + the 0.2 hardening series).**
+This file is the single source of truth for any agent session in this repository. A fresh agent reading only this file must be able to work productively. **Last verified: 2026-07-26 (v0.1.0 + the 0.2 hardening series + the deployment-hardening pass).**
 
 ## 1. What Uchronia is
 
@@ -36,10 +36,14 @@ packages/core      Pure engine. IO only via injected ports (provider/clock/rng/i
                      derived entity endedness (endedEntities), in-place event replacement, guards
   src/validator.ts   machine validator (9 pure rules incl. no-posthumous-mutation)
   src/pipeline/      run.ts (seed + era loop + convergence; abort-aware), plan.ts (era
-                     spans, resume), critic.ts (dual review + cause glossary), drafts.ts
-                     (LLM drafts→rows), regenerate.ts (in-place event retelling),
-                     structured.ts (zod + repair loop + signal/usage), context.ts
-                     (budgeted state summaries, causal-annotated recents), events.ts
+                     spans, resume), critic.ts (dual review + cause glossary, bounded
+                     revision fan-out), drafts.ts (LLM drafts→rows, batch-local slug
+                     dedup), validate.ts (trial-apply on a clone; store-guard throws
+                     become issues), regenerate.ts (in-place event retelling),
+                     structured.ts (zod + repair loop + signal/usage + em-dash scrub
+                     with empty-guard), context.ts (budgeted state summaries,
+                     causal-annotated recents), ctx.ts, fork.ts, expand.ts,
+                     artifacts.ts, events.ts
   src/prompts/       registry + templates (pod-normalize, seed-consequences, …) + fragments
   src/mock/          MockProvider + per-template handlers + flavor banks
   src/dial.ts        determinism dial → concrete generation parameters (§4.4)
@@ -48,12 +52,19 @@ packages/core      Pure engine. IO only via injected ports (provider/clock/rng/i
   src/errors.ts      typed error taxonomy   src/rng.ts  seeded RNG
   src/baseline.ts    curated baseline loader; data/baseline.json (203 curated anchors)
 apps/server        Hono. Routes + SSE, AnthropicProvider, Drizzle + better-sqlite3.
-  src/config.ts      env parsing; ANTHROPIC_API_KEY lives here and only here
+  src/config.ts      env parsing (empty vars mean unset; serverless detection);
+                     ANTHROPIC_API_KEY lives here and only here
   src/deps.ts        ServerDeps injection (repo/provider/idgen/clock); tests build their own
   src/providers/     anthropic.ts: live provider (structured outputs, streaming,
                      truncation retry, abort passthrough, usage; injectable client + tests)
-  src/app.ts         app factory + CORS/body-limit + error→HTTP mapping;
-                     src/index.ts = listener + optional static web serving (DEPLOY.md)
+  src/app.ts         app factory + CORS/body-limit + error→HTTP mapping (incl.
+                     malformed-JSON 400); src/index.ts = listener (UCHRONIA_HOST,
+                     loads repo-root .env, real env wins) + optional static serving
+  src/vercel.ts      serverless entry: app + demo seed (inlined ledger), esbuild-
+                     bundled to dist/vercel.js by `build:vercel` (see DEPLOY.md)
+  src/seed-demo.ts   showcase seeding (bundled ledger or demo/ on disk)
+  src/http-error.ts  ApiError  ·  src/test-helpers.ts  in-memory test app
+  scripts/           copy-vercel-assets.mjs stages dist/drizzle + dist/fonts
   src/routes/        meta (config/baseline), timelines (CRUD+PATCH+validated import+export),
                      branches (view + md/html export + leaf DELETE), generate (SSE;
                      persist-before-stream; per-branch lock; era healing; token ceiling),
@@ -74,12 +85,18 @@ apps/web           Vite + React. RED THREAD interface (docs/DESIGN.md is binding
                      DeltaView, CompareView, ArtifactReader, SettingsView
   public/            brand assets: the seal (uchronia-logo.png) + favicon set
   e2e/               journey.spec.ts: the §11.3 Playwright journey (mock mode)
-docs/              ARCHITECTURE, DATA_MODEL, GENERATION, DESIGN(+NOTES), TESTING, ROADMAP, adr/
+docs/              ARCHITECTURE, DATA_MODEL, GENERATION, DESIGN(+NOTES), TESTING,
+                   DEPLOY, ROADMAP, adr/
 demo/              the-unburnt-library.uchronia.json (showcase; one-click load from Atlas;
-                   seeds empty databases when UCHRONIA_SEED_DEMO / Vercel)
+                   seeds empty databases when UCHRONIA_SEED_DEMO / Vercel; inlined into
+                   the serverless bundle at build time)
+scripts/           mirror-dist.mjs (web dist → root dist for Vercel) ·
+                   verify-vercel.mjs (fake-Vercel staging smoke; `pnpm verify:vercel`)
 Dockerfile         single-container edition (mock by default; docs/DEPLOY.md)
-api/index.ts       Vercel edition: the whole Hono app as one serverless function
-vercel.json        zero-config Vercel deployment (static web + /api/* rewrites)
+api/index.mjs      Vercel function entry: a two-line re-export of the prebundled
+                   apps/server/dist/vercel.js — no TS, no workspace resolution
+vercel.json        Vercel deployment: pinned pnpm install (no corepack), prebundle +
+                   static build + mirror, includeFiles apps/server/dist/**, rewrites
 ```
 
 Dependency direction: web → server → core → schemas (schemas shared by all). The pipeline lives in `packages/core/src/pipeline/` (from M3); prompts in `packages/core/src/prompts/` (from M3).
@@ -104,7 +121,11 @@ pnpm migrate                # drizzle-kit generate: new migration after schema e
                             # (migrations APPLY automatically at server start)
 pnpm e2e                    # playwright mock-mode journey (boots server+web itself, keyless;
                             # first run: pnpm --filter @uchronia/web exec playwright install chromium)
+pnpm verify:vercel          # build the serverless bundle, stage it as Vercel ships it,
+                            # smoke it with real requests (CI runs this on ubuntu)
 ```
+
+Node ≥ 22.13 (pnpm 11.16's own engine floor; `.nvmrc` pins 22.13).
 
 Per package: `pnpm --filter @uchronia/<schemas|core|server|web> <script>`.
 
@@ -114,15 +135,18 @@ Per package: `pnpm --filter @uchronia/<schemas|core|server|web> <script>`.
 | --- | --- | --- |
 | `ANTHROPIC_API_KEY` | Live generation (server-side only; never logged, never sent to client) | App degrades to mock mode |
 | `UCHRONIA_MOCK=1` | Forces deterministic MockProvider everywhere (CI always sets this) | Live if key present, else mock |
-| `UCHRONIA_MODEL_GENERATION` | Overrides generation model | `claude-sonnet-4-6` |
+| `UCHRONIA_MODEL_GENERATION` | Overrides generation model (must support structured outputs) | `claude-sonnet-5` |
 | `UCHRONIA_MODEL_CRITIC` | Overrides critic/utility model | `claude-haiku-4-5-20251001` |
 | `UCHRONIA_PORT` | Server port | `8787` |
-| `UCHRONIA_DB` | SQLite file path | `./data/uchronia.db` (resolved absolute, logged at boot) |
+| `UCHRONIA_HOST` | Listener bind interface | `127.0.0.1` (Docker image sets `0.0.0.0`) |
+| `UCHRONIA_DB` | SQLite file path | `./data/uchronia.db` (resolved absolute, logged at boot); `/tmp/uchronia.db` on serverless (Vercel/Lambda) |
 | `UCHRONIA_MAX_RUN_TOKENS` | Per-run token ceiling (live) | `3000000`; `0` disables |
-| `UCHRONIA_MOCK_PACE_MS` | Mock demo pacing per event | `0` (`dev:mock` sets 250) |
+| `UCHRONIA_MOCK_PACE_MS` | Mock demo pacing per event | `0` (`dev:mock` sets 250; 250 under Vercel) |
 | `UCHRONIA_STATIC_DIR` | Serve built web app from server | unset (dev uses vite proxy) |
 | `UCHRONIA_CORS_ORIGINS` | CORS allowlist (comma-separated) | empty = same-origin only |
 | `UCHRONIA_SEED_DEMO` | Seed the showcase into an empty DB at boot | off locally; on under Vercel |
+
+Set-but-empty variables count as unset (a copied template can't silently disable defaults). `pnpm dev`/`dev:server` load a repo-root `.env` (real environment always wins); tests and the serverless entry never do.
 
 ## 6. Data model & pipeline
 
@@ -140,7 +164,7 @@ Per package: `pnpm --filter @uchronia/<schemas|core|server|web> <script>`.
 
 ## 8. Current status
 
-**v0.1.0 shipped + the 0.2 hardening series landed (2026-07-23)**: all milestones M0–M12 complete, then a ~15-commit audit-driven pass: graph-fed generation, region-aware convergence, entity lifecycle (9th validator rule), dial-aware critic, generation locking + import validation + era healing, abort/usage/cost ceiling, lifecycle routes (PATCH timeline, regenerate event, delete branch), web code-splitting + interaction depth, CI matrix, Docker. See [docs/ROADMAP.md](docs/ROADMAP.md) for the honest record and open threads (notably: live mode is provider-unit-tested and cost-capped but still unexercised against the real API from this machine). The full mock-mode product works keyless: `pnpm dev:mock`, then "load the showcase chronicle" on the empty Atlas. Deployment posture: [docs/DEPLOY.md](docs/DEPLOY.md) + ADR-0003 (mock is public, live is local).
+**v0.1.0 shipped + the 0.2 hardening series (2026-07-23) + the deployment-hardening pass (2026-07-26)**: all milestones M0–M12 complete, then a ~15-commit audit-driven pass (graph-fed generation, region-aware convergence, entity lifecycle/9th validator rule, dial-aware critic, generation locking + import validation + era healing, abort/usage/cost ceiling, lifecycle routes, web code-splitting, CI matrix, Docker), then a full line-by-line audit that rebuilt the Vercel chain on a prebundled function (`build:vercel` → `api/index.mjs`), pinned the toolchain (Node ≥ 22.13, pnpm without corepack), moved the generation default to a structured-outputs-capable model (`claude-sonnet-5`), added the fake-Vercel smoke (`pnpm verify:vercel`, CI `vercel-shape` job), and fixed a dozen audit-found bugs across core/server/web. See [docs/ROADMAP.md](docs/ROADMAP.md) for the honest record and open threads (notably: live mode is provider-unit-tested and cost-capped but still unexercised against the real API from this machine; the Vercel chain is CI-verified against a faithful stage but awaits its first real import). The full mock-mode product works keyless: `pnpm dev:mock`, then "load the showcase chronicle" on the empty Atlas. Deployment posture: [docs/DEPLOY.md](docs/DEPLOY.md) + ADR-0003 (mock is public, live is local).
 
 ## 9. Documentation sync directive (binding)
 

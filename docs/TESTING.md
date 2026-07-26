@@ -3,10 +3,11 @@
 ## How to run
 
 ```sh
-pnpm test          # vitest across all packages (~174 tests)
+pnpm test          # vitest across all packages (~189 tests)
 pnpm typecheck     # tsc --noEmit everywhere
 pnpm lint          # biome check
 pnpm e2e           # playwright mock-mode journey (boots both servers keyless)
+pnpm verify:vercel # build the serverless bundle, stage it like Vercel ships it, smoke it
 ```
 
 Per package: `pnpm --filter @uchronia/<name> test` (`test:watch`, `test:coverage`).
@@ -17,12 +18,13 @@ Per package: `pnpm --filter @uchronia/<name> test` (`test:watch`, `test:coverage
 
 ## Test matrix (§11.3, implemented)
 
-- **schemas** (16): round-trips, fixture parsing, draft/llm shapes, artifact discrimination.
-- **core unit** (now 102 with integration): seeded rng · dial mapping (bands, budgets, floors) · store: change-log replay, multi-level fork resolution, mutation guards incl. pre-fork immutability · every validator rule individually, including `no-posthumous-mutation` with its branch-locality · region-aware `anchorsNear` ranking · state-snapshot budgeting caps · structured repair loop (success/repair/fail-loud/non-JSON) · mock pod intake determinism · era planning.
+- **schemas** (14): round-trips, fixture parsing, draft/llm shapes, artifact discrimination.
+- **core unit** (105 with integration): seeded rng · dial mapping (bands, budgets, floors) · store: change-log replay, multi-level fork resolution, mutation guards incl. pre-fork immutability · every validator rule individually, including `no-posthumous-mutation` with its branch-locality · region-aware `anchorsNear` ranking · state-snapshot budgeting caps · structured repair loop (success/repair/fail-loud/non-JSON) · mock pod intake determinism · era planning.
 - **core integration**: full pipeline in mock (seed + era loop to the horizon, determinism, resume-after-interrupt), dual-review paths (regenerate-and-fix, dispute-kept, machine-drop, wildcard floor), convergence against the real baseline, cooperative abort mid-run (committed prefix stays valid), a failing convergence scan degrading to a warning, fork discipline (a late fork's first era requests batch 4, wildcards 0, asserted via a spy provider), lazy expansion fill-once semantics, multi-level fork generation with sub-PODs.
-- **server** (45): routes with the injected MockProvider: CRUD, import/export round-trip **including referential 422 rejection**, branch views through forks, SSE lifecycle including client abort mid-stream, **concurrent-run 409**, **partial-era healing on resume**, PATCH rename/dial/horizon (shrink refused), regenerate-in-place (identity kept, inherited events refused), leaf-branch deletion (roots and parents refused), expansion persistence, fork/compare, artifacts, md/html exporters, plus **AnthropicProvider unit tests** via an injectable stub client (usage mapping, truncation retry with doubled budget, refusal, abort-signal passthrough, role→model routing).
+- **server** (57): routes with the injected MockProvider: CRUD, import/export round-trip **including referential 422 rejection**, branch views through forks, SSE lifecycle including client abort mid-stream, **concurrent-run 409**, **partial-era healing on resume**, PATCH rename/dial/horizon (shrink refused), regenerate-in-place (identity kept, inherited events refused), leaf-branch deletion (roots and parents refused), expansion persistence, fork/compare, artifacts, md/html exporters, **config parsing** (empty-vars-mean-unset, serverless `/tmp` redirect, host binding, the structured-outputs-capable generation default), **malformed-JSON 400 envelope**, plus **AnthropicProvider unit tests** via an injectable stub client (usage mapping, truncation retry with doubled budget, refusal, abort-signal passthrough, role→model routing).
 - **web** (13): year formatting · thread geometry math (sag, symmetry, caps) · EventCard/Stamp component tests (jsdom) incl. disputed/convergence marks and off-screen relation counts.
-- **e2e** (Playwright, chromium): the §11.3 journey: gallery POD → SSE stream to completion → dual-review marks walked into view with `j` → open event → expand → generate artifact → read it → fork with sub-POD → child derivation → delta → export JSON download.
+- **e2e** (Playwright, chromium): the §11.3 journey: gallery POD → SSE stream to completion → dual-review marks walked into view with `j` → ledger search → open event → expand → generate artifact → read it → fork with sub-POD → child derivation → delta → export JSON download.
+- **fake-Vercel smoke** (`scripts/verify-vercel.mjs`, run by `pnpm verify:vercel`): stages `api/index.mjs` + `apps/server/dist/**` exactly as Vercel ships the function, imports the bundle under plain Node with `VERCEL=1`, and asserts cold start (migrations at the staged path, bundled-ledger seeding, the native sqlite binding), a branch view, the font-embedded HTML export, and the 404 envelope.
 
 ## Machine validator rules (each unit-tested)
 
@@ -30,4 +32,8 @@ dates-monotonic · event-within-era · edge-endpoints-exist · entities-exist ·
 
 ## CI
 
-GitHub Actions on push/PR to main: pnpm install → biome → typecheck → vitest → build web+server → Playwright chromium journey, all in mock mode, no secrets. Journey traces upload as artifacts on failure.
+GitHub Actions on push/PR to main, all in mock mode, no secrets:
+
+- **checks** — a 2×2 matrix (ubuntu/windows × node 22/24): pnpm install → biome → typecheck → vitest → build.
+- **vercel-shape** (ubuntu, node 22): `pnpm verify:vercel` (the fake-Vercel smoke above) plus the web build and root-`dist` mirror — the exact steps `vercel.json` runs, on the OS Vercel builds on.
+- **journey** (ubuntu): the Playwright chromium journey; traces upload as artifacts on failure.

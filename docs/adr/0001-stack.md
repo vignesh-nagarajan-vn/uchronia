@@ -13,7 +13,7 @@ As specified in §6: pnpm workspaces · TypeScript strict everywhere, no `any` �
 
 Choices the spec left open, resolved here:
 
-1. **Node**: `engines >= 22.12`. CI pins Node 22 (the spec's LTS); local development on Node 24 is supported and exercised.
+1. **Node**: `engines >= 22.12` at the time of this record (raised to `>= 22.13` in the deployment-hardening pass — pnpm 11.16's own engine floor). CI pins Node 22 (the spec's LTS); local development on Node 24 is supported and exercised.
 2. **Zod v4**: current major; native `z.toJSONSchema` is useful for structured-output plumbing.
 3. **Source exports**: internal packages export TypeScript source directly (`"exports": "./src/index.ts"`). Vitest, tsx, Vite, and esbuild all consume TS source; no build orchestration or project references needed. "Build" per package is `tsc --noEmit` (types are the artifact) except the deployable apps: web bundles via Vite, server bundles via esbuild (`better-sqlite3` external, a native module).
 4. **ULIDs** via the `ulid` package, wrapped behind an injected `IdGen` port so tests and mock mode can use deterministic factories.

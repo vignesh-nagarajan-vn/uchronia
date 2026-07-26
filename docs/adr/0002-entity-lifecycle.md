@@ -15,7 +15,7 @@ Death is **state**, so it travels the way all state travels: on the event. `Stat
 - `World.endedEntities(branchId)` derives the ended set; nothing is ever stored.
 - Validator rule 9, `no-posthumous-mutation`, reports any delta targeting an entity after its terminal delta on the same branch (further deltas *within* the ending event are legal; a death may set facts).
 - `EntityView.endedByEventId` is computed per branch at view-assembly time.
-- Prompts: the roster drops the dead, the snapshot lists them under a terse `no longer extant` line, and `era-generate` (v1.2.0) is instructed to end entities and reminded that people age.
+- Prompts: the roster drops the dead, the snapshot lists them under a terse `no longer extant` line, and `era-generate` (v1.2.0 when this landed; since revised) is instructed to end entities and reminded that people age.
 
 `ends` is optional (`absent = not terminal`), so every pre-lifecycle export imports unchanged.
 

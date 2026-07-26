@@ -96,4 +96,4 @@ Checked before build; revisited per view with screenshots (log in DESIGN_NOTES.m
 
 ## 8. Keyboard & accessibility floor (§8)
 
-`j/k` walk events · `enter` open · `f` fork · `l` cycle lens · `b` delta · `c` compare · `e` export · `?` shortcut sheet. Focus visible everywhere (2px thread-red offset ring); all dialogs/menus are React Aria (focus-trapped, labeled); graph/thread visuals all have list fallbacks; AA contrast in both themes; reduced-motion respected. The floor is part of done, not a stretch goal.
+`j/k` walk events · `enter` open · `f` fork · `l` cycle lens · `/` search the ledger · `b` delta · `c` compare · `e` export · `?` shortcut sheet. Focus visible everywhere (2px thread-red offset ring); all dialogs/menus are React Aria (focus-trapped, labeled); graph/thread visuals all have list fallbacks; AA contrast in both themes; reduced-motion respected. The floor is part of done, not a stretch goal.
