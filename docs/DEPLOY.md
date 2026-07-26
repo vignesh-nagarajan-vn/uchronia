@@ -12,6 +12,8 @@ Uchronia is local-first: a single-user app holding an API key. That shapes every
 
 ## Vercel
 
+This repo's own deployment lives at **<https://uchronia-server.vercel.app/>** — imported from GitHub exactly as described below, confirmed live 2026-07-26.
+
 ### How the build works
 
 The repo carries a `vercel.json` that drives the whole deployment; the dashboard needs no build settings. The chain is deliberately boring:
