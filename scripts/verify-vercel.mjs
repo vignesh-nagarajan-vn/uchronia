@@ -65,19 +65,51 @@ try {
   assert.equal(typeof handler, 'function', 'default export must be a handler function')
   check('bundle imports under plain Node (cold start: db + migrations + seed)', true)
 
-  // Vercel's Node runtime invokes the function (req, res)-style; exercising it
-  // through a real node:http server proves that exact contract — a
-  // fetch-shaped handler would hang here just as it does deployed.
-  server = createServer(handler)
+  // Vercel's Node runtime invokes the function (req, res)-style AND its
+  // helpers pre-consume the request stream, parking the parsed value on
+  // req.body. Exercising both shapes through a real node:http server proves
+  // the exact deployed contract: a fetch-shaped handler hangs every request,
+  // and a stream-only handler hangs every POST.
+  const simulateVercelHelpers = async (req) => {
+    if (req.method === 'GET' || req.method === 'HEAD') return
+    const chunks = []
+    for await (const chunk of req) chunks.push(chunk)
+    const raw = Buffer.concat(chunks)
+    req.body =
+      (req.headers['content-type'] ?? '').includes('application/json') && raw.length > 0
+        ? JSON.parse(raw.toString('utf8'))
+        : raw
+  }
+  server = createServer((req, res) => {
+    const helpersMode = req.headers['x-verify-helpers'] === '1'
+    const run = helpersMode ? simulateVercelHelpers(req).then(() => handler(req, res)) : handler(req, res)
+    run.catch((error) => {
+      res.statusCode = 500
+      res.end(String(error))
+    })
+  })
   await new Promise((ready) => server.listen(0, '127.0.0.1', ready))
   const { port } = server.address()
-  const get = async (path) =>
-    await Promise.race([
-      fetch(`http://127.0.0.1:${port}${path}`),
+  const withTimeout = (promise, label) =>
+    Promise.race([
+      promise,
       new Promise((_, reject) =>
-        setTimeout(() => reject(new Error(`no response for ${path} within 15s — handler hang`)), 15_000),
+        setTimeout(() => reject(new Error(`no response for ${label} within 15s: handler hang`)), 15_000),
       ),
     ])
+  const get = (path) => withTimeout(fetch(`http://127.0.0.1:${port}${path}`), path)
+  const post = (path, body, helpersMode) =>
+    withTimeout(
+      fetch(`http://127.0.0.1:${port}${path}`, {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+          ...(helpersMode ? { 'x-verify-helpers': '1' } : {}),
+        },
+        body: JSON.stringify(body),
+      }),
+      `POST ${path}${helpersMode ? ' (helpers)' : ''}`,
+    )
 
   const health = await get('/api/health')
   const healthBody = await health.json()
@@ -114,6 +146,19 @@ try {
 
   const missing = await get('/api/timelines/nonexistent')
   check('unknown resource maps to 404 envelope', missing.status === 404)
+
+  // The create flow is the first POST a visitor makes; test it under both
+  // body regimes. helpersMode mirrors production Vercel exactly.
+  const pod = { podText: 'The verification fleet returns, 1433', dial: 50, horizonYears: 60 }
+  const created = await post('/api/timelines', pod, true)
+  const createdBody = await created.json()
+  check(
+    'POST create works with a helpers-consumed body (production shape)',
+    created.status === 201 && typeof createdBody.timeline?.id === 'string',
+    `HTTP ${created.status}, "${createdBody.timeline?.title ?? '?'}"`,
+  )
+  const createdRaw = await post('/api/timelines', { ...pod, podText: 'A second fleet, 1434' }, false)
+  check('POST create works with an intact body stream', createdRaw.status === 201)
 } catch (error) {
   check('handler exercise', false, String(error?.stack ?? error))
 } finally {
