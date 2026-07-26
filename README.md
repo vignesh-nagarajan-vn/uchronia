@@ -8,7 +8,7 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-1a5fb4.svg)](LICENSE)
 [![Node ≥ 22.13](https://img.shields.io/badge/node-%E2%89%A5%2022.13-3c873a.svg)](package.json)
 
-**Live playground**: [uchronia-server.vercel.app](https://uchronia-server.vercel.app/) — keyless mock mode, the showcase chronicle seeded on arrival.
+**Live playground**: [uchronia-server.vercel.app](https://uchronia-server.vercel.app/) - keyless mock mode, the showcase chronicle seeded on arrival.
 
 Uchronia is an alternate-history engine. Choose or write a **Point of Divergence**, say *"the Library of Alexandria never burns"*, and watch history re-derive itself era by era. Drill into events, read biographies of people as they exist in this timeline, hold fake primary sources generated from inside the world, fork sub-branches at any event, and compare everything against real history.
 
@@ -122,7 +122,7 @@ Everything in the UI is reachable in mock mode; CI runs exclusively keyless. On 
 
 Prefer a container? `docker build -t uchronia . && docker run -p 8787:8787 -v uchronia-data:/data uchronia`: one port, keyless, safe to host. See [docs/DEPLOY.md](docs/DEPLOY.md).
 
-Or skip the install entirely: this repo is deployed on Vercel via its `vercel.json`, live at **[uchronia-server.vercel.app](https://uchronia-server.vercel.app/)**. Serverless state lives in `/tmp` per instance — a playground, not an archive. Full deployment story: [docs/DEPLOY.md](docs/DEPLOY.md).
+Or skip the install entirely: this repo is deployed on Vercel via its `vercel.json`, live at **[uchronia-server.vercel.app](https://uchronia-server.vercel.app/)**. Serverless state lives in `/tmp` per instance - a playground, not an archive. Full deployment story: [docs/DEPLOY.md](docs/DEPLOY.md).
 
 <details>
 <summary><strong>Troubleshooting</strong></summary>

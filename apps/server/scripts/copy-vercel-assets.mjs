@@ -1,8 +1,8 @@
 /**
  * Stage the serverless bundle's runtime assets under dist/, next to vercel.js,
  * so one non-brace includeFiles glob ("apps/server/dist/**") ships everything:
- *   dist/drizzle/  — migration SQL + meta journal, read by drizzle's migrator
- *   dist/fonts/    — the four @fontsource woff2 files the HTML export embeds
+ *   dist/drizzle/ - migration SQL + meta journal, read by drizzle's migrator
+ *   dist/fonts/ - the four @fontsource woff2 files the HTML export embeds
  * Runs from apps/server (pnpm script cwd); resolves @fontsource through this
  * package's own dependencies.
  */

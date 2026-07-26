@@ -156,7 +156,7 @@ describe('forking end to end (mock)', () => {
     const { world, rootId, ctx } = freshWorld()
     await drain(runGeneration(ctx, world, rootId))
     const rootEvents = world.resolveEvents(rootId)
-    // Fork late — decades downstream of the root POD.
+    // Fork late - decades downstream of the root POD.
     const forkEvent = rootEvents[rootEvents.length - 2]
     if (!forkEvent) throw new Error('missing fork event')
     expect(forkEvent.date.year).toBeGreaterThan(world.pod.year + 30)

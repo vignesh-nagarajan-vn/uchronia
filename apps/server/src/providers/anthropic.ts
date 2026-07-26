@@ -25,17 +25,17 @@ export interface AnthropicProviderConfig {
 const MAX_TOKEN_CEILING = 16000
 
 /**
- * The live provider. Uses the SDK's current structured-output mechanism —
+ * The live provider. Uses the SDK's current structured-output mechanism -
  * `output_config.format` via the zodOutputFormat helper (unsupported schema
  * constraints are stripped by the helper; core re-validates everything and
  * runs the repair loop, so validation stays owned by the pipeline).
  *
  * Streaming keeps long era batches under HTTP timeouts; the SDK retries
  * 429/5xx with backoff (maxRetries). A max_tokens truncation is retried once
- * with double the budget before failing — a long era must not abort a whole
+ * with double the budget before failing - a long era must not abort a whole
  * run. The request's AbortSignal rides into the HTTP layer so a cancelled run
  * stops billing mid-call. Token usage is reported for the server's per-run
- * accounting. Errors map onto the typed provider taxonomy — never surfaced
+ * accounting. Errors map onto the typed provider taxonomy - never surfaced
  * raw, never leaking the key.
  */
 export class AnthropicProvider implements LLMProvider {

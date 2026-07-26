@@ -6,7 +6,7 @@ All notable changes to Uchronia. The format follows [Keep a Changelog](https://k
 
 ### Added
 
-- A fake-Vercel smoke harness (`pnpm verify:vercel` / `scripts/verify-vercel.mjs`): stages the serverless function exactly as Vercel ships it and drives it with real requests — cold-start migrations, bundled-ledger seeding, the native sqlite binding, the font-embedded HTML export. CI runs it on ubuntu (`vercel-shape` job).
+- A fake-Vercel smoke harness (`pnpm verify:vercel` / `scripts/verify-vercel.mjs`): stages the serverless function exactly as Vercel ships it and drives it with real requests - cold-start migrations, bundled-ledger seeding, the native sqlite binding, the font-embedded HTML export. CI runs it on ubuntu (`vercel-shape` job).
 - `UCHRONIA_HOST`: the server now binds `127.0.0.1` by default (making SECURITY.md's localhost posture literally true); the container image sets `0.0.0.0`.
 - The server entry loads a repo-root `.env` (real environment always wins), making the README's `cp .env.example .env` flow actually work.
 - Server config tests: empty env vars mean "unset" (an empty `UCHRONIA_MAX_RUN_TOKENS=` no longer silently disables the token ceiling, an empty `UCHRONIA_SEED_DEMO=` no longer disables Vercel seeding), the serverless `/tmp` redirect, and the host default.
@@ -24,9 +24,9 @@ All notable changes to Uchronia. The format follows [Keep a Changelog](https://k
 
 ### Changed
 
-- The Vercel function is now prebundled: `build:vercel` compiles the whole server (workspace TS, schemas, the showcase chronicle, the baseline) into one plain ESM file that `api/index.mjs` re-exports, with migrations and export fonts staged beside it under `apps/server/dist/` — Vercel's builder no longer compiles TypeScript or resolves workspace packages at all. The install command pins pnpm via `npm install -g` instead of corepack. The handler speaks the Node runtime's actual `(req, res)` contract (`@hono/node-server/vercel`, not `hono/vercel`, whose fetch-shaped handler hangs to a 504 under it), and the `verify:vercel` harness now exercises the function through a real `node:http` server so a wrong-shaped handler fails locally.
+- The Vercel function is now prebundled: `build:vercel` compiles the whole server (workspace TS, schemas, the showcase chronicle, the baseline) into one plain ESM file that `api/index.mjs` re-exports, with migrations and export fonts staged beside it under `apps/server/dist/` - Vercel's builder no longer compiles TypeScript or resolves workspace packages at all. The install command pins pnpm via `npm install -g` instead of corepack. The handler is a hand-rolled `(req, res)` bridge: the runtime both invokes Node-style (a fetch-shaped `hono/vercel` handler hangs to a 504) and pre-consumes request bodies for its helpers (a stream-reading adapter hangs every POST), so the entry builds the web Request itself, rebuilding bodies from the helper buffer, and streams the Response out. The `verify:vercel` harness exercises the function through a real `node:http` server in both body regimes so a wrong-shaped handler fails locally.
 - Default generation model is `claude-sonnet-5` (its predecessor `claude-sonnet-4-6` does not support the structured outputs the provider sends on every call, so live mode would have 400'd on the first request).
-- Node floor raised to 22.13 (`.nvmrc`, `engines`) — pnpm 11.16 itself refuses to run below it.
+- Node floor raised to 22.13 (`.nvmrc`, `engines`) - pnpm 11.16 itself refuses to run below it.
 - The web ledger reads the baseline through the typed API client, downloads exports without navigating away, keeps its theme guess from crashing sandboxed embeds, and shows a real error state on `/settings` when configuration fetch fails.
 - P2 discipline is measured from a branch's own divergence: late forks open as tightly as fresh roots.
 - The critic calibrates its plausibility bar to the determinism dial.
@@ -37,7 +37,7 @@ All notable changes to Uchronia. The format follows [Keep a Changelog](https://k
 
 ### Fixed
 
-- The esbuild server bundles crashed on load with a duplicate `createRequire` declaration (the banner collided with the bundle's own hoisted import) — caught by the new fake-Vercel harness; both bundles now alias the banner import.
+- The esbuild server bundles crashed on load with a duplicate `createRequire` declaration (the banner collided with the bundle's own hoisted import) - caught by the new fake-Vercel harness; both bundles now alias the banner import.
 - An SSE stream severed mid-run (network drop, serverless time limit) was presented as a completed derivation; the ledger now reports it honestly and everything accepted so far stays saved. SSE parsing also tolerates CRLF-normalizing proxies, joins multi-line data fields per spec, closes the HTTP body when a consumer stops early, and the server marks the stream `X-Accel-Buffering: no`.
 - The em-dash scrubber could empty an all-dash field *after* schema validation, storing invalid content; a scrub that would empty a string now keeps the original.
 - A store-guard violation during batch trial-apply escaped as an exception and killed the run instead of becoming a reviewable issue; two drafts could also collide on one renamed entity slug within a batch.

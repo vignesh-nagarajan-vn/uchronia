@@ -25,8 +25,8 @@ export const seedConsequences: PromptTemplate<SeedArgs, EraBatchOut> = {
   id: 'seed-consequences',
   version: '1.1.0',
   changelog: [
-    '1.0.0 — initial template',
-    '1.1.0 — human voice mandate; prose register tracks the dial',
+    '1.0.0 - initial template',
+    '1.1.0 - human voice mandate; prose register tracks the dial',
   ],
   role: 'generation',
   schemaName: 'EraBatchOut',

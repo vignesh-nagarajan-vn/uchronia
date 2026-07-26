@@ -29,7 +29,7 @@ export function ForkDialog({
       }),
     onSuccess: ({ branch }) => {
       void queryClient.invalidateQueries({ queryKey: ['timelines'] })
-      // The parent's branches[] now lists the child — delta and compare views
+      // The parent's branches[] now lists the child - delta and compare views
       // read it from this cache entry, so it must not go stale.
       void queryClient.invalidateQueries({ queryKey: ['branch-view', branchId] })
       onClose()

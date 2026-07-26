@@ -65,11 +65,11 @@ function healPartialTrailingEra(deps: ServerDeps, world: World, branchId: string
 }
 
 /**
- * POST /api/branches/:id/generate — run the pipeline, streaming pipeline
+ * POST /api/branches/:id/generate - run the pipeline, streaming pipeline
  * events as SSE (§4.8). Each mutation is persisted before it is streamed, so
  * whatever the client saw is exactly what the database holds; a client abort
  * cancels in-flight provider calls via AbortSignal and keeps everything
- * accepted so far. One run per branch at a time per process — a second request
+ * accepted so far. One run per branch at a time per process - a second request
  * to the same process 409s instead of duplicating ordinals; across processes
  * (or serverless instances, each with its own database) the unique
  * (branch_id, ordinal) index is the durable backstop.

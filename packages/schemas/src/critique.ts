@@ -15,7 +15,7 @@ export type EventVerdict = z.infer<typeof EventVerdict>
 
 /**
  * The critic's verdict sheet for one generated batch. The critic never
- * rewrites — it verdicts; the pipeline regenerates or marks disputed (§4.5).
+ * rewrites - it verdicts; the pipeline regenerates or marks disputed (§4.5).
  */
 export const CritiqueReport = z.object({
   id: UlidString,

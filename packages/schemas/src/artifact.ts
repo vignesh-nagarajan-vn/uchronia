@@ -10,7 +10,7 @@ export type ArtifactKind = z.infer<typeof ArtifactKind>
 export const NewspaperBody = z.object({
   kind: z.literal('newspaper'),
   masthead: z.string().min(1),
-  /** e.g. "Alexandria — 14 Thoth, Year 412 of the Common Reckoning". */
+  /** e.g. "Alexandria - 14 Thoth, Year 412 of the Common Reckoning". */
   dateline: z.string().min(1),
   headline: z.string().min(1),
   subhead: z.string().nullable(),
@@ -42,7 +42,7 @@ export const LetterBody = z.object({
 })
 export type LetterBody = z.infer<typeof LetterBody>
 
-/** An entry from an in-world encyclopedia — not ours. */
+/** An entry from an in-world encyclopedia - not ours. */
 export const EncyclopediaBody = z.object({
   kind: z.literal('encyclopedia'),
   encyclopediaTitle: z.string().min(1),

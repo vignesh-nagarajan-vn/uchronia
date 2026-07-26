@@ -41,7 +41,7 @@ function factsToRecord(facts: StateFact[]): StateRecord {
  * Turn validated LLM drafts into committed-shape rows: mint ids, resolve
  * slugs and refs (e<n> = 1-based position in the branch's visible history at
  * batch start; d<n> = within batch), fold key/value facts into state records,
- * compute distance from the POD. Unknown references are machine-fixable —
+ * compute distance from the POD. Unknown references are machine-fixable -
  * dropped with a warning; semantic validity is the validator's job.
  */
 export function resolveDrafts(ctx: DraftContext, drafts: DraftEvent[]): ResolvedBatch {
@@ -81,7 +81,7 @@ export function resolveDrafts(ctx: DraftContext, drafts: DraftEvent[]): Resolved
       }
       // Slugs are timeline-unique but visibility is branch-local: a sibling
       // branch this one cannot see may already own the slug. Rename
-      // deterministically — parallel histories are allowed their own
+      // deterministically - parallel histories are allowed their own
       // "Improved Method"; batch-internal references keep using the original.
       let storedSlug = def.slug
       let n = 2
@@ -192,7 +192,7 @@ export function resolveDrafts(ctx: DraftContext, drafts: DraftEvent[]): Resolved
 }
 
 /**
- * Within-batch causes may point at a draft that lands *later* in year order —
+ * Within-batch causes may point at a draft that lands *later* in year order -
  * a cause from the future. Those edges are dropped here (with a warning)
  * rather than committed, since the store forbids nothing about them but
  * history should not run backwards.

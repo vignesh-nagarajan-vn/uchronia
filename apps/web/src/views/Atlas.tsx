@@ -9,7 +9,7 @@ import { Shell, Wordmark } from '../components/Shell.js'
 import { ApiError, api } from '../lib/api.js'
 import { GALLERY, type GalleryEntry } from '../lib/gallery.js'
 
-/** V1 — Atlas: the POD studio. Composer + curated catalogue + open ledgers. */
+/** V1 - Atlas: the POD studio. Composer + curated catalogue + open ledgers. */
 export function Atlas() {
   const navigate = useNavigate()
   const queryClient = useQueryClient()

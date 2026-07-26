@@ -14,7 +14,7 @@ export interface PodNormalizeArgs {
 export const podNormalize: PromptTemplate<PodNormalizeArgs, PodNormalizedOut> = {
   id: 'pod-normalize',
   version: '1.0.0',
-  changelog: ['1.0.0 — initial template'],
+  changelog: ['1.0.0 - initial template'],
   role: 'utility',
   schemaName: 'PodNormalizedOut',
   schema: PodNormalizedOut,
@@ -35,8 +35,8 @@ Produce:
 - year: the integer year the divergence occurs (negative for BC; no year zero). If the user gave none, choose the historically sensible moment for this divergence.
 - dateLabel: a human date label ("May 1453", "c. 48 BC").
 - region: the primary region affected.
-- mechanism: which lever the divergence pulls — knowledge, disease, politics, technology, economics, environment, or culture.
-- baselineContext: 2–3 sentences on what actually happened in real history at and around this moment — the situation the divergence departs from.
+- mechanism: which lever the divergence pulls - knowledge, disease, politics, technology, economics, environment, or culture.
+- baselineContext: 2–3 sentences on what actually happened in real history at and around this moment - the situation the divergence departs from.
 - suggestedTitle: a short evocative title for this timeline (3–6 words, no colon-subtitle).`,
   seedKey: ({ raw }) => raw.trim().toLowerCase(),
 }

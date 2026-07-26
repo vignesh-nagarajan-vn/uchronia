@@ -28,7 +28,7 @@ describe('expandEvent', () => {
     expect(world.getEvent(FX.e1).detail).toBe(expanded.detail)
   })
 
-  it('fills once — the second expansion returns the first text', async () => {
+  it('fills once - the second expansion returns the first text', async () => {
     const { world, ctx } = setup()
     const first = await expandEvent(ctx, world, FX.rootBranch, FX.e1)
     const second = await expandEvent(ctx, world, FX.childBranch, FX.e1) // shared pre-fork event

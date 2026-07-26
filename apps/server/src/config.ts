@@ -4,7 +4,7 @@ import { resolve } from 'node:path'
  * Server configuration, read once from the environment.
  *
  * ANTHROPIC_API_KEY lives here and only here (§6). The value is never logged,
- * never serialized into a response, and never reaches the client — routes may
+ * never serialized into a response, and never reaches the client - routes may
  * expose `keyConfigured` (a boolean) at most.
  */
 export interface ServerConfig {
@@ -22,7 +22,7 @@ export interface ServerConfig {
     generation: string
     critic: string
   }
-  /** Absolute path — a CWD-relative default must not silently open a second DB. */
+  /** Absolute path - a CWD-relative default must not silently open a second DB. */
   dbPath: string
   /**
    * Hard ceiling on total tokens (input + output) one generation run may

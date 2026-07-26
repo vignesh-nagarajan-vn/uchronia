@@ -19,7 +19,7 @@ function setup(): { world: World; ctx: PipelineCtx } {
   }
 }
 
-describe('generateArtifact — the four diegetic kinds', () => {
+describe('generateArtifact - the four diegetic kinds', () => {
   it('generates a schema-valid artifact of every kind', async () => {
     const { world, ctx } = setup()
     for (const kind of ARTIFACT_KINDS) {

@@ -4,7 +4,7 @@ import { generateStructured } from '../pipeline/structured.js'
 import { podNormalize } from '../prompts/pod-normalize.js'
 import { MockProvider } from './provider.js'
 
-describe('MockProvider — pod-normalize', () => {
+describe('MockProvider - pod-normalize', () => {
   it('is deterministic for identical input', async () => {
     const a = await generateStructured(new MockProvider(), podNormalize, {
       raw: 'What if the Library of Alexandria never burned?',

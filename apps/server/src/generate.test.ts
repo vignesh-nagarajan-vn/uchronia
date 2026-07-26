@@ -30,7 +30,7 @@ async function createTimeline(app: Awaited<ReturnType<typeof makeTestApp>>['app'
   return CreateTimelineResponse.parse(await res.json())
 }
 
-describe('POST /api/branches/:id/generate — SSE', () => {
+describe('POST /api/branches/:id/generate - SSE', () => {
   it('streams a full run to the horizon and persists exactly what it streamed', async () => {
     const { app } = makeTestApp()
     const created = await createTimeline(app)

@@ -25,7 +25,7 @@ const TEMPLATES: Record<
 
 /**
  * F8: generate a diegetic artifact for an event, conditioned on the state as
- * of that event. One artifact per (event, kind) — the mock is deterministic
+ * of that event. One artifact per (event, kind) - the mock is deterministic
  * anyway, and the reader deserves a stable document; asking again returns it.
  */
 export async function generateArtifact(

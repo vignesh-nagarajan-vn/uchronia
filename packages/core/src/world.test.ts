@@ -7,7 +7,7 @@ function makeWorld(): World {
   return World.fromAggregate(fixtureAggregate())
 }
 
-describe('fork resolution — structural sharing', () => {
+describe('fork resolution - structural sharing', () => {
   it('resolves the root branch to its own events in order', () => {
     const world = makeWorld()
     expect(world.resolveEvents(FX.rootBranch).map((e) => e.id)).toEqual([
@@ -64,7 +64,7 @@ describe('fork resolution — structural sharing', () => {
 
   it('normalizes the fork parent to the branch owning the fork event', () => {
     const world = makeWorld()
-    // Viewed from the child, e1 is inherited from root — the fork attaches to root.
+    // Viewed from the child, e1 is inherited from root - the fork attaches to root.
     const cousin = world.fork({
       id: '01BR00000000000000000000G4',
       viewedBranchId: FX.childBranch,
@@ -157,7 +157,7 @@ describe('event views', () => {
   })
 })
 
-describe('mutation guards — pre-fork immutability and integrity', () => {
+describe('mutation guards - pre-fork immutability and integrity', () => {
   it('rejects events appended into another branch’s era', () => {
     const world = makeWorld()
     const agg = fixtureAggregate()

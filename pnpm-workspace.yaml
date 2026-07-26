@@ -3,7 +3,7 @@ packages:
   - apps/*
 
 # pnpm blocks postinstall scripts by default; esbuild needs its own.
-# better-sqlite3 v13 ships prebuilt N-API binaries inside the package — the
+# better-sqlite3 v13 ships prebuilt N-API binaries inside the package - the
 # implicit node-gyp rebuild (triggered by its binding.gyp) must be suppressed.
 allowBuilds:
   esbuild: true

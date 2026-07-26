@@ -5,7 +5,7 @@ import type { ResolvedBatch } from './drafts.js'
 
 /**
  * Trial-apply a resolved batch on a clone of the world and run the machine
- * validator. Returns the issues attributable to the batch — the real world is
+ * validator. Returns the issues attributable to the batch - the real world is
  * untouched until the caller commits.
  */
 export function validateBatchOnClone(
@@ -23,7 +23,7 @@ export function validateBatchOnClone(
     for (const edge of batch.edges) clone.addEdge(edge)
   } catch (error) {
     // A store guard (IntegrityError and friends) firing on the trial apply is
-    // a batch defect to report like any other issue — not a crash that kills
+    // a batch defect to report like any other issue - not a crash that kills
     // the run before the review loop can regenerate the offending draft.
     return [
       {

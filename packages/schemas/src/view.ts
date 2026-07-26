@@ -12,7 +12,7 @@ import { Dial, Timeline, TimelineSettings } from './timeline.js'
 
 /**
  * API contracts shared by server and web. The client parses responses against
- * these — the same schemas that validated the data on the way in.
+ * these - the same schemas that validated the data on the way in.
  */
 
 export const TimelineSummary = z.object({
@@ -77,7 +77,7 @@ export const ImportResponse = z.object({
 export type ImportResponse = z.infer<typeof ImportResponse>
 
 /**
- * PATCH /timelines/:id — every field optional, at least one required.
+ * PATCH /timelines/:id - every field optional, at least one required.
  * The horizon may only grow (the era plan is append-only by design);
  * shrinking would orphan committed eras.
  */
@@ -141,7 +141,7 @@ export const CompareView = z.object({
   ]),
   /** Events visible on both sides (branch↔branch), in a's order. */
   sharedEventIds: z.array(z.string()),
-  /** The last shared event — where the two lines part. */
+  /** The last shared event - where the two lines part. */
   divergesAfterEventId: z.string().nullable(),
 })
 export type CompareView = z.infer<typeof CompareView>

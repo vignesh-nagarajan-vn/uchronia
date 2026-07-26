@@ -5,7 +5,7 @@ import { Provenance } from './provenance.js'
 
 /**
  * A curated real-history anchor event. ~200 of these form the baseline spine
- * (packages/core/data/baseline.json) — the blue line the divergence peels away
+ * (packages/core/data/baseline.json) - the blue line the divergence peels away
  * from, and the reference set for convergence detection. Always curated, never
  * generated.
  */
@@ -28,7 +28,7 @@ export const BaselineDataset = z.object({
 export type BaselineDataset = z.infer<typeof BaselineDataset>
 
 /**
- * A moment where the divergent timeline rhymes back into real history — the
+ * A moment where the divergent timeline rhymes back into real history - the
  * most satisfying thing this tool can show, so it is a first-class record.
  */
 export const ConvergencePoint = z.object({

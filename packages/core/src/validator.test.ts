@@ -28,7 +28,7 @@ function event(agg: TimelineAggregate, id: string) {
   return e
 }
 
-describe('validator — clean world', () => {
+describe('validator - clean world', () => {
   it('finds no issues in the fixture world, on any branch', () => {
     const world = World.fromAggregate(fixtureAggregate())
     expect(validateWorld(world)).toEqual([])
@@ -47,7 +47,7 @@ describe('rule: dates-monotonic', () => {
   })
 
   it('does not compare across eras', () => {
-    // e3 (era1, 1457) after e2 (era0, 1454) — different eras, no comparison.
+    // e3 (era1, 1457) after e2 (era0, 1454) - different eras, no comparison.
     const world = World.fromAggregate(fixtureAggregate())
     expect(datesMonotonicWithinEra(world, FX.rootBranch)).toEqual([])
   })
@@ -123,7 +123,7 @@ describe('rule: deltas-apply', () => {
 
   it('flags deltas on a child branch whose target is introduced on an invisible segment', () => {
     const world = worldWith((agg) => {
-      // e5 (child) mutates the press — introduced by e3, invisible to the child.
+      // e5 (child) mutates the press - introduced by e3, invisible to the child.
       event(agg, FX.e5).deltas.push({
         entityId: FX.peraPress,
         patch: { pressCount: 9 },
@@ -150,7 +150,7 @@ describe('rule: no-posthumous-mutation', () => {
 
   it('allows further deltas within the ending event itself', () => {
     const world = worldWith((agg) => {
-      // The LAST delta of the last root event ends the entity — nothing follows.
+      // The LAST delta of the last root event ends the entity - nothing follows.
       const last = agg.events
         .filter((e) => e.branchId === FX.rootBranch)
         .sort((a, b) => a.ordinal - b.ordinal)
@@ -221,7 +221,7 @@ describe('rule: fork-normalized', () => {
     const world = worldWith((agg) => {
       const child = agg.branches.find((b) => b.id === FX.childBranch)
       if (!child) throw new Error('fixture branch missing')
-      child.forkEventId = FX.e5 // owned by the child itself — nonsense
+      child.forkEventId = FX.e5 // owned by the child itself - nonsense
     })
     const issues = forkNormalized(world, FX.childBranch)
     expect(issues).toHaveLength(1)

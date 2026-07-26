@@ -13,7 +13,7 @@ interface BranchLine {
   x: number
 }
 
-/** V5 — Delta: the branch tree as one picture — red threads leaving the blue trunk. */
+/** V5 - Delta: the branch tree as one picture - red threads leaving the blue trunk. */
 export function DeltaView() {
   const { timelineId = '', branchId = '' } = useParams()
   const view = useBranchView(branchId)
@@ -33,7 +33,7 @@ export function DeltaView() {
     const podYear = data.pod.year
     const horizonEnd = podYear + data.timeline.settings.horizonYears
 
-    // One pass for fork years — no per-branch scans over the event list.
+    // One pass for fork years - no per-branch scans over the event list.
     const eventYearById = new Map(data.events.map((e) => [e.id, e.date.year]))
     const forkYears = new Map(
       branches.map((b) => [

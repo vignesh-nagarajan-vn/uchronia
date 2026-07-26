@@ -83,7 +83,7 @@ export class Repo {
   }
 
   listTimelines(): TimelineSummary[] {
-    // Three queries total, not three per timeline — this backs the landing view.
+    // Three queries total, not three per timeline - this backs the landing view.
     const rows = this.db.select().from(t.timelines).all()
     const branchRows = this.db
       .select({

@@ -31,7 +31,7 @@ export function useBranchView(branchId: string) {
   })
 }
 
-/** V2 — the Timeline: the core reading surface. */
+/** V2 - the Timeline: the core reading surface. */
 export function TimelineView() {
   const { timelineId = '', branchId = '' } = useParams()
   const [searchParams, setSearchParams] = useSearchParams()
@@ -175,9 +175,9 @@ export function TimelineView() {
   // Recompute pins whenever the virtual window shifts under the hover.
   const virtualWindowSize = virtualizer.getVirtualItems().length
   // Layout effect (not post-paint) so the threads land the same frame as the
-  // hover state, and one rect read per related card — the container rect is
+  // hover state, and one rect read per related card - the container rect is
   // hoisted out of the loop so scrolling while hovering doesn't thrash layout.
-  // biome-ignore lint/correctness/useExhaustiveDependencies(virtualWindowSize): deliberately extra — thread pins must re-measure when virtualization swaps rows
+  // biome-ignore lint/correctness/useExhaustiveDependencies(virtualWindowSize): deliberately extra - thread pins must re-measure when virtualization swaps rows
   useLayoutEffect(() => {
     if (!relatedIds || !hovered || !scrollRef.current) {
       setThreads([])
@@ -299,7 +299,7 @@ export function TimelineView() {
           navigate(`/t/${timelineId}/compare?a=${branchId}&b=baseline`)
           break
         case 'e': {
-          // A download, not a navigation — assigning location.href would leave
+          // A download, not a navigation - assigning location.href would leave
           // the SPA whenever the response lacks a Content-Disposition header.
           const a = document.createElement('a')
           a.href = api.exportJsonUrl(timelineId)
@@ -365,7 +365,7 @@ export function TimelineView() {
           <Link
             to={`${branchPath}/delta`}
             className="hover:text-ink"
-            title="delta view — all branches"
+            title="delta view - all branches"
           >
             {data.branch.name}
           </Link>

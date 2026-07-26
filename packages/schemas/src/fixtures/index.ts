@@ -233,7 +233,7 @@ export function fixtureAggregate(): TimelineAggregate {
         summary:
           'The janissary wave stalls in the fosse under Giustiniani’s repaired stockade; by noon Mehmed sounds withdrawal, and the Golden Horn boom still holds.',
         detail:
-          'Three waves went in before dawn. The bashi-bazouks died in the fosse as they always did; the Anatolians broke against the inner wall; and when the janissaries found the Kerkoporta barred — in this history, someone remembered to bar it — the assault lost its one cheap way in. Giustiniani took the splinter wound that in another chronicle kills the defense, but the Genoese surgeon’s tourniquet held him upright until dusk. What broke instead was the besiegers’ patience: the fleet had failed at the boom for seven weeks, the great bombard had cracked twice, and Halil Pasha’s peace party finally had its argument.',
+          'Three waves went in before dawn. The bashi-bazouks died in the fosse as they always did; the Anatolians broke against the inner wall; and when the janissaries found the Kerkoporta barred - in this history, someone remembered to bar it - the assault lost its one cheap way in. Giustiniani took the splinter wound that in another chronicle kills the defense, but the Genoese surgeon’s tourniquet held him upright until dusk. What broke instead was the besiegers’ patience: the fleet had failed at the boom for seven weeks, the great bombard had cracked twice, and Halil Pasha’s peace party finally had its argument.',
         entityIds: [FX.byzantium, FX.ottomans, FX.constantine],
         deltas: [
           {
@@ -251,7 +251,7 @@ export function fixtureAggregate(): TimelineAggregate {
         plausibility: {
           score: 0.74,
           rationale:
-            'The siege was decided by narrow margins — the Kerkoporta, Giustiniani’s wound; a failed assault was widely expected by contemporaries.',
+            'The siege was decided by narrow margins - the Kerkoporta, Giustiniani’s wound; a failed assault was widely expected by contemporaries.',
         },
         distanceFromPod: 0,
         wildcard: false,
@@ -569,7 +569,7 @@ export function fixtureAggregate(): TimelineAggregate {
         eventId: FX.e4,
         anchorId: 'bl-constantinople-1453',
         similarityNote:
-          'Ottoman expansion resumes within a decade along the Danube — the structural drive toward Europe reasserts itself even with the City unconquered.',
+          'Ottoman expansion resumes within a decade along the Danube - the structural drive toward Europe reasserts itself even with the City unconquered.',
         provenance: generated,
       },
     ],
@@ -608,7 +608,7 @@ export function fixtureAggregate(): TimelineAggregate {
         entityId: FX.constantine,
         branchId: FX.rootBranch,
         biography:
-          'Constantine XI Palaiologos (1405–?) is remembered in this timeline not for how he died but for what he signed. The soldier-emperor who held the walls in May 1453 spent the rest of his reign holding a pen: the Venetian loan of 1454, the customs concessions, the grain contracts that fed a city too poor to feed itself. Chroniclers of the next century would call him ho diplous plerotes — "he who paid twice" — once in blood on the walls, once in gold on the quay. He never produced an heir, and the question of what he preserved the empire *for* outlived him.',
+          'Constantine XI Palaiologos (1405–?) is remembered in this timeline not for how he died but for what he signed. The soldier-emperor who held the walls in May 1453 spent the rest of his reign holding a pen: the Venetian loan of 1454, the customs concessions, the grain contracts that fed a city too poor to feed itself. Chroniclers of the next century would call him ho diplous plerotes - "he who paid twice" - once in blood on the walls, once in gold on the quay. He never produced an heir, and the question of what he preserved the empire *for* outlived him.',
         provenance: generated,
       },
     ],

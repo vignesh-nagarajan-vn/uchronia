@@ -42,7 +42,7 @@ export type CritiqueIssue = z.infer<typeof CritiqueIssue>
  * The persisted event. Causal edges are stored separately ({@link CausalEdge}
  * rows); the API serves {@link EventView} with `causes`/`effects` computed from
  * the edges visible on the requested branch. Storing the arrays here would let
- * a child branch's edges mutate inherited events — see docs/DATA_MODEL.md.
+ * a child branch's edges mutate inherited events - see docs/DATA_MODEL.md.
  */
 export const Event = z.object({
   id: UlidString,

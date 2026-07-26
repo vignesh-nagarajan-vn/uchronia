@@ -14,7 +14,7 @@ describe('branch exports (F10)', () => {
     expect(md).toContain('## The Siege That Failed')
     expect(md).toContain('plausibility 0.74')
     expect(md).toContain('◉ convergence')
-    expect(md).toContain("Disputed — the critic's notes")
+    expect(md).toContain("Disputed - the critic's notes")
     expect(md).toContain('not scholarship, and not a source')
   })
 

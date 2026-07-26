@@ -60,8 +60,10 @@ apps/server        Hono. Routes + SSE, AnthropicProvider, Drizzle + better-sqlit
   src/app.ts         app factory + CORS/body-limit + error→HTTP mapping (incl.
                      malformed-JSON 400); src/index.ts = listener (UCHRONIA_HOST,
                      loads repo-root .env, real env wins) + optional static serving
-  src/vercel.ts      serverless entry: app + demo seed (inlined ledger), esbuild-
-                     bundled to dist/vercel.js by `build:vercel` (see DEPLOY.md)
+  src/vercel.ts      serverless entry: app + demo seed (inlined ledger) behind a
+                     hand-rolled (req, res) bridge (Vercel invokes Node-style and
+                     its helpers pre-consume POST bodies; the bridge rebuilds them),
+                     esbuild-bundled to dist/vercel.js by `build:vercel` (DEPLOY.md)
   src/seed-demo.ts   showcase seeding (bundled ledger or demo/ on disk)
   src/http-error.ts  ApiError  ·  src/test-helpers.ts  in-memory test app
   scripts/           copy-vercel-assets.mjs stages dist/drizzle + dist/fonts
@@ -94,7 +96,7 @@ scripts/           mirror-dist.mjs (web dist → root dist for Vercel) ·
                    verify-vercel.mjs (fake-Vercel staging smoke; `pnpm verify:vercel`)
 Dockerfile         single-container edition (mock by default; docs/DEPLOY.md)
 api/index.mjs      Vercel function entry: a two-line re-export of the prebundled
-                   apps/server/dist/vercel.js — no TS, no workspace resolution
+                   apps/server/dist/vercel.js - no TS, no workspace resolution
 vercel.json        Vercel deployment: pinned pnpm install (no corepack), prebundle +
                    static build + mirror, includeFiles apps/server/dist/**, rewrites
 ```
@@ -158,13 +160,14 @@ Set-but-empty variables count as unset (a copied template can't silently disable
 
 - **Commits**: Conventional Commits, `type(scope): imperative subject ≤ 72 chars`. Types: feat fix test docs chore refactor perf ci. Scopes: repo schemas core server web prompts design docs ci. Atomic: one logical change (+ its tests + its doc updates); never mix features, or refactor with feature. 5–15 commits per milestone. Push at milestone boundaries.
 - **Code**: TS strict, no `any` (Biome enforces). `packages/core` stays pure (IO via injected ports only). All LLM output Zod-validated at the boundary. Typed error taxonomy. Secrets never logged/committed/sent to client.
+- **No em dashes, anywhere**: not in docs, comments, UI strings, or data (per user direction, 2026-07-26; generated prose was already banned from them). Use commas, colons, hyphens, or parentheses; en dashes for year ranges are fine. Sole exception: the scrubber's detection regex and its test fixtures (`packages/core/src/pipeline/structured.ts` + `.test.ts`) must contain the character in order to eliminate it.
 - **Tests**: matrix in [docs/TESTING.md](docs/TESTING.md). A milestone is done only when its acceptance criteria pass.
 - **Docs**: see the sync directive below. ADRs in `docs/adr/` for every deviation from the master prompt.
 - **Sensitive history**: every generation prompt embeds a sober historiographic register; no glorification of atrocity; the critic treats tonal violations as failures. README carries the speculative-fiction disclaimer.
 
 ## 8. Current status
 
-**v0.1.0 shipped + the 0.2 hardening series (2026-07-23) + the deployment-hardening pass (2026-07-26)**: all milestones M0–M12 complete, then a ~15-commit audit-driven pass (graph-fed generation, region-aware convergence, entity lifecycle/9th validator rule, dial-aware critic, generation locking + import validation + era healing, abort/usage/cost ceiling, lifecycle routes, web code-splitting, CI matrix, Docker), then a full line-by-line audit that rebuilt the Vercel chain on a prebundled function (`build:vercel` → `api/index.mjs`), pinned the toolchain (Node ≥ 22.13, pnpm without corepack), moved the generation default to a structured-outputs-capable model (`claude-sonnet-5`), added the fake-Vercel smoke (`pnpm verify:vercel`, CI `vercel-shape` job), and fixed a dozen audit-found bugs across core/server/web. See [docs/ROADMAP.md](docs/ROADMAP.md) for the honest record and open threads (notably: live mode is provider-unit-tested and cost-capped but still unexercised against the real API from this machine). The Vercel deployment is live at <https://uchronia-server.vercel.app/> (confirmed 2026-07-26). The full mock-mode product works keyless: `pnpm dev:mock`, then "load the showcase chronicle" on the empty Atlas. Deployment posture: [docs/DEPLOY.md](docs/DEPLOY.md) + ADR-0003 (mock is public, live is local).
+**v0.1.0 shipped + the 0.2 hardening series (2026-07-23) + the deployment-hardening pass (2026-07-26)**: all milestones M0–M12 complete, then a ~15-commit audit-driven pass (graph-fed generation, region-aware convergence, entity lifecycle/9th validator rule, dial-aware critic, generation locking + import validation + era healing, abort/usage/cost ceiling, lifecycle routes, web code-splitting, CI matrix, Docker), then a full line-by-line audit that rebuilt the Vercel chain on a prebundled function (`build:vercel` → `api/index.mjs`, with a body-reconstructing `(req, res)` bridge for the Node runtime's helpers), pinned the toolchain (Node ≥ 22.13, pnpm without corepack), moved the generation default to a structured-outputs-capable model (`claude-sonnet-5`), added the fake-Vercel smoke (`pnpm verify:vercel`, CI `vercel-shape` job), fixed a dozen audit-found bugs across core/server/web, and removed em dashes repo-wide. See [docs/ROADMAP.md](docs/ROADMAP.md) for the honest record and open threads (notably: live mode is provider-unit-tested and cost-capped but still unexercised against the real API from this machine). The Vercel deployment is live at <https://uchronia-server.vercel.app/> (confirmed 2026-07-26). The full mock-mode product works keyless: `pnpm dev:mock`, then "load the showcase chronicle" on the empty Atlas. Deployment posture: [docs/DEPLOY.md](docs/DEPLOY.md) + ADR-0003 (mock is public, live is local).
 
 ## 9. Documentation sync directive (binding)
 

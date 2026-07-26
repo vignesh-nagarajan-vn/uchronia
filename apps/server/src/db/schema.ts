@@ -22,7 +22,7 @@ import { index, integer, real, sqliteTable, text, uniqueIndex } from 'drizzle-or
 /**
  * Persistence mirrors packages/schemas one-to-one; nested objects live in JSON
  * columns. Referential integrity is core's job (validator + store guards), so
- * no SQL foreign keys — deletes run as explicit transactions in the repo.
+ * no SQL foreign keys - deletes run as explicit transactions in the repo.
  */
 
 export const timelines = sqliteTable('timelines', {

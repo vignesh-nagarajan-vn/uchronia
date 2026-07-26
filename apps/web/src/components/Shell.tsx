@@ -46,7 +46,7 @@ export function Shell({
             {config.data?.mock && (
               <span
                 className="stamp rounded-[2px] border border-rule px-1.5 py-0.5 text-ink-faded"
-                title="deterministic mock engine — no API key in play"
+                title="deterministic mock engine - no API key in play"
               >
                 mock
               </span>

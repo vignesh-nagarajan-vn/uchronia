@@ -17,7 +17,7 @@ export const systemClock: Clock = {
   now: () => new Date(),
 }
 
-/** Production id generation — monotonic-ish real ULIDs. */
+/** Production id generation - monotonic-ish real ULIDs. */
 export function ulidIdGen(): IdGen {
   return { next: () => ulid() }
 }
@@ -26,7 +26,7 @@ const ALPHABET = '0123456789ABCDEFGHJKMNPQRSTVWXYZ'
 
 /**
  * Deterministic ids for tests and mock runs: valid ULIDs from a two-char kind
- * code and an incrementing counter — stable across runs for identical inputs.
+ * code and an incrementing counter - stable across runs for identical inputs.
  */
 export function sequentialIdGen(kindCode = 'MK', start = 0): IdGen {
   if (!/^[0-9ABCDEFGHJKMNPQRSTVWXYZ]{2}$/.test(kindCode)) {

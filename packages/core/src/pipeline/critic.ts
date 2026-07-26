@@ -143,7 +143,7 @@ export async function refineBatch(args: {
 
     const revisedRefs = new Set<string>()
     // Bounded fan-out: up to REVISION_CONCURRENCY provider calls in flight,
-    // not one per flagged draft — a rate-limit and latency courtesy that the
+    // not one per flagged draft - a rate-limit and latency courtesy that the
     // deterministic mock never notices.
     const revised: (typeof drafts)[number][] = []
     for (let i = 0; i < needsRevision.length; i += REVISION_CONCURRENCY) {
@@ -195,7 +195,7 @@ export async function refineBatch(args: {
     if ((assessment.machine.get(draft.ref) ?? []).length > 0) {
       droppedRefs.push(draft.ref)
       warnings.push(
-        `"${draft.title}" dropped — machine rules still failing after ${MAX_REVISIONS} revisions: ${(assessment.machine.get(draft.ref) ?? []).join('; ')}`,
+        `"${draft.title}" dropped - machine rules still failing after ${MAX_REVISIONS} revisions: ${(assessment.machine.get(draft.ref) ?? []).join('; ')}`,
       )
       continue
     }
@@ -242,7 +242,7 @@ export async function refineBatch(args: {
 }
 
 /**
- * Resolve every cause ref the drafts cite to a title the critic can weigh —
+ * Resolve every cause ref the drafts cite to a title the critic can weigh -
  * without this the "stated causes cannot carry the weight" criterion is
  * unjudgeable, since e<n>/d<n> handles carry no meaning on their own.
  */
@@ -260,14 +260,14 @@ export function buildCauseGlossary(world: World, branchId: string, drafts: Draft
         lines.push(
           event
             ? `${cause.ref} = ${event.title} (${event.date.label}): ${event.summary}`
-            : `${cause.ref} = (resolves to no event — treat as an unsupported cause)`,
+            : `${cause.ref} = (resolves to no event - treat as an unsupported cause)`,
         )
       } else {
         const other = byRef.get(cause.ref)
         lines.push(
           other
             ? `${cause.ref} = ${other.title} (draft in this batch)`
-            : `${cause.ref} = (no such draft — treat as an unsupported cause)`,
+            : `${cause.ref} = (no such draft - treat as an unsupported cause)`,
         )
       }
     }

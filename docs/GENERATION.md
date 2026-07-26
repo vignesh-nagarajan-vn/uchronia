@@ -36,7 +36,7 @@ Handles, never ULIDs: entity **slugs**, `e<n>` = 1-based position in the branch'
 | generation | `claude-sonnet-5` | `UCHRONIA_MODEL_GENERATION` |
 | critic + cheap utility | `claude-haiku-4-5-20251001` | `UCHRONIA_MODEL_CRITIC` |
 
-The generation model must support structured outputs — the provider sends `output_config.format` on every call (`claude-sonnet-4-6`, the previous default, does not; overriding to it would 400 in live mode).
+The generation model must support structured outputs - the provider sends `output_config.format` on every call (`claude-sonnet-4-6`, the previous default, does not; overriding to it would 400 in live mode).
 
 Role → model happens inside the provider; templates declare `role`. Mock mode (`UCHRONIA_MOCK=1`, or no key present) swaps the whole app onto the deterministic `MockProvider`: seeded per request, identical inputs → identical fixtures; arbitrary PODs work (intake reads years/mechanism/region from text, including aviation-age technology and North American markers; seed generation draws period- and region-appropriate names from era-bucketed flavor banks, with seeded sentence variants and six titles per mechanism so parallel ledgers read differently). CI runs exclusively in mock.
 

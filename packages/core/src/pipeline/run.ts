@@ -47,7 +47,7 @@ export function branchOriginYear(world: World, branchId: string): number {
 
 /**
  * The generation run (§4.1): seed consequences for a fresh root, then the era
- * loop — pressures → era batch → dual review → commit → convergence scan —
+ * loop - pressures → era batch → dual review → commit → convergence scan -
  * until the timeline's horizon. Era ordinals index into a fixed plan, so an
  * interrupted run resumes at the next unwritten era. Mutates `world` in step
  * with the events it yields; the caller persists.
@@ -114,7 +114,7 @@ export async function* runGeneration(
     if (ctx.signal?.aborted) throw new GenerationAbortedError()
     const span = plan[i]
     if (!span) break
-    // P2 discipline is measured from this branch's OWN divergence — a child
+    // P2 discipline is measured from this branch's OWN divergence - a child
     // forked a century downstream opens as tightly as a fresh root would.
     const distance = Math.max(0, span.startYear - originYear)
     const podDistance = Math.max(0, span.startYear - pod.year)
@@ -125,7 +125,7 @@ export async function* runGeneration(
     const previousPressures = world.ownEras(branchId)[i - 1]?.pressures ?? []
 
     // §4.3 pressures, with the dial's convergence-pressure term (§4.4c).
-    // Attractors come from the POD's own theatre first — a distant region's
+    // Attractors come from the POD's own theatre first - a distant region's
     // record is not a channel this history can rhyme into.
     const attractorHints = anchorsNear(midYear, halfWidth + 30, {
       region: pod.region,
@@ -232,7 +232,7 @@ async function* runReviewedEra(
   if (candidates.length > 0) {
     const idToRef = new Map([...refined.batch.refToEventId].map(([ref, id]) => [id, ref]))
     // The era is already committed; a failed scan must not undo it. Degrade to
-    // a warning and let the era stand unscanned — aborts still propagate.
+    // a warning and let the era stand unscanned - aborts still propagate.
     let scan: GeneratedValue<ConvergenceScanOut> | null
     try {
       scan = await generateStructured(
@@ -257,7 +257,7 @@ async function* runReviewedEra(
       const message = error instanceof Error ? error.message : String(error)
       yield {
         type: 'warning',
-        message: `convergence scan failed for era "${era.title}" — the era stands, unscanned: ${message}`,
+        message: `convergence scan failed for era "${era.title}" - the era stands, unscanned: ${message}`,
       }
     }
     const candidateIds = new Set(candidates.map((c) => c.id))

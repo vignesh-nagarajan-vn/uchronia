@@ -11,7 +11,7 @@ import { openDatabase } from './db/client.js'
 import { Repo } from './db/repo.js'
 import { AnthropicProvider } from './providers/anthropic.js'
 
-/** Everything the routes need, injected — tests build their own. */
+/** Everything the routes need, injected - tests build their own. */
 export interface ServerDeps {
   config: ServerConfig
   repo: Repo

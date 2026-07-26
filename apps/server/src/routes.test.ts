@@ -32,7 +32,7 @@ describe('meta routes', () => {
   })
 })
 
-describe('POST /api/timelines — pod intake', () => {
+describe('POST /api/timelines - pod intake', () => {
   it('creates a timeline with a normalized pod and root branch', async () => {
     const { app } = makeTestApp()
     const res = await postJson(app, '/api/timelines', {
@@ -108,7 +108,7 @@ describe('aggregate round-trip through the API', () => {
     const broken = fixtureAggregate()
     const event = broken.events[0]
     if (!event) throw new Error('fixture missing')
-    // Valid ULID, but no such era exists — every later read would 500 forever.
+    // Valid ULID, but no such era exists - every later read would 500 forever.
     event.eraId = '01ER00000000000000000000ZZ'
     const res = await postJson(app, '/api/import', broken)
     expect(res.status).toBe(422)

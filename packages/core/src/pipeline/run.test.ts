@@ -63,7 +63,7 @@ async function collect(gen: AsyncGenerator<PipelineEvent>): Promise<PipelineEven
   return out
 }
 
-describe('runGeneration — full pipeline (mock)', () => {
+describe('runGeneration - full pipeline (mock)', () => {
   it('generates seed plus the era loop out to the horizon', async () => {
     const { world, branchId } = freshWorld()
     const events = await collect(runGeneration(ctx(), world, branchId))
@@ -136,7 +136,7 @@ describe('runGeneration — full pipeline (mock)', () => {
 
   it('resumes an interrupted run at the next unwritten era', async () => {
     const { world, branchId } = freshWorld()
-    // One ctx across both runs — like the server, whose idgen outlives runs.
+    // One ctx across both runs - like the server, whose idgen outlives runs.
     const sharedCtx = ctx()
     // Interrupt after the third era completes.
     let eraCount = 0
@@ -150,7 +150,7 @@ describe('runGeneration — full pipeline (mock)', () => {
     await run.return(undefined)
     expect(world.ownEras(branchId)).toHaveLength(3)
 
-    // A second run continues — no reseeding, no duplicate eras.
+    // A second run continues - no reseeding, no duplicate eras.
     await collect(runGeneration(sharedCtx, world, branchId))
     const eras = world.ownEras(branchId)
     expect(eras.length).toBeGreaterThanOrEqual(5)

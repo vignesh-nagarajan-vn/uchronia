@@ -34,7 +34,7 @@ export interface TokenUsage {
 }
 
 export interface StructuredResult {
-  /** Parsed JSON value. NOT yet schema-validated — the pipeline validates and repairs. */
+  /** Parsed JSON value. NOT yet schema-validated - the pipeline validates and repairs. */
   value: unknown
   raw: string
   model: string

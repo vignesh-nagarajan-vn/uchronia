@@ -22,7 +22,7 @@ export interface RegenerateArgs {
 export const regenerateEvent: PromptTemplate<RegenerateArgs, RegeneratedEventOut> = {
   id: 'regenerate-event',
   version: '1.1.0',
-  changelog: ['1.0.0 — initial template', '1.1.0 — human voice mandate; dial register threaded in'],
+  changelog: ['1.0.0 - initial template', '1.1.0 - human voice mandate; dial register threaded in'],
   role: 'generation',
   schemaName: 'RegeneratedEventOut',
   schema: RegeneratedEventOut,

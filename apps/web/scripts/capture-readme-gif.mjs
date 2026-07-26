@@ -67,7 +67,7 @@ async function main() {
     await shoot()
   }
 
-  // Back to the divergence, then hover inside the seed cluster — its causal
+  // Back to the divergence, then hover inside the seed cluster - its causal
   // relatives sit close, so the red threads land on screen.
   await page.getByTestId('timeline-scroll').evaluate((el) => {
     el.scrollTop = 0

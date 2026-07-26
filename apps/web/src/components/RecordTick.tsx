@@ -2,7 +2,7 @@ import type { BaselineAnchor } from '@uchronia/schemas'
 import { formatYear } from '../lib/format.js'
 
 /**
- * A baseline anchor on the record rail (F7): unmistakably *record*, not ink —
+ * A baseline anchor on the record rail (F7): unmistakably *record*, not ink -
  * mono, Prussian blue, non-interactive.
  */
 export function RecordTick({ anchor }: { anchor: BaselineAnchor }) {
@@ -15,7 +15,7 @@ export function RecordTick({ anchor }: { anchor: BaselineAnchor }) {
         className="min-w-0 truncate font-data text-[12px] text-record/80"
         title={anchor.summary}
       >
-        — {anchor.title}
+        – {anchor.title}
       </span>
     </div>
   )

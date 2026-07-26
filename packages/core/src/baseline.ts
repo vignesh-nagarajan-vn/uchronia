@@ -3,7 +3,7 @@ import rawDataset from '../data/baseline.json' with { type: 'json' }
 
 let cached: BaselineDataset | null = null
 
-/** The curated real-history spine (F7) — parsed once, validated always. */
+/** The curated real-history spine (F7) - parsed once, validated always. */
 export function loadBaseline(): BaselineDataset {
   if (!cached) cached = BaselineDataset.parse(rawDataset)
   return cached
@@ -39,7 +39,7 @@ const ADJACENT_LOWER: ReadonlyMap<string, readonly string[]> = new Map(
 /**
  * Rank an anchor for a given POD region: 0 = same theatre (or either side is
  * global), 1 = adjacent theatre, 2 = elsewhere. Convergence is about the same
- * pressure discharging into the same channel — a Ming fleet is not an
+ * pressure discharging into the same channel - a Ming fleet is not an
  * attractor for an Alexandrian divergence, however close its year.
  */
 function regionRank(anchorRegion: string, podRegion: string): number {
@@ -52,7 +52,7 @@ function regionRank(anchorRegion: string, podRegion: string): number {
 
 /**
  * Anchors within ±window years of a given year. When a `region` is given,
- * same-theatre anchors rank first, adjacent theatres second, the rest last —
+ * same-theatre anchors rank first, adjacent theatres second, the rest last -
  * year proximity breaks ties within each tier, so off-region anchors still
  * fill the tail where the record is sparse rather than crowding out the
  * relevant ones. `limit` caps the result after ranking.

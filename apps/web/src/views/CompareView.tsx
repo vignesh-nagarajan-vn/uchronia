@@ -7,7 +7,7 @@ import { EmptyState, ErrorState, Shell } from '../components/Shell.js'
 import { api } from '../lib/api.js'
 import { formatYear } from '../lib/format.js'
 
-/** The b side carries an explicit tag — never guessed from object shape. */
+/** The b side carries an explicit tag - never guessed from object shape. */
 type BSideItem = { kind: 'event'; event: EventView } | { kind: 'anchor'; anchor: BaselineAnchor }
 
 interface YearRow {
@@ -16,7 +16,7 @@ interface YearRow {
   b: BSideItem[]
 }
 
-/** V6 — Compare: two spines, one scroll; shared prefix washed in record blue. */
+/** V6 - Compare: two spines, one scroll; shared prefix washed in record blue. */
 export function CompareView() {
   const { timelineId = '' } = useParams()
   const [params] = useSearchParams()

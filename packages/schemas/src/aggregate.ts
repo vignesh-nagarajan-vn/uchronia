@@ -12,7 +12,7 @@ import { Timeline } from './timeline.js'
 
 /**
  * A whole timeline as one document: the persistence hydration shape, the JSON
- * export/import format (F10), and the fixture format — one schema for all
+ * export/import format (F10), and the fixture format - one schema for all
  * three so they can never drift apart.
  */
 export const TimelineAggregate = z.object({

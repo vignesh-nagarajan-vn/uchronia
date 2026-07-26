@@ -10,7 +10,7 @@ export type EntityType = z.infer<typeof EntityType>
 /**
  * The persisted entity: identity plus the state it was introduced with.
  * Branch-local state and the changeLog are *derived* by replaying the deltas
- * of the events visible on a branch (see docs/DATA_MODEL.md) — the API serves
+ * of the events visible on a branch (see docs/DATA_MODEL.md) - the API serves
  * {@link EntityView}.
  */
 export const Entity = z.object({
@@ -45,7 +45,7 @@ export const EntityView = Entity.extend({
   changeLog: z.array(LedgerLine),
   /**
    * Event whose terminal delta ended this entity on THIS branch; null while
-   * it lives. Derived by replay (see StateDelta.ends) — never stored, so a
+   * it lives. Derived by replay (see StateDelta.ends) - never stored, so a
    * sibling branch that cannot see the ending event still shows it alive.
    */
   endedByEventId: UlidString.nullable().default(null),

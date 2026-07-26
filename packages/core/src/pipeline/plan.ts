@@ -10,7 +10,7 @@ const WIDTHS = [2, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987] as const
  * The fixed era plan for a branch: spans covering (fromYear → toYear], the
  * first a tight seed window, each later era wider than the last. A branch's
  * own era ordinals index straight into its plan, which is what makes
- * interrupted runs resumable — generation continues at plan[ownEras.length].
+ * interrupted runs resumable - generation continues at plan[ownEras.length].
  */
 export function planEraSpans(fromYear: number, toYear: number): EraSpan[] {
   if (toYear <= fromYear) return []

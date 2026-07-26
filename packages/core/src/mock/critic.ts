@@ -6,8 +6,8 @@ import type { Rng } from '../rng.js'
 /**
  * Deterministic critic for mock mode. Rules mirror the live rubric closely
  * enough to exercise every pipeline path:
- *  - "suddenly" / "great war" in a summary → revise (cliche-collapse) — fixable
- *  - plausibility < 0.35 → dispute (implausible-leap) — kept and marked
+ *  - "suddenly" / "great war" in a summary → revise (cliche-collapse) - fixable
+ *  - plausibility < 0.35 → dispute (implausible-leap) - kept and marked
  *  - otherwise pass, occasionally with a harmless note
  */
 export function mockCriticReview(rawArgs: unknown, rng: Rng): CritiqueOut {
@@ -62,7 +62,7 @@ export function mockCriticReview(rawArgs: unknown, rng: Rng): CritiqueOut {
 
 /**
  * Deterministic repair: fixes exactly the cliche marker the mock critic
- * flags (and nothing else — machine-level flaws like out-of-era years are
+ * flags (and nothing else - machine-level flaws like out-of-era years are
  * left in place so the drop path stays testable).
  */
 export function mockRegenerateEvent(rawArgs: unknown, _rng: Rng): RegeneratedEventOut {

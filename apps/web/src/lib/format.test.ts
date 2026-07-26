@@ -17,7 +17,7 @@ describe('formatYear', () => {
   })
 
   it('handles non-finite input', () => {
-    expect(formatYear(Number.NaN)).toBe('—')
+    expect(formatYear(Number.NaN)).toBe('–')
   })
 })
 

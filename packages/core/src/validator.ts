@@ -3,7 +3,7 @@ import type { World } from './world.js'
 /**
  * The machine validator (§P4): pure-code graph rules that cannot be argued
  * with. It runs over a branch's resolved view before commits are accepted and
- * again in tests over hydrated aggregates. Rules never throw — they report.
+ * again in tests over hydrated aggregates. Rules never throw - they report.
  */
 export type RuleId =
   | 'dates-monotonic'

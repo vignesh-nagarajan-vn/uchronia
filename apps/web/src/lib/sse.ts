@@ -49,7 +49,7 @@ export async function* streamGeneration(
     }
   } finally {
     // A consumer that breaks out early must close the HTTP body, not just
-    // release the lock — otherwise the connection leaks.
+    // release the lock - otherwise the connection leaks.
     try {
       await reader.cancel()
     } catch {}

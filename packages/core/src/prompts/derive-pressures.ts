@@ -10,7 +10,7 @@ export interface PressuresArgs {
   nextSpan: { startYear: number; endYear: number }
   distanceYears: number
   dial: DialParams
-  /** Titles of nearby baseline anchors — the attractors, at high railroadness. */
+  /** Titles of nearby baseline anchors - the attractors, at high railroadness. */
   attractorHints: string[]
   /** What drove the era before this one; each must be carried, escalated, or discharged. */
   previousPressures: Pressure[]
@@ -20,16 +20,16 @@ export interface PressuresArgs {
  * §4.3: read the current world-state and name the 3–7 active tensions that
  * will drive the next era. This is what makes era N+1 feel *caused by* era N
  * instead of merely following it. The dial's convergence-pressure term (§4.4c)
- * enters here — continuously: attractors are context at low dials, a magnet at
+ * enters here - continuously: attractors are context at low dials, a magnet at
  * high ones, with the shift landing on the band edges rather than mid-band.
  */
 export const derivePressures: PromptTemplate<PressuresArgs, PressuresOut> = {
   id: 'derive-pressures',
   version: '1.2.0',
   changelog: [
-    '1.0.0 — initial template',
-    '1.1.0 — attractor language scales with the dial instead of a mid-band cliff; previous pressures must be carried or discharged',
-    '1.2.0 — prompt strings stop modeling the em dash',
+    '1.0.0 - initial template',
+    '1.1.0 - attractor language scales with the dial instead of a mid-band cliff; previous pressures must be carried or discharged',
+    '1.2.0 - prompt strings stop modeling the em dash',
   ],
   role: 'critic',
   schemaName: 'PressuresOut',

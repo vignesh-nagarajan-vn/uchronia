@@ -7,7 +7,7 @@ export interface GenerationState {
   status: 'idle' | 'running' | 'done' | 'error'
   currentEra: string | null
   error: string | null
-  /** Event ids that arrived over this stream — the ink-in set. */
+  /** Event ids that arrived over this stream - the ink-in set. */
   freshIds: Set<string>
   /** What the run cost, when the provider metered it (live mode). */
   usage: { inputTokens: number; outputTokens: number } | null
@@ -44,8 +44,8 @@ export function useGeneration(branchId: string) {
       queryClient.setQueryData<BranchView>(key, (old) => (old ? fn(old) : old))
     }
 
-    // A stream that ends without run.completed/run.error was severed —
-    // network drop or a serverless duration cap — and must not be presented
+    // A stream that ends without run.completed/run.error was severed -
+    // network drop or a serverless duration cap - and must not be presented
     // as a finished derivation.
     let sawTerminalFrame = false
     try {
@@ -180,7 +180,7 @@ export function useGeneration(branchId: string) {
           status: 'error',
           currentEra: null,
           error:
-            'the stream ended before the run finished (a network drop or a serverless time limit); everything accepted so far is saved — derive again to continue',
+            'the stream ended before the run finished (a network drop or a serverless time limit); everything accepted so far is saved - derive again to continue',
         }))
       } else {
         setState((s) => (s.status === 'error' ? s : { ...s, status: 'done', currentEra: null }))

@@ -8,7 +8,7 @@ import { generateStructured } from './structured.js'
 
 /**
  * Lazy expanders (§4.1 stage 5, P5): depth on demand, conditioned on the
- * branch-local state at that point in time. All three fill exactly once —
+ * branch-local state at that point in time. All three fill exactly once -
  * a second request returns the stored text.
  */
 
@@ -40,7 +40,7 @@ export async function expandEvent(
     .map((e) => describe(e.toEventId))
     .filter((s): s is string => s !== null)
 
-  // The snapshot *as of this event* — not the branch's present (P1/P5).
+  // The snapshot *as of this event* - not the branch's present (P1/P5).
   const stateLines: string[] = []
   const stateAtEvent = world.stateAt(branchId, eventId)
   for (const entity of world.resolveEntities(branchId)) {

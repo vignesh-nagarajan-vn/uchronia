@@ -21,7 +21,7 @@ export type MockHandler = (args: unknown, rng: Rng) => unknown
 /**
  * The deterministic provider that makes the whole app demoable without an API
  * key (§4.6). Handlers are keyed by template id; each seeds a PRNG from the
- * request's seedKey, so identical inputs always produce identical fixtures —
+ * request's seedKey, so identical inputs always produce identical fixtures -
  * that determinism is what CI and the integration tests stand on.
  *
  * Handlers are registered per pipeline stage as the milestones land.

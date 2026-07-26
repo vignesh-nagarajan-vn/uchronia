@@ -13,7 +13,7 @@ const NOTE_TEMPLATES = [
 
 /**
  * Deterministic convergence detection for mock mode: at most one match per
- * era — the event/anchor pair with the smallest year gap within 30 years,
+ * era - the event/anchor pair with the smallest year gap within 30 years,
  * gated so convergence stays special rather than routine.
  */
 export function mockConvergenceScan(rawArgs: unknown, rng: Rng): ConvergenceScanOut {

@@ -11,7 +11,7 @@ export interface PipelineCtx {
   clock: Clock
   /** Cooperative cancellation for the whole run (client disconnect, budget cap). */
   signal?: AbortSignal
-  /** Usage sink — the server sums this into cost accounting and ceilings. */
+  /** Usage sink - the server sums this into cost accounting and ceilings. */
   onUsage?: (usage: TokenUsage, templateId: string, model: string) => void
 }
 

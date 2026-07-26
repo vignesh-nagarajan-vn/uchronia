@@ -23,7 +23,7 @@ function recordToFacts(record: StateRecord): StateFact[] {
  * identity. Position, era, and causal edges stay; title, summary, lenses,
  * plausibility, and deltas are rewritten conditioned on the state as of the
  * moment before the event. The replacement is trial-validated on a clone
- * before it lands — a fresh telling must not corrupt the replay. A disputed
+ * before it lands - a fresh telling must not corrupt the replay. A disputed
  * flag is cleared (regeneration is the reader's remedy); stale detail resets.
  */
 export async function regenerateCommittedEvent(

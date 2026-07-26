@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-/** Crockford base32, 26 chars — the ULID wire format. All ids in Uchronia are ULIDs. */
+/** Crockford base32, 26 chars - the ULID wire format. All ids in Uchronia are ULIDs. */
 export const ULID_REGEX = /^[0-9A-HJKMNP-TV-Z]{26}$/
 
 export const UlidString = z.string().regex(ULID_REGEX, 'expected a ULID')

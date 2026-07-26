@@ -4,7 +4,7 @@ import { EmptyState, ErrorState, Shell } from '../components/Shell.js'
 import { api } from '../lib/api.js'
 import { useBranchView } from './TimelineView.js'
 
-/** V4 — the dossier: state ledger (each line linked to its event) + biography. */
+/** V4 - the dossier: state ledger (each line linked to its event) + biography. */
 export function Dossier() {
   const { timelineId = '', branchId = '', entityId = '' } = useParams()
   const view = useBranchView(branchId)
@@ -90,7 +90,7 @@ export function Dossier() {
 
         <section className="mt-8" aria-label="the ledger">
           <h2 className="border-b border-rule pb-1 font-data text-[13px] text-ink-faded">
-            the ledger — every recorded change
+            the ledger - every recorded change
           </h2>
           {entity.changeLog.length === 0 ? (
             <p className="mt-2 text-[14px] text-ink-faded">

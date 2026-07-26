@@ -28,7 +28,7 @@ export interface EventExpandArgs {
 export const eventExpand: PromptTemplate<EventExpandArgs, ExpandOut> = {
   id: 'event-expand',
   version: '1.1.0',
-  changelog: ['1.0.0 — initial template', '1.1.0 — human voice mandate; dial register threaded in'],
+  changelog: ['1.0.0 - initial template', '1.1.0 - human voice mandate; dial register threaded in'],
   role: 'generation',
   schemaName: 'ExpandOut',
   schema: ExpandOut,
@@ -65,7 +65,7 @@ export interface EraDeepDiveArgs {
 export const eraDeepDive: PromptTemplate<EraDeepDiveArgs, ExpandOut> = {
   id: 'era-deepdive',
   version: '1.1.0',
-  changelog: ['1.0.0 — initial template', '1.1.0 — human voice mandate; dial register threaded in'],
+  changelog: ['1.0.0 - initial template', '1.1.0 - human voice mandate; dial register threaded in'],
   role: 'generation',
   schemaName: 'ExpandOut',
   schema: ExpandOut,
@@ -100,7 +100,7 @@ export interface BiographyArgs {
 export const entityBiography: PromptTemplate<BiographyArgs, BiographyOut> = {
   id: 'entity-biography',
   version: '1.1.0',
-  changelog: ['1.0.0 — initial template', '1.1.0 — human voice mandate; dial register threaded in'],
+  changelog: ['1.0.0 - initial template', '1.1.0 - human voice mandate; dial register threaded in'],
   role: 'generation',
   schemaName: 'BiographyOut',
   schema: BiographyOut,

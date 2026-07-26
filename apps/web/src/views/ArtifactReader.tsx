@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router'
 import { EmptyState, ErrorState, Shell } from '../components/Shell.js'
 import { useBranchView } from './TimelineView.js'
 
-/** V7 — the artifact reader: full-bleed diegetic rendering, one template per kind. */
+/** V7 - the artifact reader: full-bleed diegetic rendering, one template per kind. */
 export function ArtifactReader() {
   const { timelineId = '', branchId = '', artifactId = '' } = useParams()
   const view = useBranchView(branchId)
@@ -65,7 +65,7 @@ export function ArtifactReader() {
       }
     >
       <p className="mx-auto max-w-[760px] pt-6 text-center font-data text-[12px] text-ink-faded">
-        a {artifact.kind} produced from inside this timeline — speculative fiction, not a source
+        a {artifact.kind} produced from inside this timeline - speculative fiction, not a source
       </p>
       <div className="mx-auto mt-4 max-w-[760px]">
         <ArtifactBody artifact={artifact} />

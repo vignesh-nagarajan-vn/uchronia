@@ -45,7 +45,7 @@ export function EventCard({
       )}
       onMouseEnter={() => onHoverChange?.(true)}
       onMouseLeave={() => onHoverChange?.(false)}
-      // Only fire on crossing the card boundary — focus moving between the
+      // Only fire on crossing the card boundary - focus moving between the
       // title and an entity link inside the same card must not flicker the
       // thread overlay.
       onFocus={(e) => {

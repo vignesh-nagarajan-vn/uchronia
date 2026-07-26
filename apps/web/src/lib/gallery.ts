@@ -1,6 +1,6 @@
 import type { Dial, Lens } from '@uchronia/schemas'
 
-/** F1 — the curated starter gallery: twelve divergences spanning eras, regions, mechanisms. */
+/** F1 - the curated starter gallery: twelve divergences spanning eras, regions, mechanisms. */
 export interface GalleryEntry {
   slug: string
   yearLabel: string

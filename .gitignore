@@ -5,7 +5,7 @@ node_modules/
 dist/
 *.tsbuildinfo
 
-# environment — secrets never committed
+# environment - secrets never committed
 .env
 .env.local
 

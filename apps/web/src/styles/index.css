@@ -9,7 +9,7 @@
 @import '@fontsource/ibm-plex-mono/500.css';
 @import 'tailwindcss';
 
-/* RED THREAD tokens — see docs/DESIGN.md. Color carries meaning:
+/* RED THREAD tokens - see docs/DESIGN.md. Color carries meaning:
    record blue = attested history only; thread red = divergence/causality only. */
 @theme {
   --color-paper: #e8eae3;

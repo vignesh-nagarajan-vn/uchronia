@@ -34,6 +34,6 @@ dates-monotonic · event-within-era · edge-endpoints-exist · entities-exist ·
 
 GitHub Actions on push/PR to main, all in mock mode, no secrets:
 
-- **checks** — a 2×2 matrix (ubuntu/windows × node 22/24): pnpm install → biome → typecheck → vitest → build.
-- **vercel-shape** (ubuntu, node 22): `pnpm verify:vercel` (the fake-Vercel smoke above) plus the web build and root-`dist` mirror — the exact steps `vercel.json` runs, on the OS Vercel builds on.
+- **checks** - a 2×2 matrix (ubuntu/windows × node 22/24): pnpm install → biome → typecheck → vitest → build.
+- **vercel-shape** (ubuntu, node 22): `pnpm verify:vercel` (the fake-Vercel smoke above) plus the web build and root-`dist` mirror - the exact steps `vercel.json` runs, on the OS Vercel builds on.
 - **journey** (ubuntu): the Playwright chromium journey; traces upload as artifacts on failure.

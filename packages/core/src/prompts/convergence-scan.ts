@@ -3,7 +3,7 @@ import type { PromptTemplate } from './types.js'
 
 export interface ConvergenceScanArgs {
   podStatement: string
-  /** The POD's theatre — anchors were pre-ranked toward it. */
+  /** The POD's theatre - anchors were pre-ranked toward it. */
   region: string
   /** Committed era events, still labeled by their draft refs. */
   events: Array<{ ref: string; year: number; title: string; summary: string }>
@@ -12,16 +12,16 @@ export interface ConvergenceScanArgs {
 
 /**
  * Stage 4 (§4.1): after each era, ask whether any accepted event *rhymes back
- * into the attested record* — the same structural outcome arriving by another
+ * into the attested record* - the same structural outcome arriving by another
  * road. Matches become first-class ConvergencePoints (P3).
  */
 export const convergenceScan: PromptTemplate<ConvergenceScanArgs, ConvergenceScanOut> = {
   id: 'convergence-scan',
   version: '1.2.0',
   changelog: [
-    '1.0.0 — initial template',
-    '1.1.0 — region-aware: candidates carry their theatre; matches must share it or explain why not',
-    '1.2.0 — prompt strings stop modeling the em dash',
+    '1.0.0 - initial template',
+    '1.1.0 - region-aware: candidates carry their theatre; matches must share it or explain why not',
+    '1.2.0 - prompt strings stop modeling the em dash',
   ],
   role: 'critic',
   schemaName: 'ConvergenceScanOut',

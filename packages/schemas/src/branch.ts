@@ -11,7 +11,7 @@ export type SubPod = z.infer<typeof SubPod>
 /**
  * Branches share structure: a fork stores a parent pointer and the fork event,
  * never a copy. `parentBranchId` is normalized to the branch that *owns* the
- * fork event (which may be an ancestor of the branch the user was viewing —
+ * fork event (which may be an ancestor of the branch the user was viewing -
  * the fork event always sits on the segment that owns it). Pre-fork history is
  * immutable from the child's perspective.
  */

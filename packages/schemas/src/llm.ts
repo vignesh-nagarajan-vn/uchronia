@@ -9,7 +9,7 @@ import { Lens } from './lens.js'
 import { MECHANISMS } from './pod.js'
 
 /**
- * Shapes the LLM produces (drafts) — no ids, no provenance; the pipeline mints
+ * Shapes the LLM produces (drafts) - no ids, no provenance; the pipeline mints
  * those. Prompts hand the model short handles instead of ULIDs: entities are
  * referenced by slug, prior events as `e<ordinal>`, and drafts label
  * themselves `d1..dn` so the critic and the repair loop can point at them.

@@ -11,7 +11,7 @@ export interface CriticArgs {
   recentEvents: string
   /** Every e<n>/d<n> the drafts cite, resolved to titles the critic can weigh. */
   causeGlossary: string
-  /** The timeline's determinism setting — the plausibility bar tracks it. */
+  /** The timeline's determinism setting - the plausibility bar tracks it. */
   dial: DialParams
   drafts: DraftEvent[]
 }
@@ -20,16 +20,16 @@ export interface CriticArgs {
  * The skeptical historian (§4.5). Reviews ONLY against the state snapshot,
  * the causal graph, the POD, and the rubric. It verdicts; it never rewrites.
  * The dial calibrates its implausible-leap bar: a butterfly history is
- * *supposed* to surprise — the question is whether the cited causes carry the
+ * *supposed* to surprise - the question is whether the cited causes carry the
  * weight, not whether the outcome is familiar.
  */
 export const criticReview: PromptTemplate<CriticArgs, CritiqueOut> = {
   id: 'critic-review',
   version: '1.2.0',
   changelog: [
-    '1.0.0 — initial rubric',
-    '1.1.0 — dial-calibrated plausibility bar; cause refs arrive resolved to titles',
-    '1.2.0 — machine mannerisms (em dashes, stock phrasing) are tone violations',
+    '1.0.0 - initial rubric',
+    '1.1.0 - dial-calibrated plausibility bar; cause refs arrive resolved to titles',
+    '1.2.0 - machine mannerisms (em dashes, stock phrasing) are tone violations',
   ],
   role: 'critic',
   schemaName: 'CritiqueOut',

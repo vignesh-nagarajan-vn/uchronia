@@ -3,7 +3,7 @@ import { HUMAN_VOICE, SENSITIVE_HISTORY_STANCE } from './fragments.js'
 import type { PromptTemplate } from './types.js'
 
 /**
- * F8 — diegetic artifacts: primary sources produced from INSIDE the timeline.
+ * F8 - diegetic artifacts: primary sources produced from INSIDE the timeline.
  * The writer is a person of that world; they know nothing of our history and
  * never wink at it. Anachronism in voice is as much a failure as in fact.
  */
@@ -36,7 +36,7 @@ ${SENSITIVE_HISTORY_STANCE}`
 export const artifactNewspaper: PromptTemplate<ArtifactArgs, NewspaperOut> = {
   id: 'artifact-newspaper',
   version: '1.1.0',
-  changelog: ['1.0.0 — initial template', '1.1.0 — human voice mandate; dial register threaded in'],
+  changelog: ['1.0.0 - initial template', '1.1.0 - human voice mandate; dial register threaded in'],
   role: 'generation',
   schemaName: 'NewspaperOut',
   schema: NewspaperOut,
@@ -63,7 +63,7 @@ Produce the front page.`,
 export const artifactLetter: PromptTemplate<ArtifactArgs, LetterOut> = {
   id: 'artifact-letter',
   version: '1.1.0',
-  changelog: ['1.0.0 — initial template', '1.1.0 — human voice mandate; dial register threaded in'],
+  changelog: ['1.0.0 - initial template', '1.1.0 - human voice mandate; dial register threaded in'],
   role: 'generation',
   schemaName: 'LetterOut',
   schema: LetterOut,
@@ -90,7 +90,7 @@ Write the letter.`,
 export const artifactEncyclopedia: PromptTemplate<ArtifactArgs, EncyclopediaOut> = {
   id: 'artifact-encyclopedia',
   version: '1.1.0',
-  changelog: ['1.0.0 — initial template', '1.1.0 — human voice mandate; dial register threaded in'],
+  changelog: ['1.0.0 - initial template', '1.1.0 - human voice mandate; dial register threaded in'],
   role: 'generation',
   schemaName: 'EncyclopediaOut',
   schema: EncyclopediaOut,
@@ -117,7 +117,7 @@ Write the entry.`,
 export const artifactPoster: PromptTemplate<ArtifactArgs, PosterOut> = {
   id: 'artifact-poster',
   version: '1.1.0',
-  changelog: ['1.0.0 — initial template', '1.1.0 — human voice mandate; dial register threaded in'],
+  changelog: ['1.0.0 - initial template', '1.1.0 - human voice mandate; dial register threaded in'],
   role: 'generation',
   schemaName: 'PosterOut',
   schema: PosterOut,

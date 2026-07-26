@@ -16,7 +16,7 @@ export type PipelineEvent =
   | { type: 'run.started'; branchId: string }
   | { type: 'era.started'; era: Era }
   | { type: 'entity.created'; entity: Entity }
-  /** Disputed events arrive here too — flags.disputed + criticNotes already set. */
+  /** Disputed events arrive here too - flags.disputed + criticNotes already set. */
   | { type: 'event.accepted'; event: Event; edges: CausalEdge[] }
   | { type: 'critique.completed'; report: CritiqueReport }
   | { type: 'convergence.found'; point: ConvergencePoint; eventId: string }

@@ -54,7 +54,7 @@ export function expandRoutes(deps: ServerDeps): Hono {
     return c.json({ era })
   })
 
-  // A fresh telling of a committed event, in place — the reader's remedy for
+  // A fresh telling of a committed event, in place - the reader's remedy for
   // a flat or disputed entry. Validated on a clone before it lands.
   app.post('/branches/:branchId/events/:eventId/regenerate', async (c) => {
     const branchId = c.req.param('branchId')

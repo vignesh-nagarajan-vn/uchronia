@@ -66,7 +66,7 @@ function draft(overrides: Partial<DraftEvent> & { ref: string }): DraftEvent {
   }
 }
 
-describe('refineBatch — dual review (§P4)', () => {
+describe('refineBatch - dual review (§P4)', () => {
   it('passes a clean batch through untouched', async () => {
     const { world, era, ctx } = setup()
     const refined = await refineBatch({

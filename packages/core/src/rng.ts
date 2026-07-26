@@ -1,7 +1,7 @@
 /**
  * Deterministic randomness for the engine.
  *
- * The core never calls Math.random directly — every consumer receives an Rng
+ * The core never calls Math.random directly - every consumer receives an Rng
  * through injection (§6: IO only through injected ports). MockProvider seeds
  * one of these from its inputs so identical requests always produce identical
  * fixtures, which is what makes mock mode testable and CI stable.
@@ -15,7 +15,7 @@ export interface Rng {
   pick<T>(items: readonly T[]): T
 }
 
-/** FNV-1a 32-bit hash — stable, dependency-free seed derivation from strings. */
+/** FNV-1a 32-bit hash - stable, dependency-free seed derivation from strings. */
 export function fnv1a(input: string): number {
   let hash = 0x811c9dc5
   for (let i = 0; i < input.length; i++) {
@@ -25,7 +25,7 @@ export function fnv1a(input: string): number {
   return hash >>> 0
 }
 
-/** mulberry32 — small, fast, deterministic PRNG. */
+/** mulberry32 - small, fast, deterministic PRNG. */
 export function seededRng(seed: number | string): Rng {
   let state = typeof seed === 'string' ? fnv1a(seed) : seed >>> 0
   const next = (): number => {

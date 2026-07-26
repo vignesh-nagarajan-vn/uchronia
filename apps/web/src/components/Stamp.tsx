@@ -1,7 +1,7 @@
 import type { Event } from '@uchronia/schemas'
 import { clsx } from 'clsx'
 
-/** Archival marks: `plausibility 0.82`, `disputed — see critic notes`, `◉` convergence. */
+/** Archival marks: `plausibility 0.82`, `disputed - see critic notes`, `◉` convergence. */
 export function PlausibilityStamp({ score }: { score: number }) {
   return (
     <span className="stamp text-ink-faded" data-testid="plausibility-stamp">
@@ -13,7 +13,7 @@ export function PlausibilityStamp({ score }: { score: number }) {
 export function DisputedMark({ withNotes = true }: { withNotes?: boolean }) {
   return (
     <span className="stamp font-medium text-thread" data-testid="disputed-mark">
-      disputed{withNotes ? ' — see critic notes' : ''}
+      disputed{withNotes ? ' - see critic notes' : ''}
     </span>
   )
 }

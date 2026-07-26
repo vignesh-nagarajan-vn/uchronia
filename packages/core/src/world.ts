@@ -28,7 +28,7 @@ export interface Segment {
 }
 
 /**
- * The in-memory world state of one timeline — the store the pipeline reads
+ * The in-memory world state of one timeline - the store the pipeline reads
  * snapshots from and commits accepted history into. Persistence hydrates it
  * via {@link World.fromAggregate} and saves the mutation stream elsewhere;
  * the class itself performs no IO.
@@ -57,7 +57,7 @@ export class World {
     this.pod = pod
   }
 
-  /** Hydrate from a full aggregate. Structural only — run the validator for semantic checks. */
+  /** Hydrate from a full aggregate. Structural only - run the validator for semantic checks. */
   static fromAggregate(aggregate: TimelineAggregate): World {
     const world = new World(aggregate.timeline, aggregate.pod)
     for (const b of aggregate.branches) world.branches.set(b.id, b)
@@ -290,7 +290,7 @@ export class World {
   }
 
   /**
-   * Entities ended on this branch, with the event that ended each — derived
+   * Entities ended on this branch, with the event that ended each - derived
    * by replay of terminal deltas ({@link StateDelta.ends}), branch-local by
    * construction. Optionally stop the walk at (and including) an event.
    */
@@ -500,7 +500,7 @@ export class World {
 
   /**
    * Replace a committed event's narrative content in place (regeneration).
-   * Identity, position, era, and causal edges are immutable — only the owning
+   * Identity, position, era, and causal edges are immutable - only the owning
    * branch may do this, and the caller validates the branch afterwards (the
    * new deltas re-thread the replay).
    */

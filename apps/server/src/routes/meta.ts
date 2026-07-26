@@ -11,7 +11,7 @@ export function metaRoutes(deps: ServerDeps): Hono {
   app.get('/config', (c) =>
     c.json({
       mock: deps.config.mock,
-      // Boolean only — the key value never leaves config (§F12).
+      // Boolean only - the key value never leaves config (§F12).
       keyConfigured: deps.config.apiKey !== undefined,
       models: deps.config.models,
       defaults: {

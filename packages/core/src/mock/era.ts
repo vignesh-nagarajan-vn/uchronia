@@ -31,7 +31,7 @@ const ERA_TITLES = [
   'Old Roads, New Traffic',
 ]
 
-/** New actors introduced as history widens — one bank per era ordinal, no slug collisions. */
+/** New actors introduced as history widens - one bank per era ordinal, no slug collisions. */
 const NEW_ENTITY_BANKS: Record<
   number,
   {
@@ -77,7 +77,7 @@ type Archetype = (args: {
 }) => DraftEvent
 
 const archetypes: Archetype[] = [
-  // council / reform — political
+  // council / reform - political
   ({ ref, year, yearLabel, roster, pressure }) => ({
     ref,
     year,
@@ -102,7 +102,7 @@ const archetypes: Archetype[] = [
     },
     wildcard: false,
   }),
-  // market / prices — economic + daily-life
+  // market / prices - economic + daily-life
   ({ ref, year, yearLabel, roster, pressure }) => ({
     ref,
     year,
@@ -130,7 +130,7 @@ const archetypes: Archetype[] = [
     },
     wildcard: false,
   }),
-  // technique diffusion — technological
+  // technique diffusion - technological
   ({ ref, year, yearLabel, roster, pressure }) => ({
     ref,
     year,
@@ -154,7 +154,7 @@ const archetypes: Archetype[] = [
     },
     wildcard: false,
   }),
-  // school / canon — cultural
+  // school / canon - cultural
   ({ ref, year, yearLabel, roster, pressure }) => ({
     ref,
     year,
@@ -178,7 +178,7 @@ const archetypes: Archetype[] = [
     },
     wildcard: false,
   }),
-  // frontier / rival — political
+  // frontier / rival - political
   ({ ref, year, yearLabel, roster, pressure }) => ({
     ref,
     year,
@@ -202,7 +202,7 @@ const archetypes: Archetype[] = [
     },
     wildcard: false,
   }),
-  // person / generation — daily-life
+  // person / generation - daily-life
   ({ ref, year, yearLabel, roster, pressure }) => ({
     ref,
     year,

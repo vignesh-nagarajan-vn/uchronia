@@ -5,7 +5,7 @@ import { EmptyState, ErrorState, Shell } from '../components/Shell.js'
 import { api } from '../lib/api.js'
 import { useTheme } from '../lib/theme.js'
 
-/** V8 — Settings (F12): model config, key status, theme, import. */
+/** V8 - Settings (F12): model config, key status, theme, import. */
 export function SettingsView() {
   const config = useQuery({ queryKey: ['config'], queryFn: api.config })
   const { theme, toggle } = useTheme()
@@ -54,12 +54,12 @@ export function SettingsView() {
           </h2>
           <dl className="mt-2 space-y-1.5">
             <SettingRow k="mode">
-              {c.mock ? 'mock — deterministic, keyless' : 'live — Anthropic API'}
+              {c.mock ? 'mock - deterministic, keyless' : 'live - Anthropic API'}
             </SettingRow>
             <SettingRow k="API key">
               {c.keyConfigured
                 ? 'configured (value never shown, never sent to this page)'
-                : 'not configured — set ANTHROPIC_API_KEY server-side'}
+                : 'not configured - set ANTHROPIC_API_KEY server-side'}
             </SettingRow>
             <SettingRow k="generation model">{c.models.generation}</SettingRow>
             <SettingRow k="critic model">{c.models.critic}</SettingRow>

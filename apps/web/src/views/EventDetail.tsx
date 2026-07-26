@@ -14,7 +14,7 @@ import {
 import { api } from '../lib/api.js'
 import { useBranchView } from './TimelineView.js'
 
-/** V3 — the event unfolded: narrative, causal neighborhood, artifacts, critique. */
+/** V3 - the event unfolded: narrative, causal neighborhood, artifacts, critique. */
 export function EventDetail() {
   const { timelineId = '', branchId = '', eventId = '' } = useParams()
   const view = useBranchView(branchId)
@@ -192,7 +192,7 @@ export function EventDetail() {
             className="mt-6 border-l-2 border-thread bg-thread-wash px-4 py-3"
             aria-label="critic notes"
           >
-            <p className="stamp text-thread">disputed — the critic's notes, attached</p>
+            <p className="stamp text-thread">disputed - the critic's notes, attached</p>
             <ul className="mt-2 space-y-2">
               {event.criticNotes.map((note, noteIndex) => (
                 // biome-ignore lint/suspicious/noArrayIndexKey: static critique list; two notes can share their text

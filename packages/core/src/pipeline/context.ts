@@ -8,10 +8,10 @@ export function renderValue(value: StateValue): string {
 
 /**
  * Compact world-state snapshot for prompts: one line per living entity,
- * ledger-style. This is what generation and critique condition on (P1) —
+ * ledger-style. This is what generation and critique condition on (P1) -
  * never accumulated prose. The snapshot is budgeted: entities rank by how
  * recently the history touched them, cold ones are withheld with a count,
- * and each line keeps only its most recently written facts — an old world
+ * and each line keeps only its most recently written facts - an old world
  * must not drown the "what matters now" signal (or the token budget).
  * Ended entities collapse into a terse terminal line.
  */
@@ -94,13 +94,13 @@ export function summarizeState(
  * The recent visible past, referenceable as e<n> (1-based position in the
  * branch's visible history). Each line carries its causal parents as
  * `[from e<n>, …]` so generation can extend existing chains instead of
- * inventing disconnected ones — the graph feeds the loop, not just the UI.
+ * inventing disconnected ones - the graph feeds the loop, not just the UI.
  * `limit` keeps prompts bounded; the numbering always reflects absolute
  * positions so refs stay stable.
  */
 export function summarizeRecentEvents(world: World, branchId: string, limit = 12): string {
   const events = world.resolveEvents(branchId)
-  if (events.length === 0) return '(no events yet — this is the first batch)'
+  if (events.length === 0) return '(no events yet - this is the first batch)'
 
   const positionById = new Map(events.map((e, i) => [e.id, i + 1]))
   const causesByEvent = new Map<string, number[]>()

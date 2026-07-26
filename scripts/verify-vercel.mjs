@@ -8,7 +8,7 @@
  * HTML export embeds its typefaces from the staged fonts.
  *
  * Run via `pnpm verify:vercel` (which builds the bundle first). CI runs it on
- * the ubuntu leg — the same OS Vercel builds on.
+ * the ubuntu leg - the same OS Vercel builds on.
  */
 import assert from 'node:assert/strict'
 import { cpSync, existsSync, mkdirSync, rmSync } from 'node:fs'
@@ -23,13 +23,13 @@ const bundle = join(serverDir, 'dist', 'vercel.js')
 
 if (!existsSync(bundle)) {
   console.error(
-    'apps/server/dist/vercel.js missing — run `pnpm --filter @uchronia/server build:vercel` first',
+    'apps/server/dist/vercel.js missing - run `pnpm --filter @uchronia/server build:vercel` first',
   )
   process.exit(1)
 }
 for (const staged of ['dist/drizzle/meta/_journal.json', 'dist/fonts']) {
   if (!existsSync(join(serverDir, staged))) {
-    console.error(`apps/server/${staged} missing — copy-vercel-assets.mjs did not run?`)
+    console.error(`apps/server/${staged} missing - copy-vercel-assets.mjs did not run?`)
     process.exit(1)
   }
 }
@@ -44,7 +44,7 @@ cpSync(join(repoRoot, 'api', 'index.mjs'), join(stage, 'api', 'index.mjs'))
 cpSync(join(serverDir, 'dist'), join(stage, 'apps', 'server', 'dist'), { recursive: true })
 
 // The database goes to the OS temp dir, mirroring Vercel's /tmp (outside the
-// task root) — and keeping the still-open SQLite handle out of the stage so
+// task root) - and keeping the still-open SQLite handle out of the stage so
 // cleanup works on Windows.
 const dbPath = join(tmpdir(), `uchronia-verify-${process.pid}.db`)
 process.env.VERCEL = '1'
@@ -56,7 +56,7 @@ process.chdir(stage) // /var/task stand-in
 const checks = []
 const check = (name, ok, detail = '') => {
   checks.push([name, ok])
-  console.log(`${ok ? 'PASS' : 'FAIL'}  ${name}${detail ? ` — ${detail}` : ''}`)
+  console.log(`${ok ? 'PASS' : 'FAIL'}  ${name}${detail ? ` - ${detail}` : ''}`)
 }
 
 let server
@@ -82,7 +82,9 @@ try {
   }
   server = createServer((req, res) => {
     const helpersMode = req.headers['x-verify-helpers'] === '1'
-    const run = helpersMode ? simulateVercelHelpers(req).then(() => handler(req, res)) : handler(req, res)
+    const run = helpersMode
+      ? simulateVercelHelpers(req).then(() => handler(req, res))
+      : handler(req, res)
     run.catch((error) => {
       res.statusCode = 500
       res.end(String(error))
@@ -94,7 +96,10 @@ try {
     Promise.race([
       promise,
       new Promise((_, reject) =>
-        setTimeout(() => reject(new Error(`no response for ${label} within 15s: handler hang`)), 15_000),
+        setTimeout(
+          () => reject(new Error(`no response for ${label} within 15s: handler hang`)),
+          15_000,
+        ),
       ),
     ])
   const get = (path) => withTimeout(fetch(`http://127.0.0.1:${port}${path}`), path)
@@ -157,7 +162,11 @@ try {
     created.status === 201 && typeof createdBody.timeline?.id === 'string',
     `HTTP ${created.status}, "${createdBody.timeline?.title ?? '?'}"`,
   )
-  const createdRaw = await post('/api/timelines', { ...pod, podText: 'A second fleet, 1434' }, false)
+  const createdRaw = await post(
+    '/api/timelines',
+    { ...pod, podText: 'A second fleet, 1434' },
+    false,
+  )
   check('POST create works with an intact body stream', createdRaw.status === 201)
 } catch (error) {
   check('handler exercise', false, String(error?.stack ?? error))
@@ -165,7 +174,7 @@ try {
   server?.close()
   process.chdir(repoRoot)
   // Best-effort: the SQLite handle stays open for the process lifetime, and
-  // Windows refuses to delete open files — leftovers land in the OS temp dir.
+  // Windows refuses to delete open files - leftovers land in the OS temp dir.
   for (const path of [stage, dbPath, `${dbPath}-wal`, `${dbPath}-shm`]) {
     try {
       rmSync(path, { recursive: true, force: true })
@@ -178,4 +187,4 @@ if (failed.length > 0) {
   console.error(`\n${failed.length} of ${checks.length} checks failed`)
   process.exit(1)
 }
-console.log(`\nall ${checks.length} checks passed — the function is Vercel-shaped`)
+console.log(`\nall ${checks.length} checks passed - the function is Vercel-shaped`)
