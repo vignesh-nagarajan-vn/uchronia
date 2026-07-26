@@ -26,6 +26,7 @@ COPY --from=build /app /app
 ENV NODE_ENV=production \
     UCHRONIA_MOCK=1 \
     UCHRONIA_PORT=8787 \
+    UCHRONIA_HOST=0.0.0.0 \
     UCHRONIA_DB=/data/uchronia.db \
     UCHRONIA_STATIC_DIR=/app/apps/web/dist \
     UCHRONIA_MOCK_PACE_MS=250

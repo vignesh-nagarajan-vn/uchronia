@@ -9,6 +9,11 @@ import { resolve } from 'node:path'
  */
 export interface ServerConfig {
   port: number
+  /**
+   * Interface the listener binds. Defaults to loopback (SECURITY.md's
+   * localhost-only posture); containers set UCHRONIA_HOST=0.0.0.0.
+   */
+  host: string
   /** True when the whole app runs on the deterministic MockProvider. */
   mock: boolean
   /** Present only in live mode. Treat as a secret. */
@@ -26,8 +31,9 @@ export interface ServerConfig {
   maxRunTokens: number
   /**
    * Mock-mode demo pacing: milliseconds to hold each accepted event before
-   * streaming the next, so the ink-in is visible. 0 (the default, and always
-   * in live mode) streams at full speed; tests and CI leave it unset.
+   * streaming the next, so the ink-in is visible. Defaults to 0 (and is
+   * always 0 in live mode); under Vercel's mock playground it defaults to
+   * 250 so derivations visibly ink in. Tests and CI leave it unset.
    */
   mockPaceMs: number
   /** Serve the built web app from this directory when set (production). */
@@ -39,46 +45,68 @@ export interface ServerConfig {
 }
 
 export const DEFAULT_MODELS = {
-  generation: 'claude-sonnet-4-6',
+  // Generation must support structured outputs (the provider sends
+  // output_config.format on every call); claude-sonnet-5 does, its
+  // predecessor claude-sonnet-4-6 does not.
+  generation: 'claude-sonnet-5',
   critic: 'claude-haiku-4-5-20251001',
 } as const
 
 const truthy = (value: string | undefined): boolean => value === '1' || value === 'true'
 
+/**
+ * An env var that is set-but-empty (the shape a copied template or a blank
+ * dashboard field produces) means "unset": every default below survives it.
+ */
+const text = (value: string | undefined): string | undefined => value?.trim() || undefined
+
+const number = (value: string | undefined): number | undefined => {
+  const raw = text(value)
+  if (raw === undefined) return undefined
+  const parsed = Number(raw)
+  return Number.isFinite(parsed) ? parsed : undefined
+}
+
 export function loadConfig(env: NodeJS.ProcessEnv = process.env): ServerConfig {
-  const apiKey = env.ANTHROPIC_API_KEY?.trim() || undefined
+  const apiKey = text(env.ANTHROPIC_API_KEY)
   const mockRequested = truthy(env.UCHRONIA_MOCK)
   // Mock mode is load-bearing: no key means we degrade to mock rather than crash.
   const mock = mockRequested || apiKey === undefined
-  const maxRunTokens = Number(env.UCHRONIA_MAX_RUN_TOKENS)
-  const mockPaceMs = Number(env.UCHRONIA_MOCK_PACE_MS)
+  const maxRunTokens = number(env.UCHRONIA_MAX_RUN_TOKENS)
+  const mockPaceMs = number(env.UCHRONIA_MOCK_PACE_MS)
   // Serverless (Vercel) has no durable disk: the database lives in /tmp per
   // warm instance, the showcase chronicle seeds it so visitors land on
   // content, and pacing defaults on so derivations visibly ink in. All three
-  // stay overridable through the usual variables.
+  // stay overridable through the usual variables. The /tmp redirect also
+  // applies on any other Lambda-shaped runtime, where the task root is
+  // read-only even when the platform hides the VERCEL variable.
   const onVercel = truthy(env.VERCEL)
+  const serverless =
+    onVercel || env.AWS_LAMBDA_FUNCTION_NAME !== undefined || env.LAMBDA_TASK_ROOT !== undefined
   return {
-    port: Number(env.UCHRONIA_PORT) || 8787,
+    port: number(env.UCHRONIA_PORT) ?? 8787,
+    host: text(env.UCHRONIA_HOST) ?? '127.0.0.1',
     mock,
     apiKey: mock ? undefined : apiKey,
     models: {
-      generation: env.UCHRONIA_MODEL_GENERATION?.trim() || DEFAULT_MODELS.generation,
-      critic: env.UCHRONIA_MODEL_CRITIC?.trim() || DEFAULT_MODELS.critic,
+      generation: text(env.UCHRONIA_MODEL_GENERATION) ?? DEFAULT_MODELS.generation,
+      critic: text(env.UCHRONIA_MODEL_CRITIC) ?? DEFAULT_MODELS.critic,
     },
     dbPath:
-      env.UCHRONIA_DB?.trim() === ':memory:'
+      text(env.UCHRONIA_DB) === ':memory:'
         ? ':memory:'
         : resolve(
-            env.UCHRONIA_DB?.trim() || (onVercel ? '/tmp/uchronia.db' : './data/uchronia.db'),
+            text(env.UCHRONIA_DB) ?? (serverless ? '/tmp/uchronia.db' : './data/uchronia.db'),
           ),
-    maxRunTokens: Number.isFinite(maxRunTokens) ? Math.max(0, maxRunTokens) : 3_000_000,
+    maxRunTokens: maxRunTokens !== undefined ? Math.max(0, maxRunTokens) : 3_000_000,
     mockPaceMs:
-      mock && Number.isFinite(mockPaceMs) ? Math.max(0, mockPaceMs) : mock && onVercel ? 250 : 0,
-    staticDir: env.UCHRONIA_STATIC_DIR?.trim() || undefined,
+      mock && mockPaceMs !== undefined ? Math.max(0, mockPaceMs) : mock && onVercel ? 250 : 0,
+    staticDir: text(env.UCHRONIA_STATIC_DIR),
     corsOrigins: (env.UCHRONIA_CORS_ORIGINS ?? '')
       .split(',')
       .map((o) => o.trim())
       .filter((o) => o.length > 0),
-    seedDemo: env.UCHRONIA_SEED_DEMO !== undefined ? truthy(env.UCHRONIA_SEED_DEMO) : onVercel,
+    seedDemo:
+      text(env.UCHRONIA_SEED_DEMO) !== undefined ? truthy(env.UCHRONIA_SEED_DEMO) : onVercel,
   }
 }
