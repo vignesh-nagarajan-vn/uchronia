@@ -10,11 +10,12 @@ export type Db = BetterSQLite3Database
 function migrationsFolder(): string {
   const here = dirname(fileURLToPath(import.meta.url))
   // src/db/client.ts → apps/server/drizzle; bundled dist/index.js →
-  // apps/server/drizzle; a serverless bundle runs from the repo root with the
-  // folder carried along via includeFiles.
+  // apps/server/drizzle; the Vercel bundle (dist/vercel.js) → dist/drizzle,
+  // staged beside it by copy-vercel-assets.mjs and shipped via includeFiles.
   const candidates = [
     join(here, '..', '..', 'drizzle'),
     join(here, '..', 'drizzle'),
+    join(here, 'drizzle'),
     join(process.cwd(), 'drizzle'),
     join(process.cwd(), 'apps', 'server', 'drizzle'),
   ]

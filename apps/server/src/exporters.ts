@@ -1,5 +1,7 @@
 import { readFileSync } from 'node:fs'
 import { createRequire } from 'node:module'
+import { basename, dirname, join } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import type { World } from '@uchronia/core'
 import type { Artifact } from '@uchronia/schemas'
 
@@ -10,20 +12,31 @@ function yearLabel(year: number): string {
 // ---------------------------------------------------------------- fonts
 // "Self-contained" must include the typography, or every reader without
 // these faces installed sees the design fall back to Palatino. The woff2
-// files embed as data URIs (≈160 KB once — cached across renders); if the
-// packages are unresolvable (exotic bundling), degrade to the system stacks
-// already present in the CSS rather than fail the export.
+// files embed as data URIs (≈160 KB once — cached across renders). Resolution
+// order: node_modules (dev/tests/Docker, where @fontsource is installed),
+// then a fonts/ directory beside this module (the Vercel bundle, where
+// copy-vercel-assets.mjs stages the files under dist/fonts). If both miss,
+// degrade to the system stacks already present in the CSS rather than fail
+// the export.
 
 const requireFromHere = createRequire(import.meta.url)
+const hereDir = dirname(fileURLToPath(import.meta.url))
+
+function fontFile(packagePath: string): Buffer | null {
+  try {
+    return readFileSync(requireFromHere.resolve(packagePath))
+  } catch {}
+  try {
+    return readFileSync(join(hereDir, 'fonts', basename(packagePath)))
+  } catch {}
+  return null
+}
 
 function fontFace(family: string, packagePath: string, style: 'normal' | 'italic'): string {
-  try {
-    const file = requireFromHere.resolve(packagePath)
-    const data = readFileSync(file).toString('base64')
-    return `@font-face{font-family:'${family}';font-style:${style};font-weight:400;font-display:swap;src:url(data:font/woff2;base64,${data}) format('woff2')}`
-  } catch {
-    return ''
-  }
+  const file = fontFile(packagePath)
+  if (file === null) return ''
+  const data = file.toString('base64')
+  return `@font-face{font-family:'${family}';font-style:${style};font-weight:400;font-display:swap;src:url(data:font/woff2;base64,${data}) format('woff2')}`
 }
 
 let fontCssCache: string | null = null

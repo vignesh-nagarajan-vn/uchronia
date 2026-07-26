@@ -2,10 +2,10 @@
   "name": "uchronia",
   "private": true,
   "version": "0.1.0",
-  "description": "An alternate-history engine \u00e2\u20ac\u201d git rebase for history.",
+  "description": "An alternate-history engine — git rebase for history.",
   "packageManager": "pnpm@11.16.0",
   "engines": {
-    "node": ">=22.12"
+    "node": ">=22.13"
   },
   "scripts": {
     "dev": "pnpm --parallel --filter @uchronia/server --filter @uchronia/web dev",
@@ -18,13 +18,11 @@
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
     "migrate": "pnpm --filter @uchronia/server migrate",
-    "e2e": "pnpm --filter @uchronia/web e2e"
+    "e2e": "pnpm --filter @uchronia/web e2e",
+    "verify:vercel": "pnpm --filter @uchronia/server build:vercel && node scripts/verify-vercel.mjs"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.5",
     "cross-env": "^7.0.3"
-  },
-  "dependencies": {
-    "hono": "^4.10.4"
   }
 }

@@ -29,5 +29,6 @@ Thumbs.db
 .vscode/*
 !.vscode/extensions.json
 
-# vercel project link (local)
+# vercel project link (local) + the verify:vercel staging area
 .vercel/
+apps/server/.vercel-stage/
