@@ -69,8 +69,10 @@ function healPartialTrailingEra(deps: ServerDeps, world: World, branchId: string
  * events as SSE (§4.8). Each mutation is persisted before it is streamed, so
  * whatever the client saw is exactly what the database holds; a client abort
  * cancels in-flight provider calls via AbortSignal and keeps everything
- * accepted so far. One run per branch at a time — a second request 409s
- * instead of duplicating ordinals.
+ * accepted so far. One run per branch at a time per process — a second request
+ * to the same process 409s instead of duplicating ordinals; across processes
+ * (or serverless instances, each with its own database) the unique
+ * (branch_id, ordinal) index is the durable backstop.
  */
 export function generateRoutes(deps: ServerDeps): Hono {
   const app = new Hono()
@@ -122,6 +124,8 @@ export function generateRoutes(deps: ServerDeps): Hono {
     )
 
     activeBranches.add(branchId)
+    // Proxies (including serverless edges) must not buffer the event stream.
+    c.header('X-Accel-Buffering', 'no')
     return streamSSE(c, async (stream) => {
       const abort = () => controller.abort()
       c.req.raw.signal.addEventListener('abort', abort)

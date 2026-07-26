@@ -75,7 +75,9 @@ export function forkRoutes(deps: ServerDeps): Hono {
       return c.json(view)
     }
 
-    if (deps.repo.branchTimelineId(bId) !== deps.repo.branchTimelineId(aId)) {
+    const bTimelineId = deps.repo.branchTimelineId(bId)
+    if (bTimelineId === null) throw new ApiError(404, 'not-found', 'branch not found')
+    if (bTimelineId !== deps.repo.branchTimelineId(aId)) {
       throw new ApiError(400, 'invalid-request', 'branches belong to different timelines')
     }
     const b = side(bId)

@@ -208,7 +208,7 @@ async function* runReviewedEra(
   const refined = await refineBatch({ ctx, world, branchId, era, drafts, dial, provenance })
   for (const warning of refined.warnings) yield { type: 'warning', message: warning }
   if (refined.batch.events.length === 0) {
-    throw new GenerationValidationError(era.title, [
+    throw new GenerationValidationError('era-generate', [
       `every event of era "${era.title}" was dropped by the dual review`,
       ...refined.warnings,
     ])

@@ -22,6 +22,8 @@ import { generateStructured } from './structured.js'
 import { validateBatchOnClone } from './validate.js'
 
 const MAX_REVISIONS = 2
+/** Cap on concurrent regenerate-event calls per revision pass (live-mode courtesy). */
+const REVISION_CONCURRENCY = 3
 
 export interface RefinedBatch {
   batch: ResolvedBatch
@@ -140,30 +142,41 @@ export async function refineBatch(args: {
     if (needsRevision.length === 0) break
 
     const revisedRefs = new Set<string>()
-    const revised = await Promise.all(
-      needsRevision.map(async (draft) => {
-        const issues = [
-          ...(assessment.machine.get(draft.ref) ?? []),
-          ...(finalIssues.get(draft.ref) ?? []).map((i) => `${i.type} (${i.severity}): ${i.note}`),
-        ]
-        const replacement = await generateStructured(
-          ctx.provider,
-          regenerateEvent,
-          {
-            podStatement: criticContext.podStatement,
-            eraTitle: criticContext.eraTitle,
-            eraSpan: criticContext.eraSpan,
-            stateSummary: criticContext.stateSummary,
-            draft,
-            issues,
-            voice: dial.voiceLanguage,
-          },
-          callOpts(ctx),
-        )
-        revisedRefs.add(draft.ref)
-        return replacement.value.event
-      }),
-    )
+    // Bounded fan-out: up to REVISION_CONCURRENCY provider calls in flight,
+    // not one per flagged draft — a rate-limit and latency courtesy that the
+    // deterministic mock never notices.
+    const revised: (typeof drafts)[number][] = []
+    for (let i = 0; i < needsRevision.length; i += REVISION_CONCURRENCY) {
+      const chunk = needsRevision.slice(i, i + REVISION_CONCURRENCY)
+      revised.push(
+        ...(await Promise.all(
+          chunk.map(async (draft) => {
+            const issues = [
+              ...(assessment.machine.get(draft.ref) ?? []),
+              ...(finalIssues.get(draft.ref) ?? []).map(
+                (i) => `${i.type} (${i.severity}): ${i.note}`,
+              ),
+            ]
+            const replacement = await generateStructured(
+              ctx.provider,
+              regenerateEvent,
+              {
+                podStatement: criticContext.podStatement,
+                eraTitle: criticContext.eraTitle,
+                eraSpan: criticContext.eraSpan,
+                stateSummary: criticContext.stateSummary,
+                draft,
+                issues,
+                voice: dial.voiceLanguage,
+              },
+              callOpts(ctx),
+            )
+            revisedRefs.add(draft.ref)
+            return replacement.value.event
+          }),
+        )),
+      )
+    }
     const byRef = new Map(revised.map((d) => [d.ref, d]))
     drafts = drafts.map((d) => byRef.get(d.ref) ?? d)
 

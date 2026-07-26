@@ -63,6 +63,7 @@ export function resolveDrafts(ctx: DraftContext, drafts: DraftEvent[]): Resolved
 
   const now = clock.now().toISOString()
   const newEntities: Entity[] = []
+  const batchSlugs = new Set<string>()
   const events: Event[] = []
   const edges: CausalEdge[] = []
 
@@ -84,7 +85,9 @@ export function resolveDrafts(ctx: DraftContext, drafts: DraftEvent[]): Resolved
       // "Improved Method"; batch-internal references keep using the original.
       let storedSlug = def.slug
       let n = 2
-      while (world.entityBySlug(storedSlug)) {
+      // Consult the batch's own renames too: two drafts may independently
+      // land on the same stored slug (one renamed onto it, one asking for it).
+      while (world.entityBySlug(storedSlug) || batchSlugs.has(storedSlug)) {
         storedSlug = `${def.slug}-${n++}`
       }
       if (storedSlug !== def.slug) {
@@ -104,6 +107,7 @@ export function resolveDrafts(ctx: DraftContext, drafts: DraftEvent[]): Resolved
         createdAt: now,
         provenance,
       }
+      batchSlugs.add(storedSlug)
       slugToId.set(def.slug, entity.id)
       newEntities.push(entity)
     }
@@ -131,7 +135,9 @@ export function resolveDrafts(ctx: DraftContext, drafts: DraftEvent[]): Resolved
         entityId: id,
         patch: factsToRecord(delta.patch),
         note: delta.note,
-        ends: delta.ends,
+        // Conditional spread, matching regenerate.ts: stored deltas carry the
+        // key only when the draft set it.
+        ...(delta.ends !== undefined ? { ends: delta.ends } : {}),
       })
     }
 

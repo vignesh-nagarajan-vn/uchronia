@@ -9,6 +9,18 @@ describe('server app', () => {
     expect(res.status).toBe(200)
     expect(await res.json()).toEqual({ ok: true, mock: true })
   })
+
+  it('maps malformed JSON bodies to a 400 envelope instead of a 500', async () => {
+    const { app } = makeTestApp()
+    const res = await app.request('/api/timelines', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: '{not json',
+    })
+    expect(res.status).toBe(400)
+    const body = (await res.json()) as { error: string }
+    expect(body.error).toBe('invalid-json')
+  })
 })
 
 describe('loadConfig', () => {

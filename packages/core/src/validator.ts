@@ -280,10 +280,11 @@ export const ALL_RULES: readonly Rule[] = [
 /** Run every rule against one branch's resolved view. Empty result = clean. */
 export function validateBranch(world: World, branchId: string): ValidationIssue[] {
   // fork-normalized failures make segment resolution itself throw, so run it
-  // first and stop there if the chain is unresolvable.
+  // first and stop there if the chain is unresolvable. Having passed, skip
+  // its slot in ALL_RULES rather than running it twice.
   const forkIssues = forkNormalized(world, branchId)
   if (forkIssues.length > 0) return forkIssues
-  return ALL_RULES.flatMap((rule) => rule(world, branchId))
+  return ALL_RULES.flatMap((rule) => (rule === forkNormalized ? [] : rule(world, branchId)))
 }
 
 /** Validate every branch of the world. */

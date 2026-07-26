@@ -56,6 +56,10 @@ export function createApp(deps: ServerDeps): Hono {
     if (err instanceof ApiError) {
       return c.json({ error: err.code, message: err.message }, err.status as 404)
     }
+    // c.req.json() throws SyntaxError on malformed bodies — client error, not ours.
+    if (err instanceof SyntaxError) {
+      return c.json({ error: 'invalid-json', message: 'request body is not valid JSON' }, 400)
+    }
     if (err instanceof ZodError) {
       const issues = err.issues.map((i) => `${i.path.join('.') || '(root)'}: ${i.message}`)
       return c.json(

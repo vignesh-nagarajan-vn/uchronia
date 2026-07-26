@@ -22,16 +22,18 @@ const MAX_REPAIRS = 2
  * House style, enforced rather than hoped for: no em dashes ever reach a
  * store. The prompts forbid them; this is the guarantee when a model slips.
  * Only U+2014/U+2015 are touched (en dashes in year ranges survive), and the
- * transform runs after schema validation, where no field pattern admits an em
- * dash, so validity is preserved.
+ * transform runs after schema validation — with one guard: a string the scrub
+ * would empty entirely (an all-dash value) keeps its original form, because a
+ * post-validation transform must never invalidate a `.min(1)` field.
  */
 export function scrubEmDashes<T>(value: T): T {
   if (typeof value === 'string') {
     if (!/[—―]/.test(value)) return value
-    return value
+    const scrubbed = value
       .replace(/\s*[—―]+\s*/g, ', ')
       .replace(/^, /, '')
-      .replace(/, $/, '') as T
+      .replace(/, $/, '')
+    return (scrubbed.length > 0 ? scrubbed : value) as T
   }
   if (Array.isArray(value)) return value.map((v) => scrubEmDashes(v)) as T
   if (value !== null && typeof value === 'object') {
