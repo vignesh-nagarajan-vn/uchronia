@@ -162,8 +162,9 @@ export function EventDetail() {
         <div className="mt-6 border-t border-rule pt-5 text-[16.5px] leading-[1.7]">
           <p>{event.summary}</p>
           {event.detail ? (
-            event.detail.split('\n\n').map((para) => (
-              <p key={para.slice(0, 40)} className="mt-4">
+            event.detail.split('\n\n').map((para, paraIndex) => (
+              // biome-ignore lint/suspicious/noArrayIndexKey: static prose list; duplicate content makes content-derived keys collide
+              <p key={`para-${paraIndex}`} className="mt-4">
                 {para}
               </p>
             ))
@@ -193,8 +194,9 @@ export function EventDetail() {
           >
             <p className="stamp text-thread">disputed — the critic's notes, attached</p>
             <ul className="mt-2 space-y-2">
-              {event.criticNotes.map((note) => (
-                <li key={note.note} className="text-[14.5px]">
+              {event.criticNotes.map((note, noteIndex) => (
+                // biome-ignore lint/suspicious/noArrayIndexKey: static critique list; two notes can share their text
+                <li key={`note-${noteIndex}`} className="text-[14.5px]">
                   <span className="font-data text-[12px] text-thread">
                     {note.type} · {note.severity}
                   </span>

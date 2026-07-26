@@ -5,9 +5,16 @@ export type Theme = 'survey' | 'nitrate'
 const STORAGE_KEY = 'uchronia-theme'
 
 function readInitial(): Theme {
-  const stored = localStorage.getItem(STORAGE_KEY)
-  if (stored === 'survey' || stored === 'nitrate') return stored
-  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'nitrate' : 'survey'
+  // Storage/matchMedia can throw (sandboxed iframes, blocked storage); a theme
+  // guess must never take down the app. Mirrors the guarded inline script in
+  // index.html.
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY)
+    if (stored === 'survey' || stored === 'nitrate') return stored
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'nitrate' : 'survey'
+  } catch {
+    return 'survey'
+  }
 }
 
 function apply(theme: Theme): void {
@@ -24,7 +31,11 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     apply(theme)
-    localStorage.setItem(STORAGE_KEY, theme)
+    try {
+      localStorage.setItem(STORAGE_KEY, theme)
+    } catch {
+      // Blocked storage just means the choice won't persist.
+    }
   }, [theme])
 
   const toggle = useCallback(() => {

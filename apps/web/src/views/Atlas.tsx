@@ -176,7 +176,7 @@ export function Atlas() {
         )}
       </section>
 
-      {(timelines.data?.length ?? 0) === 0 && (
+      {timelines.isSuccess && timelines.data.length === 0 && (
         <p className="mx-auto mt-6 max-w-[680px] text-center font-data text-[13px] text-ink-faded">
           first time here?{' '}
           <button

@@ -1,6 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query'
 import type { BranchView, EntityView, EventView } from '@uchronia/schemas'
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import { streamGeneration } from './sse.js'
 
 export interface GenerationState {
@@ -44,6 +44,10 @@ export function useGeneration(branchId: string) {
       queryClient.setQueryData<BranchView>(key, (old) => (old ? fn(old) : old))
     }
 
+    // A stream that ends without run.completed/run.error was severed —
+    // network drop or a serverless duration cap — and must not be presented
+    // as a finished derivation.
+    let sawTerminalFrame = false
     try {
       for await (const frame of streamGeneration(branchId, controller.signal)) {
         const data = frame.data as Record<string, unknown>
@@ -150,6 +154,7 @@ export function useGeneration(branchId: string) {
             break
           }
           case 'run.completed': {
+            sawTerminalFrame = true
             const usage = data.usage as GenerationState['usage'] | undefined
             if (usage && usage.inputTokens + usage.outputTokens > 0) {
               setState((s) => ({ ...s, usage }))
@@ -157,6 +162,7 @@ export function useGeneration(branchId: string) {
             break
           }
           case 'run.error': {
+            sawTerminalFrame = true
             setState((s) => ({
               ...s,
               status: 'error',
@@ -168,7 +174,17 @@ export function useGeneration(branchId: string) {
             break
         }
       }
-      setState((s) => (s.status === 'error' ? s : { ...s, status: 'done', currentEra: null }))
+      if (!sawTerminalFrame && !controller.signal.aborted) {
+        setState((s) => ({
+          ...s,
+          status: 'error',
+          currentEra: null,
+          error:
+            'the stream ended before the run finished (a network drop or a serverless time limit); everything accepted so far is saved — derive again to continue',
+        }))
+      } else {
+        setState((s) => (s.status === 'error' ? s : { ...s, status: 'done', currentEra: null }))
+      }
     } catch (error) {
       if (!controller.signal.aborted) {
         setState((s) => ({
@@ -186,5 +202,7 @@ export function useGeneration(branchId: string) {
     }
   }, [branchId, queryClient])
 
-  return { state, start, stop }
+  // A stable object per (state, start, stop): consumers list the hook result
+  // in effect deps without re-running every render.
+  return useMemo(() => ({ state, start, stop }), [state, start, stop])
 }

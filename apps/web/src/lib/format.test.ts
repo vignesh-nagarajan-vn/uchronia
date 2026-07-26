@@ -2,12 +2,12 @@ import { describe, expect, it } from 'vitest'
 import { formatYear, formatYearRange } from './format.js'
 
 describe('formatYear', () => {
-  it('renders CE years bare', () => {
+  it('renders positive years bare', () => {
     expect(formatYear(1453)).toBe('1453')
     expect(formatYear(14)).toBe('14')
   })
 
-  it('renders BCE years with suffix', () => {
+  it('renders BC years with suffix', () => {
     expect(formatYear(-48)).toBe('48 BC')
     expect(formatYear(-1177)).toBe('1177 BC')
   })

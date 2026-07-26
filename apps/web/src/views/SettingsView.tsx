@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useRef, useState } from 'react'
 import { useNavigate } from 'react-router'
-import { EmptyState, Shell } from '../components/Shell.js'
+import { EmptyState, ErrorState, Shell } from '../components/Shell.js'
 import { api } from '../lib/api.js'
 import { useTheme } from '../lib/theme.js'
 
@@ -24,6 +24,16 @@ export function SettingsView() {
     onError: (error) => setImportError((error as Error).message),
   })
 
+  if (config.isError) {
+    return (
+      <Shell breadcrumb={<span className="text-ink">settings</span>}>
+        <ErrorState
+          message={config.error instanceof Error ? config.error.message : 'configuration failed'}
+          retry={() => void config.refetch()}
+        />
+      </Shell>
+    )
+  }
   if (!config.data) {
     return (
       <Shell breadcrumb={<span className="text-ink">settings</span>}>

@@ -39,8 +39,7 @@ export function TimelineView() {
   const view = useBranchView(branchId)
   const baseline = useQuery({
     queryKey: ['baseline'],
-    queryFn: async () =>
-      (await (await fetch('/api/baseline')).json()) as { anchors: BaselineAnchor[] },
+    queryFn: api.baseline,
     staleTime: Number.POSITIVE_INFINITY,
   })
   const generation = useGeneration(branchId)
@@ -60,12 +59,14 @@ export function TimelineView() {
 
   // Auto-derive when arriving from the Atlas (?derive=1) onto an empty branch.
   const shouldDerive = searchParams.get('derive') === '1'
+  const generationStatus = generation.state.status
+  const startGeneration = generation.start
   useEffect(() => {
-    if (shouldDerive && view.data && generation.state.status === 'idle') {
+    if (shouldDerive && view.data && generationStatus === 'idle') {
       setSearchParams({}, { replace: true })
-      void generation.start()
+      void startGeneration()
     }
-  }, [shouldDerive, view.data, generation, setSearchParams])
+  }, [shouldDerive, view.data, generationStatus, startGeneration, setSearchParams])
 
   const data = view.data
   const branchPath = `/t/${timelineId}/b/${branchId}`
@@ -297,9 +298,17 @@ export function TimelineView() {
         case 'c':
           navigate(`/t/${timelineId}/compare?a=${branchId}&b=baseline`)
           break
-        case 'e':
-          window.location.href = api.exportJsonUrl(timelineId)
+        case 'e': {
+          // A download, not a navigation — assigning location.href would leave
+          // the SPA whenever the response lacks a Content-Disposition header.
+          const a = document.createElement('a')
+          a.href = api.exportJsonUrl(timelineId)
+          a.download = ''
+          document.body.appendChild(a)
+          a.click()
+          a.remove()
           break
+        }
         case '?':
           setShortcutsOpen(true)
           break

@@ -94,16 +94,18 @@ export function ArtifactBody({ artifact }: { artifact: Artifact }) {
             className="mt-6 gap-8 sm:columns-2"
             style={{ columnRule: '1px solid var(--color-rule)' }}
           >
-            {body.columns.map((column) => (
-              <section key={column.paragraphs[0]?.slice(0, 30)} className="break-inside-avoid">
+            {body.columns.map((column, columnIndex) => (
+              // biome-ignore lint/suspicious/noArrayIndexKey: static prose list; duplicate content makes content-derived keys collide
+              <section key={`column-${columnIndex}`} className="break-inside-avoid">
                 {column.heading && (
                   <h3 className="mt-2 text-[15px] font-semibold uppercase tracking-wide">
                     {column.heading}
                   </h3>
                 )}
-                {column.paragraphs.map((para) => (
+                {column.paragraphs.map((para, paraIndex) => (
                   <p
-                    key={para.slice(0, 40)}
+                    // biome-ignore lint/suspicious/noArrayIndexKey: static prose list; duplicate content makes content-derived keys collide
+                    key={`para-${paraIndex}`}
                     className="mt-2 text-justify text-[14.5px] leading-[1.55]"
                   >
                     {para}
@@ -118,9 +120,10 @@ export function ArtifactBody({ artifact }: { artifact: Artifact }) {
                 notices
               </p>
               <div className="mt-2 grid gap-3 sm:grid-cols-3">
-                {body.notices.map((notice) => (
+                {body.notices.map((notice, noticeIndex) => (
                   <p
-                    key={notice.slice(0, 30)}
+                    // biome-ignore lint/suspicious/noArrayIndexKey: static prose list; duplicate content makes content-derived keys collide
+                    key={`notice-${noticeIndex}`}
                     className="border border-rule px-2.5 py-2 text-[12.5px] italic leading-snug"
                   >
                     {notice}
@@ -138,9 +141,10 @@ export function ArtifactBody({ artifact }: { artifact: Artifact }) {
             {body.place}, {body.dateLabel}
           </p>
           <p className="mt-8 text-[17px] italic">{body.salutation}</p>
-          {body.paragraphs.map((para) => (
+          {body.paragraphs.map((para, paraIndex) => (
             <p
-              key={para.slice(0, 40)}
+              // biome-ignore lint/suspicious/noArrayIndexKey: static prose list; duplicate content makes content-derived keys collide
+              key={`para-${paraIndex}`}
               className="mt-4 indent-8 text-[16.5px] italic leading-[1.75]"
             >
               {para}
@@ -174,8 +178,9 @@ export function ArtifactBody({ artifact }: { artifact: Artifact }) {
             className="mt-2 gap-8 sm:columns-2"
             style={{ columnRule: '1px solid var(--color-rule)' }}
           >
-            {body.entryParagraphs.map((para) => (
-              <p key={para.slice(0, 40)} className="mt-2 text-justify text-[14px] leading-[1.6]">
+            {body.entryParagraphs.map((para, paraIndex) => (
+              // biome-ignore lint/suspicious/noArrayIndexKey: static prose list; duplicate content makes content-derived keys collide
+              <p key={`para-${paraIndex}`} className="mt-2 text-justify text-[14px] leading-[1.6]">
                 {para}
               </p>
             ))}
@@ -198,8 +203,9 @@ export function ArtifactBody({ artifact }: { artifact: Artifact }) {
             <p className="mt-3 text-[17px] italic text-ink-faded">{body.subheadline}</p>
           )}
           <div className="mx-auto mt-7 max-w-[480px] space-y-3">
-            {body.lines.map((line) => (
-              <p key={line.slice(0, 40)} className="text-[16.5px] leading-snug">
+            {body.lines.map((line, lineIndex) => (
+              // biome-ignore lint/suspicious/noArrayIndexKey: static prose list; duplicate content makes content-derived keys collide
+              <p key={`line-${lineIndex}`} className="text-[16.5px] leading-snug">
                 {line}
               </p>
             ))}

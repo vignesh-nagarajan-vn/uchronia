@@ -6,11 +6,13 @@ export interface SseFrame {
 
 function parseFrame(block: string): SseFrame | null {
   let event = ''
-  let data = ''
-  for (const line of block.split('\n')) {
+  const dataLines: string[] = []
+  for (const line of block.split(/\r?\n/)) {
     if (line.startsWith('event:')) event = line.slice(6).trim()
-    else if (line.startsWith('data:')) data += line.slice(5).trim()
+    // Per the SSE spec, multi-line data fields join with a newline.
+    else if (line.startsWith('data:')) dataLines.push(line.slice(5).trim())
   }
+  const data = dataLines.join('\n')
   if (!event || !data) return null
   try {
     return { event, data: JSON.parse(data) }
@@ -29,21 +31,28 @@ export async function* streamGeneration(
   }
   const reader = res.body.getReader()
   const decoder = new TextDecoder()
+  // Frame boundaries tolerate CRLF normalization by intermediaries.
+  const boundaryPattern = /\r?\n\r?\n/
   let buffer = ''
   try {
     for (;;) {
       const { done, value } = await reader.read()
       if (done) break
       buffer += decoder.decode(value, { stream: true })
-      let boundary = buffer.indexOf('\n\n')
-      while (boundary !== -1) {
-        const frame = parseFrame(buffer.slice(0, boundary))
-        buffer = buffer.slice(boundary + 2)
+      let boundary = buffer.match(boundaryPattern)
+      while (boundary?.index !== undefined) {
+        const frame = parseFrame(buffer.slice(0, boundary.index))
+        buffer = buffer.slice(boundary.index + boundary[0].length)
         if (frame) yield frame
-        boundary = buffer.indexOf('\n\n')
+        boundary = buffer.match(boundaryPattern)
       }
     }
   } finally {
+    // A consumer that breaks out early must close the HTTP body, not just
+    // release the lock — otherwise the connection leaks.
+    try {
+      await reader.cancel()
+    } catch {}
     reader.releaseLock()
   }
 }

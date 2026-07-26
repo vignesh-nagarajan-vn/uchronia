@@ -1,5 +1,6 @@
 import {
   type Artifact,
+  type BaselineAnchor,
   BranchView,
   CompareView,
   ConfigResponse,
@@ -48,6 +49,8 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
 
 export const api = {
   config: async () => ConfigResponse.parse(await request('/api/config')),
+
+  baseline: () => request<{ anchors: BaselineAnchor[] }>('/api/baseline'),
 
   listTimelines: async () => z.array(TimelineSummary).parse(await request('/api/timelines')),
 

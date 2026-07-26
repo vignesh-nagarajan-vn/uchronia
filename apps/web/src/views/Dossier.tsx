@@ -98,11 +98,9 @@ export function Dossier() {
             </p>
           ) : (
             <ol className="mt-2 space-y-2.5">
-              {entity.changeLog.map((line) => (
-                <li
-                  key={`${line.eventId}-${line.note}`}
-                  className="grid grid-cols-[84px_1fr] gap-3"
-                >
+              {entity.changeLog.map((line, lineIndex) => (
+                // biome-ignore lint/suspicious/noArrayIndexKey: append-only ledger; a delta's event and note can both repeat
+                <li key={`change-${lineIndex}`} className="grid grid-cols-[84px_1fr] gap-3">
                   <Link
                     to={`${branchPath}/e/${line.eventId}`}
                     className="pt-[2px] text-right font-data text-[12.5px] text-ink-faded hover:text-thread"
@@ -130,8 +128,9 @@ export function Dossier() {
           </h2>
           {biography ? (
             <div className="mt-3 text-[16px] leading-[1.7]">
-              {biography.biography.split('\n\n').map((para) => (
-                <p key={para.slice(0, 40)} className="mt-3 first:mt-0">
+              {biography.biography.split('\n\n').map((para, paraIndex) => (
+                // biome-ignore lint/suspicious/noArrayIndexKey: static prose list; duplicate content makes content-derived keys collide
+                <p key={`para-${paraIndex}`} className="mt-3 first:mt-0">
                   {para}
                 </p>
               ))}
