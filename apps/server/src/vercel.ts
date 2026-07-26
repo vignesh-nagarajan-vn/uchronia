@@ -13,7 +13,11 @@
  * ephemeral by design here — and per-instance: a playground, not an archive.
  * See docs/DEPLOY.md and ADR-0003 before pointing a key at this.
  */
-import { handle } from 'hono/vercel'
+// The Node-runtime adapter, not hono/vercel: Vercel invokes this function
+// (req, res)-style — its web-handler detection cannot see through the
+// re-export into the bundle — and a fetch-shaped handler under (req, res)
+// invocation writes nothing and hangs to the 60 s cap (504 on every call).
+import { handle } from '@hono/node-server/vercel'
 import demoLedger from '../../../demo/the-unburnt-library.uchronia.json' with { type: 'json' }
 import { createApp } from './app.js'
 import { loadConfig } from './config.js'

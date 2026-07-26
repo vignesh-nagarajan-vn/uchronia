@@ -12,6 +12,7 @@
  */
 import assert from 'node:assert/strict'
 import { cpSync, existsSync, mkdirSync, rmSync } from 'node:fs'
+import { createServer } from 'node:http'
 import { tmpdir } from 'node:os'
 import { join, resolve } from 'node:path'
 import { pathToFileURL } from 'node:url'
@@ -58,12 +59,25 @@ const check = (name, ok, detail = '') => {
   console.log(`${ok ? 'PASS' : 'FAIL'}  ${name}${detail ? ` — ${detail}` : ''}`)
 }
 
+let server
 try {
   const { default: handler } = await import(pathToFileURL(join(stage, 'api', 'index.mjs')))
   assert.equal(typeof handler, 'function', 'default export must be a handler function')
   check('bundle imports under plain Node (cold start: db + migrations + seed)', true)
 
-  const get = async (path) => handler(new Request(`http://uchronia.test${path}`))
+  // Vercel's Node runtime invokes the function (req, res)-style; exercising it
+  // through a real node:http server proves that exact contract — a
+  // fetch-shaped handler would hang here just as it does deployed.
+  server = createServer(handler)
+  await new Promise((ready) => server.listen(0, '127.0.0.1', ready))
+  const { port } = server.address()
+  const get = async (path) =>
+    await Promise.race([
+      fetch(`http://127.0.0.1:${port}${path}`),
+      new Promise((_, reject) =>
+        setTimeout(() => reject(new Error(`no response for ${path} within 15s — handler hang`)), 15_000),
+      ),
+    ])
 
   const health = await get('/api/health')
   const healthBody = await health.json()
@@ -103,6 +117,7 @@ try {
 } catch (error) {
   check('handler exercise', false, String(error?.stack ?? error))
 } finally {
+  server?.close()
   process.chdir(repoRoot)
   // Best-effort: the SQLite handle stays open for the process lifetime, and
   // Windows refuses to delete open files — leftovers land in the OS temp dir.
