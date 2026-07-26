@@ -33,6 +33,16 @@ async function walkUntilVisible(page: Page, testId: string, maxSteps = 60): Prom
   await expect(page.getByTestId(testId).first()).toBeVisible()
 }
 
+test('a vanished branch gets the honest dead end, not a retry loop', async ({ page }) => {
+  // Ephemeral serverless instances forget chronicles (recycling, redeploys);
+  // a 404 must read as the truth with a way out, not "ask again".
+  await page.goto('/t/ghost/b/ghost-branch')
+  await expect(page.getByText('This chronicle is no longer on the shelf.')).toBeVisible()
+  await expect(page.getByRole('link', { name: /Return to the atlas/ })).toBeVisible()
+  await page.getByRole('link', { name: /Return to the atlas/ }).click()
+  await expect(page.getByText('the point of divergence')).toBeVisible()
+})
+
 test('the full journey, keyless', async ({ page }) => {
   await page.goto('/')
 

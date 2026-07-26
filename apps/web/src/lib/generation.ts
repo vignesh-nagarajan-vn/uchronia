@@ -187,10 +187,15 @@ export function useGeneration(branchId: string) {
       }
     } catch (error) {
       if (!controller.signal.aborted) {
+        const message = error instanceof Error ? error.message : 'generation failed'
         setState((s) => ({
           ...s,
           status: 'error',
-          error: error instanceof Error ? error.message : 'generation failed',
+          // A 404 at start means the branch left this serverless instance
+          // (recycled or redeployed); say so instead of echoing a status code.
+          error: message.includes('(404)')
+            ? 'this branch is no longer on the shelf (the playground is ephemeral); return to the atlas and begin a new divergence'
+            : message,
         }))
       } else {
         setState((s) => ({ ...s, status: 'done', currentEra: null }))

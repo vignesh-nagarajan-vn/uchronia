@@ -32,7 +32,7 @@ On [vercel.com/new](https://vercel.com/new): import the GitHub repository, leave
 
 Serverless has no durable disk, and the setup leans into it instead of pretending otherwise:
 
-- The SQLite database lives at `/tmp/uchronia.db`, **per instance**. Histories survive while an instance stays warm, vanish when it recycles, and are not shared between concurrent instances - a chronicle you just created may not be visible on the next request if it lands elsewhere. A playground, not an archive; export anything you want to keep.
+- The SQLite database lives at `/tmp/uchronia.db`, **per instance**. Histories survive while an instance stays warm, vanish when it recycles, are not shared between concurrent instances (a chronicle you just created may not be visible on the next request if it lands elsewhere), and **every redeploy resets the world** to the seeded chronicle. The web app says so honestly when a branch has evaporated. A playground, not an archive; export anything you want to keep.
 - On cold start the showcase chronicle (inlined into the bundle) seeds an empty database (`UCHRONIA_SEED_DEMO`, default on under Vercel), so every visitor lands on 67 events of content rather than a blank atlas.
 - Mock pacing defaults on (250 ms) so derivations visibly ink in; the SSE stream fits comfortably inside the function's 60 s `maxDuration`. If a stream is ever severed at the limit, the ledger says so honestly and everything accepted so far is saved - derive again to continue.
 - Vercel caps request bodies around 4.5 MB, below the app's own 16 MB limit; very large JSON imports belong on a local instance.

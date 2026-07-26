@@ -122,7 +122,7 @@ Everything in the UI is reachable in mock mode; CI runs exclusively keyless. On 
 
 Prefer a container? `docker build -t uchronia . && docker run -p 8787:8787 -v uchronia-data:/data uchronia`: one port, keyless, safe to host. See [docs/DEPLOY.md](docs/DEPLOY.md).
 
-Or skip the install entirely: this repo is deployed on Vercel via its `vercel.json`, live at **[uchronia-server.vercel.app](https://uchronia-server.vercel.app/)**. Serverless state lives in `/tmp` per instance - a playground, not an archive. Full deployment story: [docs/DEPLOY.md](docs/DEPLOY.md).
+Or skip the install entirely: this repo is deployed on Vercel via its `vercel.json`, live at **[uchronia-server.vercel.app](https://uchronia-server.vercel.app/)**. Serverless state lives in `/tmp` per instance and resets on every redeploy - a playground, not an archive. Full deployment story: [docs/DEPLOY.md](docs/DEPLOY.md).
 
 <details>
 <summary><strong>Troubleshooting</strong></summary>

@@ -12,7 +12,7 @@ import { RecordTick } from '../components/RecordTick.js'
 import { EmptyState, ErrorState, Shell } from '../components/Shell.js'
 import { ShortcutsDialog } from '../components/ShortcutsDialog.js'
 import { type Thread, ThreadOverlay } from '../components/ThreadOverlay.js'
-import { api } from '../lib/api.js'
+import { ApiError, api } from '../lib/api.js'
 import { useGeneration } from '../lib/generation.js'
 
 type Row =
@@ -335,6 +335,25 @@ export function TimelineView() {
     return (
       <Shell>
         <EmptyState title="Fetching the ledger…" />
+      </Shell>
+    )
+  }
+  if (view.isError && view.error instanceof ApiError && view.error.status === 404) {
+    // A dead end deserves the truth, not a retry button: the branch was
+    // burned, never lived here, or sat on a serverless instance that has
+    // since been recycled or redeployed (the playground is ephemeral).
+    return (
+      <Shell>
+        <EmptyState title="This chronicle is no longer on the shelf.">
+          <p>
+            Either the branch was burned, or it lived on a playground instance that has since been
+            recycled: on serverless hosting, histories are ephemeral and every redeploy resets the
+            world to the showcase chronicle. What is gone cannot be refetched.
+          </p>
+          <Link to="/" className="mt-3 inline-block text-thread underline underline-offset-4">
+            Return to the atlas and begin a new divergence
+          </Link>
+        </EmptyState>
       </Shell>
     )
   }
