@@ -4,6 +4,10 @@ All notable changes to Uchronia. The format follows [Keep a Changelog](https://k
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-07-26
+
+The first stable release: the 0.2 hardening series plus the deployment-hardening pass, live at <https://uchronia-server.vercel.app/>.
+
 ### Added
 
 - A fake-Vercel smoke harness (`pnpm verify:vercel` / `scripts/verify-vercel.mjs`): stages the serverless function exactly as Vercel ships it and drives it with real requests - cold-start migrations, bundled-ledger seeding, the native sqlite binding, the font-embedded HTML export. CI runs it on ubuntu (`vercel-shape` job).
@@ -68,5 +72,6 @@ comparison, JSON import/export, markdown and self-contained HTML exports, and
 the RED THREAD interface (Survey and Nitrate themes) with a Playwright-verified
 keyless journey.
 
-[Unreleased]: https://github.com/vignesh-nagarajan-vn/uchronia/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/vignesh-nagarajan-vn/uchronia/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/vignesh-nagarajan-vn/uchronia/compare/v0.1.0...v1.0.0
 [0.1.0]: https://github.com/vignesh-nagarajan-vn/uchronia/releases/tag/v0.1.0
