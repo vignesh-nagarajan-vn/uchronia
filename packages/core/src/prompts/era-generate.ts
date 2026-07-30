@@ -10,6 +10,7 @@ import type { PromptTemplate } from './types.js'
 
 export interface EraGenerateArgs {
   podStatement: string
+  podMechanism: string
   span: { startYear: number; endYear: number }
   ordinal: number
   /**
@@ -37,12 +38,13 @@ export interface EraGenerateArgs {
  */
 export const eraGenerate: PromptTemplate<EraGenerateArgs, EraBatchOut> = {
   id: 'era-generate',
-  version: '1.3.0',
+  version: '1.4.0',
   changelog: [
     '1.0.0 - initial template',
     '1.1.0 - discipline measured from the branch origin; recent events carry causal marks; chain-extension mandate',
     '1.2.0 - entity lifecycle: terminal deltas (ends:true), roster excludes the dead',
     '1.3.0 - human voice mandate; prose register frays or steadies with the dial',
+    '1.4.0 - relevance guard: mechanism named, on-divergence mandate (v2/M14)',
   ],
   role: 'generation',
   schemaName: 'EraBatchOut',
@@ -64,6 +66,7 @@ ${SENSITIVE_HISTORY_STANCE}
 ${HANDLE_CONVENTIONS}`,
   prompt: ({
     podStatement,
+    podMechanism,
     span,
     distanceYears,
     podDistanceYears,
@@ -88,6 +91,7 @@ ${HANDLE_CONVENTIONS}`,
         : `No wildcards in this era (wildcard: false everywhere): every event should be structurally implied by the pressures.`
 
     return `Point of divergence, ${podDistanceYears} years before this era: ${podStatement}
+Its mechanism: ${podMechanism}. This history exists to answer THAT divergence. Every era must visibly carry its consequences through the live chains - events that could sit unchanged in a generic history of this period, with no thread back to the divergence, are failures (the critic flags them as on-divergence drift).
 ${subPod}
 Era to generate: years ${span.startYear} to ${span.endYear}.
 

@@ -27,6 +27,7 @@ export const CRITIQUE_ISSUE_TYPES = [
   'presentism',
   'cliche-collapse',
   'tone',
+  'on-divergence',
 ] as const
 export const CritiqueIssueType = z.enum(CRITIQUE_ISSUE_TYPES)
 export type CritiqueIssueType = z.infer<typeof CritiqueIssueType>

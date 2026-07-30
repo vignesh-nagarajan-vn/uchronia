@@ -5,6 +5,7 @@ import type { PromptTemplate } from './types.js'
 
 export interface CriticArgs {
   podStatement: string
+  podMechanism: string
   eraTitle: string
   eraSpan: string
   stateSummary: string
@@ -25,11 +26,12 @@ export interface CriticArgs {
  */
 export const criticReview: PromptTemplate<CriticArgs, CritiqueOut> = {
   id: 'critic-review',
-  version: '1.2.0',
+  version: '1.3.0',
   changelog: [
     '1.0.0 - initial rubric',
     '1.1.0 - dial-calibrated plausibility bar; cause refs arrive resolved to titles',
     '1.2.0 - machine mannerisms (em dashes, stock phrasing) are tone violations',
+    '1.3.0 - on-divergence dimension: drift into generic period content is a flaggable failure (v2/M14)',
   ],
   role: 'critic',
   schemaName: 'CritiqueOut',
@@ -47,6 +49,7 @@ Judge each draft ONLY against: the given world-state snapshot, the given prior e
 - presentism: actors reasoning with our categories instead of their own
 - cliche-collapse: reflexive drama ("and then a great war", sudden collapses without structural cause)
 - tone: violations of the register below, and machine mannerisms in the prose (em dashes anywhere, stock phrasing such as "testament to" or "pivotal moment", uniform sentence rhythm, summarizing closers)
+- on-divergence: drift into generic period content - an event that would sit unchanged in a plain history of this era, with no visible thread of consequence back to the point of divergence and its mechanism, is off-subject however plausible it is
 
 Calibrate implausible-leap to this history's determinism setting, which the author was instructed to follow:
 ${dial.attractorLanguage}
@@ -62,6 +65,7 @@ Verdict semantics:
 Return a verdict for EVERY draft ref. Do not invent refs.`,
   prompt: ({
     podStatement,
+    podMechanism,
     eraTitle,
     eraSpan,
     stateSummary,
@@ -70,6 +74,7 @@ Return a verdict for EVERY draft ref. Do not invent refs.`,
     drafts,
   }) =>
     `Point of divergence: ${podStatement}
+Its mechanism: ${podMechanism}. This history exists to answer that divergence; weigh every draft's connection to it.
 
 Era under review: "${eraTitle}" (${eraSpan})
 

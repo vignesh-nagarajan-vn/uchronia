@@ -180,6 +180,59 @@ describe('refineBatch - dual review (§P4)', () => {
     expect(refined.warnings.some((w) => w.includes('machine rules still failing'))).toBe(true)
   })
 
+  it('carries on-divergence drift verdicts through to visible disputes (v2/M14)', async () => {
+    const { world, era } = setup()
+    // A critic that flags generic period drift: the fixture case is an event
+    // that would read identically in a history without the divergence.
+    const ctx = {
+      provider: new MockProvider({
+        'critic-review': (rawArgs: unknown) => {
+          const { drafts } = rawArgs as { drafts: Array<{ ref: string }> }
+          return {
+            verdicts: drafts.map((d) => ({
+              ref: d.ref,
+              verdict: 'dispute',
+              issues: [
+                {
+                  type: 'on-divergence',
+                  severity: 'fail',
+                  note: 'generic period content: no thread of consequence back to the divergence',
+                },
+              ],
+            })),
+          }
+        },
+      }),
+      idgen: sequentialIdGen('DV'),
+      clock: fixedClock(NOW),
+    }
+    const generic = draft({
+      ref: 'd1',
+      title: 'A tax assessment proceeds on schedule',
+      summary: 'The customary assessment is carried out as it is every seventh year.',
+    })
+    const refined = await refineBatch({
+      ctx,
+      world,
+      branchId: FX.rootBranch,
+      era,
+      drafts: [generic],
+      dial: dialParams(50),
+      provenance: {
+        kind: 'generated',
+        model: 'mock',
+        templateId: 't',
+        templateVersion: '1',
+        generatedAt: NOW,
+        mode: 'mock',
+      },
+    })
+    expect(refined.droppedRefs).toEqual([])
+    const event = refined.batch.events[0]
+    expect(event?.flags.disputed).toBe(true)
+    expect(event?.criticNotes?.some((i) => i.type === 'on-divergence')).toBe(true)
+  })
+
   it('discards wildcards below the dial plausibility floor before review', async () => {
     const { world, era, ctx } = setup()
     const wildcard = draft({

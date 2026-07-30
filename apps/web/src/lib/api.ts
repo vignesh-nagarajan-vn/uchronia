@@ -11,6 +11,7 @@ import {
   type Event,
   type EventView,
   ForkResponse,
+  InterpretResponse,
   TimelineAggregate,
   TimelineSummary,
   type UpdateTimelineRequest,
@@ -59,6 +60,14 @@ export const api = {
   config: async () => ConfigResponse.parse(await request('/api/config')),
 
   liveCheck: () => request<LiveCheckResult>('/api/live-check', { method: 'POST' }),
+
+  interpret: async (podText: string) =>
+    InterpretResponse.parse(
+      await request('/api/timelines/interpret', {
+        method: 'POST',
+        body: JSON.stringify({ podText }),
+      }),
+    ),
 
   baseline: () => request<{ anchors: BaselineAnchor[] }>('/api/baseline'),
 

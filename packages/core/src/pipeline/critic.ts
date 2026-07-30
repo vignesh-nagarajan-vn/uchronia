@@ -84,6 +84,7 @@ export async function refineBatch(args: {
 
   const criticContext = {
     podStatement: world.pod.statement,
+    podMechanism: world.pod.mechanism,
     eraTitle: era.title,
     eraSpan: `${era.startYear}–${era.endYear}`,
     stateSummary: summarizeState(world, branchId),

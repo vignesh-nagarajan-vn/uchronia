@@ -4,8 +4,10 @@ import type { Rng } from '../rng.js'
 /**
  * Name and phrase banks that give mock content period- and region-appropriate
  * texture. Era buckets are deliberately coarse: ancient (<500), medieval
- * (500–1500), early-modern (1500–1800), modern (>1800). Regions without a
- * curated bank fall back to era-neutral generics.
+ * (500–1500), early-modern (1500–1800), modern (1800–1900), twentieth
+ * (1900 on - added in v2/M14 so WW2-era and Cold-War demo content stops
+ * wearing 1848's clothes). Regions without a curated bank fall back to
+ * era-neutral generics.
  */
 export interface RegionFlavor {
   nation: string
@@ -19,13 +21,14 @@ export interface RegionFlavor {
   commodity: string
 }
 
-type Bucket = 'ancient' | 'medieval' | 'early-modern' | 'modern'
+type Bucket = 'ancient' | 'medieval' | 'early-modern' | 'modern' | 'twentieth'
 
 export function eraBucket(year: number): Bucket {
   if (year < 500) return 'ancient'
   if (year < 1500) return 'medieval'
   if (year < 1800) return 'early-modern'
-  return 'modern'
+  if (year < 1900) return 'modern'
+  return 'twentieth'
 }
 
 const BANKS: Record<string, Partial<Record<Bucket, RegionFlavor>>> = {
@@ -98,6 +101,17 @@ const BANKS: Record<string, Partial<Record<Bucket, RegionFlavor>>> = {
       city: 'Frankfurt',
       commodity: 'coal',
     },
+    twentieth: {
+      nation: 'the United Kingdom',
+      nationSlug: 'united-kingdom',
+      rival: 'the German Reich',
+      rivalSlug: 'german-reich',
+      persons: ['Group Captain Edith Marlowe', 'the broadcaster Hugh Carden', 'Dr. Lene Aldinger'],
+      institution: 'the war cabinet secretariat',
+      institutionSlug: 'war-cabinet-secretariat',
+      city: 'London',
+      commodity: 'petrol',
+    },
   },
   'East Asia': {
     medieval: {
@@ -111,18 +125,33 @@ const BANKS: Record<string, Partial<Record<Bucket, RegionFlavor>>> = {
       city: 'Nanjing',
       commodity: 'porcelain',
     },
+    twentieth: {
+      nation: 'the Empire of Japan',
+      nationSlug: 'empire-of-japan',
+      rival: 'the American Pacific Fleet',
+      rivalSlug: 'american-pacific-fleet',
+      persons: [
+        'Captain Harada Kiyoshi',
+        'the diplomat Nomura Sadao',
+        'the correspondent Ella Greenway',
+      ],
+      institution: 'the naval general staff',
+      institutionSlug: 'naval-general-staff',
+      city: 'Tokyo',
+      commodity: 'oil',
+    },
   },
   'North America': {
-    modern: {
+    twentieth: {
       nation: 'the United States',
       nationSlug: 'united-states',
-      rival: 'the Soviet space directorate',
-      rivalSlug: 'soviet-space-directorate',
+      rival: 'the rival bloc',
+      rivalSlug: 'rival-bloc',
       persons: ['Eleanor Vance', 'Marcus Okafor', 'Irene Castellanos'],
-      institution: 'the national launch authority',
-      institutionSlug: 'national-launch-authority',
-      city: 'Houston',
-      commodity: 'aluminum',
+      institution: 'the federal research authority',
+      institutionSlug: 'federal-research-authority',
+      city: 'Washington',
+      commodity: 'oil',
     },
   },
 }
@@ -171,6 +200,17 @@ const GENERIC: Record<Bucket, RegionFlavor> = {
     institutionSlug: 'standards-bureau',
     city: 'the capital',
     commodity: 'steel',
+  },
+  twentieth: {
+    nation: 'the continental republic',
+    nationSlug: 'continental-republic',
+    rival: 'the opposing bloc',
+    rivalSlug: 'opposing-bloc',
+    persons: ['Undersecretary Calloway', 'the correspondent Mira Volkonsky', 'Dr. Anselm Roth'],
+    institution: 'the general staff college',
+    institutionSlug: 'general-staff-college',
+    city: 'the federal capital',
+    commodity: 'oil',
   },
 }
 

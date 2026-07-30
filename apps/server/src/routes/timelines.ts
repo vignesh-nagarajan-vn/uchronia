@@ -1,7 +1,17 @@
-import { generateStructured, podNormalize, validateWorld, World } from '@uchronia/core'
+import {
+  generateStructured,
+  loadBaseline,
+  podInterpret,
+  podNormalize,
+  retrieveAnchors,
+  sketchPod,
+  validateWorld,
+  World,
+} from '@uchronia/core'
 import {
   type Branch,
   CreateTimelineRequest,
+  InterpretRequest,
   LENSES,
   type PointOfDivergence,
   type Timeline,
@@ -18,21 +28,66 @@ export function timelineRoutes(deps: ServerDeps): Hono {
 
   app.get('/timelines', (c) => c.json(repo.listTimelines()))
 
+  // Intake 2.0 (v2/M14): interpret the ask against retrieved baseline
+  // anchors and offer candidate mechanisms. Creates nothing; the user
+  // confirms (possibly after edits) and creation takes the confirmed reading.
+  app.post('/timelines/interpret', async (c) => {
+    const body = InterpretRequest.parse(await c.req.json())
+    const anchors = loadBaseline().anchors
+    const sketch = sketchPod(body.podText, anchors)
+    const retrieved = retrieveAnchors(anchors, body.podText, {
+      year: sketch.year,
+      limit: 12,
+    }).map((a) => ({ year: a.year, title: a.title, summary: a.summary, region: a.region }))
+    const generated = await generateStructured(
+      provider,
+      podInterpret,
+      { raw: body.podText, anchors: retrieved },
+      { signal: c.req.raw.signal },
+    )
+    return c.json({ interpretation: generated.value, model: generated.model, mode: generated.mode })
+  })
+
   app.post('/timelines', async (c) => {
     const body = CreateTimelineRequest.parse(await c.req.json())
 
-    // Stage 1 of the pipeline: POD intake (§4.1). Validated + repair-looped.
-    const normalized = await generateStructured(
-      provider,
-      podNormalize,
-      { raw: body.podText },
-      {
-        signal: c.req.raw.signal,
-      },
-    )
-    const pod = normalized.value
-
+    // Stage 1 of the pipeline: POD intake (§4.1). A confirmed interpretation
+    // from the card is the authority when present (the user saw and accepted
+    // it, possibly after edits - provenance: user); otherwise the classic
+    // one-shot normalize runs.
     const now = clock.now().toISOString()
+    let pod: Pick<
+      PointOfDivergence,
+      'statement' | 'year' | 'dateLabel' | 'region' | 'mechanism' | 'baselineContext'
+    > & { suggestedTitle: string }
+    let podProvenance: PointOfDivergence['provenance']
+    if (body.interpretation) {
+      const confirmed = body.interpretation
+      pod = {
+        ...confirmed,
+        suggestedTitle: confirmed.suggestedTitle ?? confirmed.statement.replace(/\.$/, ''),
+      }
+      podProvenance = { kind: 'user' }
+    } else {
+      const normalized = await generateStructured(
+        provider,
+        podNormalize,
+        { raw: body.podText },
+        {
+          signal: c.req.raw.signal,
+        },
+      )
+      pod = normalized.value
+      podProvenance = {
+        kind: 'generated',
+        model: normalized.model,
+        templateId: podNormalize.id,
+        templateVersion: podNormalize.version,
+        generatedAt: now,
+        mode: normalized.mode,
+      }
+    }
+
     const timeline: Timeline = {
       id: idgen.next(),
       title: body.title ?? pod.suggestedTitle,
@@ -58,14 +113,7 @@ export function timelineRoutes(deps: ServerDeps): Hono {
       region: pod.region,
       mechanism: pod.mechanism,
       baselineContext: pod.baselineContext,
-      provenance: {
-        kind: 'generated',
-        model: normalized.model,
-        templateId: podNormalize.id,
-        templateVersion: podNormalize.version,
-        generatedAt: now,
-        mode: normalized.mode,
-      },
+      provenance: podProvenance,
     }
     const rootBranch: Branch = {
       id: idgen.next(),

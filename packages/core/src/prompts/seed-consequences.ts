@@ -23,10 +23,11 @@ export interface SeedArgs {
  */
 export const seedConsequences: PromptTemplate<SeedArgs, EraBatchOut> = {
   id: 'seed-consequences',
-  version: '1.1.0',
+  version: '1.2.0',
   changelog: [
     '1.0.0 - initial template',
     '1.1.0 - human voice mandate; prose register tracks the dial',
+    '1.2.0 - relevance guard: every seed event traces to the divergence (v2/M14)',
   ],
   role: 'generation',
   schemaName: 'EraBatchOut',
@@ -56,6 +57,7 @@ ${pod.baselineContext}
 Generate the SEED CONSEQUENCES: the first zero to two years only (years ${pod.year} to ${pod.year + 2}).
 
 Rules for the seed:
+- This history exists to answer THAT divergence and no other. Every seed event is a direct consequence of it, through the mechanism named above; nothing generic to the period that would read the same without the divergence.
 - 3 to 5 events, all high-confidence (plausibility ≥ 0.6, wildcard: false for every event). This close to the divergence, consequences are few, local, and disciplined.
 - The first event (d1) is the divergence itself landing: what observers at the time actually notice.
 - Found the entity roster: introduce 3 to 6 entities via newEntities, the polities, people, and institutions this history will track. At least one must NOT be a state or ruler (an institution, technology, or movement). Give each a slug, a one-line description, and 2–4 initialState facts.

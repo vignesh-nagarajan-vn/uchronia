@@ -47,6 +47,29 @@ test('demo mode is unmissable and the live check answers honestly', async ({ pag
   await expect(page.getByText(/demo mode; configure ANTHROPIC_API_KEY/)).toBeVisible()
 })
 
+test('the WW2 gate, demo side: the ask lands in 1939-1945 through the card', async ({ page }) => {
+  await page.goto('/')
+  await page.getByLabel('the point of divergence').fill('What if the Allies lost World War 2')
+  await page.getByRole('button', { name: 'Read the divergence' }).click()
+
+  // The interpretation card offers the real mechanisms, never a random century.
+  await expect(page.getByTestId('interpretation-card')).toBeVisible()
+  await expect(page.getByRole('button', { name: /Operation Sea Lion succeeds/ })).toBeVisible()
+  const year = Number(await page.getByLabel('year', { exact: true }).inputValue())
+  expect(year).toBeGreaterThanOrEqual(1939)
+  expect(year).toBeLessThanOrEqual(1945)
+
+  // Pick a mechanism, open the ledger, and let the derivation run.
+  await page.getByRole('button', { name: /Moscow falls in the winter/ }).click()
+  await page.getByRole('button', { name: 'Open the ledger' }).click()
+  await expect(page).toHaveURL(/\/t\/.+\/b\/.+/)
+  await expect(page.getByText('the divergence · ')).toBeVisible({ timeout: 20_000 })
+  await expect(page.getByRole('heading', { name: /Moscow falls in the winter/ })).toBeVisible()
+  await expect(page.getByRole('button', { name: 'Continue derivation' })).toBeVisible({
+    timeout: 90_000,
+  })
+})
+
 test('a vanished branch gets the honest dead end, not a retry loop', async ({ page }) => {
   // Ephemeral serverless instances forget chronicles (recycling, redeploys);
   // a 404 must read as the truth with a way out, not "ask again".

@@ -12,6 +12,7 @@ import { buildCritiqueReport, type RefinedBatch, refineBatch } from './critic.js
 import { callOpts, makeProvenance, type PipelineCtx } from './ctx.js'
 import type { PipelineEvent } from './events.js'
 import { eraBatchSize, planEraSpans } from './plan.js'
+import { batchReachesPod } from './relevance.js'
 import { type GeneratedValue, generateStructured } from './structured.js'
 
 /** Commit a resolved batch into the world, yielding pipeline events in ink order. */
@@ -153,6 +154,7 @@ export async function* runGeneration(
       eraGenerate,
       {
         podStatement: pod.statement,
+        podMechanism: pod.mechanism,
         span,
         ordinal: i,
         distanceYears: distance,
@@ -212,6 +214,18 @@ async function* runReviewedEra(
       `every event of era "${era.title}" was dropped by the dual review`,
       ...refined.warnings,
     ])
+  }
+
+  // Relevance guard, machine half (v2/M14): an era none of whose events
+  // trace back to the divergence has drifted into generic period content.
+  // The era still commits (the critic and the prompts are the teeth; this is
+  // the tripwire), but the drift is flagged where the user can see it.
+  const reach = batchReachesPod(world, branchId, refined.batch)
+  if (!reach.connected && era.ordinal > 0) {
+    yield {
+      type: 'warning',
+      message: `era "${era.title}" drifted off the divergence: no event's cause chain reaches the seed within ${reach.minHops === null ? 'any number of' : reach.minHops} hops (on-divergence check)`,
+    }
   }
 
   world.addEra(era)

@@ -86,6 +86,52 @@ export const PodNormalizedOut = z.object({
 })
 export type PodNormalizedOut = z.infer<typeof PodNormalizedOut>
 
+/**
+ * One candidate divergence mechanism the interpreter offers (v2/M14): a
+ * concrete, historically real way the asked-for divergence could happen.
+ */
+export const PodCandidate = z.object({
+  /** Short label, e.g. "Operation Sea Lion succeeds". */
+  label: z.string().min(1),
+  year: z.number().int(),
+  dateLabel: z.string().min(1),
+  region: z.string().min(1),
+  mechanism: z.enum(MECHANISMS),
+  /** One line on why this is a real hinge for the asked divergence. */
+  rationale: z.string().min(1),
+})
+export type PodCandidate = z.infer<typeof PodCandidate>
+
+/**
+ * pod-interpret output (v2/M14): the model's primary reading of the user's
+ * divergence plus selectable candidate mechanisms. Replaces bare
+ * normalization as the composer's entry point; nothing is created from it
+ * until the user confirms.
+ */
+export const PodInterpretedOut = z.object({
+  statement: z.string().min(1),
+  year: z.number().int(),
+  dateLabel: z.string().min(1),
+  region: z.string().min(1),
+  mechanism: z.enum(MECHANISMS),
+  baselineContext: z.string().min(1),
+  suggestedTitle: z.string().min(1),
+  /** 0-1: how sure the interpreter is that the primary reading is what was meant. */
+  confidence: z.number().min(0).max(1),
+  /** Named ambiguities in the request (empty when the ask is clear). */
+  ambiguities: z.array(z.string()),
+  /** 1-4 concrete ways the divergence could happen; the first is the primary. */
+  candidates: z.array(PodCandidate).min(1).max(4),
+  /** One optional clarifying round when confidence is low. Never a chat loop. */
+  clarifyingQuestion: z
+    .object({
+      question: z.string().min(1),
+      options: z.array(z.string().min(1)).min(2).max(4),
+    })
+    .nullable(),
+})
+export type PodInterpretedOut = z.infer<typeof PodInterpretedOut>
+
 /** derive-pressures output. */
 export const PressuresOut = z.object({
   pressures: z.array(Pressure).min(3).max(7),

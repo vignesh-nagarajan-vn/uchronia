@@ -8,6 +8,7 @@ const MASTHEADS: Record<ReturnType<typeof eraBucket>, (city: string) => string> 
   medieval: (city) => `The ${city} Chronicle of Common Report`,
   'early-modern': (city) => `The ${city} Courant`,
   modern: (city) => `The ${city} Intelligencer`,
+  twentieth: (city) => `The ${city} Evening Dispatch`,
 }
 
 const NOTICES: Record<ReturnType<typeof eraBucket>, string[]> = {
@@ -30,6 +31,11 @@ const NOTICES: Record<ReturnType<typeof eraBucket>, string[]> = {
     'Steam packet departs Tuesdays and Fridays, weather permitting. Berths from twelve shillings.',
     'Wanted: clerks with a fair hand and no opinions. Apply in writing to the registry.',
     'Dr. Malloy’s Universal Tonic, now with less mercury. Ask your chemist.',
+  ],
+  twentieth: [
+    'Ration books for the quarter are ready at the district office; bring the old cover.',
+    'Wireless sets repaired while you wait; valves in short supply, patience requested.',
+    'Lost near the tram depot: one identity card, initials R.V. Honest finder rewarded.',
   ],
 }
 

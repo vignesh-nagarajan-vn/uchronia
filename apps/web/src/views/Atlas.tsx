@@ -1,6 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import type { Lens, TimelineSummary } from '@uchronia/schemas'
-import { LENSES } from '@uchronia/schemas'
+import type {
+  ConfirmedInterpretation,
+  Lens,
+  PodCandidate,
+  PodInterpretedOut,
+  TimelineSummary,
+} from '@uchronia/schemas'
+import { LENSES, MECHANISMS } from '@uchronia/schemas'
 import { useState } from 'react'
 import { Dialog, Heading, Modal, ModalOverlay } from 'react-aria-components'
 import { Link, useNavigate } from 'react-router'
@@ -20,17 +26,63 @@ export function Atlas() {
   const [burning, setBurning] = useState<TimelineSummary | null>(null)
   const [renaming, setRenaming] = useState<{ id: string; title: string } | null>(null)
   const [demoError, setDemoError] = useState<string | null>(null)
+  // Intake 2.0 (v2/M14): the interpretation card between typing and deriving.
+  const [reading, setReading] = useState<{
+    card: PodInterpretedOut
+    edit: ConfirmedInterpretation
+  } | null>(null)
   const timelines = useQuery({ queryKey: ['timelines'], queryFn: api.listTimelines })
   const config = useQuery({ queryKey: ['config'], queryFn: api.config, staleTime: 60_000 })
 
   const create = useMutation({
-    mutationFn: (args: { podText: string; dial: number; horizonYears: number; lenses: Lens[] }) =>
-      api.createTimeline(args),
+    mutationFn: (args: {
+      podText: string
+      dial: number
+      horizonYears: number
+      lenses: Lens[]
+      interpretation?: ConfirmedInterpretation
+    }) => api.createTimeline(args),
     onSuccess: (created) => {
       void queryClient.invalidateQueries({ queryKey: ['timelines'] })
       navigate(`/t/${created.timeline.id}/b/${created.rootBranch.id}?derive=1`)
     },
   })
+
+  const interpret = useMutation({
+    mutationFn: (text: string) => api.interpret(text),
+    onSuccess: ({ interpretation }) => {
+      setReading({
+        card: interpretation,
+        edit: {
+          statement: interpretation.statement,
+          year: interpretation.year,
+          dateLabel: interpretation.dateLabel,
+          region: interpretation.region,
+          mechanism: interpretation.mechanism,
+          baselineContext: interpretation.baselineContext,
+          suggestedTitle: interpretation.suggestedTitle,
+        },
+      })
+    },
+  })
+
+  const applyCandidate = (candidate: PodCandidate) => {
+    setReading((r) =>
+      r
+        ? {
+            ...r,
+            edit: {
+              ...r.edit,
+              statement: /[.!]$/.test(candidate.label) ? candidate.label : `${candidate.label}.`,
+              year: candidate.year,
+              dateLabel: candidate.dateLabel,
+              region: candidate.region,
+              mechanism: candidate.mechanism,
+            },
+          }
+        : r,
+    )
+  }
 
   const begin = (entry?: GalleryEntry) => {
     create.mutate({
@@ -38,6 +90,7 @@ export function Atlas() {
       dial: entry?.dial ?? dial,
       horizonYears: entry?.horizonYears ?? horizon,
       lenses: entry?.lenses ?? lenses,
+      ...(entry === undefined && reading ? { interpretation: reading.edit } : {}),
     })
   }
 
@@ -124,7 +177,10 @@ export function Atlas() {
         <textarea
           id="pod"
           value={podText}
-          onChange={(e) => setPodText(e.target.value)}
+          onChange={(e) => {
+            setPodText(e.target.value)
+            setReading(null) // a changed ask invalidates the old reading
+          }}
           rows={2}
           placeholder="What if the Library of Alexandria never burned?"
           className="mt-1 w-full resize-none rounded-[2px] border border-rule bg-paper px-3 py-2 text-[16px] placeholder:text-ink-faded/70 focus:outline-2 focus:outline-thread"
@@ -175,19 +231,200 @@ export function Atlas() {
             })}
           </div>
         </fieldset>
-        <div className="mt-5 flex items-center justify-between">
-          <p className="font-data text-[12px] text-ink-faded">
-            {create.isPending ? 'normalizing the divergence…' : 'a blank ledger awaits'}
-          </p>
-          <button
-            type="button"
-            disabled={podText.trim().length < 4 || create.isPending}
-            onClick={() => begin()}
-            className="rounded-[2px] border border-thread px-4 py-1.5 text-[15px] font-medium text-thread hover:bg-thread-wash disabled:opacity-40"
+        {reading && (
+          <div
+            className="mt-4 rounded-[2px] border border-rule bg-paper p-4"
+            data-testid="interpretation-card"
           >
-            Open a ledger
-          </button>
+            <div className="flex flex-wrap items-baseline justify-between gap-2">
+              <p className="stamp text-thread">the reading</p>
+              <p className="font-data text-[11.5px] text-ink-faded">
+                confidence {(reading.card.confidence * 100).toFixed(0)}%
+              </p>
+            </div>
+            {reading.card.clarifyingQuestion && (
+              <p className="mt-2 text-[14px] font-medium text-notice">
+                {reading.card.clarifyingQuestion.question}
+              </p>
+            )}
+            {reading.card.ambiguities.length > 0 && (
+              <p className="mt-1 font-data text-[11.5px] text-ink-faded">
+                open questions: {reading.card.ambiguities.join('; ')}
+              </p>
+            )}
+            {reading.card.candidates.length > 1 && (
+              <fieldset className="mt-3">
+                <legend className="font-data text-[12px] text-ink-faded">
+                  ways this divergence could happen (pick one, or edit below)
+                </legend>
+                <div className="mt-1.5 flex flex-wrap gap-2">
+                  {reading.card.candidates.map((candidate) => {
+                    const active =
+                      reading.edit.year === candidate.year &&
+                      reading.edit.statement.startsWith(candidate.label)
+                    return (
+                      <button
+                        key={candidate.label}
+                        type="button"
+                        onClick={() => applyCandidate(candidate)}
+                        aria-pressed={active}
+                        title={candidate.rationale}
+                        className={`rounded-[2px] border px-2 py-1 text-left font-data text-[12px] ${
+                          active
+                            ? 'border-thread text-thread'
+                            : 'border-rule text-ink-faded hover:text-ink'
+                        }`}
+                      >
+                        {candidate.label} · {candidate.dateLabel}
+                      </button>
+                    )
+                  })}
+                </div>
+              </fieldset>
+            )}
+            <div className="mt-3 grid gap-3 sm:grid-cols-[1fr_110px]">
+              <label className="block">
+                <span className="font-data text-[12px] text-ink-faded">statement</span>
+                <textarea
+                  aria-label="statement"
+                  value={reading.edit.statement}
+                  onChange={(e) =>
+                    setReading((r) =>
+                      r ? { ...r, edit: { ...r.edit, statement: e.target.value } } : r,
+                    )
+                  }
+                  rows={2}
+                  className="mt-1 w-full resize-none rounded-[2px] border border-rule bg-paper-raised px-2 py-1 text-[14px]"
+                />
+              </label>
+              <label className="block">
+                <span className="font-data text-[12px] text-ink-faded">year</span>
+                <input
+                  aria-label="year"
+                  type="number"
+                  value={reading.edit.year}
+                  onChange={(e) =>
+                    setReading((r) =>
+                      r
+                        ? {
+                            ...r,
+                            edit: {
+                              ...r.edit,
+                              year: Number(e.target.value) || r.edit.year,
+                              dateLabel: String(Number(e.target.value) || r.edit.year),
+                            },
+                          }
+                        : r,
+                    )
+                  }
+                  className="mt-1 w-full rounded-[2px] border border-rule bg-paper-raised px-2 py-1 font-data text-[13px]"
+                />
+              </label>
+            </div>
+            <div className="mt-2 grid gap-3 sm:grid-cols-2">
+              <label className="block">
+                <span className="font-data text-[12px] text-ink-faded">region</span>
+                <input
+                  aria-label="region"
+                  type="text"
+                  value={reading.edit.region}
+                  onChange={(e) =>
+                    setReading((r) =>
+                      r ? { ...r, edit: { ...r.edit, region: e.target.value } } : r,
+                    )
+                  }
+                  className="mt-1 w-full rounded-[2px] border border-rule bg-paper-raised px-2 py-1 text-[13px]"
+                />
+              </label>
+              <label className="block">
+                <span className="font-data text-[12px] text-ink-faded">mechanism</span>
+                <select
+                  aria-label="mechanism"
+                  value={reading.edit.mechanism}
+                  onChange={(e) =>
+                    setReading((r) =>
+                      r
+                        ? {
+                            ...r,
+                            edit: {
+                              ...r.edit,
+                              mechanism: e.target.value as ConfirmedInterpretation['mechanism'],
+                            },
+                          }
+                        : r,
+                    )
+                  }
+                  className="mt-1 w-full rounded-[2px] border border-rule bg-paper-raised px-2 py-1 text-[13px]"
+                >
+                  {MECHANISMS.map((m) => (
+                    <option key={m} value={m}>
+                      {m}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
+            <p className="mt-3 text-[13px] text-ink-faded">
+              <span className="font-data text-[11.5px] text-record">the record: </span>
+              {reading.edit.baselineContext}
+            </p>
+            <div className="mt-4 flex items-center justify-end gap-3">
+              <button
+                type="button"
+                onClick={() => setReading(null)}
+                className="rounded-[2px] border border-rule px-3 py-1 text-[14px] hover:bg-paper-raised"
+              >
+                Dismiss
+              </button>
+              <button
+                type="button"
+                disabled={create.isPending || reading.edit.statement.trim().length === 0}
+                onClick={() => begin()}
+                className="rounded-[2px] border border-thread px-4 py-1.5 text-[15px] font-medium text-thread hover:bg-thread-wash disabled:opacity-40"
+              >
+                {create.isPending ? 'Opening…' : 'Open the ledger'}
+              </button>
+            </div>
+          </div>
+        )}
+
+        <div className="mt-5 flex items-center justify-between gap-3">
+          <p className="min-w-0 font-data text-[12px] text-ink-faded">
+            {interpret.isPending
+              ? 'reading the divergence…'
+              : create.isPending
+                ? 'opening the ledger…'
+                : reading
+                  ? 'confirm the reading above, or edit it first'
+                  : 'a blank ledger awaits'}
+          </p>
+          {!reading && (
+            <span className="flex shrink-0 items-center gap-2">
+              <button
+                type="button"
+                disabled={podText.trim().length < 4 || create.isPending || interpret.isPending}
+                onClick={() => begin()}
+                className="rounded-[2px] border border-rule px-3 py-1.5 text-[14px] text-ink-faded hover:text-ink disabled:opacity-40"
+                title="skip the interpretation card and derive from the top reading"
+              >
+                Just derive
+              </button>
+              <button
+                type="button"
+                disabled={podText.trim().length < 4 || interpret.isPending || create.isPending}
+                onClick={() => interpret.mutate(podText)}
+                className="rounded-[2px] border border-thread px-4 py-1.5 text-[15px] font-medium text-thread hover:bg-thread-wash disabled:opacity-40"
+              >
+                Read the divergence
+              </button>
+            </span>
+          )}
         </div>
+        {interpret.isError && (
+          <p className="mt-2 font-data text-[12px] text-thread" role="alert">
+            The reading failed: {(interpret.error as Error).message}
+          </p>
+        )}
         {create.isError && (
           <p className="mt-2 font-data text-[12px] text-thread" role="alert">
             The divergence could not be recorded: {(create.error as Error).message}

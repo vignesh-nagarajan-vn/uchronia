@@ -3,6 +3,7 @@ import {
   BranchView,
   ConfigResponse,
   CreateTimelineResponse,
+  InterpretResponse,
   RegenerateEventResponse,
   TimelineAggregate,
   TimelineSummary,
@@ -79,6 +80,55 @@ describe('meta routes', () => {
     expect(body.ok).toBe(false)
     expect(body.error).toContain('provider-auth')
     expect(JSON.stringify(body)).not.toMatch(/sk-/)
+  })
+})
+
+describe('POST /api/timelines/interpret - intake 2.0 (v2/M14)', () => {
+  it('lands the WW2 ask in 1939-1945 with real candidate mechanisms', async () => {
+    const { app } = makeTestApp()
+    const res = await postJson(app, '/api/timelines/interpret', {
+      podText: 'What if the Allies lost World War 2',
+    })
+    expect(res.status).toBe(200)
+    const body = InterpretResponse.parse(await res.json())
+    expect(body.mode).toBe('mock')
+    expect(body.interpretation.year).toBeGreaterThanOrEqual(1939)
+    expect(body.interpretation.year).toBeLessThanOrEqual(1945)
+    expect(body.interpretation.region).toBe('Europe')
+    expect(body.interpretation.candidates.length).toBeGreaterThanOrEqual(2)
+    expect(body.interpretation.candidates.map((c) => c.label)).toContain(
+      'Operation Sea Lion succeeds',
+    )
+  })
+
+  it('creates nothing', async () => {
+    const { app } = makeTestApp()
+    await postJson(app, '/api/timelines/interpret', { podText: 'What if WW2 went otherwise' })
+    const list = (await (await app.request('/api/timelines')).json()) as unknown[]
+    expect(list).toHaveLength(0)
+  })
+
+  it('creates from a confirmed interpretation without re-running intake', async () => {
+    const { app } = makeTestApp()
+    const res = await postJson(app, '/api/timelines', {
+      podText: 'What if the Allies lost World War 2',
+      interpretation: {
+        statement: 'Operation Sea Lion succeeds.',
+        year: 1940,
+        dateLabel: 'September 1940',
+        region: 'Europe',
+        mechanism: 'politics',
+        baselineContext: 'In the attested record the invasion was never attempted.',
+        suggestedTitle: 'The Standing Wall',
+      },
+    })
+    expect(res.status).toBe(201)
+    const created = CreateTimelineResponse.parse(await res.json())
+    expect(created.pod.year).toBe(1940)
+    expect(created.pod.statement).toBe('Operation Sea Lion succeeds.')
+    expect(created.pod.provenance.kind).toBe('user')
+    expect(created.pod.raw).toBe('What if the Allies lost World War 2')
+    expect(created.timeline.title).toBe('The Standing Wall')
   })
 })
 

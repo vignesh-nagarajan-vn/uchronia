@@ -12,6 +12,7 @@ import { mockConvergenceScan } from './convergence.js'
 import { mockCriticReview, mockRegenerateEvent } from './critic.js'
 import { mockEraGenerate } from './era.js'
 import { mockBiography, mockEraDeepDive, mockEventExpand } from './expanders.js'
+import { mockPodInterpret } from './pod-interpret.js'
 import { mockPodNormalize } from './pod-normalize.js'
 import { mockDerivePressures } from './pressures.js'
 import { mockSeedConsequences } from './seed.js'
@@ -54,6 +55,7 @@ export class MockProvider implements LLMProvider {
 
 const DEFAULT_HANDLERS: Record<string, MockHandler> = {
   'pod-normalize': mockPodNormalize,
+  'pod-interpret': mockPodInterpret,
   'seed-consequences': mockSeedConsequences,
   'critic-review': mockCriticReview,
   'regenerate-event': mockRegenerateEvent,

@@ -9,6 +9,7 @@ import { criticReview } from './critic-review.js'
 import { derivePressures } from './derive-pressures.js'
 import { eraGenerate } from './era-generate.js'
 import { entityBiography, eraDeepDive, eventExpand } from './expanders.js'
+import { podInterpret } from './pod-interpret.js'
 import { podNormalize } from './pod-normalize.js'
 import { regenerateEvent } from './regenerate-event.js'
 import { seedConsequences } from './seed-consequences.js'
@@ -22,6 +23,7 @@ import type { PromptTemplate } from './types.js'
 // biome-ignore lint/suspicious/noExplicitAny: heterogenous registry; call sites use the typed exports
 export const PROMPT_REGISTRY: Record<string, PromptTemplate<any, any>> = {
   [podNormalize.id]: podNormalize,
+  [podInterpret.id]: podInterpret,
   [seedConsequences.id]: seedConsequences,
   [criticReview.id]: criticReview,
   [regenerateEvent.id]: regenerateEvent,

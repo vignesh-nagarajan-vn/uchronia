@@ -7,7 +7,8 @@ import { EntityBiography, EntityView } from './entity.js'
 import { Era } from './era.js'
 import { EventView } from './event.js'
 import { Lens } from './lens.js'
-import { PointOfDivergence } from './pod.js'
+import { PodInterpretedOut } from './llm.js'
+import { Mechanism, PointOfDivergence } from './pod.js'
 import { Dial, Timeline, TimelineSettings } from './timeline.js'
 
 /**
@@ -27,14 +28,43 @@ export const TimelineSummary = z.object({
 })
 export type TimelineSummary = z.infer<typeof TimelineSummary>
 
+/**
+ * A confirmed interpretation (v2/M14): what the user accepted or edited on
+ * the interpretation card. When present, creation uses it verbatim instead of
+ * running intake again - the user's confirmation is the authority.
+ */
+export const ConfirmedInterpretation = z.object({
+  statement: z.string().min(1).max(500),
+  year: z.number().int(),
+  dateLabel: z.string().min(1).max(80),
+  region: z.string().min(1).max(80),
+  mechanism: Mechanism,
+  baselineContext: z.string().min(1).max(2000),
+  suggestedTitle: z.string().min(1).max(120).optional(),
+})
+export type ConfirmedInterpretation = z.infer<typeof ConfirmedInterpretation>
+
 export const CreateTimelineRequest = z.object({
   podText: z.string().min(4).max(2000),
   title: z.string().min(1).max(120).optional(),
   dial: Dial.optional(),
   horizonYears: z.number().int().min(10).max(3000).optional(),
   lenses: z.array(Lens).min(1).optional(),
+  interpretation: ConfirmedInterpretation.optional(),
 })
 export type CreateTimelineRequest = z.infer<typeof CreateTimelineRequest>
+
+export const InterpretRequest = z.object({
+  podText: z.string().min(4).max(2000),
+})
+export type InterpretRequest = z.infer<typeof InterpretRequest>
+
+export const InterpretResponse = z.object({
+  interpretation: PodInterpretedOut,
+  model: z.string(),
+  mode: z.enum(['mock', 'live']),
+})
+export type InterpretResponse = z.infer<typeof InterpretResponse>
 
 export const CreateTimelineResponse = z.object({
   timeline: Timeline,
