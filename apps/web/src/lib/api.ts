@@ -47,8 +47,18 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   return (await res.json()) as T
 }
 
+export interface LiveCheckResult {
+  ok: boolean
+  mode: 'live' | 'demo'
+  model?: string
+  latencyMs?: number
+  error?: string
+}
+
 export const api = {
   config: async () => ConfigResponse.parse(await request('/api/config')),
+
+  liveCheck: () => request<LiveCheckResult>('/api/live-check', { method: 'POST' }),
 
   baseline: () => request<{ anchors: BaselineAnchor[] }>('/api/baseline'),
 

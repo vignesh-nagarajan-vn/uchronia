@@ -29,8 +29,12 @@ export interface StructuredRequest {
 
 /** What one completion cost, when the provider knows. */
 export interface TokenUsage {
+  /** Uncached input tokens (cache reads/writes are counted separately). */
   inputTokens: number
   outputTokens: number
+  /** Prompt-cache tokens, when the provider reports them (live mode only). */
+  cacheReadTokens?: number | undefined
+  cacheWriteTokens?: number | undefined
 }
 
 export interface StructuredResult {

@@ -3,7 +3,7 @@ import type { Lens, TimelineSummary } from '@uchronia/schemas'
 import { LENSES } from '@uchronia/schemas'
 import { useState } from 'react'
 import { Dialog, Heading, Modal, ModalOverlay } from 'react-aria-components'
-import { useNavigate } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 import { DialControl } from '../components/DialControl.js'
 import { Shell, Wordmark } from '../components/Shell.js'
 import { ApiError, api } from '../lib/api.js'
@@ -21,6 +21,7 @@ export function Atlas() {
   const [renaming, setRenaming] = useState<{ id: string; title: string } | null>(null)
   const [demoError, setDemoError] = useState<string | null>(null)
   const timelines = useQuery({ queryKey: ['timelines'], queryFn: api.listTimelines })
+  const config = useQuery({ queryKey: ['config'], queryFn: api.config, staleTime: 60_000 })
 
   const create = useMutation({
     mutationFn: (args: { podText: string; dial: number; horizonYears: number; lenses: Lens[] }) =>
@@ -99,6 +100,24 @@ export function Atlas() {
       </section>
 
       <section className="sheet mx-auto max-w-[680px] p-5" aria-label="compose a divergence">
+        {config.data?.mode === 'demo' && (
+          <div
+            role="status"
+            data-testid="demo-banner"
+            className="mb-4 rounded-[2px] border border-notice/60 bg-notice-wash px-3 py-2.5"
+          >
+            <p className="stamp font-medium tracking-[0.08em] text-notice">DEMO MODE</p>
+            <p className="mt-1 text-[14px] leading-snug">
+              This engine is running canned, deterministic demo content. What you type shapes the
+              frame (the year, the region, the naming), never the history itself. For real
+              derivation, add an API key on the server:{' '}
+              <Link to="/settings" className="text-notice underline underline-offset-4">
+                how to go live
+              </Link>
+              .
+            </p>
+          </div>
+        )}
         <label htmlFor="pod" className="font-data text-[13px] text-ink-faded">
           the point of divergence
         </label>

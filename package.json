@@ -10,6 +10,7 @@
   "scripts": {
     "dev": "pnpm --parallel --filter @uchronia/server --filter @uchronia/web dev",
     "dev:mock": "cross-env UCHRONIA_MOCK=1 UCHRONIA_MOCK_PACE_MS=250 pnpm dev",
+    "dev:preview": "cross-env UCHRONIA_MOCK=1 UCHRONIA_MOCK_PACE_MS=250 pnpm --parallel --filter @uchronia/server --filter @uchronia/web dev:preview",
     "dev:server": "pnpm --filter @uchronia/server dev",
     "dev:web": "pnpm --filter @uchronia/web dev",
     "build": "pnpm -r build",
@@ -19,7 +20,8 @@
     "lint:fix": "biome check --write .",
     "migrate": "pnpm --filter @uchronia/server migrate",
     "e2e": "pnpm --filter @uchronia/web e2e",
-    "verify:vercel": "pnpm --filter @uchronia/server build:vercel && node scripts/verify-vercel.mjs"
+    "verify:vercel": "pnpm --filter @uchronia/server build:vercel && node scripts/verify-vercel.mjs",
+    "check:secrets": "node scripts/check-secrets.mjs"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.5",

@@ -1,3 +1,4 @@
+import { ProviderAuthError } from '@uchronia/core'
 import {
   BranchView,
   ConfigResponse,
@@ -10,6 +11,7 @@ import {
 import { FX, fixtureAggregate } from '@uchronia/schemas/fixtures'
 import { describe, expect, it } from 'vitest'
 import { z } from 'zod'
+import { createApp } from './app.js'
 import { makeTestApp, postJson } from './test-helpers.js'
 
 describe('meta routes', () => {
@@ -19,6 +21,7 @@ describe('meta routes', () => {
     expect(res.status).toBe(200)
     const config = ConfigResponse.parse(await res.json())
     expect(config.mock).toBe(true)
+    expect(config.mode).toBe('demo')
     expect(config.keyConfigured).toBe(false)
     expect(JSON.stringify(config)).not.toMatch(/sk-/)
   })
@@ -29,6 +32,53 @@ describe('meta routes', () => {
     const body = (await res.json()) as { provenance: string; anchors: unknown[] }
     expect(body.provenance).toBe('curated')
     expect(body.anchors.length).toBeGreaterThanOrEqual(3)
+  })
+
+  it('live-check tells the truth in demo mode without spending anything', async () => {
+    const { app } = makeTestApp()
+    const res = await app.request('/api/live-check', { method: 'POST' })
+    expect(res.status).toBe(200)
+    const body = (await res.json()) as { ok: boolean; mode: string; error: string }
+    expect(body.ok).toBe(false)
+    expect(body.mode).toBe('demo')
+    expect(body.error).toContain('demo mode')
+  })
+
+  it('live-check reports the pinged model and latency when live', async () => {
+    const { deps } = makeTestApp()
+    const app = createApp({
+      ...deps,
+      config: { ...deps.config, mock: false },
+      livePing: async () => ({ model: 'claude-haiku-4-5-20251001' }),
+    })
+    const res = await app.request('/api/live-check', { method: 'POST' })
+    const body = (await res.json()) as {
+      ok: boolean
+      mode: string
+      model: string
+      latencyMs: number
+    }
+    expect(body.ok).toBe(true)
+    expect(body.mode).toBe('live')
+    expect(body.model).toBe('claude-haiku-4-5-20251001')
+    expect(body.latencyMs).toBeGreaterThanOrEqual(0)
+  })
+
+  it('live-check maps provider failures to readable, secret-free errors', async () => {
+    const { deps } = makeTestApp()
+    const app = createApp({
+      ...deps,
+      config: { ...deps.config, mock: false },
+      livePing: async () => {
+        throw new ProviderAuthError('anthropic rejected the API key')
+      },
+    })
+    const res = await app.request('/api/live-check', { method: 'POST' })
+    expect(res.status).toBe(200)
+    const body = (await res.json()) as { ok: boolean; error: string }
+    expect(body.ok).toBe(false)
+    expect(body.error).toContain('provider-auth')
+    expect(JSON.stringify(body)).not.toMatch(/sk-/)
   })
 })
 

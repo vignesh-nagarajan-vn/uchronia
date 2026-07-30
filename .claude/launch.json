@@ -4,12 +4,8 @@
     {
       "name": "uchronia",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["dev"],
-      "port": 5173,
-      "env": {
-        "UCHRONIA_MOCK": "1",
-        "UCHRONIA_MOCK_PACE_MS": "250"
-      }
+      "runtimeArgs": ["dev:preview"],
+      "port": 5173
     }
   ]
 }

@@ -13,6 +13,7 @@ import { EmptyState, ErrorState, Shell } from '../components/Shell.js'
 import { ShortcutsDialog } from '../components/ShortcutsDialog.js'
 import { type Thread, ThreadOverlay } from '../components/ThreadOverlay.js'
 import { ApiError, api } from '../lib/api.js'
+import { formatUsd } from '../lib/format.js'
 import { useGeneration } from '../lib/generation.js'
 
 type Row =
@@ -552,10 +553,16 @@ export function TimelineView() {
           the derivation halted: {generation.state.error}
         </p>
       )}
-      {!running && generation.state.usage && (
-        <p className="mt-2 font-data text-[12px] text-ink-faded">
-          the run spent {generation.state.usage.inputTokens.toLocaleString()} tokens in,{' '}
+      {generation.state.usage && (
+        <p className="mt-2 font-data text-[12px] text-ink-faded" data-testid="cost-meter">
+          {running ? 'spending' : 'the run spent'}{' '}
+          {generation.state.usage.inputTokens.toLocaleString()} tokens in,{' '}
           {generation.state.usage.outputTokens.toLocaleString()} out
+          {generation.state.usage.cacheReadTokens > 0 &&
+            `, ${generation.state.usage.cacheReadTokens.toLocaleString()} cache-read`}
+          {generation.state.usage.estimatedUsd > 0 &&
+            ` · about ${formatUsd(generation.state.usage.estimatedUsd)}`}
+          {generation.state.usage.unpricedModels.length > 0 && ' (plus unpriced model tokens)'}
         </p>
       )}
 

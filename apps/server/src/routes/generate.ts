@@ -1,9 +1,11 @@
 import {
+  estimateUsd,
   GenerationAbortedError,
   type PipelineEvent,
   runGeneration,
   type TokenUsage,
   UchroniaError,
+  type UsageByModel,
   World,
 } from '@uchronia/core'
 import { Hono } from 'hono'
@@ -100,15 +102,29 @@ export function generateRoutes(deps: ServerDeps): Hono {
     const world = World.fromAggregate(aggregate)
     const controller = new AbortController()
     const usage: TokenUsage = { inputTokens: 0, outputTokens: 0 }
+    // Per-model splits feed the cost meter: sonnet input is not haiku input.
+    const byModel: UsageByModel = {}
+    let usageDirty = false
     let budgetExceeded = false
-    const onUsage = (u: TokenUsage) => {
+    const onUsage = (u: TokenUsage, _templateId: string, model: string) => {
       usage.inputTokens += u.inputTokens
       usage.outputTokens += u.outputTokens
+      byModel[model] ??= { inputTokens: 0, outputTokens: 0 }
+      const m = byModel[model]
+      m.inputTokens += u.inputTokens
+      m.outputTokens += u.outputTokens
+      if (u.cacheReadTokens) m.cacheReadTokens = (m.cacheReadTokens ?? 0) + u.cacheReadTokens
+      if (u.cacheWriteTokens) m.cacheWriteTokens = (m.cacheWriteTokens ?? 0) + u.cacheWriteTokens
+      usageDirty = true
       const cap = deps.config.maxRunTokens
       if (cap > 0 && usage.inputTokens + usage.outputTokens > cap && !budgetExceeded) {
         budgetExceeded = true
         controller.abort()
       }
+    }
+    const costFrame = () => {
+      const { usd, unpriced } = estimateUsd(byModel)
+      return { usage, byModel, estimatedUsd: usd, unpricedModels: unpriced }
     }
 
     const run = runGeneration(
@@ -142,8 +158,18 @@ export function generateRoutes(deps: ServerDeps): Hono {
         }
         for await (const ev of run) {
           persistPipelineEvent(deps, ev)
-          const frame = ev.type === 'run.completed' ? { ...ev, usage } : ev
+          const frame = ev.type === 'run.completed' ? { ...ev, ...costFrame() } : ev
           await stream.writeSSE({ event: ev.type, data: JSON.stringify(frame) })
+          // The live cost meter: whenever provider calls landed since the last
+          // frame, follow with a cumulative usage frame (live mode only; the
+          // mock meters nothing, so demo streams stay exactly as before).
+          if (usageDirty && ev.type !== 'run.completed') {
+            usageDirty = false
+            await stream.writeSSE({
+              event: 'run.usage',
+              data: JSON.stringify({ type: 'run.usage', ...costFrame() }),
+            })
+          }
           // Pace the first stretch only: the ink-in is a demo moment, and a
           // long-horizon run must not walk into serverless time limits.
           if (pace > 0 && ev.type === 'event.accepted' && pacedEvents < 60) {

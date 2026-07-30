@@ -102,12 +102,36 @@ export class AnthropicProvider implements LLMProvider {
           usage: {
             inputTokens: message.usage.input_tokens,
             outputTokens: message.usage.output_tokens,
+            cacheReadTokens: message.usage.cache_read_input_tokens ?? undefined,
+            cacheWriteTokens: message.usage.cache_creation_input_tokens ?? undefined,
           },
         }
       }
     } catch (error) {
       throw mapAnthropicError(error)
     }
+  }
+}
+
+/**
+ * The cheapest possible proof that the configured key works: one message,
+ * one output token, on the critic-tier model. Returns the resolved model id;
+ * failures surface through the typed provider taxonomy (never the key).
+ */
+export async function livePing(
+  config: AnthropicProviderConfig,
+  client?: Anthropic,
+): Promise<{ model: string }> {
+  const anthropic = client ?? new Anthropic({ apiKey: config.apiKey, maxRetries: 1 })
+  try {
+    const message = await anthropic.messages.create({
+      model: config.models.critic,
+      max_tokens: 1,
+      messages: [{ role: 'user', content: 'ping' }],
+    })
+    return { model: message.model }
+  } catch (error) {
+    throw mapAnthropicError(error)
   }
 }
 

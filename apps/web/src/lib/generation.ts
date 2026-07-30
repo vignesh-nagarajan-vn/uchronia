@@ -3,14 +3,49 @@ import type { BranchView, EntityView, EventView } from '@uchronia/schemas'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { streamGeneration } from './sse.js'
 
+/** The live cost meter, fed by run.usage frames (live mode meters; demo does not). */
+export interface RunMeter {
+  inputTokens: number
+  outputTokens: number
+  cacheReadTokens: number
+  /** Dated estimate from the server's pricing table; billing truth is Anthropic's. */
+  estimatedUsd: number
+  /** Models the server could not price (their tokens are outside estimatedUsd). */
+  unpricedModels: string[]
+}
+
+interface UsageFrameData {
+  usage?: { inputTokens?: number; outputTokens?: number }
+  byModel?: Record<string, { cacheReadTokens?: number }>
+  estimatedUsd?: number
+  unpricedModels?: string[]
+}
+
+function meterFrom(data: UsageFrameData): RunMeter | null {
+  const inputTokens = data.usage?.inputTokens ?? 0
+  const outputTokens = data.usage?.outputTokens ?? 0
+  if (inputTokens + outputTokens <= 0) return null
+  const cacheReadTokens = Object.values(data.byModel ?? {}).reduce(
+    (sum, m) => sum + (m.cacheReadTokens ?? 0),
+    0,
+  )
+  return {
+    inputTokens,
+    outputTokens,
+    cacheReadTokens,
+    estimatedUsd: data.estimatedUsd ?? 0,
+    unpricedModels: data.unpricedModels ?? [],
+  }
+}
+
 export interface GenerationState {
   status: 'idle' | 'running' | 'done' | 'error'
   currentEra: string | null
   error: string | null
   /** Event ids that arrived over this stream - the ink-in set. */
   freshIds: Set<string>
-  /** What the run cost, when the provider metered it (live mode). */
-  usage: { inputTokens: number; outputTokens: number } | null
+  /** What the run has cost so far, when the provider meters it (live mode). */
+  usage: RunMeter | null
 }
 
 /**
@@ -153,12 +188,15 @@ export function useGeneration(branchId: string) {
             }))
             break
           }
+          case 'run.usage': {
+            const meter = meterFrom(data as UsageFrameData)
+            if (meter) setState((s) => ({ ...s, usage: meter }))
+            break
+          }
           case 'run.completed': {
             sawTerminalFrame = true
-            const usage = data.usage as GenerationState['usage'] | undefined
-            if (usage && usage.inputTokens + usage.outputTokens > 0) {
-              setState((s) => ({ ...s, usage }))
-            }
+            const meter = meterFrom(data as UsageFrameData)
+            if (meter) setState((s) => ({ ...s, usage: meter }))
             break
           }
           case 'run.error': {

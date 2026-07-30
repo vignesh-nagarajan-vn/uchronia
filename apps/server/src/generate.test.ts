@@ -172,6 +172,54 @@ describe('POST /api/branches/:id/generate - SSE', () => {
     expect(after.events).toHaveLength(eventCount)
   })
 
+  it('streams cumulative run.usage frames and a priced run.completed when metered', async () => {
+    const { app, deps } = makeTestApp()
+    // The mock meters nothing; wrap it so every call reports usage the way
+    // the live provider would, with per-role model ids.
+    const inner = deps.provider
+    deps.provider = {
+      mode: inner.mode,
+      complete: async (req) => ({
+        ...(await inner.complete(req)),
+        model: req.role === 'generation' ? 'claude-sonnet-5' : 'claude-haiku-4-5-20251001',
+        usage: { inputTokens: 1000, outputTokens: 500 },
+      }),
+    }
+    const created = await createTimeline(app)
+    const events = parseSse(
+      await (
+        await app.request(`/api/branches/${created.rootBranch.id}/generate`, { method: 'POST' })
+      ).text(),
+    )
+
+    const usageFrames = events.filter((e) => e.event === 'run.usage')
+    expect(usageFrames.length).toBeGreaterThanOrEqual(3)
+    // Cumulative and monotonic: the meter only ever counts up.
+    let previous = 0
+    for (const frame of usageFrames) {
+      const data = frame.data as { usage: { inputTokens: number; outputTokens: number } }
+      const total = data.usage.inputTokens + data.usage.outputTokens
+      expect(total).toBeGreaterThanOrEqual(previous)
+      previous = total
+    }
+
+    const completed = events.at(-1)
+    expect(completed?.event).toBe('run.completed')
+    const data = completed?.data as {
+      usage: { inputTokens: number; outputTokens: number }
+      byModel: Record<string, { inputTokens: number; outputTokens: number }>
+      estimatedUsd: number
+      unpricedModels: string[]
+    }
+    expect(data.usage.inputTokens).toBeGreaterThan(0)
+    expect(data.estimatedUsd).toBeGreaterThan(0)
+    expect(data.unpricedModels).toEqual([])
+    expect(Object.keys(data.byModel).sort()).toEqual([
+      'claude-haiku-4-5-20251001',
+      'claude-sonnet-5',
+    ])
+  })
+
   it('404s for unknown branches', async () => {
     const { app } = makeTestApp()
     const res = await app.request('/api/branches/01BR00000000000000000000ZZ/generate', {

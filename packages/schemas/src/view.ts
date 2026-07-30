@@ -44,7 +44,10 @@ export const CreateTimelineResponse = z.object({
 export type CreateTimelineResponse = z.infer<typeof CreateTimelineResponse>
 
 export const ConfigResponse = z.object({
+  /** Kept for compatibility; `mode` is the user-facing truth. */
   mock: z.boolean(),
+  /** 'demo' = deterministic canned engine (no key); 'live' = real derivation. */
+  mode: z.enum(['live', 'demo']),
   keyConfigured: z.boolean(),
   models: z.object({ generation: z.string(), critic: z.string() }),
   defaults: z.object({

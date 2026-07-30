@@ -7,7 +7,7 @@ describe('server app', () => {
     const { app } = makeTestApp()
     const res = await app.request('/api/health')
     expect(res.status).toBe(200)
-    expect(await res.json()).toEqual({ ok: true, mock: true })
+    expect(await res.json()).toEqual({ ok: true, mock: true, mode: 'demo' })
   })
 
   it('maps malformed JSON bodies to a 400 envelope instead of a 500', async () => {

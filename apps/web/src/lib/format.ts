@@ -15,3 +15,10 @@ export function formatYear(year: number): string {
 export function formatYearRange(start: number, end: number): string {
   return `${formatYear(start)} – ${formatYear(end)}`
 }
+
+/** Cost-meter dollars: enough precision that a cheap run visibly moves. */
+export function formatUsd(usd: number): string {
+  if (usd >= 1) return `$${usd.toFixed(2)}`
+  if (usd >= 0.01) return `$${usd.toFixed(3)}`
+  return `$${usd.toFixed(4)}`
+}

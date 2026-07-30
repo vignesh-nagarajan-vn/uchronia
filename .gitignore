@@ -9,6 +9,9 @@ dist/
 .env
 .env.local
 
+# the v2 master prompt lives outside the repo; its expectations live in docs/
+/V2_MASTER_PROMPT.md
+
 # runtime data (SQLite lives under apps/server/data; packages/core/data is source!)
 apps/server/data/
 *.db

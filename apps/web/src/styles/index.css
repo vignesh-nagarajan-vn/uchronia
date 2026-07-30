@@ -21,6 +21,10 @@
   --color-thread-wash: rgba(168, 40, 26, 0.1);
   --color-record-wash: rgba(23, 74, 124, 0.08);
   --color-rule: #c6cabf;
+  /* Notice register (parchment/amber): mode banners, budget warnings. Never
+     record blue, never thread red - those stay reserved. */
+  --color-notice: #7c5310;
+  --color-notice-wash: rgba(176, 122, 34, 0.13);
 
   --color-lens-political: #4a4e45;
   --color-lens-technological: #4f5d5c;
@@ -43,6 +47,8 @@
   --color-thread-wash: rgba(217, 106, 85, 0.14);
   --color-record-wash: rgba(127, 169, 217, 0.12);
   --color-rule: #2a3245;
+  --color-notice: #d9a45b;
+  --color-notice-wash: rgba(217, 164, 91, 0.13);
 
   --color-lens-political: #9aa08f;
   --color-lens-technological: #8fa6a4;

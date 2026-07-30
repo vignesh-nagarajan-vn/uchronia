@@ -43,13 +43,15 @@ export function Shell({
           </nav>
           <div className="flex shrink-0 flex-wrap items-center gap-3">
             {actions}
-            {config.data?.mock && (
-              <span
-                className="stamp rounded-[2px] border border-rule px-1.5 py-0.5 text-ink-faded"
-                title="deterministic mock engine - no API key in play"
+            {config.data?.mode === 'demo' && (
+              <Link
+                to="/settings"
+                data-testid="demo-pill"
+                className="stamp rounded-[2px] border border-notice/60 bg-notice-wash px-2 py-0.5 font-medium tracking-[0.08em] text-notice no-underline hover:opacity-80"
+                title="demo engine: canned, deterministic content - add an API key for real derivation"
               >
-                mock
-              </span>
+                DEMO
+              </Link>
             )}
             <Link to="/settings" className="font-data text-[13px] text-ink-faded hover:text-ink">
               settings

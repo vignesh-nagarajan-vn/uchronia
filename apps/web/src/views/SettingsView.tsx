@@ -14,6 +14,8 @@ export function SettingsView() {
   const queryClient = useQueryClient()
   const navigate = useNavigate()
 
+  const liveCheck = useMutation({ mutationFn: () => api.liveCheck() })
+
   const importMutation = useMutation({
     mutationFn: (aggregate: unknown) => api.importAggregate(aggregate),
     onSuccess: () => {
@@ -54,7 +56,13 @@ export function SettingsView() {
           </h2>
           <dl className="mt-2 space-y-1.5">
             <SettingRow k="mode">
-              {c.mock ? 'mock - deterministic, keyless' : 'live - Anthropic API'}
+              {c.mode === 'demo' ? (
+                <span className="font-medium text-notice">
+                  demo - canned, deterministic, keyless
+                </span>
+              ) : (
+                'live - real derivation via the Anthropic API'
+              )}
             </SettingRow>
             <SettingRow k="API key">
               {c.keyConfigured
@@ -68,9 +76,60 @@ export function SettingsView() {
               {c.defaults.lenses.length} lenses
             </SettingRow>
           </dl>
+
+          {c.mode === 'demo' && (
+            <div className="mt-3 rounded-[2px] border border-notice/60 bg-notice-wash px-3 py-2.5 text-[14px]">
+              <p className="stamp font-medium tracking-[0.08em] text-notice">going live, locally</p>
+              <ol className="mt-1.5 list-decimal space-y-1 pl-5 leading-snug">
+                <li>
+                  Create a file named <code className="font-data text-[12.5px]">.env</code> at the
+                  repository root (it is gitignored; never commit it, never paste the key anywhere
+                  else).
+                </li>
+                <li>
+                  Add one line: <code className="font-data text-[12.5px]">ANTHROPIC_API_KEY=</code>
+                  followed by your key from the Anthropic console.
+                </li>
+                <li>
+                  Restart the server (<code className="font-data text-[12.5px]">pnpm dev</code>).
+                  The DEMO pill disappears once the engine is live.
+                </li>
+              </ol>
+              <p className="mt-1.5 text-[13px] text-ink-faded">
+                If UCHRONIA_MOCK=1 is set, demo stays forced even with a key. The key stays
+                server-side, always.
+              </p>
+            </div>
+          )}
+
+          <div className="mt-3 flex flex-wrap items-center gap-3">
+            <button
+              type="button"
+              onClick={() => liveCheck.mutate()}
+              disabled={liveCheck.isPending}
+              className="rounded-[2px] border border-rule px-3 py-1 text-[14px] hover:bg-paper-raised disabled:opacity-40"
+            >
+              {liveCheck.isPending ? 'Checking…' : 'Test live connection'}
+            </button>
+            {liveCheck.data &&
+              (liveCheck.data.ok ? (
+                <span className="font-data text-[12px] text-ink-faded" role="status">
+                  live: {liveCheck.data.model} answered in {liveCheck.data.latencyMs}ms
+                </span>
+              ) : (
+                <span className="font-data text-[12px] text-notice" role="status">
+                  {liveCheck.data.error}
+                </span>
+              ))}
+            {liveCheck.isError && (
+              <span className="font-data text-[12px] text-notice" role="status">
+                the check did not reach the server
+              </span>
+            )}
+          </div>
           <p className="mt-2 font-data text-[11.5px] text-ink-faded">
-            models are configured with UCHRONIA_MODEL_GENERATION / UCHRONIA_MODEL_CRITIC; mock mode
-            with UCHRONIA_MOCK=1
+            the check spends one output token when a key is configured; models are configured with
+            UCHRONIA_MODEL_GENERATION / UCHRONIA_MODEL_CRITIC
           </p>
         </section>
 

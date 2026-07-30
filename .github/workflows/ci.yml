@@ -18,6 +18,15 @@ env:
   UCHRONIA_MOCK: '1'
 
 jobs:
+  secrets:
+    name: secret scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Scan the tree for key material
+        run: node scripts/check-secrets.mjs
+
   checks:
     name: checks (${{ matrix.os }}, node ${{ matrix.node }})
     strategy:

@@ -33,6 +33,20 @@ async function walkUntilVisible(page: Page, testId: string, maxSteps = 60): Prom
   await expect(page.getByTestId(testId).first()).toBeVisible()
 }
 
+test('demo mode is unmissable and the live check answers honestly', async ({ page }) => {
+  await page.goto('/')
+  // The shell pill and the composer banner both say what the engine is.
+  await expect(page.getByTestId('demo-pill')).toBeVisible()
+  await expect(page.getByTestId('demo-banner')).toBeVisible()
+  await expect(page.getByTestId('demo-banner')).toContainText('canned')
+  // The pill walks to Settings, where the mode is stated and checkable.
+  await page.getByTestId('demo-pill').click()
+  await expect(page).toHaveURL(/\/settings/)
+  await expect(page.getByText('demo - canned, deterministic, keyless')).toBeVisible()
+  await page.getByRole('button', { name: 'Test live connection' }).click()
+  await expect(page.getByText(/demo mode; configure ANTHROPIC_API_KEY/)).toBeVisible()
+})
+
 test('a vanished branch gets the honest dead end, not a retry loop', async ({ page }) => {
   // Ephemeral serverless instances forget chronicles (recycling, redeploys);
   // a 404 must read as the truth with a way out, not "ask again".
