@@ -33,34 +33,6 @@ Uchronia is a lightweight causal simulation wearing a literary interface:
 
 The prose is the surface. The graph is the truth.
 
-## What v2 added
-
-*The Second Derivation* exists because of one failure: someone asked what if the
-Allies lost the Second World War and got a canned history set in the 1600s. The
-north star was that **the engine answers the question asked, provably.**
-
-- **It reads your ask before deriving.** An interpretation card offers real
-  divergence mechanisms, grounded in retrieved anchors from the curated record,
-  and nothing is created until you confirm or edit it.
-- **It says what engine it is.** No key means demo mode, and demo mode says so
-  in a banner rather than in a whisper.
-- **1578 curated anchors**, 4000 BC to 2024, with themes, magnitude, and how
-  strongly structure pulls back toward each one.
-- **Deep time by default**: a divergence runs to the present, with an optional
-  epilogue era marked as a projection rather than a derivation.
-- **A symposium mode**: three specialist historians draft each era and a fourth
-  merges them, keeping what they could not settle as contested marginalia. And
-  a Court of Plausibility that hears disputed events out.
-- **Ask the archivist.** Every factual sentence is pinned to a row you can open,
-  and "the record is silent on that" is a real answer.
-- **Commission the chronicle** as a print-grade book or an EPUB.
-- **A map**, deliberately schematic and captioned as such, with a data table
-  carrying the same claims.
-- **Ctrl+K** to get anywhere.
-
-The full record, including everything deliberately not built, is in
-[docs/ROADMAP.md](docs/ROADMAP.md) and [CHANGELOG.md](CHANGELOG.md).
-
 ## Tech stack
 
 <p align="center"><b>Frontend</b></p>
@@ -114,15 +86,22 @@ The full record, including everything deliberately not built, is in
 
 ## Features
 
-- **POD studio**: freeform divergence composer plus a curated gallery of twelve starting points, from the Bronze Age Collapse to a Carrington-class storm in 1989.
-- **The spine**: a vertical timeline where the Prussian-blue line of the real record visibly splits at your divergence, the red thread of the counterfactual peeling away from it. Search it, filter it by lens, walk it entirely from the keyboard.
+- **POD studio**: a freeform divergence composer that reads your ask against the curated record before deriving anything, offering real divergence mechanisms on an interpretation card you confirm or edit. Plus a catalogue of 85 starting points, from the Bronze Age Collapse to a Carrington-class storm in 1989.
+- **Honest modes**: no API key means demo mode, and demo mode says so in a banner rather than in a whisper. A one-token live check tells you whether a key actually works.
+- **The record**: 1578 curated anchors, 4000 BC to 2024, with themes, magnitude, and how strongly structure pulls back toward each one. Hand-assembled, fact-checked, and never generated. Browse it at `/record`.
+- **The spine**: a vertical timeline where the Prussian-blue line of the real record visibly splits at your divergence, the red thread of the counterfactual peeling away from it. Search it, filter it by lens, walk it entirely from the keyboard, or jump anywhere with Ctrl+K.
 - **Red-thread causality**: hover any event and literal red threads draw to its causal ancestors and descendants.
-- **Determinism dial**: from *butterfly* (contingency compounds) to *railroad* (geography, demographics, and economics drag history back toward its attractors), and the critic's plausibility bar moves with it.
-- **Convergence detection**: the engine flags moments where your divergent timeline rhymes back into real history, ranked by the divergence's own theatre.
-- **Dossiers**: every person, nation, technology, and institution keeps a state ledger; biographies are written from inside the timeline; entities age, die, and dissolve for good.
-- **Diegetic artifacts**: newspaper front pages, personal letters, encyclopedia entries, and propaganda posters, typeset as period primary sources.
-- **Branching**: fork at any event with an optional sub-POD; compare any two branches, or a branch against the real record. Don't like an event? *Tell it again*: regenerated in place, validated before it lands.
-- **Export**: full JSON, markdown, and a self-contained static HTML edition of any branch (typefaces embedded, readable decades from now).
+- **Determinism dial**: from *butterfly* (contingency compounds) to *railroad* (geography, demographics, and economics drag history back toward its attractors), with four axes you can take off the master dial by hand.
+- **Deep time**: a divergence runs to the present day by default, era spans widening as they go, with an optional epilogue that is marked as a projection rather than a derivation.
+- **A symposium, and a court**: optionally derive each era through three specialist historians and a fourth pass that merges them, keeping what they could not settle as contested marginalia. Disputed events can be argued out by an advocate, a skeptic, and a judge.
+- **Convergence detection**: the engine flags where your timeline rhymes back into real history, naming the structural attractor that pulled, how many years off schedule it landed, and whether the road itself differed.
+- **Dossiers**: every person, nation, technology, and institution keeps a state ledger, with birth years, offices held, succession, procedural arms, and a mark on anyone this history invented. Entities age, die, and dissolve for good.
+- **Diegetic artifacts**: newspaper front pages, letters, encyclopedia entries, posters, telegrams, broadcast transcripts, obituaries, and classified pages, each typeset in the register its form imposes.
+- **Rival historians**: two or three in-world schools per branch, each with the blind spot its rivals name, and any event readable through all of them at once.
+- **Branching**: fork at any event with an optional sub-POD, or pulse a counterfactual first to see what one flip would move before committing. Graft an event from one line onto another. Compare two branches, or three, or a branch against the real record. Don't like an event? *Tell it again*: regenerated in place, validated before it lands.
+- **Ask the archivist**: put a question to a chronicle and get an answer made of its own record, every factual sentence pinned to a row you can open, with "the record is silent on that" as a real answer. Put a thesis to a formal inquiry and get a verdict, a cited causal chain, and what cuts against it.
+- **The map**: a deliberately schematic diagram of who holds what, era by era, with a data table carrying the same claims.
+- **Export and publish**: full JSON, markdown, a self-contained static HTML edition, or the whole branch commissioned as a book, in print-grade HTML or EPUB.
 
 | | |
 | --- | --- |
