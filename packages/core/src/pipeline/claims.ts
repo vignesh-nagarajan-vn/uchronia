@@ -1,4 +1,11 @@
-import type { Claim, DraftIndexShift, DraftNameDrift, Era, Event } from '@uchronia/schemas'
+import type {
+  Claim,
+  DraftIndexShift,
+  DraftNameDrift,
+  DraftRegionControl,
+  Era,
+  Event,
+} from '@uchronia/schemas'
 import type { World } from '../world.js'
 import { makeProvenance, type PipelineCtx } from './ctx.js'
 import type { ResolvedBatch } from './drafts.js'
@@ -22,6 +29,7 @@ export function* recordClaims(
   model: string,
   shifts: readonly DraftIndexShift[] = [],
   drifts: readonly DraftNameDrift[] = [],
+  controls: readonly DraftRegionControl[] = [],
 ): Generator<PipelineEvent> {
   const committed: Event[] = batch.events
   if (committed.length === 0) return
@@ -47,6 +55,27 @@ export function* recordClaims(
         value: shift.value,
         delta: previous === undefined ? 0 : shift.value - previous,
         note: shift.note,
+      },
+      provenance,
+    }
+    world.addClaim(claim)
+    yield { type: 'claim.recorded', claim }
+  }
+
+  // Control is a statement about where the era left the map, so like the
+  // index readings it hangs off the era's closing event.
+  for (const control of controls) {
+    const claim: Claim = {
+      id: ctx.idgen.next(),
+      branchId,
+      eventId: closing.id,
+      year: era.endYear,
+      body: {
+        kind: 'region-control',
+        region: control.region,
+        holder: control.holder,
+        grip: control.grip,
+        note: control.note,
       },
       provenance,
     }

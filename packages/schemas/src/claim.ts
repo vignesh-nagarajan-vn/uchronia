@@ -57,10 +57,30 @@ export const NameDriftClaim = z.object({
 })
 export type NameDriftClaim = z.infer<typeof NameDriftClaim>
 
-export const ClaimBody = z.discriminatedUnion('kind', [RegionalIndexClaim, NameDriftClaim])
+/**
+ * Who holds a region, as of the event that says so (v2/M22). The map reads
+ * these; nothing else depends on them, so a history that never mentions
+ * control simply renders an uncoloured map rather than a wrong one.
+ */
+export const RegionControlClaim = z.object({
+  kind: z.literal('region-control'),
+  region: AnchorRegion,
+  /** The polity's slug when it is an entity here, or its plain name. */
+  holder: z.string().min(1),
+  /** How firmly: contested ground and settled ground look different. */
+  grip: z.enum(['contested', 'held', 'consolidated']),
+  note: z.string().min(1),
+})
+export type RegionControlClaim = z.infer<typeof RegionControlClaim>
+
+export const ClaimBody = z.discriminatedUnion('kind', [
+  RegionalIndexClaim,
+  NameDriftClaim,
+  RegionControlClaim,
+])
 export type ClaimBody = z.infer<typeof ClaimBody>
 
-export const CLAIM_KINDS = ['regional-index', 'name-drift'] as const
+export const CLAIM_KINDS = ['regional-index', 'name-drift', 'region-control'] as const
 export const ClaimKind = z.enum(CLAIM_KINDS)
 export type ClaimKind = z.infer<typeof ClaimKind>
 

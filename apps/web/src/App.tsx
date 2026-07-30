@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react'
 import { Link, Route, Routes } from 'react-router'
+import { CommandPalette } from './components/CommandPalette.js'
 import { EmptyState, Shell } from './components/Shell.js'
 
 // Every view splits into its own chunk: the Atlas paints without dragging in
@@ -25,6 +26,7 @@ const ArtifactReader = lazy(() =>
 const EngineRoomView = lazy(() =>
   import('./views/EngineRoomView.js').then((m) => ({ default: m.EngineRoomView })),
 )
+const MapView = lazy(() => import('./views/MapView.js').then((m) => ({ default: m.MapView })))
 const RecordView = lazy(() =>
   import('./views/RecordView.js').then((m) => ({ default: m.RecordView })),
 )
@@ -44,6 +46,10 @@ function NotFound() {
 export function App() {
   return (
     <Suspense fallback={<div className="min-h-screen bg-paper" aria-busy="true" />}>
+      {/* Mounted once, above the routes: the palette reads the branch out of
+          the URL, so Ctrl+K works on an event or a dossier, not just a
+          ledger (v2/M22). */}
+      <CommandPalette />
       <Routes>
         <Route path="/" element={<Atlas />} />
         <Route path="/settings" element={<SettingsView />} />
@@ -52,6 +58,7 @@ export function App() {
         <Route path="/t/:timelineId/b/:branchId" element={<TimelineView />} />
         <Route path="/t/:timelineId/b/:branchId/delta" element={<DeltaView />} />
         <Route path="/t/:timelineId/b/:branchId/engine" element={<EngineRoomView />} />
+        <Route path="/t/:timelineId/b/:branchId/map" element={<MapView />} />
         <Route path="/t/:timelineId/b/:branchId/e/:eventId" element={<EventDetail />} />
         <Route path="/t/:timelineId/b/:branchId/entity/:entityId" element={<Dossier />} />
         <Route

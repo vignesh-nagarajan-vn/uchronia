@@ -1,6 +1,7 @@
 import { Dialog, Heading, Modal, ModalOverlay } from 'react-aria-components'
 
 const SHORTCUTS: Array<[string, string]> = [
+  ['ctrl+k', 'jump to anything on this branch'],
   ['j / k', 'walk events (moves focus)'],
   ['enter', 'open event'],
   ['f', 'fork at the focused event'],

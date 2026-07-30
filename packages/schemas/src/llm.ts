@@ -75,6 +75,15 @@ export const DraftIndexShift = z.object({
 })
 export type DraftIndexShift = z.infer<typeof DraftIndexShift>
 
+/** Who holds a region after this era (v2/M22). Optional and usually short. */
+export const DraftRegionControl = z.object({
+  region: z.enum(ANCHOR_REGIONS),
+  holder: z.string().min(1),
+  grip: z.enum(['contested', 'held', 'consolidated']),
+  note: z.string().min(1),
+})
+export type DraftRegionControl = z.infer<typeof DraftRegionControl>
+
 /** A name this history moved (v2/M18). Naming only, never a constructed language. */
 export const DraftNameDrift = z.object({
   ref: DraftRef,
@@ -225,6 +234,11 @@ export const EraBatchOut = z.object({
    * a separate call. Usually empty; a conquest or a schism fills it.
    */
   nameDrift: z.array(DraftNameDrift).max(6).optional(),
+  /**
+   * Who holds which region after this era (v2/M22). Optional: a history that
+   * says nothing about control renders an uncoloured map, which is honest.
+   */
+  regionControl: z.array(DraftRegionControl).max(11).optional(),
 })
 export type EraBatchOut = z.infer<typeof EraBatchOut>
 

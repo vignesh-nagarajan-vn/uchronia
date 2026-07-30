@@ -4,6 +4,7 @@ import type {
   DraftEvent,
   DraftIndexShift,
   DraftNameDrift,
+  DraftRegionControl,
   Era,
 } from '@uchronia/schemas'
 import { anchorsNear } from '../baseline.js'
@@ -232,6 +233,7 @@ export async function* runGeneration(
         model: eraOut.model,
         shifts: eraOut.value.indexShifts ?? [],
         drifts: eraOut.value.nameDrift ?? [],
+        controls: eraOut.value.regionControl ?? [],
       }
     }
 
@@ -271,6 +273,7 @@ interface ClaimSource {
   model: string
   shifts?: readonly DraftIndexShift[]
   drifts?: readonly DraftNameDrift[]
+  controls?: readonly DraftRegionControl[]
 }
 
 /** Dual review → commit → critique report → claims → convergence scan, for one era. */
@@ -370,6 +373,7 @@ async function* runReviewedEra(
       claimSource.model,
       claimSource.shifts,
       claimSource.drifts,
+      claimSource.controls,
     )
   }
 

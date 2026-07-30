@@ -180,6 +180,18 @@ test('the full journey, keyless', async ({ page }) => {
   await expect(page.getByTestId('pulse-card')).toContainText('a forecast, not a record')
   await expect(page.getByTestId('commit-fork')).toBeVisible()
 
+  // 3c. The palette jumps anywhere on the branch (v2/M22).
+  await page.keyboard.press('Control+k')
+  await expect(page.getByTestId('command-palette')).toBeVisible()
+  await page.getByLabel('jump to').fill('the map')
+  await page.keyboard.press('Enter')
+  await expect(page).toHaveURL(/\/map$/)
+  await expect(page.getByRole('heading', { name: 'The map, such as it is' })).toBeVisible()
+  // The diagram and the table carry the same claims, and the table always shows.
+  await expect(page.getByTestId('map-svg')).toBeVisible()
+  await expect(page.getByTestId('map-table')).toBeVisible()
+  await page.goBack()
+
   // 4. Generate an artifact and read it.
   await page.getByTestId('generate-letter').click()
   await expect(

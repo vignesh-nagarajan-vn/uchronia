@@ -436,6 +436,9 @@ export function TimelineView() {
           >
             html
           </a>
+          <Link to={`${branchPath}/map`} className="text-ink-faded hover:text-ink">
+            map
+          </Link>
           <button
             type="button"
             onClick={() => setCommissioning(true)}

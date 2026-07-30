@@ -3,6 +3,7 @@ import {
   type DraftEvent,
   type DraftIndexShift,
   type DraftNameDrift,
+  type DraftRegionControl,
   type EraBatchOut,
   type Lens,
   type Pressure,
@@ -365,7 +366,31 @@ export function mockEraGenerate(rawArgs: unknown, rng: Rng): EraBatchOut {
     events,
     indexShifts: mockIndexShifts(args, rng),
     nameDrift: mockNameDrift(args, events, rng),
+    regionControl: mockRegionControl(args),
   }
+}
+
+const GRIPS = ['contested', 'held', 'consolidated'] as const
+
+/**
+ * Demo-mode control (v2/M22): the divergence's own theatre, held by the
+ * roster's leading nation, with a grip that firms up as the history settles.
+ * A canned engine has no business redrawing regions it never mentions.
+ */
+function mockRegionControl(args: EraGenerateArgs): DraftRegionControl[] {
+  const region = ANCHOR_REGIONS.find((r) => r === args.podRegion)
+  if (!region) return []
+  const holder = args.entityRoster.find((e) => e.type === 'nation')
+  if (!holder) return []
+  const grip = GRIPS[Math.min(GRIPS.length - 1, Math.floor(args.distanceYears / 40))] ?? 'held'
+  return [
+    {
+      region,
+      holder: holder.slug,
+      grip,
+      note: `${holder.name} holds the theatre this era, ${grip === 'contested' ? 'but not everywhere, and not cheaply' : 'and the arrangements are beginning to look permanent'}.`,
+    },
+  ]
 }
 
 /**
