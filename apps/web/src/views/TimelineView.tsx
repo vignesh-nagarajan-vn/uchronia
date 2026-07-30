@@ -6,6 +6,7 @@ import { clsx } from 'clsx'
 import { motion, useReducedMotion } from 'motion/react'
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router'
+import { CommissionDialog } from '../components/CommissionDialog.js'
 import { EraHeader } from '../components/EraHeader.js'
 import { EventCard } from '../components/EventCard.js'
 import { ForkDialog } from '../components/ForkDialog.js'
@@ -52,6 +53,7 @@ export function TimelineView() {
   const [hoveredEventId, setHoveredEventId] = useState<string | null>(null)
   const [forkAt, setForkAt] = useState<EventView | null>(null)
   const [shortcutsOpen, setShortcutsOpen] = useState(false)
+  const [commissioning, setCommissioning] = useState(false)
   const searchRef = useRef<HTMLInputElement>(null)
   const reduced = useReducedMotion()
 
@@ -436,6 +438,15 @@ export function TimelineView() {
           </a>
           <button
             type="button"
+            onClick={() => setCommissioning(true)}
+            data-testid="commission-button"
+            className="text-ink-faded hover:text-ink"
+            title="compile this branch into a book"
+          >
+            commission
+          </button>
+          <button
+            type="button"
             onClick={() => setShortcutsOpen(true)}
             className="text-ink-faded hover:text-ink"
             aria-label="keyboard shortcuts"
@@ -655,6 +666,13 @@ export function TimelineView() {
         />
       )}
       <ShortcutsDialog open={shortcutsOpen} onClose={() => setShortcutsOpen(false)} />
+      {commissioning && (
+        <CommissionDialog
+          branchId={branchId}
+          title={data.timeline.title}
+          onClose={() => setCommissioning(false)}
+        />
+      )}
     </Shell>
   )
 }

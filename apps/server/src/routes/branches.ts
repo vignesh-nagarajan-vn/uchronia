@@ -1,5 +1,6 @@
 import { World } from '@uchronia/core'
 import { Hono } from 'hono'
+import { compileBook, renderBookHtml, renderEpub } from '../book.js'
 import type { ServerDeps } from '../deps.js'
 import { renderMarkdown, renderStaticHtml } from '../exporters.js'
 import { ApiError } from '../http-error.js'
@@ -35,6 +36,43 @@ export function branchRoutes(deps: ServerDeps): Hono {
     const html = renderStaticHtml(worldFor(branchId), branchId)
     c.header('Content-Disposition', `inline; filename="uchronia-${branchId}.html"`)
     return c.html(html)
+  })
+
+  // Commission the chronicle (v2/M21). No provider call: a book is an
+  // arrangement of history already derived, so it costs nothing to make and
+  // can be remade with different options as often as the reader likes.
+  const bookFor = (branchId: string, query: URLSearchParams) => {
+    const lensParam = query.get('lenses')
+    // `Number(null)` is 0, not NaN, so an absent parameter has to be tested
+    // for by absence: reading it as a number silently dropped every plate.
+    const plateParam = query.get('plates')
+    const density = plateParam === null ? Number.NaN : Number(plateParam)
+    return compileBook(worldFor(branchId), branchId, deps.clock.now().toISOString(), {
+      ...(lensParam ? { lenses: lensParam.split(',').filter(Boolean) } : {}),
+      ...(Number.isFinite(density) && density >= 0 ? { artifactDensity: density } : {}),
+    })
+  }
+
+  app.get('/branches/:id/book.html', (c) => {
+    const branchId = c.req.param('id')
+    const book = bookFor(branchId, new URL(c.req.url).searchParams)
+    c.header('Content-Disposition', `inline; filename="uchronia-book-${branchId}.html"`)
+    return c.html(renderBookHtml(book))
+  })
+
+  app.get('/branches/:id/book.epub', (c) => {
+    const branchId = c.req.param('id')
+    const book = bookFor(branchId, new URL(c.req.url).searchParams)
+    // An EPUB is bytes, not text: hand Hono an ArrayBuffer so nothing tries
+    // to decode it on the way out.
+    const epub = renderEpub(book, branchId.toLowerCase())
+    const bytes = epub.buffer.slice(
+      epub.byteOffset,
+      epub.byteOffset + epub.byteLength,
+    ) as ArrayBuffer
+    c.header('Content-Type', 'application/epub+zip')
+    c.header('Content-Disposition', `attachment; filename="uchronia-${branchId}.epub"`)
+    return c.body(bytes)
   })
 
   // Burn one branch. Roots are the timeline (delete that instead); branches
