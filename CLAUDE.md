@@ -43,10 +43,14 @@ packages/core      Pure engine. IO only via injected ports (provider/clock/rng/i
                      become issues), regenerate.ts (in-place event retelling),
                      structured.ts (zod + repair loop + signal/usage + em-dash scrub
                      with empty-guard), context.ts (budgeted state summaries,
-                     causal-annotated recents), ctx.ts, fork.ts, expand.ts,
-                     artifacts.ts, events.ts
-  src/prompts/       registry + templates (pod-normalize, seed-consequences, …) + fragments
-  src/mock/          MockProvider + per-template handlers + flavor banks
+                     causal-annotated recents), relevance.ts (batchReachesPod:
+                     the on-divergence drift tripwire), ctx.ts, fork.ts,
+                     expand.ts, artifacts.ts, events.ts
+  src/prompts/       registry + templates (pod-interpret, pod-normalize, seed-consequences, …) + fragments
+  src/mock/          MockProvider + per-template handlers + flavor banks (era buckets incl. twentieth)
+  src/retrieval.ts   anchor retrieval: tokenize + keyword/year scoring (v2/M14)
+  src/pod-sketch.ts  deterministic intake heuristics: named-event aliases with real
+                     candidate mechanisms, strict year parsing, anchor snapping
   src/dial.ts        determinism dial → concrete generation parameters (§4.4)
   src/llm.ts         LLMProvider port (signal + usage) + provider error taxonomy
   src/ports.ts       Clock/IdGen ports (+ sequentialIdGen for deterministic tests)
@@ -68,7 +72,8 @@ apps/server        Hono. Routes + SSE, AnthropicProvider, Drizzle + better-sqlit
   src/seed-demo.ts   showcase seeding (bundled ledger or demo/ on disk)
   src/http-error.ts  ApiError  ·  src/test-helpers.ts  in-memory test app
   scripts/           copy-vercel-assets.mjs stages dist/drizzle + dist/fonts
-  src/routes/        meta (config/baseline/live-check: 1-token key proof), timelines (CRUD+PATCH+validated import+export),
+  src/routes/        meta (config/baseline/live-check: 1-token key proof), timelines (CRUD+PATCH+
+                     interpret (retrieval-grounded reading, creates nothing)+validated import+export),
                      branches (view + md/html export + leaf DELETE), generate (SSE;
                      persist-before-stream; per-branch lock; era healing; token ceiling),
                      expand (event/era/entity + regenerate-in-place), fork, artifacts
@@ -82,8 +87,9 @@ apps/web           Vite + React. RED THREAD interface (docs/DESIGN.md is binding
                      theme.tsx · thread-geometry.ts (red-thread curves) · gallery.ts · format.ts
   src/components/    Shell, Stamp, EventCard, EraHeader, RecordTick, ThreadOverlay,
                      DialControl, ForkDialog, ShortcutsDialog, ErrorBoundary
-  src/views/         all lazy-loaded: Atlas (composer+catalogue+rename/burn dialogs+
-                     demo loader), TimelineView (virtualized spine, search, multi-lens,
+  src/views/         all lazy-loaded: Atlas (composer+interpretation card (M14: reading,
+                     candidate chips, editable fields, Just-derive escape)+catalogue+
+                     rename/burn dialogs+demo loader), TimelineView (virtualized spine, search, multi-lens,
                      stop control), EventDetail (prev/next, retell, copy link), Dossier,
                      DeltaView, CompareView, ArtifactReader, SettingsView
   public/            brand assets: the seal (uchronia-logo.png) + favicon set
@@ -158,7 +164,7 @@ Set-but-empty variables count as unset (a copied template can't silently disable
 ## 6. Data model & pipeline
 
 - Schemas are Zod-first in `packages/schemas`; everything an LLM produces is validated before touching any store. Summary + fork semantics: [docs/DATA_MODEL.md](docs/DATA_MODEL.md).
-- Pipeline: POD intake → seed consequences → era loop (snapshot + pressures + dial → validate → critique → accept/regenerate/dispute) → convergence scan; lazy expanders for detail/biographies/artifacts. Details + prompt registry + dial mapping: [docs/GENERATION.md](docs/GENERATION.md).
+- Pipeline: POD intake 2.0 (interpret against retrieved anchors → user confirms on the card) → seed consequences → era loop (snapshot + pressures + dial → validate → critique incl. on-divergence → accept/regenerate/dispute → drift tripwire) → convergence scan; lazy expanders for detail/biographies/artifacts. Details + prompt registry + dial mapping: [docs/GENERATION.md](docs/GENERATION.md).
 - Design system RED THREAD: [docs/DESIGN.md](docs/DESIGN.md), finalized before the first UI commit (§7.8) and binding for all UI work; realization log in [docs/DESIGN_NOTES.md](docs/DESIGN_NOTES.md). Two hard rules worth repeating: record blue is reserved for attested history, thread red for divergence/causality; neither is ever decoration.
 
 ## 7. Engineering conventions
@@ -172,7 +178,7 @@ Set-but-empty variables count as unset (a copied template can't silently disable
 
 ## 8. Current status
 
-**The v2.0.0 program ("The Second Derivation") is underway** (opened 2026-07-29): milestones M13-M25 toward the WW2 gate, tracked honestly in [docs/ROADMAP.md](docs/ROADMAP.md). M13 is complete: demo-mode honesty (mode field, DEMO pill, composer banner, notice-register tokens), `/api/live-check`, the per-model cost meter with `run.usage` frames and dated pricing estimates (`core/src/pricing.ts`), the secret scan (`pnpm check:secrets`, CI-enforced), and the in-process `dev:preview` launch path. Live-only gates verify on the deployed instance, not this machine (ADR-0004): no key ever lands in this tree; demo-side gates stay enforced in CI.
+**The v2.0.0 program ("The Second Derivation") is underway** (opened 2026-07-29): milestones M13-M25 toward the WW2 gate, tracked honestly in [docs/ROADMAP.md](docs/ROADMAP.md). Complete so far: **M13** (demo-mode honesty: mode field, DEMO pill, composer banner, notice-register tokens; `/api/live-check`; the per-model cost meter with `run.usage` frames and dated pricing estimates in `core/src/pricing.ts`; the CI-enforced secret scan; the in-process `dev:preview` launch path) and **M14** (POD Intake 2.0: `pod-interpret` grounded on retrieved anchors, the interpretation card, the on-divergence relevance guard, and Mock 2.0 - the demo WW2 gate passes). Live-only gates verify on the deployed instance, not this machine (ADR-0004): no key ever lands in this tree; demo-side gates stay enforced in CI.
 
 **v1.0.0 (2026-07-26) = v0.1.0 + the 0.2 hardening series (2026-07-23) + the deployment-hardening pass (2026-07-26)**: all milestones M0–M12 complete, then a ~15-commit audit-driven pass (graph-fed generation, region-aware convergence, entity lifecycle/9th validator rule, dial-aware critic, generation locking + import validation + era healing, abort/usage/cost ceiling, lifecycle routes, web code-splitting, CI matrix, Docker), then a full line-by-line audit that rebuilt the Vercel chain on a prebundled function (`build:vercel` → `api/index.mjs`, with a body-reconstructing `(req, res)` bridge for the Node runtime's helpers), pinned the toolchain (Node ≥ 22.13, pnpm without corepack), moved the generation default to a structured-outputs-capable model (`claude-sonnet-5`), added the fake-Vercel smoke (`pnpm verify:vercel`, CI `vercel-shape` job), fixed a dozen audit-found bugs across core/server/web, and removed em dashes repo-wide. See [docs/ROADMAP.md](docs/ROADMAP.md) for the honest record and open threads (notably: live mode is provider-unit-tested and cost-capped but still unexercised against the real API from this machine). The Vercel deployment is live at <https://uchronia-server.vercel.app/> (confirmed 2026-07-26). The full mock-mode product works keyless: `pnpm dev:mock`, then "load the showcase chronicle" on the empty Atlas. Deployment posture: [docs/DEPLOY.md](docs/DEPLOY.md) + ADR-0003 (mock is public, live is local).
 

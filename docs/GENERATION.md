@@ -2,7 +2,7 @@
 
 ## Stages (§4.1)
 
-1. **POD intake** ✅: freeform text → normalized `PointOfDivergence` + baseline-context summary (runs inside `POST /api/timelines`)
+1. **POD intake** ✅ (2.0 in v2/M14): the composer calls `POST /api/timelines/interpret` first: server-side retrieval (`core/src/retrieval.ts`, keyword + year scoring, biased by the deterministic `pod-sketch` heuristics) feeds curated anchors into `pod-interpret` (generation tier), which returns the primary reading, a confidence, named ambiguities, 2-4 real candidate mechanisms, and at most one clarifying question. Nothing is created; the user confirms or edits on the interpretation card, and `POST /api/timelines` takes the confirmed reading verbatim (`provenance: user`). The old one-shot `pod-normalize` still serves fork sub-PODs and the power-user "Just derive" path. **Demo intake never rolls dice** (Mock 2.0): named-event aliases (WW2/WWII/world war two, WW1/great war, cold war, american civil war, french revolution) snap to the right years with canned real candidates; bare years need 3-4 digits (era markers for shorter); everything else snaps to the nearest anchor by keyword/year distance; true garbage gets a fixed neutral 1900 with low confidence and a clarifying question.
 2. **Seed consequences** ✅: years ~0–2 after the POD, 3–5 high-confidence events (no wildcards, plausibility ≥ 0.6), founding the entity roster
 3. **Era loop** ✅, per era: `derive-pressures` (3–7 tensions read off the state, §4.3) → `era-generate` (snapshot + pressures + dial + distance) → dual review → commit → convergence scan. One `POST /api/branches/:id/generate` runs seed + all eras to the horizon.
 4. **Convergence scan** ✅: after each era, accepted events are compared against nearby baseline anchors; genuine matches become `ConvergencePoint`s and flag their events (P3)
@@ -53,18 +53,21 @@ Role → model happens inside the provider; templates declare `role`. Mock mode 
 
 The **critic is dial-aware**: its system prompt embeds the same attractor language and instructs that under a low dial, surprising-but-caused outcomes are the intended product: implausible-leap weighs whether cited causes carry the outcome, never resemblance to the familiar record.
 
+**The relevance guard (v2/M14).** The engine answers the question asked, structurally: seed and era prompts restate the divergence and its mechanism with an explicit on-divergence mandate; the critic rubric gains an `on-divergence` dimension (generic period content with no thread of consequence back to the divergence is flaggable, with the usual bounded-retry/dispute sentencing); and a machine tripwire (`core/src/pipeline/relevance.ts`, `batchReachesPod`) checks after each era's dual review that at least one event's cause chain reaches the seed era within a generous hop bound, streaming a drift warning when none does.
+
 ## Prompt registry (§4.7)
 
 Templates in `packages/core/src/prompts/`, one file each, `id` + semver `version` + changelog. Shared fragments (`fragments.ts`, v1.1.0): `ANTI_CLICHE_MANDATES` (P6), `SENSITIVE_HISTORY_STANCE` (§12), `HUMAN_VOICE` (the humanity mandate: chronicler's hand, banned stock phrasing, no em dashes), `HANDLE_CONVENTIONS`. The dial adds `voiceLanguage`, a prose register that frays at butterfly settings (clipped entries, asides, un-erased corrections) and steadies to a clerk's calm at railroad; every reader-facing template embeds it. Belt and suspenders: `generateStructured` scrubs any em dash out of validated output before it can reach a store (en dashes in ranges survive).
 
 | Template | Purpose | Version | Role |
 | --- | --- | --- | --- |
-| `pod-normalize` | Freeform POD → normalized record + baseline context | 1.0.0 | utility |
-| `seed-consequences` | First 0–2 years: disciplined events + entity roster + era header | 1.1.0 | generation |
-| `critic-review` | Skeptical-historian verdicts over one draft batch (dial-calibrated; causes arrive resolved; machine mannerisms are tone violations) | 1.2.0 | critic |
+| `pod-interpret` | v2 intake (M14): freeform ask + retrieved anchors → primary reading, confidence, ambiguities, 2-4 real candidate mechanisms, at most one clarifying question. The composer's entry point; the highest-leverage call in the product | 1.0.0 | generation |
+| `pod-normalize` | Freeform POD → normalized record + baseline context (still serves fork sub-PODs and the "Just derive" path) | 1.0.0 | utility |
+| `seed-consequences` | First 0–2 years: disciplined events + entity roster + era header (on-divergence mandate: every seed event traces to the divergence) | 1.2.0 | generation |
+| `critic-review` | Skeptical-historian verdicts over one draft batch (dial-calibrated; causes arrive resolved; machine mannerisms are tone violations; on-divergence drift is flaggable) | 1.3.0 | critic |
 | `regenerate-event` | One bounded replacement for a flagged draft; also drives the user-facing `POST …/events/:id/regenerate` (a fresh telling in place, clone-validated) | 1.1.0 | generation |
 | `derive-pressures` | 3–7 named tensions from the state snapshot (+ graded attractor pull; previous pressures must be carried or discharged) | 1.2.0 | critic |
-| `era-generate` | One era of consequences from snapshot + pressures + dial + distance (chain-extension mandate; entity lifecycle via `ends:true`) | 1.3.0 | generation |
+| `era-generate` | One era of consequences from snapshot + pressures + dial + distance (chain-extension mandate; entity lifecycle via `ends:true`; mechanism named, on-divergence mandate) | 1.4.0 | generation |
 | `convergence-scan` | Conservative rhyme-detection against baseline anchors (theatre-aware) | 1.2.0 | critic |
 | `event-expand` | Expanded narrative from state-at-event + causal neighborhood | 1.1.0 | generation |
 | `era-deepdive` | Era essay over pressures and events | 1.1.0 | generation |
