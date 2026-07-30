@@ -48,6 +48,26 @@ export interface ServerConfig {
   corsOrigins: string[]
   /** Import the showcase chronicle into an empty database at boot. */
   seedDemo: boolean
+  /**
+   * The passphrase that unlocks spending on a public deployment (v2/M24).
+   * When set alongside a key, every route that can cost money requires an
+   * unlocked session; anonymous visitors get full demo mode. Treat as a
+   * secret: it is compared in constant time and never echoed.
+   */
+  accessToken: string | undefined
+  /**
+   * True when this instance may actually spend. On serverless, a key with no
+   * access token is REFUSED rather than trusted: the fail-safe direction is
+   * "serve the demo", because the alternative is a public endpoint that bills
+   * the owner. Locally, a key is the owner's own decision and is honoured.
+   */
+  liveAllowed: boolean
+  /** Total tokens this instance may spend per UTC day. 0 disables the cap. */
+  dailyTokenBudget: number
+  /** Requests per minute per IP on routes that can spend. 0 disables. */
+  rateLimitPerMinute: number
+  /** True on Vercel/Lambda: no durable disk, public by default. */
+  serverless: boolean
 }
 
 export const DEFAULT_MODELS = {
@@ -89,11 +109,25 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): ServerConfig {
   const onVercel = truthy(env.VERCEL)
   const serverless =
     onVercel || env.AWS_LAMBDA_FUNCTION_NAME !== undefined || env.LAMBDA_TASK_ROOT !== undefined
+  // The deployment posture (v2/M24, ADR-0005). A key on a public serverless
+  // instance without a passphrase is the one configuration that could quietly
+  // bill the owner for strangers' derivations, so it is the one we refuse:
+  // the instance keeps its key unused and serves demo mode until an access
+  // token is configured. Locally there is no such exposure and no such rule.
+  const accessToken = text(env.UCHRONIA_ACCESS_TOKEN)
+  const liveAllowed = !mock && (!serverless || accessToken !== undefined)
+  const effectiveMock = mock || !liveAllowed
+
   return {
     port: number(env.UCHRONIA_PORT) ?? 8787,
     host: text(env.UCHRONIA_HOST) ?? '127.0.0.1',
-    mock,
-    apiKey: mock ? undefined : apiKey,
+    mock: effectiveMock,
+    apiKey: effectiveMock ? undefined : apiKey,
+    accessToken,
+    liveAllowed,
+    dailyTokenBudget: number(env.UCHRONIA_DAILY_TOKEN_BUDGET) ?? (serverless ? 2_000_000 : 0),
+    rateLimitPerMinute: number(env.UCHRONIA_RATE_LIMIT) ?? (serverless ? 20 : 0),
+    serverless,
     models: {
       generation: text(env.UCHRONIA_MODEL_GENERATION) ?? DEFAULT_MODELS.generation,
       critic: text(env.UCHRONIA_MODEL_CRITIC) ?? DEFAULT_MODELS.critic,

@@ -12,6 +12,7 @@ import { bodyLimit } from 'hono/body-limit'
 import { cors } from 'hono/cors'
 import { ZodError } from 'zod'
 import type { ServerDeps } from './deps.js'
+import { DailyBudget, spendingGate } from './gate.js'
 import { ApiError } from './http-error.js'
 import { artifactRoutes } from './routes/artifacts.js'
 import { askRoutes } from './routes/ask.js'
@@ -46,6 +47,30 @@ export function createApp(deps: ServerDeps): Hono {
         ),
     }),
   )
+
+  // Everything that can reach the provider sits behind the gate (v2/M24).
+  // Reads, exports, the book, the map, and the record are deliberately
+  // outside it: a locked instance is still a fully readable one.
+  const budget = new DailyBudget(deps.config.dailyTokenBudget)
+  deps.budget = budget
+  const gate = spendingGate(deps.config, budget, deps.clock)
+  for (const path of [
+    '/api/timelines/interpret',
+    '/api/branches/:id/generate',
+    '/api/branches/:branchId/events/:eventId/expand',
+    '/api/branches/:branchId/eras/:eraId/expand',
+    '/api/branches/:branchId/entities/:entityId/biography',
+    '/api/branches/:branchId/events/:eventId/regenerate',
+    '/api/branches/:branchId/events/:eventId/artifacts',
+    '/api/branches/:branchId/events/:eventId/pulse',
+    '/api/branches/:branchId/events/:eventId/interpretations',
+    '/api/branches/:branchId/schools',
+    '/api/branches/:branchId/ask',
+    '/api/branches/:branchId/inquiry',
+    '/api/branches/:id/fork',
+  ]) {
+    app.use(path, gate)
+  }
 
   app.route('/api', metaRoutes(deps))
   app.route('/api', timelineRoutes(deps))

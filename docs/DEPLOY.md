@@ -8,7 +8,8 @@ Uchronia is local-first: a single-user app holding an API key. That shapes every
 | --- | --- | --- | --- |
 | Show someone a finished chronicle | **A static HTML export** | free | `GET /api/branches/:id/export.html` is a single self-contained file (typefaces embedded, no scripts). Attach it to a GitHub Release, send it as a file, or drop it on any static host you choose. Zero backend, zero risk. |
 | Let people *play* with the product | **Vercel (one click)** or a **Docker container**, both in mock mode | ~free tier | Vercel: import the repo, zero configuration, ephemeral playground. Docker: durable history via a `/data` volume, on Fly.io / Railway / Render / a VPS. Both default keyless. |
-| Generate real history with a key | **Run it locally** (`pnpm dev`, or the container with `-e UCHRONIA_MOCK=0 -e ANTHROPIC_API_KEY=…`) | your tokens | **Never expose a live-mode instance publicly.** The server has no authentication; every visitor would spend your key. `UCHRONIA_MAX_RUN_TOKENS` (default 3M/run) caps the blast radius of any single run, but it is a seatbelt, not a lock. |
+| Generate real history for yourself | **Run it locally** (`pnpm dev`, or the container with `-e UCHRONIA_MOCK=0 -e ANTHROPIC_API_KEY=…`) | your tokens | The listener binds loopback and the key is yours. No gate, because there is no exposure. |
+| Let a few named people derive on your key | **Vercel with a key AND `UCHRONIA_ACCESS_TOKEN`** | your tokens, capped | The gate below. Without the passphrase variable the instance refuses to go live at all and serves the demo, which is the point. |
 
 ## Vercel
 
@@ -69,8 +70,39 @@ UCHRONIA_STATIC_DIR=apps/web/dist node apps/server/dist/index.js
 
 Or skip the bundle entirely and run `pnpm --filter @uchronia/server start` under a process manager; it is what the container does.
 
+## Going live on a public URL (v2/M24, ADR-0005)
+
+A public URL holding a real key is a public endpoint that bills you. Since M24
+the code will not let that happen by accident: **on a serverless runtime, a key
+with no `UCHRONIA_ACCESS_TOKEN` is refused.** `liveAllowed` goes false, the app
+forces demo mode, and the key is dropped from the resolved config so nothing
+downstream can reach for it. You will see full demo mode with the DEMO pill,
+exactly as before, until you configure a passphrase.
+
+To actually go live, set both in the Vercel dashboard:
+
+| Variable | Value | What it does |
+| --- | --- | --- |
+| `ANTHROPIC_API_KEY` | your key | Enables live derivation. Never appears in any response. |
+| `UCHRONIA_ACCESS_TOKEN` | a passphrase you choose | Unlocks spending, per browser session. Compared in constant time; stored as an httpOnly cookie. |
+| `UCHRONIA_DAILY_TOKEN_BUDGET` | tokens per UTC day (default 2000000) | Hard stop for the day once reached. `0` disables. |
+| `UCHRONIA_RATE_LIMIT` | requests per minute per IP (default 20) | Brake on loops. `0` disables. |
+| `UCHRONIA_MAX_RUN_TOKENS` | tokens per run (default 3000000) | Unchanged: caps one derivation. |
+
+Then open the site, go to Settings, and enter the passphrase once. Anonymous
+visitors keep full demo mode and every existing chronicle; only the routes that
+can reach the provider are gated. Reading, exporting, the book, the map, and
+the record room stay open to everyone.
+
+**Know the limitation.** The rate limiter and the daily ledger are in-memory
+and per instance, so a cold start resets them and concurrent instances each
+count separately: the effective cap is the configured one times the number of
+warm instances. They are a brake on casual abuse, not a billing system. **Set a
+spend limit on your Anthropic account.** That is the layer that actually bounds
+your loss, and this codebase cannot set it for you.
+
 ## What not to do
 
-- Don't put a live-mode server behind a public URL "just for a demo"; that is what mock mode is for.
+- Don't put a live-mode server behind a public URL without `UCHRONIA_ACCESS_TOKEN` and an account spend limit. The code now refuses the first half of that on serverless; the second half is yours.
 - Don't serve the SQLite file from a network filesystem; WAL mode wants a local disk.
 - Don't strip the `/data` volume: the container treats history as durable state.

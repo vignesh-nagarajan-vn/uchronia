@@ -66,6 +66,13 @@ export const api = {
 
   liveCheck: () => request<LiveCheckResult>('/api/live-check', { method: 'POST' }),
 
+  /** Unlock a gated instance (v2/M24). Always 200; the verdict is in the body. */
+  unlock: (passphrase: string) =>
+    request<{ ok: boolean; gated: boolean; message: string }>('/api/unlock', {
+      method: 'POST',
+      body: JSON.stringify({ passphrase }),
+    }),
+
   interpret: async (podText: string) =>
     InterpretResponse.parse(
       await request('/api/timelines/interpret', {

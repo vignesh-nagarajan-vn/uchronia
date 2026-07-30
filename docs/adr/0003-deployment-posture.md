@@ -1,6 +1,6 @@
 # ADR-0003: Deployment posture: mock is public, live is local
 
-**Status**: accepted, 2026-07-23
+**Status**: superseded by [ADR-0005](0005-public-deployment-spending.md), 2026-07-30. A public deployment may now hold a key, behind a passphrase, a per-IP rate limit, and a daily token budget, and refuses to go live on serverless without one.
 
 ## Context
 

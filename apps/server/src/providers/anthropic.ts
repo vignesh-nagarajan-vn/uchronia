@@ -57,7 +57,19 @@ export class AnthropicProvider implements LLMProvider {
           {
             model,
             max_tokens: maxTokens,
-            system: request.system,
+            // Prompt caching (v2/M24). The system block is the stable prefix
+            // of every call for a given template and dial: fragments, the
+            // register, the anti-cliche mandates. Marking it cached turns the
+            // repeat cost of an era loop's forty-odd calls into cache reads,
+            // which the usage accounting below already knows how to report.
+            // The user turn is per-call by construction and is never marked.
+            system: [
+              {
+                type: 'text' as const,
+                text: request.system,
+                cache_control: { type: 'ephemeral' as const },
+              },
+            ],
             messages: [{ role: 'user', content: request.prompt }],
             output_config: {
               format: zodOutputFormat(request.schema),

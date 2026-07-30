@@ -2,6 +2,7 @@ import { armsSvg, loadBaseline, UchroniaError } from '@uchronia/core'
 import { LENSES } from '@uchronia/schemas'
 import { Hono } from 'hono'
 import type { ServerDeps } from '../deps.js'
+import { grantUnlock, isUnlocked, passphraseMatches } from '../gate.js'
 
 export function metaRoutes(deps: ServerDeps): Hono {
   const app = new Hono()
@@ -23,8 +24,29 @@ export function metaRoutes(deps: ServerDeps): Hono {
         horizonYears: 150,
         lenses: [...LENSES],
       },
+      // The deployment posture (v2/M24), so the UI can say why it cannot
+      // derive rather than failing at the first click.
+      gated: deps.config.accessToken !== undefined,
+      unlocked: isUnlocked(c, deps.config),
+      dailyBudget: deps.budget?.status(deps.clock.now()) ?? null,
     }),
   )
+
+  // Unlock a gated instance (v2/M24). Always 200 with the verdict in the
+  // body, never a header or a status that distinguishes "wrong passphrase"
+  // from "no passphrase configured", and the passphrase is never echoed.
+  app.post('/unlock', async (c) => {
+    if (deps.config.accessToken === undefined) {
+      return c.json({ ok: true, gated: false, message: 'this instance is not gated' })
+    }
+    const body = (await c.req.json().catch(() => ({}))) as { passphrase?: unknown }
+    const given = typeof body.passphrase === 'string' ? body.passphrase : ''
+    if (!passphraseMatches(deps.config.accessToken, given)) {
+      return c.json({ ok: false, gated: true, message: 'that is not the passphrase' })
+    }
+    grantUnlock(c, deps.config)
+    return c.json({ ok: true, gated: true, message: 'unlocked' })
+  })
 
   app.get('/baseline', (c) => c.json(loadBaseline()))
 

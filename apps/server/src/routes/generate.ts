@@ -123,6 +123,9 @@ export function generateRoutes(deps: ServerDeps): Hono {
       if (u.cacheReadTokens) m.cacheReadTokens = (m.cacheReadTokens ?? 0) + u.cacheReadTokens
       if (u.cacheWriteTokens) m.cacheWriteTokens = (m.cacheWriteTokens ?? 0) + u.cacheWriteTokens
       usageDirty = true
+      // The day's ledger (v2/M24) is charged as the run spends, not at the
+      // end: a run killed halfway still cost what it cost.
+      deps.budget?.record(u.inputTokens + u.outputTokens, deps.clock.now())
       const cap = deps.config.maxRunTokens
       if (cap > 0 && usage.inputTokens + usage.outputTokens > cap && !budgetExceeded) {
         budgetExceeded = true

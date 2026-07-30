@@ -16,6 +16,19 @@ export function SettingsView() {
 
   const liveCheck = useMutation({ mutationFn: () => api.liveCheck() })
 
+  // The spending gate (v2/M24). The passphrase never enters app state beyond
+  // this field; the server sets an httpOnly cookie and the UI just re-reads
+  // the posture from /api/config.
+  const [passphrase, setPassphrase] = useState('')
+  const unlock = useMutation({
+    mutationFn: () => api.unlock(passphrase),
+    onSuccess: (result) => {
+      if (!result.ok) return
+      setPassphrase('')
+      void queryClient.invalidateQueries({ queryKey: ['config'] })
+    },
+  })
+
   const importMutation = useMutation({
     mutationFn: (aggregate: unknown) => api.importAggregate(aggregate),
     onSuccess: () => {
@@ -99,6 +112,57 @@ export function SettingsView() {
                 If UCHRONIA_MOCK=1 is set, demo stays forced even with a key. The key stays
                 server-side, always.
               </p>
+            </div>
+          )}
+
+          {config.data?.gated && (
+            <div
+              className="mt-4 rounded-[2px] border border-notice/60 bg-notice-wash px-3 py-2.5"
+              data-testid="unlock-panel"
+            >
+              <p className="stamp font-medium tracking-[0.08em] text-notice">
+                {config.data.unlocked ? 'UNLOCKED' : 'LOCKED'}
+              </p>
+              <p className="mt-1 text-[14px] leading-snug">
+                {config.data.unlocked
+                  ? 'This session may spend on this instance. Deriving here costs its owner real tokens; the daily budget below is what is left today.'
+                  : 'This instance derives on somebody else’s account, so spending needs the passphrase. Everything else, including every chronicle already here, is open without it.'}
+              </p>
+              {config.data.dailyBudget && (
+                <p className="mt-1 font-data text-[11.5px] text-ink-faded">
+                  today: {config.data.dailyBudget.spent.toLocaleString()} of{' '}
+                  {config.data.dailyBudget.limit.toLocaleString()} tokens spent
+                </p>
+              )}
+              {!config.data.unlocked && (
+                <form
+                  className="mt-2 flex flex-wrap items-center gap-2"
+                  onSubmit={(e) => {
+                    e.preventDefault()
+                    unlock.mutate()
+                  }}
+                >
+                  <input
+                    type="password"
+                    value={passphrase}
+                    onChange={(e) => setPassphrase(e.target.value)}
+                    aria-label="passphrase"
+                    placeholder="passphrase"
+                    className="min-w-0 flex-1 rounded-[2px] border border-rule bg-paper px-2 py-1 text-[14px]"
+                  />
+                  <button
+                    type="submit"
+                    disabled={unlock.isPending || passphrase.length === 0}
+                    data-testid="unlock-submit"
+                    className="rounded-[2px] border border-rule px-3 py-1 text-[14px] hover:bg-paper-raised disabled:opacity-40"
+                  >
+                    {unlock.isPending ? 'checking…' : 'Unlock'}
+                  </button>
+                </form>
+              )}
+              {unlock.data && !unlock.data.ok && (
+                <p className="mt-1.5 text-[13.5px] text-thread">{unlock.data.message}</p>
+              )}
             </div>
           )}
 

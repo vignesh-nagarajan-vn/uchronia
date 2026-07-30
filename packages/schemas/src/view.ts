@@ -97,6 +97,15 @@ export const ConfigResponse = z.object({
     horizonYears: z.number().int(),
     lenses: z.array(Lens),
   }),
+  /** True when this instance requires a passphrase to spend (v2/M24). */
+  gated: z.boolean().default(false),
+  /** True when this session has already given it. */
+  unlocked: z.boolean().default(true),
+  /** The day's token ledger, or null when uncapped. */
+  dailyBudget: z
+    .object({ limit: z.number(), spent: z.number(), remaining: z.number() })
+    .nullable()
+    .default(null),
 })
 export type ConfigResponse = z.infer<typeof ConfigResponse>
 
