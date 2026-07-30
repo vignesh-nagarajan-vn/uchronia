@@ -56,14 +56,30 @@ export interface ServerConfig {
    */
   accessToken: string | undefined
   /**
-   * True when this instance may actually spend. On serverless, a key with no
-   * access token is REFUSED rather than trusted: the fail-safe direction is
-   * "serve the demo", because the alternative is a public endpoint that bills
-   * the owner. Locally, a key is the owner's own decision and is honoured.
+   * True when anonymous visitors may spend (v2.1/M26, ADR-0006). This is the
+   * deliberate opt-in that turns a deployment into a public live instance:
+   * without it, a serverless key still needs the passphrase. It is never
+   * implied, because the thing it buys is strangers deriving on the owner's
+   * account, and that has to be a decision someone typed.
+   */
+  publicLive: boolean
+  /**
+   * True when this instance may actually spend. On serverless, a key with
+   * neither an access token nor an explicit public-live opt-in is REFUSED
+   * rather than trusted: the fail-safe direction is "serve the demo", because
+   * the alternative is a public endpoint that quietly bills the owner.
+   * Locally, a key is the owner's own decision and is honoured.
    */
   liveAllowed: boolean
   /** Total tokens this instance may spend per UTC day. 0 disables the cap. */
   dailyTokenBudget: number
+  /**
+   * Tokens one anonymous caller may spend per UTC day (v2.1/M26). The day's
+   * instance budget bounds the invoice; this bounds any one visitor's share of
+   * it, so the first person through the door cannot take the whole day. An
+   * unlocked session is not a visitor and is not charged against it.
+   */
+  visitorTokenBudget: number
   /** Requests per minute per IP on routes that can spend. 0 disables. */
   rateLimitPerMinute: number
   /** True on Vercel/Lambda: no durable disk, public by default. */
@@ -109,14 +125,28 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): ServerConfig {
   const onVercel = truthy(env.VERCEL)
   const serverless =
     onVercel || env.AWS_LAMBDA_FUNCTION_NAME !== undefined || env.LAMBDA_TASK_ROOT !== undefined
-  // The deployment posture (v2/M24, ADR-0005). A key on a public serverless
-  // instance without a passphrase is the one configuration that could quietly
-  // bill the owner for strangers' derivations, so it is the one we refuse:
-  // the instance keeps its key unused and serves demo mode until an access
-  // token is configured. Locally there is no such exposure and no such rule.
+  // The deployment posture (v2/M24 + v2.1/M26, ADR-0005 as amended by
+  // ADR-0006). A key on a public serverless instance could quietly bill the
+  // owner for strangers' derivations, so it is refused unless someone has said
+  // in the environment how that is meant to work: either UCHRONIA_ACCESS_TOKEN
+  // (spending is the owner's, behind a passphrase) or UCHRONIA_PUBLIC_LIVE
+  // (spending is the public's, behind the meters below). Absent both, the
+  // instance keeps its key unused and serves demo mode. Locally there is no
+  // such exposure and no such rule.
   const accessToken = text(env.UCHRONIA_ACCESS_TOKEN)
-  const liveAllowed = !mock && (!serverless || accessToken !== undefined)
+  const publicLiveRequested = truthy(env.UCHRONIA_PUBLIC_LIVE)
+  const liveAllowed = !mock && (!serverless || accessToken !== undefined || publicLiveRequested)
   const effectiveMock = mock || !liveAllowed
+  // A flag that survived into a demo instance would be a lie on /api/config.
+  const publicLive = publicLiveRequested && !effectiveMock
+  // Defaults exist so that turning the posture on cannot leave it unmetered:
+  // a public instance always has a per-visitor allowance unless one is
+  // explicitly zeroed, and a single run may never exceed one visitor's day.
+  const visitorTokenBudget = number(env.UCHRONIA_VISITOR_TOKEN_BUDGET) ?? (publicLive ? 150_000 : 0)
+  // What makes an instance need brakes is strangers reaching it, which is
+  // usually serverless but is exactly what the public posture declares. A
+  // public container behind UCHRONIA_HOST=0.0.0.0 is as exposed as Vercel is.
+  const exposed = serverless || publicLive
 
   return {
     port: number(env.UCHRONIA_PORT) ?? 8787,
@@ -124,9 +154,11 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): ServerConfig {
     mock: effectiveMock,
     apiKey: effectiveMock ? undefined : apiKey,
     accessToken,
+    publicLive,
     liveAllowed,
-    dailyTokenBudget: number(env.UCHRONIA_DAILY_TOKEN_BUDGET) ?? (serverless ? 2_000_000 : 0),
-    rateLimitPerMinute: number(env.UCHRONIA_RATE_LIMIT) ?? (serverless ? 20 : 0),
+    dailyTokenBudget: number(env.UCHRONIA_DAILY_TOKEN_BUDGET) ?? (exposed ? 2_000_000 : 0),
+    visitorTokenBudget: Math.max(0, visitorTokenBudget),
+    rateLimitPerMinute: number(env.UCHRONIA_RATE_LIMIT) ?? (exposed ? 20 : 0),
     serverless,
     models: {
       generation: text(env.UCHRONIA_MODEL_GENERATION) ?? DEFAULT_MODELS.generation,
@@ -138,7 +170,16 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): ServerConfig {
         : resolve(
             text(env.UCHRONIA_DB) ?? (serverless ? '/tmp/uchronia.db' : './data/uchronia.db'),
           ),
-    maxRunTokens: maxRunTokens !== undefined ? Math.max(0, maxRunTokens) : 3_000_000,
+    // One run may not outlast one visitor's allowance: the gate checks the
+    // ledger between requests, so without this a single unbounded chronicle
+    // could overshoot the allowance by an order of magnitude before the next
+    // check ever ran.
+    maxRunTokens:
+      maxRunTokens !== undefined
+        ? Math.max(0, maxRunTokens)
+        : publicLive && visitorTokenBudget > 0
+          ? visitorTokenBudget
+          : 3_000_000,
     traceRuns: (() => {
       const parsed = number(env.UCHRONIA_TRACE_RUNS)
       if (parsed !== undefined) return Math.max(0, parsed)

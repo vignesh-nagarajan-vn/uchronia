@@ -2,7 +2,7 @@ import { armsSvg, loadBaseline, UchroniaError } from '@uchronia/core'
 import { LENSES } from '@uchronia/schemas'
 import { Hono } from 'hono'
 import type { ServerDeps } from '../deps.js'
-import { grantUnlock, isUnlocked, passphraseMatches } from '../gate.js'
+import { callerKey, grantUnlock, isOwner, isUnlocked, passphraseMatches } from '../gate.js'
 
 export function metaRoutes(deps: ServerDeps): Hono {
   const app = new Hono()
@@ -24,11 +24,23 @@ export function metaRoutes(deps: ServerDeps): Hono {
         horizonYears: 150,
         lenses: [...LENSES],
       },
-      // The deployment posture (v2/M24), so the UI can say why it cannot
-      // derive rather than failing at the first click.
+      // The deployment posture (v2/M24, extended v2.1/M26), so the UI can say
+      // why it cannot derive rather than failing at the first click.
       gated: deps.config.accessToken !== undefined,
       unlocked: isUnlocked(c, deps.config),
+      // Whose allowance this caller spends. On a public instance `unlocked` is
+      // true for everyone (there is no passphrase to give), so it cannot carry
+      // this distinction and the UI would call a visitor the owner.
+      owner: isOwner(c, deps.config),
+      // True when anonymous visitors may derive on this instance's key.
+      publicLive: deps.config.publicLive,
       dailyBudget: deps.budget?.status(deps.clock.now()) ?? null,
+      // This caller's own remaining share, so the composer can show it before
+      // the run rather than as a 429 halfway through. Null when they are not
+      // metered: an unlocked session, or an instance with no per-visitor cap.
+      visitorBudget: isOwner(c, deps.config)
+        ? null
+        : (deps.visitors?.status(callerKey(c), deps.clock.now()) ?? null),
     }),
   )
 

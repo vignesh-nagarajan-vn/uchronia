@@ -9,7 +9,7 @@ import {
 import type { ServerConfig } from './config.js'
 import { openDatabase } from './db/client.js'
 import { Repo } from './db/repo.js'
-import type { DailyBudget } from './gate.js'
+import type { DailyBudget, VisitorLedger } from './gate.js'
 import { AnthropicProvider, livePing } from './providers/anthropic.js'
 
 /** Everything the routes need, injected - tests build their own. */
@@ -21,8 +21,10 @@ export interface ServerDeps {
   clock: Clock
   /** Tiny 1-token live connection check; absent in demo mode. */
   livePing?: () => Promise<{ model: string }>
-  /** The day's token ledger (v2/M24); set by createApp so routes can record. */
+  /** The day's token ledger (v2/M24); set by createApp so routes can report it. */
   budget?: DailyBudget
+  /** The per-visitor day ledger (v2.1/M26); set by createApp alongside it. */
+  visitors?: VisitorLedger
 }
 
 export function createDeps(config: ServerConfig): ServerDeps {

@@ -85,6 +85,12 @@ export const CreateTimelineResponse = z.object({
 })
 export type CreateTimelineResponse = z.infer<typeof CreateTimelineResponse>
 
+/** A token allowance and what is left of it; null means no cap applies. */
+const TokenLedger = z
+  .object({ limit: z.number(), spent: z.number(), remaining: z.number() })
+  .nullable()
+  .default(null)
+
 export const ConfigResponse = z.object({
   /** Kept for compatibility; `mode` is the user-facing truth. */
   mock: z.boolean(),
@@ -99,13 +105,24 @@ export const ConfigResponse = z.object({
   }),
   /** True when this instance requires a passphrase to spend (v2/M24). */
   gated: z.boolean().default(false),
-  /** True when this session has already given it. */
+  /** True when nothing bars this session from spending: it gave the passphrase, or none is set. */
   unlocked: z.boolean().default(true),
+  /**
+   * True when this session spends as the instance's owner rather than as one
+   * of its visitors (v2.1/M26). Distinct from `unlocked`, which is also true
+   * on a public instance where nobody has a passphrase and everybody is a
+   * visitor: this is the field that says whose allowance is being spent.
+   */
+  owner: z.boolean().default(true),
+  /** True when anonymous visitors may derive on this instance's key (v2.1/M26). */
+  publicLive: z.boolean().default(false),
   /** The day's token ledger, or null when uncapped. */
-  dailyBudget: z
-    .object({ limit: z.number(), spent: z.number(), remaining: z.number() })
-    .nullable()
-    .default(null),
+  dailyBudget: TokenLedger,
+  /**
+   * This caller's own remaining share of the day (v2.1/M26), or null when they
+   * are not metered: an unlocked session, or an instance with no visitor cap.
+   */
+  visitorBudget: TokenLedger,
 })
 export type ConfigResponse = z.infer<typeof ConfigResponse>
 

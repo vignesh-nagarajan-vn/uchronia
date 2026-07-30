@@ -12,8 +12,9 @@ import { bodyLimit } from 'hono/body-limit'
 import { cors } from 'hono/cors'
 import { ZodError } from 'zod'
 import type { ServerDeps } from './deps.js'
-import { DailyBudget, spendingGate } from './gate.js'
+import { DailyBudget, spendingGate, VisitorLedger } from './gate.js'
 import { ApiError } from './http-error.js'
+import { meterProvider } from './metering.js'
 import { artifactRoutes } from './routes/artifacts.js'
 import { askRoutes } from './routes/ask.js'
 import { branchRoutes } from './routes/branches.js'
@@ -52,8 +53,14 @@ export function createApp(deps: ServerDeps): Hono {
   // Reads, exports, the book, the map, and the record are deliberately
   // outside it: a locked instance is still a fully readable one.
   const budget = new DailyBudget(deps.config.dailyTokenBudget)
+  const visitors = new VisitorLedger(deps.config.visitorTokenBudget)
   deps.budget = budget
-  const gate = spendingGate(deps.config, budget, deps.clock)
+  deps.visitors = visitors
+  // Every provider call charges both ledgers (v2.1/M26). Wrapping here rather
+  // than in createDeps keeps tests free to inject a bare provider and still
+  // exercise the metering through the app they build.
+  deps.provider = meterProvider(deps.provider, budget, visitors, deps.clock)
+  const gate = spendingGate(deps.config, budget, visitors, deps.clock)
   for (const path of [
     '/api/timelines/interpret',
     '/api/branches/:id/generate',
