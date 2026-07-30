@@ -11,6 +11,7 @@
     "dev": "pnpm --parallel --filter @uchronia/server --filter @uchronia/web dev",
     "dev:mock": "cross-env UCHRONIA_MOCK=1 UCHRONIA_MOCK_PACE_MS=250 pnpm dev",
     "dev:preview": "cross-env UCHRONIA_MOCK=1 UCHRONIA_MOCK_PACE_MS=250 pnpm --parallel --filter @uchronia/server --filter @uchronia/web dev:preview",
+    "dev:preview:public": "cross-env UCHRONIA_PUBLIC_LIVE=1 ANTHROPIC_API_KEY=placeholder-no-key-here UCHRONIA_DB=:memory: UCHRONIA_SEED_DEMO=1 pnpm --parallel --filter @uchronia/server --filter @uchronia/web dev:preview",
     "dev:server": "pnpm --filter @uchronia/server dev",
     "dev:web": "pnpm --filter @uchronia/web dev",
     "build": "pnpm -r build",
