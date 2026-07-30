@@ -83,11 +83,23 @@ export function forkRoutes(deps: ServerDeps): Hono {
     const b = side(bId)
     const bIds = new Set(b.events.map((e) => e.id))
     const sharedEventIds = a.events.filter((e) => bIds.has(e.id)).map((e) => e.id)
+
+    // The splice (v2/M19): an optional third line, read against the same POD.
+    const cId = c.req.query('c')
+    let third: ReturnType<typeof side> | undefined
+    if (cId && cId !== 'baseline') {
+      if (deps.repo.branchTimelineId(cId) !== deps.repo.branchTimelineId(aId)) {
+        throw new ApiError(400, 'invalid-request', 'branches belong to different timelines')
+      }
+      third = side(cId)
+    }
+
     const view: CompareView = {
       timeline: world.timeline,
       pod: world.pod,
       a,
       b,
+      ...(third ? { c: third } : {}),
       sharedEventIds,
       divergesAfterEventId: sharedEventIds.at(-1) ?? null,
     }

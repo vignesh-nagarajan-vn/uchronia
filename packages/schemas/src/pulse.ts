@@ -63,6 +63,32 @@ export type PulseRequest = z.infer<typeof PulseRequest>
 export const PulseResponse = z.object({ pulse: Pulse })
 export type PulseResponse = z.infer<typeof PulseResponse>
 
+/** POST /branches/:targetBranchId/graft */
+export const GraftRequest = z.object({
+  sourceBranchId: UlidString,
+  eventId: UlidString,
+  /** Accept a graft the validator grumbled about, marked disputed. */
+  force: z.boolean().optional(),
+})
+export type GraftRequest = z.infer<typeof GraftRequest>
+
+export const GraftConflict = z.object({
+  severity: z.enum(['hard', 'soft']),
+  rule: z.string(),
+  message: z.string(),
+})
+export type GraftConflict = z.infer<typeof GraftConflict>
+
+export const GraftResponse = z.object({
+  /** False when soft conflicts were reported and `force` was not set. */
+  applied: z.boolean(),
+  /** True when it went in visibly marked rather than clean. */
+  disputed: z.boolean(),
+  eventCount: z.number().int().min(0),
+  conflicts: z.array(GraftConflict),
+})
+export type GraftResponse = z.infer<typeof GraftResponse>
+
 /** Entity fates across every branch of a timeline (v2/M19). Pure data, no calls. */
 export const EntityFate = z.object({
   branchId: UlidString,

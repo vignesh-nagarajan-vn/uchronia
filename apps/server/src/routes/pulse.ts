@@ -1,5 +1,5 @@
-import { entityFates, pulseEvent, World } from '@uchronia/core'
-import { EntityFatesResponse, PulseRequest } from '@uchronia/schemas'
+import { entityFates, graftEvent, pulseEvent, World } from '@uchronia/core'
+import { EntityFatesResponse, GraftRequest, PulseRequest } from '@uchronia/schemas'
 import { Hono } from 'hono'
 import type { ServerDeps } from '../deps.js'
 import { ApiError } from '../http-error.js'
@@ -41,6 +41,42 @@ export function pulseRoutes(deps: ServerDeps): Hono {
       { branchId, eventId, ...(body.flip !== undefined ? { flip: body.flip } : {}) },
     )
     return c.json({ pulse })
+  })
+
+  // The graft (v2/M19). No provider call; the validator is the whole gate.
+  // Soft conflicts come back unapplied so the reader can decide, then land
+  // visibly disputed if they send it again with force.
+  app.post('/branches/:branchId/graft', async (c) => {
+    const targetBranchId = c.req.param('branchId')
+    const body = GraftRequest.parse(await c.req.json())
+    const world = worldFor(targetBranchId)
+    if (
+      deps.repo.branchTimelineId(body.sourceBranchId) !== deps.repo.branchTimelineId(targetBranchId)
+    ) {
+      throw new ApiError(400, 'invalid-request', 'branches belong to different timelines')
+    }
+    const result = graftEvent(
+      { provider: deps.provider, idgen: deps.idgen, clock: deps.clock, signal: c.req.raw.signal },
+      world,
+      {
+        sourceBranchId: body.sourceBranchId,
+        targetBranchId,
+        eventId: body.eventId,
+        ...(body.force !== undefined ? { force: body.force } : {}),
+      },
+    )
+    const applied = result.events.length > 0
+    if (applied) {
+      deps.repo.insertEra(result.era)
+      for (const event of result.events) deps.repo.insertEvent(event)
+      for (const edge of result.edges) deps.repo.insertEdge(edge)
+    }
+    return c.json({
+      applied,
+      disputed: result.disputed,
+      eventCount: result.events.length,
+      conflicts: result.conflicts,
+    })
   })
 
   app.get('/branches/:branchId/entities/:entityId/fates', (c) => {

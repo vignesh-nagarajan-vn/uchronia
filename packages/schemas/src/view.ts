@@ -191,6 +191,8 @@ export const CompareView = z.object({
       anchors: z.array(BaselineAnchor),
     }),
   ]),
+  /** A third branch, spliced in (v2/M19). Absent for the two-column read. */
+  c: CompareSide.optional(),
   /** Events visible on both sides (branch↔branch), in a's order. */
   sharedEventIds: z.array(z.string()),
   /** The last shared event - where the two lines part. */
