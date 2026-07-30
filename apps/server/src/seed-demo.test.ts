@@ -1,18 +1,24 @@
 import { describe, expect, it } from 'vitest'
 import { loadConfig } from './config.js'
-import { seedDemoIfEmpty } from './seed-demo.js'
+import { SHOWCASE_FILES, seedDemoIfEmpty } from './seed-demo.js'
 import { makeTestApp } from './test-helpers.js'
 
 describe('demo seeding', () => {
-  it('imports the showcase chronicle into an empty database, once', () => {
+  it('imports every showcase chronicle into an empty database, once', () => {
     const { deps } = makeTestApp()
     expect(seedDemoIfEmpty(deps)).toBe(true)
     const list = deps.repo.listTimelines()
-    expect(list).toHaveLength(1)
-    expect(list[0]?.eventCount).toBe(67)
+    expect(list).toHaveLength(SHOWCASE_FILES.length)
+    for (const timeline of list) expect(timeline.eventCount).toBeGreaterThan(0)
     // A database with content is left alone.
     expect(seedDemoIfEmpty(deps)).toBe(false)
-    expect(deps.repo.listTimelines()).toHaveLength(1)
+    expect(deps.repo.listTimelines()).toHaveLength(SHOWCASE_FILES.length)
+  })
+
+  it('skips an unreadable ledger rather than refusing to boot', () => {
+    const { deps } = makeTestApp()
+    expect(seedDemoIfEmpty(deps, [{ formatVersion: 1, nonsense: true }])).toBe(false)
+    expect(deps.repo.listTimelines()).toHaveLength(0)
   })
 })
 

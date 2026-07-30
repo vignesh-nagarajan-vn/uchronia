@@ -126,10 +126,17 @@ try {
 
   const timelines = await get('/api/timelines')
   const list = await timelines.json()
+  // Every showcase must arrive: the ledgers are inlined into the bundle, so a
+  // missing one means esbuild dropped an import rather than that seeding is off.
   check(
-    'showcase chronicle seeded from the bundled ledger',
-    timelines.status === 200 && Array.isArray(list) && list.length === 1,
-    `${Array.isArray(list) ? list.length : '?'} timeline(s)`,
+    'every showcase chronicle seeded from the bundled ledgers',
+    timelines.status === 200 && Array.isArray(list) && list.length === 4,
+    `${Array.isArray(list) ? list.length : '?'} timeline(s): ${Array.isArray(list) ? list.map((t) => t.title).join(', ') : '?'}`,
+  )
+  check(
+    'the WW2 showcase is among them',
+    Array.isArray(list) && list.some((t) => t.title === 'The Allies Lose'),
+    'the headline chronicle ships with the deployment',
   )
 
   const rootBranchId = list[0]?.rootBranchId

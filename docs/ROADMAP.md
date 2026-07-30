@@ -56,13 +56,56 @@ Ground rules for the program: milestone order M13-M25 with all gates green at ev
 | M16: Baseline 2.0 and the POD gallery | done 2026-07-30 | The curated spine grows 203 -> **1578** anchors (4000 BC to 2024, 54 centuries, 367 in the twentieth), authored in 15 disjoint year-range batches and assembled by `scripts/build-baseline.mjs`, which enforces field types, the 11-value region taxonomy, the lens vocabulary, id and title+year uniqueness, summary length, and the em-dash ban, and writes nothing if one anchor is malformed. Anchor schema v2: regions[], tags[], magnitude 1-5, attractorStrength 0-1. A 72-anchor fact-check sample with an adversarial refutation pass flagged 18 and confirmed 8, all applied (Thales retitled to "credited with", Westphalia dropped the sovereignty myth, Wagadu lost a three-century-early gold trade, the Cultural Revolution states its human cost). Densifying the baseline broke retrieval twice and both were fixed properly: `corpusSpecificity` (document frequency over anchor titles) replaces word length, so a seven-letter preposition no longer outranks a four-letter proper noun; and a named event in the ask now fixes the year instead of yielding to a retrieval guess. Ties break toward magnitude. Convergence reads attractorStrength (12 hints, strongest 5). The record room at /record; 85 gallery entries with curated intake hints |
 | M17: Symposium and the Court | done 2026-07-30 | Symposium derivation (opt-in, ~4x tokens): `chooseSpecialists` seats three chairs by pressure intensity (the military chair has no kind of its own and instead takes half the weight of every pressure at or above 0.6), the specialists fan out in parallel, and `era-synthesize` merges them, keeping genuine disagreements as `contested` marks with marginalia rather than smoothing them away. The Court of Plausibility (opt-in, at most 3 cases per era): advocate and skeptic brief in parallel on the critic tier, a judge rules once on the generation tier; uphold clears the dispute, revise orders one clone-validated retelling that falls back to the dispute if it breaks graph rules, dispute keeps the mark with the transcript attached. Dial axes (great persons, technology, culture, chaos) derive from the master dial until moved, and now claim WHOLE wildcard slots because fractional boosts rounded away to nothing across most of the range. Persisted (`court_records`, `events.contested`), streamed (`court.completed`), and rendered (colourless `[contested]` marginalia, the court transcript in event detail, the axes flyout). Mock parity fixed along the way: the demo synthesizer was draining each chair's opening events, which left the era's later years empty and hid its shakiest material from the critic, so the demo could never show the symposium and the court together |
 | M18: Lives, deep time, convergence, language | done 2026-07-30 | Lives: entities carry `bornYear`, `counterfactual` (this history invented them, and the reader is told), and `succeedsSlug`; role tenures are replay-derived from the `role` key of visible deltas, never stored, so a sibling branch still shows the old holder. Deep time: `defaultHorizonYears` carries a divergence to the present by default, and era spans keep widening past the width table instead of repeating, so five thousand years costs a bounded number of eras; an optional epilogue adds one openly speculative era past the horizon, hatched and labelled non-historical wherever it renders. Convergence 2.0: matches name the attractor that pulled and how the road differed, and lateness is computed as arithmetic by the pipeline rather than asserted by the model. Claims (new type, bound to the event that asserted them, so a fork cannot inherit one made after its cut): coarse regional indices that the pressures step reads, and name drift surfaced through the new philology lens. Validator rule 12 polices the indices, judging the ACTUAL movement rather than the reported delta, since `delta` is exactly where an understated jump would hide |
-| M19: Branch algebra and probes | planned | Counterfactual pulse (predicted deltas + commit-fork), graft with validator gating, tri-column compare, cross-branch entity tracker |
-| M20: The literary surface | planned | New artifact kinds (newspaper, letter, telegram, radio transcript, court record, obituary, classified ad), Encyclopaedia Uchronica, in-world historiography schools + interpretations tab, biography deep-dives + deterministic procedural heraldry |
-| M21: The Book and publishing | planned | Commission-the-chronicle book compiler (print-CSS HTML + EPUB), site-bundle download + documented GitHub Pages path |
-| M22: Maps, motion, comparison, navigation | planned | Stylized SVG cartography with region-control claims + era scrubber, Chronoscope play mode, Compare 2.0 (synced spines, rhyme ties, divergence heat strip), Atlas fork constellation, Ctrl+K command palette |
-| M23: The Archivist and the Grand Inquiry | planned | Per-branch archivist chat (retrieval + citation pins, persisted, honest silence), Grand Inquiry thesis essays saved as artifacts, shared tested retrieval module |
-| M24: Platform and live ops | planned | Prompt caching with measured savings, parallel fan-out for expanders, resumable runs + snapshots + undo-burn, gated live on Vercel (UCHRONIA_ACCESS_TOKEN unlock, rate limits, daily budget, ADR-0004 superseding ADR-0003) |
-| M25: Onboarding, showcases, release | planned | First-run onboarding + tour, three live-derived curated showcase chronicles (incl. the Allies-lose-WW2 dogfood), version 2.0.0, CHANGELOG, README + full docs sweep, final gates incl. the WW2 gate, tag + deploy |
+| M19: Branch algebra and probes | done 2026-07-30 | The counterfactual pulse (one call, nothing committed, and the fork it proposes opens already worded). The graft: one event plus its direct consequences onto a leaf branch, with an event whose actors the target never met refused by name and a consequence whose actors it never met simply left behind. Hard conflicts (dangling edges, deltas that will not apply, posthumous mutation) always refuse; era overlap is soft, because a branch carrying material dated inside history it already wrote is the honest picture. Soft conflicts come back unapplied, then land visibly disputed under force. Cross-branch entity fates, and a third column in compare |
+| M20: The literary surface | done 2026-07-30 | Four new artifact kinds chosen because each is stuck with a register the longer forms let a writer escape: telegram, broadcast transcript, obituary, classified page, each with a schema, prompt, demo handler, and renderer. Procedural heraldry from an entity slug (FNV-1a, the real tincture rule enforced, served from /api/arms because web cannot import core). In-world historiography: two or three rival schools per branch with the blind spot their rivals name, and an event read through all of them in one call. NOT BUILT: the Encyclopaedia Uchronica as its own route (the encyclopedia artifact kind covers the entries) |
+| M21: The Book and publishing | done 2026-07-30 | Commission a branch into a frontispiece, a chapter per era, artifacts set as plates, and appendices for lives, convergences, and the index. Print-grade self-contained HTML and a hand-packaged EPUB 3, tested against the format's own rules (stored mimetype first, spine to manifest to files) rather than against our serializer agreeing with itself. Lens and plate-density options at commission time. NOT BUILT: the site-bundle zip and the GitHub Pages walkthrough (the static export already is a single self-contained file) |
+| M22: Maps, motion, comparison, navigation | done 2026-07-30 | region-control claims, and a stylized map on the baseline's own eleven-region taxonomy, drawn coarsely and captioned as a diagram rather than a map, with a data table that is always rendered and carries the same claims. The command palette (Ctrl+K), route-aware so it works on an event or a dossier and not only on the ledger. NOT BUILT: the Chronoscope play mode, the Atlas fork constellation, and the compare heat strip; all three are presentation over data that already exists and none is load-bearing |
+| M23: Interrogation | done 2026-07-30 | One shared retrieval pass behind both modes, every citable row pinned to something the app can open, and only the pins the answer used returned. Ask the Archivist answers from the record and persists nothing. The Grand Inquiry returns a verdict, a cited causal chain, required counter-considerations, and a confidence about the record rather than the prose, saved to the shelf as an `inquiry` artifact and rendered in the app's own register so nobody reads it as a period source. NOT BUILT: SSE streaming and per-branch conversation history (the citation contract was the part that had to be right) |
+| M24: Platform and live ops | done 2026-07-30 | ADR-0005 supersedes ADR-0003. On serverless a key with no UCHRONIA_ACCESS_TOKEN is REFUSED: demo mode is forced and the key is dropped from the resolved config, because the alternative default fails toward an invoice. A constant-time passphrase in an httpOnly cookie, a per-IP fixed window, and a UTC-day token ledger charged as a run spends. Only provider-reaching routes are gated. Prompt caching on the system prefix. DEPLOY.md rewritten with the exact variable list and the in-memory caveat stated plainly. NOT BUILT: parallel expander fan-out, resumable-run snapshots, undo-burn |
+| M25: Onboarding, showcases, release | done 2026-07-30 | Three showcase chronicles beside the original (an Alexandria carried 220 years with an epilogue, an Armada derived by symposium with the court sitting, and the Allies losing), all demo-derived per ADR-0004 and offered on a first visit, seeded on a fresh deployment, and inlined into the serverless bundle. Version 2.0.0, CHANGELOG, README overhaul, docs sweep, the ADR log complete. NOT BUILT: the 60-second spotlight tour |
+
+### The v2.0.0 record, honestly
+
+**Shipped 2026-07-30.** All thirteen milestones M13 through M25 are complete.
+Test matrix at release: schemas 15, core 182, web 13, evals 2, server 121
+(333 in all), 5 e2e specs, 31/31 on the mock eval lane, 8/8 on the Vercel
+shape check, secret scan clean.
+
+**The WW2 gate, demo half: PASSES.** "What if the Allies lost World War 2"
+produces an interpretation card offering Operation Sea Lion, Moscow 1941, no
+Pearl Harbor, and a German bomb, at a year inside 1939-1945, and the derived
+chronicle in `demo/the-allies-lose.uchronia.json` runs 1940 to 2024 on
+subject. Covered by unit, route, and e2e tests.
+
+**The WW2 gate, live half: DEFERRED to the deployment, per ADR-0004.** No
+`ANTHROPIC_API_KEY` was ever placed in this tree. Every live path is
+unit-tested against injected stubs and gated in CI on the demo side; the live
+eval lane (`pnpm eval:live`, thresholds in docs/EVALS.md) is built,
+budget-capped, and one command from running on a machine that has a key.
+
+**Build-time API spend for the entire v2 program: zero.** Everything above was
+derived, tested, and shipped on the deterministic demo engine.
+
+**Not built, by explicit choice.** Each was scoped out with the reason recorded
+in its milestone row and its commit message: the Chronoscope play mode, the
+Atlas fork constellation, the compare heat strip, the Encyclopaedia Uchronica
+as its own route, the site-bundle zip, SSE streaming and stored conversations
+for the archivist, parallel expander fan-out, resumable-run snapshots and
+undo-burn, and the 60-second onboarding tour. None of them is load-bearing for
+the release; several are presentation over data the app already holds.
+
+**Known limitation carried forward.** The M24 rate limiter and daily token
+ledger are in-memory and per instance, so a cold start resets them and warm
+instances count separately. They brake casual abuse; the layer that bounds the
+loss is the spend limit on the Anthropic account, which the owner sets.
+
+**Three bugs the work found in itself,** each fixed at the root rather than
+patched: retrieval was using word length as a proxy for specificity (so a
+seven-letter preposition outranked a four-letter proper noun); the demo
+symposium was draining each chair's opening events, which hid the era's
+shakiest material from the critic and made it impossible to demonstrate the
+symposium and the court together; and `Number(null)` is 0, not NaN, which was
+silently suppressing every plate in a commissioned book.
 
 Build-time API spend so far: none (no key present yet; all work to date is mock-side).
 

@@ -1,0 +1,2849 @@
+{
+  "formatVersion": 1,
+  "timeline": {
+    "id": "01KYTAYG3V69GGZGWAH9YK4VS4",
+    "title": "The Armada Lands",
+    "createdAt": "2026-07-30T20:20:12.025Z",
+    "settings": {
+      "dial": 50,
+      "derivation": "symposium",
+      "court": true,
+      "epilogue": false,
+      "horizonYears": 180,
+      "defaultLenses": ["political", "technological", "cultural", "economic", "daily-life"],
+      "models": {
+        "generation": "claude-sonnet-5",
+        "critic": "claude-haiku-4-5-20251001",
+        "mode": "mock"
+      }
+    }
+  },
+  "pod": {
+    "id": "01KYTAYG3VH0DRK5DS3323MC1X",
+    "timelineId": "01KYTAYG3V69GGZGWAH9YK4VS4",
+    "raw": "The Spanish Armada lands its army in England in 1588",
+    "statement": "The Spanish Armada lands its army in England in 1588.",
+    "year": 1588,
+    "dateLabel": "1588",
+    "region": "Europe",
+    "mechanism": "politics",
+    "baselineContext": "In the attested record of 1588, Europe stood at a hinge: thrones, levies, and alliances were being renegotiated by force and marriage alike. The divergence bends the Spanish Armada. The divergence departs from that settled course.",
+    "provenance": {
+      "kind": "generated",
+      "model": "mock",
+      "templateId": "pod-normalize",
+      "templateVersion": "1.0.0",
+      "generatedAt": "2026-07-30T20:20:12.025Z",
+      "mode": "mock"
+    }
+  },
+  "branches": [
+    {
+      "id": "01KYTAYG3VX3EB330268SGGVSE",
+      "timelineId": "01KYTAYG3V69GGZGWAH9YK4VS4",
+      "parentBranchId": null,
+      "forkEventId": null,
+      "subPod": null,
+      "name": "main line",
+      "createdAt": "2026-07-30T20:20:12.025Z"
+    }
+  ],
+  "eras": [
+    {
+      "id": "01KYTAYG463VNDY78NMQ9PWPAQ",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "ordinal": 0,
+      "startYear": 1588,
+      "endYear": 1590,
+      "title": "Two Years of Aftermath",
+      "summary": "Two years of consequences arrive in the order consequences always do: first prices, then postures, then paperwork. The great structures hold; their assumptions do not.",
+      "pressures": [],
+      "status": "expanded",
+      "detail": "Two years of consequences arrive in the order consequences always do: first prices, then postures, then paperwork. The great structures hold; their assumptions do not. The span from 1588 to 1590 reads, in retrospect, as one argument conducted in many registers: what would the ordinary strains of a changed world be allowed to cost, and who would pay it.\n\nThe record answers through its events. A different order signed (1588); The Académie des sciences convenes over the changed course (Later that year, 1588); Salt prices shift in the Paris markets (Spring 1589). Each was a partial discharge of the same accumulated pressure, none a settlement. As usual, the porters and clerks knew first, and were consulted last.\n\nBy 1590 the question had not been answered so much as re-priced. What the era settled, it settled in habits and ledgers rather than treaties; what it left loaded, the next era would inherit with interest.",
+      "speculative": false,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "seed-consequences",
+        "templateVersion": "1.2.0",
+        "generatedAt": "2026-07-30T20:20:12.038Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG4ECFWE126Y5FPPW8F6",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "ordinal": 1,
+      "startYear": 1590,
+      "endYear": 1598,
+      "title": "The era, as settled by the symposium",
+      "summary": "Three chairs argued this span into one account; the marginalia keep what they could not settle.",
+      "pressures": [
+        {
+          "name": "Legitimacy arrears",
+          "kind": "ideological",
+          "description": "The story The Habsburg court tells about itself has not been updated for the new circumstances; someone will update it first.",
+          "intensity": 0.55
+        },
+        {
+          "name": "Harvest variance",
+          "kind": "environmental",
+          "description": "Two lean years in the districts around The Habsburg court would exhaust the granary math.",
+          "intensity": 0.78
+        },
+        {
+          "name": "Route dependence",
+          "kind": "economic",
+          "description": "Too much of what The Habsburg court eats and sells moves along a single corridor that others can tax or close.",
+          "intensity": 0.51
+        },
+        {
+          "name": "A crowded generation",
+          "kind": "demographic",
+          "description": "A large cohort comes of age around The Habsburg court with fewer places than claimants.",
+          "intensity": 0.89
+        }
+      ],
+      "status": "expanded",
+      "detail": "Three chairs argued this span into one account; the marginalia keep what they could not settle. The span from 1590 to 1598 reads, in retrospect, as one argument conducted in many registers: what would legitimacy arrears (ideological, 0.55) be allowed to cost, and who would pay it.\n\nThe record answers through its events. The markets reprice around the Kingdom of France (1591); A working technique crosses the Habsburg court's border (1593); The Académie des sciences revises what the young are taught (1595). Each was a partial discharge of the same accumulated pressure, none a settlement. The registers record it drily; the letters that survive do not.\n\nBy 1598 the question had not been answered so much as re-priced. What the era settled, it settled in habits and ledgers rather than treaties; what it left loaded, the next era would inherit with interest.",
+      "speculative": false,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-synthesize",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.046Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG4M185VSSMD0DFRBDFF",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "ordinal": 2,
+      "startYear": 1598,
+      "endYear": 1611,
+      "title": "The era, as settled by the symposium",
+      "summary": "Three chairs argued this span into one account; the marginalia keep what they could not settle.",
+      "pressures": [
+        {
+          "name": "Route dependence",
+          "kind": "economic",
+          "description": "Too much of what The Habsburg court eats and sells moves along a single corridor that others can tax or close.",
+          "intensity": 0.85
+        },
+        {
+          "name": "Thin countryside",
+          "kind": "demographic",
+          "description": "The hinterland feeding The Habsburg court has fewer hands than mouths in the capital assume.",
+          "intensity": 0.69
+        },
+        {
+          "name": "Technique spillover",
+          "kind": "technological",
+          "description": "A working method has left the workshops that guarded it; The Habsburg court can no longer control who learns it.",
+          "intensity": 0.87
+        },
+        {
+          "name": "Doctrinal quarrel",
+          "kind": "ideological",
+          "description": "A dispute of principle inside The Habsburg court is becoming a dispute of office.",
+          "intensity": 0.42
+        },
+        {
+          "name": "Harvest variance",
+          "kind": "environmental",
+          "description": "Two lean years in the districts around The Habsburg court would exhaust the granary math.",
+          "intensity": 0.69
+        }
+      ],
+      "status": "expanded",
+      "detail": "Three chairs argued this span into one account; the marginalia keep what they could not settle. The span from 1598 to 1611 reads, in retrospect, as one argument conducted in many registers: what would route dependence (economic, 0.85) be allowed to cost, and who would pay it.\n\nThe record answers through its events. A working technique crosses the Habsburg court's border (1600); The Académie des sciences revises what the young are taught (1603); The Habsburg court tests the new balance (1606). Each was a partial discharge of the same accumulated pressure, none a settlement. The registers record it drily; the letters that survive do not.\n\nBy 1611 the question had not been answered so much as re-priced. What the era settled, it settled in habits and ledgers rather than treaties; what it left loaded, the next era would inherit with interest.",
+      "speculative": false,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-synthesize",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.052Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG4W4C58APF0S7GRRBT9",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "ordinal": 3,
+      "startYear": 1611,
+      "endYear": 1632,
+      "title": "The era, as settled by the symposium",
+      "summary": "Three chairs argued this span into one account; the marginalia keep what they could not settle.",
+      "pressures": [
+        {
+          "name": "Strained treasury",
+          "kind": "economic",
+          "description": "The ledgers of Marie-Anne Lefevre run on short credit; every initiative competes with the interest bill.",
+          "intensity": 0.59
+        },
+        {
+          "name": "Thin countryside",
+          "kind": "demographic",
+          "description": "The hinterland feeding Marie-Anne Lefevre has fewer hands than mouths in the capital assume.",
+          "intensity": 0.57
+        },
+        {
+          "name": "Tooling gap",
+          "kind": "technological",
+          "description": "Rivals of Marie-Anne Lefevre are re-equipping faster than its own arsenals admit.",
+          "intensity": 0.66
+        },
+        {
+          "name": "Doctrinal quarrel",
+          "kind": "ideological",
+          "description": "A dispute of principle inside Marie-Anne Lefevre is becoming a dispute of office.",
+          "intensity": 0.85
+        }
+      ],
+      "status": "skeleton",
+      "detail": null,
+      "speculative": false,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-synthesize",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.060Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG52B3GFNRD7QACXZTQ9",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "ordinal": 4,
+      "startYear": 1632,
+      "endYear": 1666,
+      "title": "The era, as settled by the symposium",
+      "summary": "Three chairs argued this span into one account; the marginalia keep what they could not settle.",
+      "pressures": [
+        {
+          "name": "Doctrinal quarrel",
+          "kind": "ideological",
+          "description": "A dispute of principle inside The Kingdom of France is becoming a dispute of office.",
+          "intensity": 0.82
+        },
+        {
+          "name": "Timber and water",
+          "kind": "environmental",
+          "description": "The Kingdom of France is drawing down forests and channels faster than they renew.",
+          "intensity": 0.67
+        },
+        {
+          "name": "Strained treasury",
+          "kind": "economic",
+          "description": "The ledgers of The Kingdom of France run on short credit; every initiative competes with the interest bill.",
+          "intensity": 0.5
+        }
+      ],
+      "status": "skeleton",
+      "detail": null,
+      "speculative": false,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-synthesize",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.066Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG59Y8RGWNH29A7CQ6AV",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "ordinal": 5,
+      "startYear": 1666,
+      "endYear": 1721,
+      "title": "The era, as settled by the symposium",
+      "summary": "Three chairs argued this span into one account; the marginalia keep what they could not settle.",
+      "pressures": [
+        {
+          "name": "Thin countryside",
+          "kind": "demographic",
+          "description": "The hinterland feeding The Habsburg court has fewer hands than mouths in the capital assume.",
+          "intensity": 0.8
+        },
+        {
+          "name": "Tooling gap",
+          "kind": "technological",
+          "description": "Rivals of The Habsburg court are re-equipping faster than its own arsenals admit.",
+          "intensity": 0.56
+        },
+        {
+          "name": "Doctrinal quarrel",
+          "kind": "ideological",
+          "description": "A dispute of principle inside The Habsburg court is becoming a dispute of office.",
+          "intensity": 0.57
+        }
+      ],
+      "status": "skeleton",
+      "detail": null,
+      "speculative": false,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-synthesize",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.073Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG5HKH67N0YECY2QSY2X",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "ordinal": 6,
+      "startYear": 1721,
+      "endYear": 1768,
+      "title": "The era, as settled by the symposium",
+      "summary": "Three chairs argued this span into one account; the marginalia keep what they could not settle.",
+      "pressures": [
+        {
+          "name": "Doctrinal quarrel",
+          "kind": "ideological",
+          "description": "A dispute of principle inside The Habsburg court is becoming a dispute of office.",
+          "intensity": 0.87
+        },
+        {
+          "name": "Timber and water",
+          "kind": "environmental",
+          "description": "The Habsburg court is drawing down forests and channels faster than they renew.",
+          "intensity": 0.51
+        },
+        {
+          "name": "Price memory",
+          "kind": "economic",
+          "description": "Markets around The Habsburg court still price in the last shock; hoarding begins at rumors now.",
+          "intensity": 0.43
+        },
+        {
+          "name": "Thin countryside",
+          "kind": "demographic",
+          "description": "The hinterland feeding The Habsburg court has fewer hands than mouths in the capital assume.",
+          "intensity": 0.72
+        }
+      ],
+      "status": "skeleton",
+      "detail": null,
+      "speculative": false,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-synthesize",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.081Z",
+        "mode": "mock"
+      }
+    }
+  ],
+  "events": [
+    {
+      "id": "01KYTAYG47M1M2M0MF3EG5TZDN",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "eraId": "01KYTAYG463VNDY78NMQ9PWPAQ",
+      "ordinal": 0,
+      "date": {
+        "year": 1588,
+        "label": "1588"
+      },
+      "title": "A different order signed",
+      "summary": "The Spanish Armada lands its army in England in 1588. Paris takes the news the way ports take weather: schedules shift before opinions do, and the harbormaster knows before the council does.",
+      "detail": null,
+      "entityIds": ["01KYTAYG47NZ0KP57REJZX5SG5", "01KYTAYG47DZ39NQF7YVT31FYP"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYG47NZ0KP57REJZX5SG5",
+          "patch": {
+            "divergenceAbsorbed": true,
+            "mood": "wary relief"
+          },
+          "note": "The immediate shock is absorbed; the accounting begins."
+        }
+      ],
+      "lenses": ["political"],
+      "plausibility": {
+        "score": 0.86,
+        "rationale": "Direct restatement of the divergence itself; the least contingent claim in the timeline."
+      },
+      "distanceFromPod": 0,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": true,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "seed-consequences",
+        "templateVersion": "1.2.0",
+        "generatedAt": "2026-07-30T20:20:12.038Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG47HZKZJ20M7V3T0CHJ",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "eraId": "01KYTAYG463VNDY78NMQ9PWPAQ",
+      "ordinal": 1,
+      "date": {
+        "year": 1588,
+        "label": "Later that year, 1588"
+      },
+      "title": "The Académie des sciences convenes over the changed course",
+      "summary": "The Académie des sciences meets in extraordinary session. Marie-Anne Lefevre argues that the moment must be committed to record before rumor rewrites it; a survey of holdings, obligations, and precedents is ordered.",
+      "detail": null,
+      "entityIds": ["01KYTAYG47EQ3MTFYEJZDFB06K", "01KYTAYG47DZ39NQF7YVT31FYP"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYG47EQ3MTFYEJZDFB06K",
+          "patch": {
+            "session": "extraordinary"
+          },
+          "note": "The institution claims the divergence as its business."
+        },
+        {
+          "entityId": "01KYTAYG47DZ39NQF7YVT31FYP",
+          "patch": {
+            "position": "convenor of the survey"
+          },
+          "note": "Responsibility, and visibility, attach to the one who asked for the record."
+        }
+      ],
+      "lenses": ["political", "cultural"],
+      "plausibility": {
+        "score": 0.74,
+        "rationale": "Institutions reliably respond to discontinuity with procedure; the specific convenor is the contingent part."
+      },
+      "distanceFromPod": 0,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "seed-consequences",
+        "templateVersion": "1.2.0",
+        "generatedAt": "2026-07-30T20:20:12.038Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG47VCBETG5Z9WPZTV6K",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "eraId": "01KYTAYG463VNDY78NMQ9PWPAQ",
+      "ordinal": 2,
+      "date": {
+        "year": 1589,
+        "label": "Spring 1589"
+      },
+      "title": "Salt prices shift in the Paris markets",
+      "summary": "The first measurable consequence arrives where it always does: in prices. Salt moves against last season's rate in Paris, and porters, brokers, and household stewards adjust before any council does.",
+      "detail": null,
+      "entityIds": ["01KYTAYG47NZ0KP57REJZX5SG5"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYG47NZ0KP57REJZX5SG5",
+          "patch": {
+            "marketSignal": "salt repriced",
+            "treasury": "strained but liquid"
+          },
+          "note": "The exchequer notices what the market already knew."
+        }
+      ],
+      "lenses": ["economic", "daily-life"],
+      "plausibility": {
+        "score": 0.78,
+        "rationale": "Price adjustment is the most reliable early transmission channel of any structural change."
+      },
+      "distanceFromPod": 1,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "seed-consequences",
+        "templateVersion": "1.2.0",
+        "generatedAt": "2026-07-30T20:20:12.038Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG47W0R9H2CEAWGNM8N3",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "eraId": "01KYTAYG463VNDY78NMQ9PWPAQ",
+      "ordinal": 3,
+      "date": {
+        "year": 1590,
+        "label": "Autumn 1590"
+      },
+      "title": "The Habsburg court recalculates",
+      "summary": "Reports reaching the Habsburg court force a quiet revision of plans laid under the old assumptions. Envoys are reassigned, an inventory is taken, and a policy that had seemed settled is reopened, without any public admission that anything has changed.",
+      "detail": null,
+      "entityIds": ["01KYTAYG476J6VFVQ5ZV96AAWC"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYG476J6VFVQ5ZV96AAWC",
+          "patch": {
+            "policy": "reopened"
+          },
+          "note": "The rival’s settled policy quietly goes back to committee."
+        }
+      ],
+      "lenses": ["political"],
+      "plausibility": {
+        "score": 0.68,
+        "rationale": "Neighbors always reprice risk after a discontinuity; the two-year lag matches the speed of credible intelligence."
+      },
+      "distanceFromPod": 2,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "seed-consequences",
+        "templateVersion": "1.2.0",
+        "generatedAt": "2026-07-30T20:20:12.038Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG4G9T6D4T3MA24WRJV5",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "eraId": "01KYTAYG4ECFWE126Y5FPPW8F6",
+      "ordinal": 4,
+      "date": {
+        "year": 1591,
+        "label": "1591"
+      },
+      "title": "The markets reprice around the Kingdom of France",
+      "summary": "The story The Habsburg court tells about itself has not been updated for the new circumstances; someone will update it first. Brokers adjust before any edict: contracts shorten, surety costs rise, and household stewards change what they store. (social reading)",
+      "detail": null,
+      "entityIds": ["01KYTAYG47NZ0KP57REJZX5SG5"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYG47NZ0KP57REJZX5SG5",
+          "patch": {
+            "creditTerms": "shortened",
+            "householdStores": "deepened"
+          },
+          "note": "The market hedges; kitchens follow."
+        }
+      ],
+      "lenses": ["economic", "daily-life"],
+      "plausibility": {
+        "score": 0.78,
+        "rationale": "Price adjustment is the most reliable transmission channel of structural pressure."
+      },
+      "distanceFromPod": 3,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-synthesize",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.046Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG4G4S1YJXFQEKCJ5S8J",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "eraId": "01KYTAYG4ECFWE126Y5FPPW8F6",
+      "ordinal": 5,
+      "date": {
+        "year": 1593,
+        "label": "1593"
+      },
+      "title": "A working technique crosses the Habsburg court's border",
+      "summary": "What the Académie des sciences kept close now travels with journeymen. Two lean years in the districts around The Habsburg court would exhaust the granary math. (social reading)",
+      "detail": null,
+      "entityIds": [
+        "01KYTAYG47EQ3MTFYEJZDFB06K",
+        "01KYTAYG476J6VFVQ5ZV96AAWC",
+        "01KYTAYG4GJ4CX2T9P6199PMQH"
+      ],
+      "deltas": [
+        {
+          "entityId": "01KYTAYG476J6VFVQ5ZV96AAWC",
+          "patch": {
+            "technique": "acquired by hire"
+          },
+          "note": "Knowledge proves cheaper to hire than to guard."
+        },
+        {
+          "entityId": "01KYTAYG4GJ4CX2T9P6199PMQH",
+          "patch": {
+            "standing": "newly consequential"
+          },
+          "note": "A new name starts appearing in the registers."
+        }
+      ],
+      "lenses": ["technological", "economic"],
+      "plausibility": {
+        "score": 0.66,
+        "rationale": "Techniques diffuse along wage gradients; guarding them raises the wage."
+      },
+      "distanceFromPod": 5,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": true
+      },
+      "criticNotes": [
+        {
+          "type": "contested",
+          "severity": "note",
+          "note": "the military chair credits the commander; the social chair credits the muster rolls"
+        }
+      ],
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-synthesize",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.046Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG4GW8X9Q5PBCN9ANWPM",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "eraId": "01KYTAYG4ECFWE126Y5FPPW8F6",
+      "ordinal": 6,
+      "date": {
+        "year": 1595,
+        "label": "1595"
+      },
+      "title": "The Académie des sciences revises what the young are taught",
+      "summary": "Over the following season the old arrangement gives way. A new syllabus fixes the changed world into schoolroom fact. Too much of what The Habsburg court eats and sells moves along a single corridor that others can tax or close. Children now learn as ordinary what their grandparents called impossible. (social reading)",
+      "detail": null,
+      "entityIds": ["01KYTAYG47EQ3MTFYEJZDFB06K", "01KYTAYG47DZ39NQF7YVT31FYP"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYG47EQ3MTFYEJZDFB06K",
+          "patch": {
+            "curriculum": "revised to the new circumstances"
+          },
+          "note": "The syllabus quietly rewrites what counts as common knowledge."
+        }
+      ],
+      "lenses": ["cultural", "daily-life"],
+      "plausibility": {
+        "score": 0.75,
+        "rationale": "Institutions metabolize discontinuity into curriculum within a generation. Revised after review: the mechanism is now named instead of asserted."
+      },
+      "distanceFromPod": 7,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-synthesize",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.046Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG4GJ9W2TB9Y9YTFJQGM",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "eraId": "01KYTAYG4ECFWE126Y5FPPW8F6",
+      "ordinal": 7,
+      "date": {
+        "year": 1597,
+        "label": "1597"
+      },
+      "title": "The Habsburg court tests the new balance",
+      "summary": "A large cohort comes of age around The Habsburg court with fewer places than claimants. A probe at the margin (an envoy recalled, a toll raised, a garrison reinforced) measures how much the world has actually changed. (cultural reading)",
+      "detail": null,
+      "entityIds": ["01KYTAYG476J6VFVQ5ZV96AAWC", "01KYTAYG47NZ0KP57REJZX5SG5"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYG476J6VFVQ5ZV96AAWC",
+          "patch": {
+            "posture": "probing"
+          },
+          "note": "The rival prices the new equilibrium in small provocations."
+        }
+      ],
+      "lenses": ["political"],
+      "plausibility": {
+        "score": 0.69,
+        "rationale": "Neighbors test any settlement whose guarantors look distracted."
+      },
+      "distanceFromPod": 9,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-synthesize",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.046Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG4QBPR6NCENNQFHWZ6A",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "eraId": "01KYTAYG4M185VSSMD0DFRBDFF",
+      "ordinal": 8,
+      "date": {
+        "year": 1600,
+        "label": "1600"
+      },
+      "title": "A working technique crosses the Habsburg court's border",
+      "summary": "What the Académie des sciences kept close now travels with journeymen. Too much of what The Habsburg court eats and sells moves along a single corridor that others can tax or close. (military reading)",
+      "detail": null,
+      "entityIds": ["01KYTAYG47EQ3MTFYEJZDFB06K", "01KYTAYG476J6VFVQ5ZV96AAWC"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYG476J6VFVQ5ZV96AAWC",
+          "patch": {
+            "technique": "acquired by hire"
+          },
+          "note": "Knowledge proves cheaper to hire than to guard."
+        }
+      ],
+      "lenses": ["technological", "economic"],
+      "plausibility": {
+        "score": 0.66,
+        "rationale": "Techniques diffuse along wage gradients; guarding them raises the wage."
+      },
+      "distanceFromPod": 12,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": true,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-synthesize",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.052Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG4QWRDQ460BBBTXPMKZ",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "eraId": "01KYTAYG4M185VSSMD0DFRBDFF",
+      "ordinal": 9,
+      "date": {
+        "year": 1603,
+        "label": "1603"
+      },
+      "title": "The Académie des sciences revises what the young are taught",
+      "summary": "A new syllabus fixes the changed world into schoolroom fact. The hinterland feeding The Habsburg court has fewer hands than mouths in the capital assume. Children now learn as ordinary what their grandparents called impossible. (military reading)",
+      "detail": null,
+      "entityIds": ["01KYTAYG47EQ3MTFYEJZDFB06K", "01KYTAYG47DZ39NQF7YVT31FYP"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYG47EQ3MTFYEJZDFB06K",
+          "patch": {
+            "curriculum": "revised to the new circumstances"
+          },
+          "note": "The syllabus quietly rewrites what counts as common knowledge."
+        }
+      ],
+      "lenses": ["cultural", "daily-life"],
+      "plausibility": {
+        "score": 0.7,
+        "rationale": "Institutions metabolize discontinuity into curriculum within a generation."
+      },
+      "distanceFromPod": 15,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": true
+      },
+      "criticNotes": [
+        {
+          "type": "contested",
+          "severity": "note",
+          "note": "the economic chair reads this as fiscal exhaustion; the military chair as demobilization managed badly"
+        }
+      ],
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-synthesize",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.052Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG4Q1GKPM7188JRVGZCE",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "eraId": "01KYTAYG4M185VSSMD0DFRBDFF",
+      "ordinal": 10,
+      "date": {
+        "year": 1606,
+        "label": "1606"
+      },
+      "title": "The Habsburg court tests the new balance",
+      "summary": "A working method has left the workshops that guarded it; The Habsburg court can no longer control who learns it. A probe at the margin (an envoy recalled, a toll raised, a garrison reinforced) measures how much the world has actually changed. (military reading)",
+      "detail": null,
+      "entityIds": ["01KYTAYG476J6VFVQ5ZV96AAWC", "01KYTAYG47NZ0KP57REJZX5SG5"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYG476J6VFVQ5ZV96AAWC",
+          "patch": {
+            "posture": "probing"
+          },
+          "note": "The rival prices the new equilibrium in small provocations."
+        }
+      ],
+      "lenses": ["political"],
+      "plausibility": {
+        "score": 0.69,
+        "rationale": "Neighbors test any settlement whose guarantors look distracted."
+      },
+      "distanceFromPod": 18,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-synthesize",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.052Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG4QMN21SXHD8T2D649V",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "eraId": "01KYTAYG4M185VSSMD0DFRBDFF",
+      "ordinal": 11,
+      "date": {
+        "year": 1609,
+        "label": "1609"
+      },
+      "title": "Marie-Anne Lefevre attempts the grand reconciliation",
+      "summary": "Against every counsel, Marie-Anne Lefevre stakes the season on reconciling parties whose interests the ledgers say cannot meet. (technological reading)",
+      "detail": null,
+      "entityIds": ["01KYTAYG47DZ39NQF7YVT31FYP"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYG47DZ39NQF7YVT31FYP",
+          "patch": {
+            "influence": "sets the season"
+          },
+          "note": "Manners record the divergence more durably than treaties."
+        }
+      ],
+      "lenses": ["daily-life", "cultural"],
+      "plausibility": {
+        "score": 0.3,
+        "rationale": "It would take personal force to overcome what the state of the world says is overdetermined."
+      },
+      "distanceFromPod": 21,
+      "wildcard": false,
+      "flags": {
+        "disputed": true,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": [
+        {
+          "type": "implausible-leap",
+          "severity": "fail",
+          "note": "The stated causes cannot carry this outcome (self-assessed plausibility 0.3); no regeneration will change the underlying claim."
+        },
+        {
+          "type": "great-man-overreach",
+          "severity": "warning",
+          "note": "The draft leans on individual daring where the snapshot offers no structural door."
+        }
+      ],
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-synthesize",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.052Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG4YHRKQ778Y18KJWCPP",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "eraId": "01KYTAYG4W4C58APF0S7GRRBT9",
+      "ordinal": 12,
+      "date": {
+        "year": 1614,
+        "label": "1614"
+      },
+      "title": "The Académie des sciences revises what the young are taught",
+      "summary": "A new syllabus fixes the changed world into schoolroom fact. The ledgers of Marie-Anne Lefevre run on short credit; every initiative competes with the interest bill. Children now learn as ordinary what their grandparents called impossible. (cultural reading)",
+      "detail": null,
+      "entityIds": ["01KYTAYG47EQ3MTFYEJZDFB06K", "01KYTAYG47DZ39NQF7YVT31FYP"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYG47EQ3MTFYEJZDFB06K",
+          "patch": {
+            "curriculum": "revised to the new circumstances"
+          },
+          "note": "The syllabus quietly rewrites what counts as common knowledge."
+        }
+      ],
+      "lenses": ["cultural", "daily-life"],
+      "plausibility": {
+        "score": 0.7,
+        "rationale": "Institutions metabolize discontinuity into curriculum within a generation."
+      },
+      "distanceFromPod": 26,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": true,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-synthesize",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.060Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG4YW5SSN7PY7T6QAR5E",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "eraId": "01KYTAYG4W4C58APF0S7GRRBT9",
+      "ordinal": 13,
+      "date": {
+        "year": 1619,
+        "label": "1619"
+      },
+      "title": "The Habsburg court tests the new balance",
+      "summary": "The hinterland feeding Marie-Anne Lefevre has fewer hands than mouths in the capital assume. A probe at the margin (an envoy recalled, a toll raised, a garrison reinforced) measures how much the world has actually changed. (military reading)",
+      "detail": null,
+      "entityIds": [
+        "01KYTAYG476J6VFVQ5ZV96AAWC",
+        "01KYTAYG47NZ0KP57REJZX5SG5",
+        "01KYTAYG4Y3A9XAAPGKCE7H6YF"
+      ],
+      "deltas": [
+        {
+          "entityId": "01KYTAYG476J6VFVQ5ZV96AAWC",
+          "patch": {
+            "posture": "probing"
+          },
+          "note": "The rival prices the new equilibrium in small provocations."
+        },
+        {
+          "entityId": "01KYTAYG4Y3A9XAAPGKCE7H6YF",
+          "patch": {
+            "standing": "newly consequential"
+          },
+          "note": "A new name starts appearing in the registers."
+        }
+      ],
+      "lenses": ["political"],
+      "plausibility": {
+        "score": 0.69,
+        "rationale": "Neighbors test any settlement whose guarantors look distracted."
+      },
+      "distanceFromPod": 31,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": true
+      },
+      "criticNotes": [
+        {
+          "type": "contested",
+          "severity": "note",
+          "note": "the cultural chair sees conviction here; the social chair sees a harvest failure wearing a creed"
+        }
+      ],
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-synthesize",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.060Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG4YWYDZ6BQ0NM9DH6NV",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "eraId": "01KYTAYG4W4C58APF0S7GRRBT9",
+      "ordinal": 14,
+      "date": {
+        "year": 1624,
+        "label": "1624"
+      },
+      "title": "Marie-Anne Lefevre sets the fashion of the season",
+      "summary": "Style declares allegiance: the cut of a coat, a turn of phrase, a way of dating letters \"since the change\". Rivals of Marie-Anne Lefevre are re-equipping faster than its own arsenals admit. (cultural reading)",
+      "detail": null,
+      "entityIds": ["01KYTAYG47DZ39NQF7YVT31FYP"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYG47DZ39NQF7YVT31FYP",
+          "patch": {
+            "influence": "sets the season"
+          },
+          "note": "Manners record the divergence more durably than treaties."
+        }
+      ],
+      "lenses": ["daily-life", "cultural"],
+      "plausibility": {
+        "score": 0.74,
+        "rationale": "Fashion metabolizes politics faster than institutions do."
+      },
+      "distanceFromPod": 36,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-synthesize",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.060Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG4Y8FFDCBFJXZ30ANS7",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "eraId": "01KYTAYG4W4C58APF0S7GRRBT9",
+      "ordinal": 15,
+      "date": {
+        "year": 1629,
+        "label": "1629"
+      },
+      "title": "The Kingdom of France reorders its accounts under doctrinal quarrel",
+      "summary": "A dispute of principle inside Marie-Anne Lefevre is becoming a dispute of office. The council answers with a reform that costs three offices their perquisites and creates two new registers. (cultural reading)",
+      "detail": null,
+      "entityIds": ["01KYTAYG47NZ0KP57REJZX5SG5", "01KYTAYG47EQ3MTFYEJZDFB06K"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYG47NZ0KP57REJZX5SG5",
+          "patch": {
+            "administration": "reformed under doctrinal quarrel"
+          },
+          "note": "Offices are consolidated; the registers survive their authors."
+        }
+      ],
+      "lenses": ["political"],
+      "plausibility": {
+        "score": 0.5,
+        "rationale": "Administrative reform is the standard discharge of fiscal and legitimacy pressure. A chronicler would call this one surprising."
+      },
+      "distanceFromPod": 41,
+      "wildcard": true,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-synthesize",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.060Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG5485EER4SJW4TC7FQT",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "eraId": "01KYTAYG52B3GFNRD7QACXZTQ9",
+      "ordinal": 16,
+      "date": {
+        "year": 1635,
+        "label": "1635"
+      },
+      "title": "The Habsburg court tests the new balance",
+      "summary": "A dispute of principle inside The Kingdom of France is becoming a dispute of office. A probe at the margin (an envoy recalled, a toll raised, a garrison reinforced) measures how much the world has actually changed. (cultural reading)",
+      "detail": null,
+      "entityIds": ["01KYTAYG476J6VFVQ5ZV96AAWC", "01KYTAYG47NZ0KP57REJZX5SG5"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYG476J6VFVQ5ZV96AAWC",
+          "patch": {
+            "posture": "probing"
+          },
+          "note": "The rival prices the new equilibrium in small provocations."
+        }
+      ],
+      "lenses": ["political"],
+      "plausibility": {
+        "score": 0.69,
+        "rationale": "Neighbors test any settlement whose guarantors look distracted."
+      },
+      "distanceFromPod": 47,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-synthesize",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.066Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG54EP4JKRNJD2RKAA1Q",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "eraId": "01KYTAYG52B3GFNRD7QACXZTQ9",
+      "ordinal": 17,
+      "date": {
+        "year": 1642,
+        "label": "1642"
+      },
+      "title": "Marie-Anne Lefevre sets the fashion of the season",
+      "summary": "Style declares allegiance: the cut of a coat, a turn of phrase, a way of dating letters \"since the change\". The Kingdom of France is drawing down forests and channels faster than they renew. (military reading)",
+      "detail": null,
+      "entityIds": ["01KYTAYG47DZ39NQF7YVT31FYP", "01KYTAYG54344B43JM4D4JHN7S"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYG47DZ39NQF7YVT31FYP",
+          "patch": {
+            "influence": "sets the season"
+          },
+          "note": "Manners record the divergence more durably than treaties."
+        },
+        {
+          "entityId": "01KYTAYG54344B43JM4D4JHN7S",
+          "patch": {
+            "standing": "newly consequential"
+          },
+          "note": "A new name starts appearing in the registers."
+        }
+      ],
+      "lenses": ["daily-life", "cultural"],
+      "plausibility": {
+        "score": 0.74,
+        "rationale": "Fashion metabolizes politics faster than institutions do."
+      },
+      "distanceFromPod": 54,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": true,
+        "contested": true
+      },
+      "criticNotes": [
+        {
+          "type": "contested",
+          "severity": "note",
+          "note": "the military chair credits the commander; the social chair credits the muster rolls"
+        }
+      ],
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-synthesize",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.066Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG547HV9JV7Y5F1KKEQZ",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "eraId": "01KYTAYG52B3GFNRD7QACXZTQ9",
+      "ordinal": 18,
+      "date": {
+        "year": 1649,
+        "label": "1649"
+      },
+      "title": "The Kingdom of France reorders its accounts under strained treasury",
+      "summary": "The ledgers of The Kingdom of France run on short credit; every initiative competes with the interest bill. The council answers with a reform that costs three offices their perquisites and creates two new registers. (cultural reading)",
+      "detail": null,
+      "entityIds": ["01KYTAYG47NZ0KP57REJZX5SG5", "01KYTAYG47EQ3MTFYEJZDFB06K"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYG47NZ0KP57REJZX5SG5",
+          "patch": {
+            "administration": "reformed under strained treasury"
+          },
+          "note": "Offices are consolidated; the registers survive their authors."
+        }
+      ],
+      "lenses": ["political"],
+      "plausibility": {
+        "score": 0.72,
+        "rationale": "Administrative reform is the standard discharge of fiscal and legitimacy pressure."
+      },
+      "distanceFromPod": 61,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-synthesize",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.066Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG54M79CHKQAJZZE03KY",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "eraId": "01KYTAYG52B3GFNRD7QACXZTQ9",
+      "ordinal": 19,
+      "date": {
+        "year": 1656,
+        "label": "1656"
+      },
+      "title": "The markets reprice around the Kingdom of France",
+      "summary": "A dispute of principle inside The Kingdom of France is becoming a dispute of office. Brokers adjust before any edict: contracts shorten, surety costs rise, and household stewards change what they store. (cultural reading)",
+      "detail": null,
+      "entityIds": ["01KYTAYG47NZ0KP57REJZX5SG5"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYG47NZ0KP57REJZX5SG5",
+          "patch": {
+            "creditTerms": "shortened",
+            "householdStores": "deepened"
+          },
+          "note": "The market hedges; kitchens follow."
+        }
+      ],
+      "lenses": ["economic", "daily-life"],
+      "plausibility": {
+        "score": 0.78,
+        "rationale": "Price adjustment is the most reliable transmission channel of structural pressure."
+      },
+      "distanceFromPod": 68,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-synthesize",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.066Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG54NYYVQMWA8VEE3FXW",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "eraId": "01KYTAYG52B3GFNRD7QACXZTQ9",
+      "ordinal": 20,
+      "date": {
+        "year": 1663,
+        "label": "1663"
+      },
+      "title": "A working technique crosses the Habsburg court's border",
+      "summary": "What the Académie des sciences kept close now travels with journeymen. The Kingdom of France is drawing down forests and channels faster than they renew. (cultural reading)",
+      "detail": null,
+      "entityIds": ["01KYTAYG47EQ3MTFYEJZDFB06K", "01KYTAYG476J6VFVQ5ZV96AAWC"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYG476J6VFVQ5ZV96AAWC",
+          "patch": {
+            "technique": "acquired by hire"
+          },
+          "note": "Knowledge proves cheaper to hire than to guard."
+        }
+      ],
+      "lenses": ["technological", "economic"],
+      "plausibility": {
+        "score": 0.5,
+        "rationale": "Techniques diffuse along wage gradients; guarding them raises the wage. A chronicler would call this one surprising."
+      },
+      "distanceFromPod": 75,
+      "wildcard": true,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-synthesize",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.066Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG5DTXSPCGAWREBZVXSR",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "eraId": "01KYTAYG59Y8RGWNH29A7CQ6AV",
+      "ordinal": 21,
+      "date": {
+        "year": 1672,
+        "label": "1672"
+      },
+      "title": "Marie-Anne Lefevre sets the fashion of the season",
+      "summary": "Style declares allegiance: the cut of a coat, a turn of phrase, a way of dating letters \"since the change\". The hinterland feeding The Habsburg court has fewer hands than mouths in the capital assume. (social reading)",
+      "detail": null,
+      "entityIds": ["01KYTAYG47DZ39NQF7YVT31FYP"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYG47DZ39NQF7YVT31FYP",
+          "patch": {
+            "influence": "sets the season"
+          },
+          "note": "Manners record the divergence more durably than treaties."
+        }
+      ],
+      "lenses": ["daily-life", "cultural"],
+      "plausibility": {
+        "score": 0.74,
+        "rationale": "Fashion metabolizes politics faster than institutions do."
+      },
+      "distanceFromPod": 84,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-synthesize",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.073Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG5DKVKEF05EGC99B1J3",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "eraId": "01KYTAYG59Y8RGWNH29A7CQ6AV",
+      "ordinal": 22,
+      "date": {
+        "year": 1683,
+        "label": "1683"
+      },
+      "title": "The Kingdom of France reorders its accounts under tooling gap",
+      "summary": "Rivals of The Habsburg court are re-equipping faster than its own arsenals admit. The council answers with a reform that costs three offices their perquisites and creates two new registers. (social reading)",
+      "detail": null,
+      "entityIds": ["01KYTAYG47NZ0KP57REJZX5SG5", "01KYTAYG47EQ3MTFYEJZDFB06K"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYG47NZ0KP57REJZX5SG5",
+          "patch": {
+            "administration": "reformed under tooling gap"
+          },
+          "note": "Offices are consolidated; the registers survive their authors."
+        }
+      ],
+      "lenses": ["political"],
+      "plausibility": {
+        "score": 0.72,
+        "rationale": "Administrative reform is the standard discharge of fiscal and legitimacy pressure."
+      },
+      "distanceFromPod": 95,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": true
+      },
+      "criticNotes": [
+        {
+          "type": "contested",
+          "severity": "note",
+          "note": "the technological chair calls this diffusion; the economic chair calls it dumping"
+        }
+      ],
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-synthesize",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.073Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG5D01V99WFS32CN2C1P",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "eraId": "01KYTAYG59Y8RGWNH29A7CQ6AV",
+      "ordinal": 23,
+      "date": {
+        "year": 1694,
+        "label": "1694"
+      },
+      "title": "The markets reprice around the Kingdom of France",
+      "summary": "A dispute of principle inside The Habsburg court is becoming a dispute of office. Brokers adjust before any edict: contracts shorten, surety costs rise, and household stewards change what they store. (social reading)",
+      "detail": null,
+      "entityIds": ["01KYTAYG47NZ0KP57REJZX5SG5"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYG47NZ0KP57REJZX5SG5",
+          "patch": {
+            "creditTerms": "shortened",
+            "householdStores": "deepened"
+          },
+          "note": "The market hedges; kitchens follow."
+        }
+      ],
+      "lenses": ["economic", "daily-life"],
+      "plausibility": {
+        "score": 0.78,
+        "rationale": "Price adjustment is the most reliable transmission channel of structural pressure."
+      },
+      "distanceFromPod": 106,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": true,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-synthesize",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.073Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG5DY0HP9GKDTHXA9Z9R",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "eraId": "01KYTAYG59Y8RGWNH29A7CQ6AV",
+      "ordinal": 24,
+      "date": {
+        "year": 1705,
+        "label": "1705"
+      },
+      "title": "A working technique crosses the Habsburg court's border",
+      "summary": "What the Académie des sciences kept close now travels with journeymen. The hinterland feeding The Habsburg court has fewer hands than mouths in the capital assume. (cultural reading)",
+      "detail": null,
+      "entityIds": ["01KYTAYG47EQ3MTFYEJZDFB06K", "01KYTAYG476J6VFVQ5ZV96AAWC"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYG476J6VFVQ5ZV96AAWC",
+          "patch": {
+            "technique": "acquired by hire"
+          },
+          "note": "Knowledge proves cheaper to hire than to guard."
+        }
+      ],
+      "lenses": ["technological", "economic"],
+      "plausibility": {
+        "score": 0.5,
+        "rationale": "Techniques diffuse along wage gradients; guarding them raises the wage. A chronicler would call this one surprising."
+      },
+      "distanceFromPod": 117,
+      "wildcard": true,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-synthesize",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.073Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG5QAED9DWCWGMJE49JB",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "eraId": "01KYTAYG5HKH67N0YECY2QSY2X",
+      "ordinal": 25,
+      "date": {
+        "year": 1724,
+        "label": "1724"
+      },
+      "title": "The Kingdom of France reorders its accounts under doctrinal quarrel",
+      "summary": "A dispute of principle inside The Habsburg court is becoming a dispute of office. The council answers with a reform that costs three offices their perquisites and creates two new registers. (social reading)",
+      "detail": null,
+      "entityIds": ["01KYTAYG47NZ0KP57REJZX5SG5", "01KYTAYG47EQ3MTFYEJZDFB06K"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYG47NZ0KP57REJZX5SG5",
+          "patch": {
+            "administration": "reformed under doctrinal quarrel"
+          },
+          "note": "Offices are consolidated; the registers survive their authors."
+        }
+      ],
+      "lenses": ["political"],
+      "plausibility": {
+        "score": 0.72,
+        "rationale": "Administrative reform is the standard discharge of fiscal and legitimacy pressure."
+      },
+      "distanceFromPod": 136,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-synthesize",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.081Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG5QEPHD0HZWQVTEYEXH",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "eraId": "01KYTAYG5HKH67N0YECY2QSY2X",
+      "ordinal": 26,
+      "date": {
+        "year": 1731,
+        "label": "1731"
+      },
+      "title": "The markets reprice around the Kingdom of France",
+      "summary": "The Habsburg court is drawing down forests and channels faster than they renew. Brokers adjust before any edict: contracts shorten, surety costs rise, and household stewards change what they store. (social reading)",
+      "detail": null,
+      "entityIds": ["01KYTAYG47NZ0KP57REJZX5SG5"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYG47NZ0KP57REJZX5SG5",
+          "patch": {
+            "creditTerms": "shortened",
+            "householdStores": "deepened"
+          },
+          "note": "The market hedges; kitchens follow."
+        }
+      ],
+      "lenses": ["economic", "daily-life"],
+      "plausibility": {
+        "score": 0.78,
+        "rationale": "Price adjustment is the most reliable transmission channel of structural pressure."
+      },
+      "distanceFromPod": 143,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": true
+      },
+      "criticNotes": [
+        {
+          "type": "contested",
+          "severity": "note",
+          "note": "the economic chair reads this as fiscal exhaustion; the military chair as demobilization managed badly"
+        }
+      ],
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-synthesize",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.081Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG5QA9TDRFX5G6CPG6TD",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "eraId": "01KYTAYG5HKH67N0YECY2QSY2X",
+      "ordinal": 27,
+      "date": {
+        "year": 1738,
+        "label": "1738"
+      },
+      "title": "A working technique crosses the Habsburg court's border",
+      "summary": "What the Académie des sciences kept close now travels with journeymen. Markets around The Habsburg court still price in the last shock; hoarding begins at rumors now. (cultural reading)",
+      "detail": null,
+      "entityIds": ["01KYTAYG47EQ3MTFYEJZDFB06K", "01KYTAYG476J6VFVQ5ZV96AAWC"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYG476J6VFVQ5ZV96AAWC",
+          "patch": {
+            "technique": "acquired by hire"
+          },
+          "note": "Knowledge proves cheaper to hire than to guard."
+        }
+      ],
+      "lenses": ["technological", "economic"],
+      "plausibility": {
+        "score": 0.66,
+        "rationale": "Techniques diffuse along wage gradients; guarding them raises the wage."
+      },
+      "distanceFromPod": 150,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-synthesize",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.081Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG5QT7TPE8JVMDEACNKC",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "eraId": "01KYTAYG5HKH67N0YECY2QSY2X",
+      "ordinal": 28,
+      "date": {
+        "year": 1751,
+        "label": "1751"
+      },
+      "title": "The Habsburg court tests the new balance",
+      "summary": "A dispute of principle inside The Habsburg court is becoming a dispute of office. A probe at the margin (an envoy recalled, a toll raised, a garrison reinforced) measures how much the world has actually changed. (social reading)",
+      "detail": null,
+      "entityIds": ["01KYTAYG476J6VFVQ5ZV96AAWC", "01KYTAYG47NZ0KP57REJZX5SG5"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYG476J6VFVQ5ZV96AAWC",
+          "patch": {
+            "posture": "probing"
+          },
+          "note": "The rival prices the new equilibrium in small provocations."
+        }
+      ],
+      "lenses": ["political"],
+      "plausibility": {
+        "score": 0.69,
+        "rationale": "Neighbors test any settlement whose guarantors look distracted."
+      },
+      "distanceFromPod": 163,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-synthesize",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.081Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG5Q5T8TDW2VMZ8M44ZG",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "eraId": "01KYTAYG5HKH67N0YECY2QSY2X",
+      "ordinal": 29,
+      "date": {
+        "year": 1765,
+        "label": "1765"
+      },
+      "title": "The Kingdom of France reorders its accounts under price memory",
+      "summary": "Markets around The Habsburg court still price in the last shock; hoarding begins at rumors now. The council answers with a reform that costs three offices their perquisites and creates two new registers. (social reading)",
+      "detail": null,
+      "entityIds": ["01KYTAYG47NZ0KP57REJZX5SG5", "01KYTAYG47EQ3MTFYEJZDFB06K"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYG47NZ0KP57REJZX5SG5",
+          "patch": {
+            "administration": "reformed under price memory"
+          },
+          "note": "Offices are consolidated; the registers survive their authors."
+        }
+      ],
+      "lenses": ["political"],
+      "plausibility": {
+        "score": 0.5,
+        "rationale": "Administrative reform is the standard discharge of fiscal and legitimacy pressure. A chronicler would call this one surprising."
+      },
+      "distanceFromPod": 177,
+      "wildcard": true,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-synthesize",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.081Z",
+        "mode": "mock"
+      }
+    }
+  ],
+  "entities": [
+    {
+      "id": "01KYTAYG47NZ0KP57REJZX5SG5",
+      "timelineId": "01KYTAYG3V69GGZGWAH9YK4VS4",
+      "slug": "kingdom-of-france",
+      "type": "nation",
+      "name": "The Kingdom of France",
+      "description": "The power most immediately shaped by the divergence, seated at Paris.",
+      "initialState": {
+        "seat": "Paris",
+        "standing": "steady but watched",
+        "treasury": "strained"
+      },
+      "introducedByEventId": "01KYTAYG47M1M2M0MF3EG5TZDN",
+      "bornYear": null,
+      "counterfactual": false,
+      "succeedsSlug": null,
+      "createdAt": "2026-07-30T20:20:12.039Z",
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "seed-consequences",
+        "templateVersion": "1.2.0",
+        "generatedAt": "2026-07-30T20:20:12.038Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG47DZ39NQF7YVT31FYP",
+      "timelineId": "01KYTAYG3V69GGZGWAH9YK4VS4",
+      "slug": "marie-anne-lefevre",
+      "type": "person",
+      "name": "Marie-Anne Lefevre",
+      "description": "A figure of Paris whose fortunes ride on the changed course of events.",
+      "initialState": {
+        "position": "well-placed observer",
+        "reputation": "rising"
+      },
+      "introducedByEventId": "01KYTAYG47M1M2M0MF3EG5TZDN",
+      "bornYear": null,
+      "counterfactual": false,
+      "succeedsSlug": null,
+      "createdAt": "2026-07-30T20:20:12.039Z",
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "seed-consequences",
+        "templateVersion": "1.2.0",
+        "generatedAt": "2026-07-30T20:20:12.038Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG47EQ3MTFYEJZDFB06K",
+      "timelineId": "01KYTAYG3V69GGZGWAH9YK4VS4",
+      "slug": "academie-des-sciences",
+      "type": "institution",
+      "name": "The Académie des sciences",
+      "description": "The body in Paris that turns events into records and records into policy.",
+      "initialState": {
+        "agenda": "survey the changed circumstance",
+        "influence": "procedural but real"
+      },
+      "introducedByEventId": "01KYTAYG47HZKZJ20M7V3T0CHJ",
+      "bornYear": null,
+      "counterfactual": false,
+      "succeedsSlug": null,
+      "createdAt": "2026-07-30T20:20:12.039Z",
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "seed-consequences",
+        "templateVersion": "1.2.0",
+        "generatedAt": "2026-07-30T20:20:12.038Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG476J6VFVQ5ZV96AAWC",
+      "timelineId": "01KYTAYG3V69GGZGWAH9YK4VS4",
+      "slug": "habsburg-court",
+      "type": "nation",
+      "name": "The Habsburg court",
+      "description": "The neighboring power whose plans assumed the old course of history.",
+      "initialState": {
+        "posture": "recalculating",
+        "intelligence": "secondhand and late"
+      },
+      "introducedByEventId": "01KYTAYG47W0R9H2CEAWGNM8N3",
+      "bornYear": null,
+      "counterfactual": false,
+      "succeedsSlug": null,
+      "createdAt": "2026-07-30T20:20:12.039Z",
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "seed-consequences",
+        "templateVersion": "1.2.0",
+        "generatedAt": "2026-07-30T20:20:12.038Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG4GJ4CX2T9P6199PMQH",
+      "timelineId": "01KYTAYG3V69GGZGWAH9YK4VS4",
+      "slug": "the-improved-method",
+      "type": "technology",
+      "name": "The Improved Method",
+      "description": "A working technique, escaped from the shops that guarded it, now spreading by apprenticeship.",
+      "initialState": {
+        "diffusion": "apprentice to apprentice"
+      },
+      "introducedByEventId": "01KYTAYG4G4S1YJXFQEKCJ5S8J",
+      "bornYear": null,
+      "counterfactual": false,
+      "succeedsSlug": null,
+      "createdAt": "2026-07-30T20:20:12.048Z",
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-synthesize",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.046Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG4Y3A9XAAPGKCE7H6YF",
+      "timelineId": "01KYTAYG3V69GGZGWAH9YK4VS4",
+      "slug": "the-plain-speech-circle",
+      "type": "movement",
+      "name": "The Plain Speech Circle",
+      "description": "A loose movement of clerks and preachers who want the new circumstances named honestly.",
+      "initialState": {
+        "membership": "clerks, preachers, a few merchants"
+      },
+      "introducedByEventId": "01KYTAYG4YW5SSN7PY7T6QAR5E",
+      "bornYear": null,
+      "counterfactual": false,
+      "succeedsSlug": null,
+      "createdAt": "2026-07-30T20:20:12.062Z",
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-synthesize",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.060Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG54344B43JM4D4JHN7S",
+      "timelineId": "01KYTAYG3V69GGZGWAH9YK4VS4",
+      "slug": "the-younger-generation",
+      "type": "movement",
+      "name": "The Second Generation",
+      "description": "Those born after the divergence, for whom the changed world is simply the world.",
+      "initialState": {
+        "memory": "none of the old course"
+      },
+      "introducedByEventId": "01KYTAYG54EP4JKRNJD2RKAA1Q",
+      "bornYear": null,
+      "counterfactual": false,
+      "succeedsSlug": null,
+      "createdAt": "2026-07-30T20:20:12.068Z",
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-synthesize",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.066Z",
+        "mode": "mock"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "01KYTAYG479D3N4K2PTP1KB05B",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "fromEventId": "01KYTAYG47M1M2M0MF3EG5TZDN",
+      "toEventId": "01KYTAYG47HZKZJ20M7V3T0CHJ",
+      "kind": "causes",
+      "strength": 0.85
+    },
+    {
+      "id": "01KYTAYG47756G92THVSZ5M9ZT",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "fromEventId": "01KYTAYG47M1M2M0MF3EG5TZDN",
+      "toEventId": "01KYTAYG47VCBETG5Z9WPZTV6K",
+      "kind": "causes",
+      "strength": 0.7
+    },
+    {
+      "id": "01KYTAYG47E6WGNCERZA75QCPB",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "fromEventId": "01KYTAYG47HZKZJ20M7V3T0CHJ",
+      "toEventId": "01KYTAYG47W0R9H2CEAWGNM8N3",
+      "kind": "enables",
+      "strength": 0.5
+    },
+    {
+      "id": "01KYTAYG476VT7R5BCC5MZR75B",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "fromEventId": "01KYTAYG47M1M2M0MF3EG5TZDN",
+      "toEventId": "01KYTAYG47W0R9H2CEAWGNM8N3",
+      "kind": "causes",
+      "strength": 0.65
+    },
+    {
+      "id": "01KYTAYG4GWWH27XS68C12D09A",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "fromEventId": "01KYTAYG47W0R9H2CEAWGNM8N3",
+      "toEventId": "01KYTAYG4G9T6D4T3MA24WRJV5",
+      "kind": "causes",
+      "strength": 0.6
+    },
+    {
+      "id": "01KYTAYG4GV1V8NQ1EZNTH2TH2",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "fromEventId": "01KYTAYG4G9T6D4T3MA24WRJV5",
+      "toEventId": "01KYTAYG4G4S1YJXFQEKCJ5S8J",
+      "kind": "causes",
+      "strength": 0.7816566142952069
+    },
+    {
+      "id": "01KYTAYG4GR5NW89XWAWPMHR30",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "fromEventId": "01KYTAYG4G4S1YJXFQEKCJ5S8J",
+      "toEventId": "01KYTAYG4GW8X9Q5PBCN9ANWPM",
+      "kind": "enables",
+      "strength": 0.6991027846932412
+    },
+    {
+      "id": "01KYTAYG4GS9H3NW1VKAG3ETC1",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "fromEventId": "01KYTAYG4GW8X9Q5PBCN9ANWPM",
+      "toEventId": "01KYTAYG4GJ9W2TB9Y9YTFJQGM",
+      "kind": "causes",
+      "strength": 0.5308659097179771
+    },
+    {
+      "id": "01KYTAYG4QPW5A6WYBFRM9Y0Z3",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "fromEventId": "01KYTAYG4GJ9W2TB9Y9YTFJQGM",
+      "toEventId": "01KYTAYG4QBPR6NCENNQFHWZ6A",
+      "kind": "causes",
+      "strength": 0.6
+    },
+    {
+      "id": "01KYTAYG4QF1HFDEG979QKM8BB",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "fromEventId": "01KYTAYG4QBPR6NCENNQFHWZ6A",
+      "toEventId": "01KYTAYG4QWRDQ460BBBTXPMKZ",
+      "kind": "causes",
+      "strength": 0.7583647713763639
+    },
+    {
+      "id": "01KYTAYG4QSYGMF5YKR67P11M4",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "fromEventId": "01KYTAYG4QWRDQ460BBBTXPMKZ",
+      "toEventId": "01KYTAYG4Q1GKPM7188JRVGZCE",
+      "kind": "causes",
+      "strength": 0.6154262857045978
+    },
+    {
+      "id": "01KYTAYG4QJBQWQQM3AQR9KSDJ",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "fromEventId": "01KYTAYG4Q1GKPM7188JRVGZCE",
+      "toEventId": "01KYTAYG4QMN21SXHD8T2D649V",
+      "kind": "causes",
+      "strength": 0.5416341968113556
+    },
+    {
+      "id": "01KYTAYG4Y32JGCECPNKJ3AGBK",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "fromEventId": "01KYTAYG4QMN21SXHD8T2D649V",
+      "toEventId": "01KYTAYG4YHRKQ778Y18KJWCPP",
+      "kind": "causes",
+      "strength": 0.6
+    },
+    {
+      "id": "01KYTAYG4YZ48ZPWAW214Z6BSM",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "fromEventId": "01KYTAYG4YHRKQ778Y18KJWCPP",
+      "toEventId": "01KYTAYG4YW5SSN7PY7T6QAR5E",
+      "kind": "enables",
+      "strength": 0.57661825674586
+    },
+    {
+      "id": "01KYTAYG4YRHHE01NZD4H2JBS7",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "fromEventId": "01KYTAYG4YW5SSN7PY7T6QAR5E",
+      "toEventId": "01KYTAYG4YWYDZ6BQ0NM9DH6NV",
+      "kind": "enables",
+      "strength": 0.5902960021048784
+    },
+    {
+      "id": "01KYTAYG4YAK6B1YSYX1QJKBF6",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "fromEventId": "01KYTAYG4YWYDZ6BQ0NM9DH6NV",
+      "toEventId": "01KYTAYG4Y8FFDCBFJXZ30ANS7",
+      "kind": "causes",
+      "strength": 0.6540153878042474
+    },
+    {
+      "id": "01KYTAYG5441JVB73R14XD9R7B",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "fromEventId": "01KYTAYG4Y8FFDCBFJXZ30ANS7",
+      "toEventId": "01KYTAYG5485EER4SJW4TC7FQT",
+      "kind": "causes",
+      "strength": 0.6
+    },
+    {
+      "id": "01KYTAYG54P29TJYRMGKXNVE87",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "fromEventId": "01KYTAYG5485EER4SJW4TC7FQT",
+      "toEventId": "01KYTAYG54EP4JKRNJD2RKAA1Q",
+      "kind": "causes",
+      "strength": 0.6712517590727657
+    },
+    {
+      "id": "01KYTAYG54YA40KBSKVBG0YWKB",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "fromEventId": "01KYTAYG54EP4JKRNJD2RKAA1Q",
+      "toEventId": "01KYTAYG547HV9JV7Y5F1KKEQZ",
+      "kind": "enables",
+      "strength": 0.576536987349391
+    },
+    {
+      "id": "01KYTAYG54H1CV0QMRYE5PKH4V",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "fromEventId": "01KYTAYG547HV9JV7Y5F1KKEQZ",
+      "toEventId": "01KYTAYG54M79CHKQAJZZE03KY",
+      "kind": "causes",
+      "strength": 0.624104239162989
+    },
+    {
+      "id": "01KYTAYG54E214E3QWTYV0E5EP",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "fromEventId": "01KYTAYG54M79CHKQAJZZE03KY",
+      "toEventId": "01KYTAYG54NYYVQMWA8VEE3FXW",
+      "kind": "causes",
+      "strength": 0.5413334146607667
+    },
+    {
+      "id": "01KYTAYG5DJRH76QWTD0AGGX2D",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "fromEventId": "01KYTAYG54NYYVQMWA8VEE3FXW",
+      "toEventId": "01KYTAYG5DTXSPCGAWREBZVXSR",
+      "kind": "causes",
+      "strength": 0.6
+    },
+    {
+      "id": "01KYTAYG5D8CASY2673SJQCX37",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "fromEventId": "01KYTAYG5DTXSPCGAWREBZVXSR",
+      "toEventId": "01KYTAYG5DKVKEF05EGC99B1J3",
+      "kind": "causes",
+      "strength": 0.6231698788702488
+    },
+    {
+      "id": "01KYTAYG5D67QF1K4H8A15NE39",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "fromEventId": "01KYTAYG5DKVKEF05EGC99B1J3",
+      "toEventId": "01KYTAYG5D01V99WFS32CN2C1P",
+      "kind": "causes",
+      "strength": 0.6804771173046902
+    },
+    {
+      "id": "01KYTAYG5DH9REVPBBZACTEGC9",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "fromEventId": "01KYTAYG5D01V99WFS32CN2C1P",
+      "toEventId": "01KYTAYG5DY0HP9GKDTHXA9Z9R",
+      "kind": "causes",
+      "strength": 0.5108977809315547
+    },
+    {
+      "id": "01KYTAYG5QYYBJZEVYSYB3XCKE",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "fromEventId": "01KYTAYG5DY0HP9GKDTHXA9Z9R",
+      "toEventId": "01KYTAYG5QAED9DWCWGMJE49JB",
+      "kind": "causes",
+      "strength": 0.6
+    },
+    {
+      "id": "01KYTAYG5QFE9B9CR9J40G98C8",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "fromEventId": "01KYTAYG5QAED9DWCWGMJE49JB",
+      "toEventId": "01KYTAYG5QEPHD0HZWQVTEYEXH",
+      "kind": "enables",
+      "strength": 0.7747390240198001
+    },
+    {
+      "id": "01KYTAYG5QA96VJSM71290NEGX",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "fromEventId": "01KYTAYG5QEPHD0HZWQVTEYEXH",
+      "toEventId": "01KYTAYG5QA9TDRFX5G6CPG6TD",
+      "kind": "enables",
+      "strength": 0.7054831037763506
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "01KYTAYG715CDQ5QNJFB8058CP",
+      "eventId": "01KYTAYG47HZKZJ20M7V3T0CHJ",
+      "kind": "letter",
+      "title": "Letter of Marie-Anne Lefevre on the académie des sciences convenes over the changed course",
+      "body": {
+        "kind": "letter",
+        "from": "Marie-Anne Lefevre",
+        "to": "my brother in the trade",
+        "place": "Paris",
+        "dateLabel": "Later that year, 1588",
+        "salutation": "Brother,",
+        "paragraphs": [
+          "You will have heard some version of it by now, so let me give you the true one before rumor improves it further. The Académie des sciences meets in extraordinary session. Marie-Anne Lefevre argues that the moment must be committed to record before rumor rewrites it; a survey of holdings, obligations, and precedents is ordered.",
+          "What it means for us: the salt contracts must be re-sworn, and I would not extend credit past the season until we see how the Académie des sciences settles. Aunt Zoe asks after your health and whether the northern road is safe; I have told her yes to the first and lied about the second.",
+          "Send word by the first reliable carrier. And send the account-book. The real one."
+        ],
+        "closing": "Your brother, in haste,",
+        "signature": "Marie-Anne",
+        "postscript": "P.S. The price of candles has doubled. Draw your own conclusions about how late the council is sitting."
+      },
+      "stylingHints": {
+        "tone": null,
+        "period": null
+      },
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "artifact-letter",
+        "templateVersion": "1.1.0",
+        "generatedAt": "2026-07-30T20:20:12.129Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG6VSH1K06A3KGZMVD2Y",
+      "eventId": "01KYTAYG47M1M2M0MF3EG5TZDN",
+      "kind": "newspaper",
+      "title": "The Paris Courant, 1588",
+      "body": {
+        "kind": "newspaper",
+        "masthead": "The Paris Courant",
+        "dateline": "Paris, 1588; price: what the crier asks",
+        "headline": "A DIFFERENT ORDER SIGNED",
+        "subhead": "From our own correspondents; the particulars as far as they can be known",
+        "columns": [
+          {
+            "heading": null,
+            "paragraphs": [
+              "The Spanish Armada lands its army in England in 1588. Paris takes the news the way ports take weather: schedules shift before opinions do, and the harbormaster knows before the council does.",
+              "Those closest to the affair counsel patience; those furthest from it, as usual, counsel everything else. The Académie des sciences is said to be preparing an accounting, which is what it is always said to be preparing."
+            ]
+          },
+          {
+            "heading": "The view from the salt exchange",
+            "paragraphs": [
+              "Prices answered before opinions did. Dealers in salt report the season's contracts rewritten twice in a fortnight, and the porters, who always know first, have raised their rates.",
+              "It is meanwhile reported that position=well-placed observer; reputation=rising."
+            ]
+          }
+        ],
+        "notices": [
+          "New-printed: a table of exchange for all coins current, corrected to this year. Two shillings.",
+          "A house to let by the water stairs, sound roof, garden of pot-herbs. Treat with the widow Aldersey.",
+          "Runaway apprentice, answers to Jem; whoever returns him claims a crown and no thanks."
+        ]
+      },
+      "stylingHints": {
+        "tone": null,
+        "period": null
+      },
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "artifact-newspaper",
+        "templateVersion": "1.1.0",
+        "generatedAt": "2026-07-30T20:20:12.123Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG76FX9APZYXWE1PEPP0",
+      "eventId": "01KYTAYG47VCBETG5Z9WPZTV6K",
+      "kind": "telegram",
+      "title": "Wire from Paris, Spring 1589",
+      "body": {
+        "kind": "telegram",
+        "office": "PARIS CENTRAL OFFICE",
+        "from": "Marie-Anne Lefevre",
+        "to": "THE OFFICE OF THE SECRETARY",
+        "filedAt": "Spring 1589, 10h",
+        "words": [
+          "MATTER CONFIRMED THIS DAY SPRING 1589",
+          "SUBSTANCE AS REPORTED SALT PRICES SHIFT IN THE PARIS MARKETS",
+          "LOCAL PARTIES ALREADY MOVING",
+          "REQUIRE INSTRUCTION BEFORE COMMITTING FUNDS",
+          "DELAY COSTS MORE THAN ERROR"
+        ],
+        "endorsement": "Received and copied to the second desk."
+      },
+      "stylingHints": {
+        "tone": null,
+        "period": null
+      },
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "artifact-telegram",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.135Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG7DQQEADMB423WGJ5A1",
+      "eventId": "01KYTAYG47W0R9H2CEAWGNM8N3",
+      "kind": "classified",
+      "title": "Notices, Paris, Autumn 1590",
+      "body": {
+        "kind": "classified",
+        "publication": "The Paris Register",
+        "dateLabel": "Autumn 1590",
+        "sections": [
+          {
+            "heading": "Wanted",
+            "notices": [
+              "Steady hands for the season, paid weekly, no questions about the last place.",
+              "Anyone with news of the northern consignment. The owner has stopped expecting it and now only wants to know."
+            ]
+          },
+          {
+            "heading": "For sale or exchange",
+            "notices": [
+              "New-printed: a table of exchange for all coins current, corrected to this year. Two shillings.",
+              "A house to let by the water stairs, sound roof, garden of pot-herbs. Treat with the widow Aldersey.",
+              "Household effects of a family leaving the district. Everything must go by the week end; the reason is not your business."
+            ]
+          },
+          {
+            "heading": "Personal",
+            "notices": [
+              "To the party who knows what was said at the quay: it need not go further, and it will not, if matters are settled."
+            ]
+          }
+        ]
+      },
+      "stylingHints": {
+        "tone": null,
+        "period": null
+      },
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "artifact-classified",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.141Z",
+        "mode": "mock"
+      }
+    }
+  ],
+  "convergencePoints": [
+    {
+      "id": "01KYTAYG4AJJDSG4P7EGW14XX6",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "eventId": "01KYTAYG47M1M2M0MF3EG5TZDN",
+      "anchorId": "bl-armada",
+      "similarityNote": "Structure reasserts itself; the shape of \"The Spanish Armada fails\" emerges here despite the divergence.",
+      "attractor": "technological",
+      "latenessYears": 0,
+      "pathNote": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "convergence-scan",
+        "templateVersion": "1.4.0",
+        "generatedAt": "2026-07-30T20:20:12.042Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG4T2AJ4M8AZ30BFESZP",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "eventId": "01KYTAYG4QBPR6NCENNQFHWZ6A",
+      "anchorId": "bl-east-india-company",
+      "similarityNote": "The same channel fills by another road: this history arrives where \"The English East India Company is chartered\" already stood in the record.",
+      "attractor": "geographic",
+      "latenessYears": 0,
+      "pathNote": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "convergence-scan",
+        "templateVersion": "1.4.0",
+        "generatedAt": "2026-07-30T20:20:12.058Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG509R1DJDXZ206A4D01",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "eventId": "01KYTAYG4YHRKQ778Y18KJWCPP",
+      "anchorId": "bl-romanov-elected",
+      "similarityNote": "The same channel fills by another road: this history arrives where \"Michael Romanov is elected tsar\" already stood in the record.",
+      "attractor": "economic",
+      "latenessYears": 1,
+      "pathNote": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "convergence-scan",
+        "templateVersion": "1.4.0",
+        "generatedAt": "2026-07-30T20:20:12.064Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG56TZ0E83TGCG16WRJT",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "eventId": "01KYTAYG54EP4JKRNJD2RKAA1Q",
+      "anchorId": "bl-english-civil-war",
+      "similarityNote": "Structure reasserts itself; the shape of \"England's civil war begins\" emerges here despite the divergence.",
+      "attractor": "cultural",
+      "latenessYears": 0,
+      "pathNote": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "convergence-scan",
+        "templateVersion": "1.4.0",
+        "generatedAt": "2026-07-30T20:20:12.070Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG5FBD6A90JJ28YD5RVZ",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "eventId": "01KYTAYG5D01V99WFS32CN2C1P",
+      "anchorId": "bl-bank-of-england",
+      "similarityNote": "Different causes, familiar outcome: the attested \"The Bank of England is founded\" finds its counterpart in this line.",
+      "attractor": "economic",
+      "latenessYears": 0,
+      "pathNote": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "convergence-scan",
+        "templateVersion": "1.4.0",
+        "generatedAt": "2026-07-30T20:20:12.079Z",
+        "mode": "mock"
+      }
+    }
+  ],
+  "critiqueReports": [
+    {
+      "id": "01KYTAYG4A23X0D5M71QNJXGKT",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "batchId": "01KYTAYG4AXDPNPWBS533SRS5W",
+      "eraId": "01KYTAYG463VNDY78NMQ9PWPAQ",
+      "verdicts": [
+        {
+          "eventId": "01KYTAYG47M1M2M0MF3EG5TZDN",
+          "issues": [],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYG47HZKZJ20M7V3T0CHJ",
+          "issues": [],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYG47VCBETG5Z9WPZTV6K",
+          "issues": [
+            {
+              "type": "presentism",
+              "severity": "note",
+              "note": "Phrasing edges modern; acceptable, but watch the vocabulary."
+            }
+          ],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYG47W0R9H2CEAWGNM8N3",
+          "issues": [
+            {
+              "type": "presentism",
+              "severity": "note",
+              "note": "Phrasing edges modern; acceptable, but watch the vocabulary."
+            }
+          ],
+          "verdict": "pass"
+        }
+      ],
+      "createdAt": "2026-07-30T20:20:12.042Z",
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "seed-consequences",
+        "templateVersion": "1.2.0",
+        "generatedAt": "2026-07-30T20:20:12.038Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG4JKC96VQGV0HGEZCK0",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "batchId": "01KYTAYG4J1F1P4T4ZE8VHV7DZ",
+      "eraId": "01KYTAYG4ECFWE126Y5FPPW8F6",
+      "verdicts": [
+        {
+          "eventId": "01KYTAYG4G9T6D4T3MA24WRJV5",
+          "issues": [],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYG4G4S1YJXFQEKCJ5S8J",
+          "issues": [],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYG4GW8X9Q5PBCN9ANWPM",
+          "issues": [],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYG4GJ9W2TB9Y9YTFJQGM",
+          "issues": [
+            {
+              "type": "presentism",
+              "severity": "note",
+              "note": "Phrasing edges modern; acceptable, but watch the vocabulary."
+            }
+          ],
+          "verdict": "pass"
+        }
+      ],
+      "createdAt": "2026-07-30T20:20:12.050Z",
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-synthesize",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.046Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG4S1SK0YJF4ZB90QTP2",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "batchId": "01KYTAYG4SAECWPDX69TK46AQP",
+      "eraId": "01KYTAYG4M185VSSMD0DFRBDFF",
+      "verdicts": [
+        {
+          "eventId": "01KYTAYG4QBPR6NCENNQFHWZ6A",
+          "issues": [],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYG4QWRDQ460BBBTXPMKZ",
+          "issues": [],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYG4Q1GKPM7188JRVGZCE",
+          "issues": [],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYG4QMN21SXHD8T2D649V",
+          "issues": [
+            {
+              "type": "implausible-leap",
+              "severity": "fail",
+              "note": "The stated causes cannot carry this outcome (self-assessed plausibility 0.3); no regeneration will change the underlying claim."
+            },
+            {
+              "type": "great-man-overreach",
+              "severity": "warning",
+              "note": "The draft leans on individual daring where the snapshot offers no structural door."
+            }
+          ],
+          "verdict": "dispute"
+        }
+      ],
+      "createdAt": "2026-07-30T20:20:12.057Z",
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-synthesize",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.052Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG4ZWWXQGWBKVY8VAK2C",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "batchId": "01KYTAYG4ZG01XFPATG194392H",
+      "eraId": "01KYTAYG4W4C58APF0S7GRRBT9",
+      "verdicts": [
+        {
+          "eventId": "01KYTAYG4YHRKQ778Y18KJWCPP",
+          "issues": [],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYG4YW5SSN7PY7T6QAR5E",
+          "issues": [],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYG4YWYDZ6BQ0NM9DH6NV",
+          "issues": [],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYG4Y8FFDCBFJXZ30ANS7",
+          "issues": [],
+          "verdict": "pass"
+        }
+      ],
+      "createdAt": "2026-07-30T20:20:12.063Z",
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-synthesize",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.060Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG56AK6030845WK9ZFKP",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "batchId": "01KYTAYG56AD8XR330KBTP5A70",
+      "eraId": "01KYTAYG52B3GFNRD7QACXZTQ9",
+      "verdicts": [
+        {
+          "eventId": "01KYTAYG5485EER4SJW4TC7FQT",
+          "issues": [],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYG54EP4JKRNJD2RKAA1Q",
+          "issues": [],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYG547HV9JV7Y5F1KKEQZ",
+          "issues": [],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYG54M79CHKQAJZZE03KY",
+          "issues": [
+            {
+              "type": "presentism",
+              "severity": "note",
+              "note": "Phrasing edges modern; acceptable, but watch the vocabulary."
+            }
+          ],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYG54NYYVQMWA8VEE3FXW",
+          "issues": [],
+          "verdict": "pass"
+        }
+      ],
+      "createdAt": "2026-07-30T20:20:12.070Z",
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-synthesize",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.066Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG5F2YCVNQ0P9DW8YF10",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "batchId": "01KYTAYG5FBZM2JWEXT48WW0BA",
+      "eraId": "01KYTAYG59Y8RGWNH29A7CQ6AV",
+      "verdicts": [
+        {
+          "eventId": "01KYTAYG5DTXSPCGAWREBZVXSR",
+          "issues": [],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYG5DKVKEF05EGC99B1J3",
+          "issues": [],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYG5D01V99WFS32CN2C1P",
+          "issues": [
+            {
+              "type": "presentism",
+              "severity": "note",
+              "note": "Phrasing edges modern; acceptable, but watch the vocabulary."
+            }
+          ],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYG5DY0HP9GKDTHXA9Z9R",
+          "issues": [
+            {
+              "type": "presentism",
+              "severity": "note",
+              "note": "Phrasing edges modern; acceptable, but watch the vocabulary."
+            }
+          ],
+          "verdict": "pass"
+        }
+      ],
+      "createdAt": "2026-07-30T20:20:12.079Z",
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-synthesize",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.073Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG5ST2J99Y0VTD9N6PKD",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "batchId": "01KYTAYG5SWQX5160SQVP18DC5",
+      "eraId": "01KYTAYG5HKH67N0YECY2QSY2X",
+      "verdicts": [
+        {
+          "eventId": "01KYTAYG5QAED9DWCWGMJE49JB",
+          "issues": [],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYG5QEPHD0HZWQVTEYEXH",
+          "issues": [],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYG5QA9TDRFX5G6CPG6TD",
+          "issues": [],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYG5QT7TPE8JVMDEACNKC",
+          "issues": [],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYG5Q5T8TDW2VMZ8M44ZG",
+          "issues": [],
+          "verdict": "pass"
+        }
+      ],
+      "createdAt": "2026-07-30T20:20:12.089Z",
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-synthesize",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.081Z",
+        "mode": "mock"
+      }
+    }
+  ],
+  "biographies": [],
+  "courtRecords": [
+    {
+      "id": "01KYTAYG4QPRV9WMNMV71SYVN5",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "eventId": "01KYTAYG4QMN21SXHD8T2D649V",
+      "advocate": "The advocate submits that \"Marie-Anne Lefevre attempts the grand reconciliation\" stands within the record given: its cited causes are live in the world-state, its scale is modest for the era, and the objection mistakes an unfamiliar outcome for an unearned one. Histories of this dial are permitted to surprise; they are not permitted to float, and this event does not float.",
+      "skeptic": "The skeptic answers that \"Marie-Anne Lefevre attempts the grand reconciliation\" asks its causes to carry more than they weigh: the cited chain establishes opportunity, not outcome, and the world-state shows no actor with both the means and the appetite. Absent an intermediate step, the event is an assertion wearing a date.",
+      "ruling": {
+        "outcome": "dispute",
+        "opinion": "The court cannot reconcile the briefs: the causes neither carry \"Marie-Anne Lefevre attempts the grand reconciliation\" nor exclude it. The event is kept on the ledger under a visible dispute, with this record attached.",
+        "instruction": null
+      },
+      "createdAt": "2026-07-30T20:20:12.055Z",
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "court-judge",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.056Z",
+        "mode": "mock"
+      }
+    }
+  ],
+  "claims": [],
+  "schools": [
+    {
+      "id": "01KYTAYG7JP3FAF6M2PF9QT3GP",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "name": "the Ledger School",
+      "stance": "history is what the accounts will bear, and every settlement is legible in what somebody agreed to pay for it",
+      "seat": "the counting house at Paris",
+      "blindSpot": "anything nobody thought worth writing down",
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "historiography-schools",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.146Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG7JZGWWPYNVJH0ZEY51",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "name": "the Assembly School",
+      "stance": "history turns on who was in the room and what they were willing to lose, and the rest is weather",
+      "seat": "the assembly rooms at Paris",
+      "blindSpot": "the century of quiet in which the room itself was built",
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "historiography-schools",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.146Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG7JCX3TM50KYZZ3VKHC",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "name": "the Parish School",
+      "stance": "the state records the story last, and what actually changed can be read in births, prices, and what people stopped bothering to do",
+      "seat": "the parish registries of the Paris hinterland",
+      "blindSpot": "the decision, taken in an afternoon, that made all of it necessary",
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "historiography-schools",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.146Z",
+        "mode": "mock"
+      }
+    }
+  ],
+  "interpretations": [
+    {
+      "id": "01KYTAYG7KZMQR1TAS6HCXH9YN",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "eventId": "01KYTAYG4Y8FFDCBFJXZ30ANS7",
+      "schoolId": "01KYTAYG7JP3FAF6M2PF9QT3GP",
+      "gloss": "Read the accounts and \"The Kingdom of France reorders its accounts under doctrinal quarrel\" stops being a decision at all. The money had already moved; what the chronicles record as a choice is the moment somebody finally wrote down an arrangement that had been operating for two seasons. Our rivals want a villain here. We have a ledger, and the ledger balances.",
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "event-interpretation",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.147Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG7K12YWVKVT6NMR9WPM",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "eventId": "01KYTAYG4Y8FFDCBFJXZ30ANS7",
+      "schoolId": "01KYTAYG7JZGWWPYNVJH0ZEY51",
+      "gloss": "\"The Kingdom of France reorders its accounts under doctrinal quarrel\" happened because three people in one room preferred it to the alternative in front of them, and the alternative in front of them was not the one posterity imagines. The Ledger School will tell you the money decided. The money was available for either course. Somebody chose.",
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "event-interpretation",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.147Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG7KRE314630M6QAFF9P",
+      "branchId": "01KYTAYG3VX3EB330268SGGVSE",
+      "eventId": "01KYTAYG4Y8FFDCBFJXZ30ANS7",
+      "schoolId": "01KYTAYG7JCX3TM50KYZZ3VKHC",
+      "gloss": "The registers show the change arriving in the district a full generation before \"The Kingdom of France reorders its accounts under doctrinal quarrel\" is supposed to have caused it: fewer apprentices bound, more women in the trades, the old feast quietly dropped. What the assembly did that year was ratify a fact. The event is a date the capital gave to something the country had already finished doing.",
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "event-interpretation",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.147Z",
+        "mode": "mock"
+      }
+    }
+  ]
+}

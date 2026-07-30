@@ -19,6 +19,11 @@
  * archive. See docs/DEPLOY.md and ADR-0003 before pointing a key at this.
  */
 import type { IncomingMessage, ServerResponse } from 'node:http'
+import alexandriaLedger from '../../../demo/the-alexandrian-inheritance.uchronia.json' with {
+  type: 'json',
+}
+import alliesLedger from '../../../demo/the-allies-lose.uchronia.json' with { type: 'json' }
+import armadaLedger from '../../../demo/the-armada-lands.uchronia.json' with { type: 'json' }
 import demoLedger from '../../../demo/the-unburnt-library.uchronia.json' with { type: 'json' }
 import { createApp } from './app.js'
 import { loadConfig } from './config.js'
@@ -37,7 +42,7 @@ try {
 }
 if (serverConfig.seedDemo) {
   try {
-    seedDemoIfEmpty(deps, demoLedger)
+    seedDemoIfEmpty(deps, [demoLedger, alexandriaLedger, armadaLedger, alliesLedger])
   } catch (error) {
     console.warn('demo seeding failed; continuing with an empty ledger', error)
   }

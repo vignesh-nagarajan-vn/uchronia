@@ -1,6 +1,6 @@
 # CLAUDE.md: agent onboarding contract
 
-This file is the single source of truth for any agent session in this repository. A fresh agent reading only this file must be able to work productively. **Last verified: 2026-07-30 (v2 in progress, M13-M18 complete).**
+This file is the single source of truth for any agent session in this repository. A fresh agent reading only this file must be able to work productively. **Last verified: 2026-07-30 (v2.0.0, M13-M25 complete).**
 
 ## 1. What Uchronia is
 
@@ -30,6 +30,12 @@ The build is driven by a master prompt (mirrored expectations live throughout `d
 | **the court** | The Court of Plausibility (v2/M17; opt-in): on a critic-disputed event, an advocate and a skeptic brief and a judge rules once (uphold / revise / dispute). At most 3 cases per era |
 | **claim** | A structured assertion an era makes beyond any entity's ledger (v2/M18): a coarse regional index reading, or a name the divergence moved. Always bound to the event that asserted it |
 | **epilogue** | One optional era past the horizon (v2/M18), openly a projection rather than a derivation, and marked as such wherever it renders |
+| **pulse** | A forecast of one flip on one event (v2/M19). Costs a call, commits nothing, and the fork it proposes opens already worded |
+| **graft** | Transplanting an event plus its direct consequences from one branch onto another leaf branch (v2/M19). Hard conflicts refuse; soft ones report, then land disputed under force |
+| **school** | One of 2-3 rival in-world historiographic positions derived per branch (v2/M20), each with the blind spot its rivals name |
+| **the book** | A branch compiled into a frontispiece, chapters, plates, and appendices (v2/M21), as print HTML or EPUB. Costs nothing: it arranges history already derived |
+| **pin** | A citation handle (`E3`, `A1`, `C2`) in an archivist answer or an inquiry, resolving to a row the app can open (v2/M23) |
+| **the gate** | The spending guard on a public deployment (v2/M24, ADR-0005): passphrase, per-IP rate limit, daily token ledger. On serverless, a key with no passphrase is refused and demo mode is forced |
 
 ## 3. Architecture map
 
@@ -43,6 +49,9 @@ packages/evals     Eval harness (v2/M15): bench.ts (31-POD benchmark), mock lane
 packages/core      Pure engine. IO only via injected ports (provider/clock/rng/idgen).
   src/world.ts       World store: structural-sharing fork resolution, state replay,
                      derived entity endedness (endedEntities), in-place event replacement, guards
+  src/heraldry.ts    procedural arms from an entity slug (v2/M20): pure,
+                     deterministic, tincture rule enforced; served by the API
+                     because web depends on schemas only
   src/validator.ts   machine validator (12 pure rules: the v1 nine + tech-prerequisite
                      DAG floors + demographic person-span + index-continuity
                      (v2/M18: a regional index must report its own arithmetic, and
@@ -63,7 +72,12 @@ packages/core      Pure engine. IO only via injected ports (provider/clock/rng/i
                      with empty-guard), context.ts (budgeted state summaries,
                      causal-annotated recents, summarizeIndices), relevance.ts
                      (batchReachesPod: the on-divergence drift tripwire), ctx.ts,
-                     fork.ts, expand.ts, artifacts.ts, events.ts
+                     fork.ts, expand.ts, artifacts.ts, events.ts,
+                     graft.ts (transplant across branches; validator-gated),
+                     pulse.ts (the counterfactual pulse + cross-branch fates),
+                     historiography.ts (schools + per-event interpretations),
+                     ask.ts (one retrieval pass behind the archivist and the
+                     grand inquiry; every citation pinned to a real row)
   src/prompts/       registry + templates (pod-interpret, pod-normalize, seed-consequences,
                      era-generate, era-specialist/era-synthesize, court-advocate/
                      -skeptic/-judge, convergence-scan, …) + fragments
@@ -83,6 +97,10 @@ packages/core      Pure engine. IO only via injected ports (provider/clock/rng/i
                      with regions/tags/magnitude/attractorStrength, assembled and
                      validated by scripts/build-baseline.mjs)
 apps/server        Hono. Routes + SSE, AnthropicProvider, Drizzle + better-sqlite3.
+  src/gate.ts        the spending gate (v2/M24, ADR-0005): constant-time
+                     passphrase, per-IP window, UTC-day token ledger; mounted
+                     in app.ts over provider-reaching routes only
+  src/book.ts        compileBook + renderBookHtml + renderEpub (v2/M21)
   src/config.ts      env parsing (empty vars mean unset; serverless detection);
                      ANTHROPIC_API_KEY lives here and only here
   src/deps.ts        ServerDeps injection (repo/provider/idgen/clock); tests build their own
@@ -178,6 +196,8 @@ pnpm eval                   # mock eval lane: 31-POD intake benchmark, keyless (
 pnpm eval:report            # same, and rewrite docs/evals/mock-lane.md
 pnpm eval:live              # judged live lane (LOCAL ONLY, needs key, budget-capped)
 pnpm eval:critic            # critic A/B vs seeded violations (LOCAL ONLY; --mock = plumbing)
+node scripts/build-baseline.mjs <batches...>   # reassemble data/baseline.json
+node scripts/build-showcases.mjs               # re-derive the demo/ chronicles
 ```
 
 Node ≥ 22.13 (pnpm 11.16's own engine floor; `.nvmrc` pins 22.13).
@@ -200,7 +220,10 @@ Per package: `pnpm --filter @uchronia/<schemas|core|server|web> <script>`.
 | `UCHRONIA_MOCK_PACE_MS` | Mock demo pacing per event | `0` (`dev:mock` sets 250; 250 under Vercel) |
 | `UCHRONIA_STATIC_DIR` | Serve built web app from server | unset (dev uses vite proxy) |
 | `UCHRONIA_CORS_ORIGINS` | CORS allowlist (comma-separated) | empty = same-origin only |
-| `UCHRONIA_SEED_DEMO` | Seed the showcase into an empty DB at boot | off locally; on under Vercel |
+| `UCHRONIA_SEED_DEMO` | Seed the showcases into an empty DB at boot | off locally; on under Vercel |
+| `UCHRONIA_ACCESS_TOKEN` | The passphrase that unlocks spending (v2/M24). **On serverless, a key WITHOUT this is refused: demo mode is forced and the key is dropped** | unset = ungated locally, demo-only on serverless |
+| `UCHRONIA_DAILY_TOKEN_BUDGET` | Tokens this instance may spend per UTC day; `0` disables | `0` locally; `2000000` on serverless |
+| `UCHRONIA_RATE_LIMIT` | Requests per minute per IP on spending routes; `0` disables | `0` locally; `20` on serverless |
 
 Set-but-empty variables count as unset (a copied template can't silently disable defaults). `pnpm dev`/`dev:server` load a repo-root `.env` (real environment always wins); tests and the serverless entry never do.
 
@@ -221,7 +244,9 @@ Set-but-empty variables count as unset (a copied template can't silently disable
 
 ## 8. Current status
 
-**The v2.0.0 program ("The Second Derivation") is underway** (opened 2026-07-29): milestones M13-M25 toward the WW2 gate, tracked honestly in [docs/ROADMAP.md](docs/ROADMAP.md). Complete so far: **M13** (demo-mode honesty: mode field, DEMO pill, composer banner, notice-register tokens; `/api/live-check`; the per-model cost meter with `run.usage` frames and dated pricing estimates in `core/src/pricing.ts`; the CI-enforced secret scan; the in-process `dev:preview` launch path), **M14** (POD Intake 2.0: `pod-interpret` grounded on retrieved anchors, the interpretation card, the on-divergence relevance guard, and Mock 2.0 - the demo WW2 gate passes), **M15** (quality machinery: `packages/evals` with the 31-POD benchmark, CI mock lane, budget-capped live lane + judge, and critic A/B fixtures per [docs/EVALS.md](docs/EVALS.md); the Engine Room trace inspector end to end; validator rules 10-11 + the geographic advisory; fast-check fuzzing over intake and imports), **M16** (Baseline 2.0: 203 anchors to 1578, dataset v2, the validating assembler, corpus-derived retrieval specificity, attractor-weighted convergence, the record room, an 85-entry gallery with intake hints), **M17** (the Symposium and the Court of Plausibility, dial axes, contested marks), and **M18** (lives and counterfactual persons, replay-derived role tenures, deep time to the present with an optional epilogue, Convergence 2.0 with attractor/lateness/path, claims for regional indices and name drift, the philology lens, validator rule 12). Live-only gates verify on the deployed instance, not this machine (ADR-0004): no key ever lands in this tree; demo-side gates stay enforced in CI. Build-time API spend so far: zero.
+**v2.0.0 "The Second Derivation" shipped 2026-07-30.** All thirteen milestones M13-M25 are complete; the full record, including everything deliberately not built, is in [docs/ROADMAP.md](docs/ROADMAP.md) and [CHANGELOG.md](CHANGELOG.md). In brief: **M13** honest demo mode, the live check, and the cost meter; **M14** POD Intake 2.0 and the relevance guard (the failure v2 exists for); **M15** the eval harness, the Engine Room, validator rules 10-11, fuzzing; **M16** Baseline 2.0 (203 anchors to 1578, corpus-derived retrieval specificity, the record room); **M17** the Symposium and the Court, dial axes; **M18** lives, deep time, Convergence 2.0, claims, the philology lens, rule 12; **M19** the pulse, the graft, cross-branch fates; **M20** four new artifact kinds, procedural heraldry, in-world historiography; **M21** the Book, in print HTML and EPUB; **M22** region-control claims, the map, the command palette; **M23** the archivist and the grand inquiry, every sentence pinned; **M24** the spending gate (ADR-0005) and prompt caching; **M25** three more showcases and the release.
+
+**The WW2 gate, demo half: passes** (card offers the real mechanisms, POD lands 1939-1945, `demo/the-allies-lose.uchronia.json` runs 1940-2024 on subject). **Live half: deferred to the deployment per ADR-0004** - no key has ever been in this tree, every live path is stub-tested, and the live eval lane is one command from running on a machine that has one. **Build-time API spend for the whole v2 program: zero.**
 
 **v1.0.0 (2026-07-26) = v0.1.0 + the 0.2 hardening series (2026-07-23) + the deployment-hardening pass (2026-07-26)**: all milestones M0–M12 complete, then a ~15-commit audit-driven pass (graph-fed generation, region-aware convergence, entity lifecycle/9th validator rule, dial-aware critic, generation locking + import validation + era healing, abort/usage/cost ceiling, lifecycle routes, web code-splitting, CI matrix, Docker), then a full line-by-line audit that rebuilt the Vercel chain on a prebundled function (`build:vercel` → `api/index.mjs`, with a body-reconstructing `(req, res)` bridge for the Node runtime's helpers), pinned the toolchain (Node ≥ 22.13, pnpm without corepack), moved the generation default to a structured-outputs-capable model (`claude-sonnet-5`), added the fake-Vercel smoke (`pnpm verify:vercel`, CI `vercel-shape` job), fixed a dozen audit-found bugs across core/server/web, and removed em dashes repo-wide. See [docs/ROADMAP.md](docs/ROADMAP.md) for the honest record and open threads (notably: live mode is provider-unit-tested and cost-capped but still unexercised against the real API from this machine). The Vercel deployment is live at <https://uchronia-server.vercel.app/> (confirmed 2026-07-26). The full mock-mode product works keyless: `pnpm dev:mock`, then "load the showcase chronicle" on the empty Atlas. Deployment posture: [docs/DEPLOY.md](docs/DEPLOY.md) + ADR-0003 (mock is public, live is local).
 

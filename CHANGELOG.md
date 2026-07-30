@@ -4,6 +4,42 @@ All notable changes to Uchronia. The format follows [Keep a Changelog](https://k
 
 ## [Unreleased]
 
+## [2.0.0] - 2026-07-30 - The Second Derivation
+
+v2 exists because of one failure. A user typed *"What if the Allies lost World War 2"* and got a canned alternate history set in the **1600s**: no API key meant the server silently degraded to the demo engine, and the demo engine's year regex read "World War 2" as the year 2, found nothing, and rolled a random century. The north star: **the engine answers the question asked, provably.**
+
+**The WW2 gate.** That prompt now produces, in demo mode, a POD snapped to 1940 in Europe behind an unmissable banner saying the content is canned, and a history that runs 1940 to 2024 on subject. `demo/the-allies-lose.uchronia.json` is that derivation, kept. The live half verifies on the deployment rather than this machine (ADR-0004).
+
+### Added
+
+- **M13, honest modes.** `mode: 'live' | 'demo'` on `/api/config`, an amber DEMO pill, a composer banner, and a third colour family (notice) that borrows neither record blue nor thread red. `POST /api/live-check` spends one output token and puts the verdict in the body. A dated per-model cost meter with cumulative `run.usage` frames. `pnpm check:secrets`, CI-enforced.
+- **M14, POD Intake 2.0.** `pod-interpret` grounded on retrieved anchors returns a reading, a confidence, named ambiguities, and 1-4 real candidate mechanisms; the interpretation card lets the reader confirm or edit before anything is created. On-divergence mandates in the prompts, an on-divergence critic dimension, and `batchReachesPod` as the machine tripwire. The random-year fallback is dead.
+- **M15, quality machinery.** `packages/evals` with a 31-POD benchmark, a keyless CI mock lane, a budget-capped live lane with a relevance judge, and critic A/B fixtures. The Engine Room: one persisted trace per provider call, with prompt, response, and per-call cost. Validator rules 10 and 11 plus a warning-grade geographic advisory. Fuzzing over intake and imports.
+- **M16, Baseline 2.0.** The curated spine grows **203 to 1578 anchors**, 4000 BC to 2024, 54 centuries, 367 in the twentieth. Anchor schema v2 (regions, themes, magnitude, attractor strength) and a validating assembler that writes nothing if one anchor is malformed. A 72-anchor fact-check with adversarial refutation confirmed 8 corrections. The record room at `/record`; 85 gallery entries with intake hints.
+- **M17, the Symposium and the Court.** Three specialist chairs draft each era and a fourth merges them, keeping what they could not settle as contested marginalia. The Court of Plausibility hears disputed events: advocate, skeptic, one ruling. Dial axes come off the master dial on demand.
+- **M18, lives and deep time.** Birth years, counterfactual actors, succession, and role tenures replayed from the ledger. A divergence now runs to the present by default, with an optional epilogue marked as a projection. Convergence 2.0 names the attractor, the lateness, and the road. Claims: regional indices and name drift, with a philology lens and validator rule 12.
+- **M19, branch algebra.** The counterfactual pulse forecasts a flip without committing to it. The graft transplants an event and its direct consequences onto another line. A cross-branch fate table, and a third column in compare.
+- **M20, the literary surface.** Telegram, broadcast transcript, obituary, and classified page, each in the register its form imposes. Procedural heraldry obeying the tincture rule. In-world historiography: rival schools with real blind spots.
+- **M21, the Book.** Commission a branch into a frontispiece, chapters, plates, and appendices, as print-grade HTML and as a hand-packaged EPUB 3.
+- **M22, the map.** Region-control claims and a deliberately schematic map that says so, with a data table carrying the same claims. The command palette (Ctrl+K) from anywhere.
+- **M23, interrogation.** Ask the Archivist, every factual sentence pinned to a row that resolves in-app, with "the record is silent" as a real answer. The Grand Inquiry: a verdict, a cited chain, required counter-considerations, and a confidence about the record rather than the prose.
+- **M24, the spending gate.** ADR-0005 supersedes ADR-0003: a public deployment may hold a key, behind a passphrase, a per-IP rate limit, and a UTC-day token ledger. On serverless a key with no `UCHRONIA_ACCESS_TOKEN` is **refused** and the instance serves the demo. Prompt caching on the stable system prefix.
+- **M25, showcases.** Three more chronicles beside the original, offered on a first visit and seeded on a fresh deployment.
+
+### Changed
+
+- Retrieval measures specificity from the corpus rather than from word length, so a long function word no longer outranks a short proper noun; it sharpens as the baseline grows.
+- An ask that names its own event fixes its own year: retrieval suggests, the ask decides.
+- The e2e server runs on an in-memory database, so every run starts on an empty shelf.
+- `philology` is filterable but never a default lens.
+
+### Known limitations
+
+- **Live mode has never been exercised against the real API from this machine.** No key was ever placed in this tree (ADR-0004). Every live path is unit-tested against injected stubs and is one environment variable from running.
+- **Build-time API spend for the entire v2 program: zero.**
+- The rate limiter and daily ledger are in-memory and per instance: a brake on casual abuse, not a billing system. An account spend limit is what bounds the loss.
+- Not built, and recorded as such in `docs/ROADMAP.md`: the Chronoscope play mode, the Atlas fork constellation, the Encyclopaedia Uchronica as its own route, SSE for the archivist, parallel expander fan-out, and run snapshots.
+
 ## [1.0.0] - 2026-07-26
 
 The first stable release: the 0.2 hardening series plus the deployment-hardening pass, live at <https://uchronia-server.vercel.app/>.

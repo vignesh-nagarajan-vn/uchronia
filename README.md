@@ -8,7 +8,7 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-1a5fb4.svg)](LICENSE)
 [![Node ≥ 22.13](https://img.shields.io/badge/node-%E2%89%A5%2022.13-3c873a.svg)](package.json)
 
-**Live playground**: [uchronia-server.vercel.app](https://uchronia-server.vercel.app/) - keyless mock mode, the showcase chronicle seeded on arrival.
+**Live playground**: [uchronia-server.vercel.app](https://uchronia-server.vercel.app/) - keyless demo mode, with four showcase chronicles seeded on arrival, including *The Allies Lose*.
 
 Uchronia is an alternate-history engine. Choose or write a **Point of Divergence**, say *"the Library of Alexandria never burns"*, and watch history re-derive itself era by era. Drill into events, read biographies of people as they exist in this timeline, hold fake primary sources generated from inside the world, fork sub-branches at any event, and compare everything against real history.
 
@@ -28,9 +28,38 @@ Uchronia is a lightweight causal simulation wearing a literary interface:
 
 - Generation is grounded in **explicit, mutable world-state** (entities, deltas, a causal graph), never in accumulated prose.
 - The graph feeds the loop: new eras must extend or close the causal chains of the old, and the skeptical critic judges every claimed cause **by what it actually cites**.
-- Every claim is **auditable** back through the graph, and a pure-code **machine validator** (nine rules, including *no posthumous mutation*: the dead stay dead) polices every batch beside the LLM critic.
+- Every claim is **auditable** back through the graph, and a pure-code **machine validator** (twelve rules, including *no posthumous mutation*: the dead stay dead) polices every batch beside the LLM critic.
+- The record it diverges from is real: **1578 curated anchors**, 4000 BC to 2024, fact-checked and hand-assembled, and never generated.
 
 The prose is the surface. The graph is the truth.
+
+## What v2 added
+
+*The Second Derivation* exists because of one failure: someone asked what if the
+Allies lost the Second World War and got a canned history set in the 1600s. The
+north star was that **the engine answers the question asked, provably.**
+
+- **It reads your ask before deriving.** An interpretation card offers real
+  divergence mechanisms, grounded in retrieved anchors from the curated record,
+  and nothing is created until you confirm or edit it.
+- **It says what engine it is.** No key means demo mode, and demo mode says so
+  in a banner rather than in a whisper.
+- **1578 curated anchors**, 4000 BC to 2024, with themes, magnitude, and how
+  strongly structure pulls back toward each one.
+- **Deep time by default**: a divergence runs to the present, with an optional
+  epilogue era marked as a projection rather than a derivation.
+- **A symposium mode**: three specialist historians draft each era and a fourth
+  merges them, keeping what they could not settle as contested marginalia. And
+  a Court of Plausibility that hears disputed events out.
+- **Ask the archivist.** Every factual sentence is pinned to a row you can open,
+  and "the record is silent on that" is a real answer.
+- **Commission the chronicle** as a print-grade book or an EPUB.
+- **A map**, deliberately schematic and captioned as such, with a data table
+  carrying the same claims.
+- **Ctrl+K** to get anywhere.
+
+The full record, including everything deliberately not built, is in
+[docs/ROADMAP.md](docs/ROADMAP.md) and [CHANGELOG.md](CHANGELOG.md).
 
 ## Tech stack
 

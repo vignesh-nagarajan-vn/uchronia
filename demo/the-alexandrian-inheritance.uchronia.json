@@ -1,0 +1,3698 @@
+{
+  "formatVersion": 1,
+  "timeline": {
+    "id": "01KYTAYFX96DS1NW7R3EX516J7",
+    "title": "The Alexandrian Inheritance",
+    "createdAt": "2026-07-30T20:20:11.804Z",
+    "settings": {
+      "dial": 40,
+      "derivation": "standard",
+      "court": false,
+      "epilogue": true,
+      "horizonYears": 220,
+      "defaultLenses": ["political", "technological", "cultural", "economic", "daily-life"],
+      "models": {
+        "generation": "claude-sonnet-5",
+        "critic": "claude-haiku-4-5-20251001",
+        "mode": "mock"
+      }
+    }
+  },
+  "pod": {
+    "id": "01KYTAYFXAS65VX5YQE56RFZ5D",
+    "timelineId": "01KYTAYFX96DS1NW7R3EX516J7",
+    "raw": "The Library of Alexandria never burns in 48 BC",
+    "statement": "The Library of Alexandria never burns in 48 BC.",
+    "year": -48,
+    "dateLabel": "48 BC",
+    "region": "Mediterranean",
+    "mechanism": "knowledge",
+    "baselineContext": "In the attested record of 48 BC, Mediterranean stood at a hinge: what was written and copied there set the ceiling on what later centuries could know. Nearby in the record: Fire reaches the Library of Alexandria (48 BC). The divergence departs from that settled course.",
+    "provenance": {
+      "kind": "generated",
+      "model": "mock",
+      "templateId": "pod-normalize",
+      "templateVersion": "1.0.0",
+      "generatedAt": "2026-07-30T20:20:11.804Z",
+      "mode": "mock"
+    }
+  },
+  "branches": [
+    {
+      "id": "01KYTAYFXAQ803SKNSXYACDH81",
+      "timelineId": "01KYTAYFX96DS1NW7R3EX516J7",
+      "parentBranchId": null,
+      "forkEventId": null,
+      "subPod": null,
+      "name": "main line",
+      "createdAt": "2026-07-30T20:20:11.804Z"
+    }
+  ],
+  "eras": [
+    {
+      "id": "01KYTAYFXVS8NWJRJ5NSWNFZX1",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "ordinal": 0,
+      "startYear": -48,
+      "endYear": -46,
+      "title": "Two Years of Aftermath",
+      "summary": "Two years of consequences arrive in the order consequences always do: first prices, then postures, then paperwork. The great structures hold; their assumptions do not.",
+      "pressures": [],
+      "status": "expanded",
+      "detail": "Two years of consequences arrive in the order consequences always do: first prices, then postures, then paperwork. The great structures hold; their assumptions do not. The span from -48 to -46 reads, in retrospect, as one argument conducted in many registers: what would the ordinary strains of a changed world be allowed to cost, and who would pay it.\n\nThe record answers through its events. The archive stands (48 BC); The Mouseion of Alexandria convenes over the changed course (48 BC); Grain prices shift in the Alexandria markets (47 BC). Each was a partial discharge of the same accumulated pressure, none a settlement. The registers record it drily; the letters that survive do not.\n\nBy -46 the question had not been answered so much as re-priced. What the era settled, it settled in habits and ledgers rather than treaties; what it left loaded, the next era would inherit with interest.",
+      "speculative": false,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "seed-consequences",
+        "templateVersion": "1.2.0",
+        "generatedAt": "2026-07-30T20:20:11.835Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYFYBGFEWM06MWTW44980",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "ordinal": 1,
+      "startYear": -46,
+      "endYear": -38,
+      "title": "A Widening Circle",
+      "summary": "Between -46 and -38, the divergence stops being news and starts being structure: technique spillover sets the agenda, and the Ptolemaic Egypt adjusts.",
+      "pressures": [
+        {
+          "name": "Technique spillover",
+          "kind": "technological",
+          "description": "A working method has left the workshops that guarded it; The Roman Republic can no longer control who learns it.",
+          "intensity": 0.45
+        },
+        {
+          "name": "Doctrinal quarrel",
+          "kind": "ideological",
+          "description": "A dispute of principle inside The Roman Republic is becoming a dispute of office.",
+          "intensity": 0.64
+        },
+        {
+          "name": "Harvest variance",
+          "kind": "environmental",
+          "description": "Two lean years in the districts around The Roman Republic would exhaust the granary math.",
+          "intensity": 0.68
+        },
+        {
+          "name": "Route dependence",
+          "kind": "economic",
+          "description": "Too much of what The Roman Republic eats and sells moves along a single corridor that others can tax or close.",
+          "intensity": 0.8
+        },
+        {
+          "name": "A crowded generation",
+          "kind": "demographic",
+          "description": "A large cohort comes of age around The Roman Republic with fewer places than claimants.",
+          "intensity": 0.68
+        }
+      ],
+      "status": "expanded",
+      "detail": "Between -46 and -38, the divergence stops being news and starts being structure: technique spillover sets the agenda, and the Ptolemaic Egypt adjusts. The span from -46 to -38 reads, in retrospect, as one argument conducted in many registers: what would technique spillover (technological, 0.45) be allowed to cost, and who would pay it.\n\nThe record answers through its events. The markets reprice around Ptolemaic Egypt (45 BC); A working technique crosses the Roman Republic's border (43 BC); The Mouseion of Alexandria revises what the young are taught (41 BC). Each was a partial discharge of the same accumulated pressure, none a settlement. As usual, the porters and clerks knew first, and were consulted last.\n\nBy -38 the question had not been answered so much as re-priced. What the era settled, it settled in habits and ledgers rather than treaties; what it left loaded, the next era would inherit with interest.",
+      "speculative": false,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.851Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYFYYNS0CASTKD2K89GEY",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "ordinal": 2,
+      "startYear": -38,
+      "endYear": -25,
+      "title": "The Inheritance Divided",
+      "summary": "Between -38 and -25, the divergence stops being news and starts being structure: legitimacy arrears sets the agenda, and the Ptolemaic Egypt adjusts.",
+      "pressures": [
+        {
+          "name": "Legitimacy arrears",
+          "kind": "ideological",
+          "description": "The story The Roman Republic tells about itself has not been updated for the new circumstances; someone will update it first.",
+          "intensity": 0.47
+        },
+        {
+          "name": "Timber and water",
+          "kind": "environmental",
+          "description": "The Roman Republic is drawing down forests and channels faster than they renew.",
+          "intensity": 0.87
+        },
+        {
+          "name": "Route dependence",
+          "kind": "economic",
+          "description": "Too much of what The Roman Republic eats and sells moves along a single corridor that others can tax or close.",
+          "intensity": 0.42
+        },
+        {
+          "name": "Thin countryside",
+          "kind": "demographic",
+          "description": "The hinterland feeding The Roman Republic has fewer hands than mouths in the capital assume.",
+          "intensity": 0.86
+        }
+      ],
+      "status": "expanded",
+      "detail": "Between -38 and -25, the divergence stops being news and starts being structure: legitimacy arrears sets the agenda, and the Ptolemaic Egypt adjusts. The span from -38 to -25 reads, in retrospect, as one argument conducted in many registers: what would legitimacy arrears (ideological, 0.47) be allowed to cost, and who would pay it.\n\nThe record answers through its events. A working technique crosses the Roman Republic's border (36 BC); The Mouseion of Alexandria revises what the young are taught (33 BC); The Roman Republic tests the new balance (30 BC). Each was a partial discharge of the same accumulated pressure, none a settlement. As usual, the porters and clerks knew first, and were consulted last.\n\nBy -25 the question had not been answered so much as re-priced. What the era settled, it settled in habits and ledgers rather than treaties; what it left loaded, the next era would inherit with interest.",
+      "speculative": false,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.870Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYFZ4H60TMN2KM58RHMZ5",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "ordinal": 3,
+      "startYear": -25,
+      "endYear": -4,
+      "title": "New Channels",
+      "summary": "Between -25 and -4, the divergence stops being news and starts being structure: a crowded generation sets the agenda, and the Ptolemaic Egypt adjusts.",
+      "pressures": [
+        {
+          "name": "A crowded generation",
+          "kind": "demographic",
+          "description": "A large cohort comes of age around Sosigenes of Alexandria with fewer places than claimants.",
+          "intensity": 0.46
+        },
+        {
+          "name": "Tooling gap",
+          "kind": "technological",
+          "description": "Rivals of Sosigenes of Alexandria are re-equipping faster than its own arsenals admit.",
+          "intensity": 0.67
+        },
+        {
+          "name": "Doctrinal quarrel",
+          "kind": "ideological",
+          "description": "A dispute of principle inside Sosigenes of Alexandria is becoming a dispute of office.",
+          "intensity": 0.53
+        },
+        {
+          "name": "Timber and water",
+          "kind": "environmental",
+          "description": "Sosigenes of Alexandria is drawing down forests and channels faster than they renew.",
+          "intensity": 0.65
+        },
+        {
+          "name": "Strained treasury",
+          "kind": "economic",
+          "description": "The ledgers of Sosigenes of Alexandria run on short credit; every initiative competes with the interest bill.",
+          "intensity": 0.47
+        }
+      ],
+      "status": "skeleton",
+      "detail": null,
+      "speculative": false,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.876Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYFZA92VXYPF2SNKPFJCC",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "ordinal": 4,
+      "startYear": -4,
+      "endYear": 30,
+      "title": "The Inheritance Divided",
+      "summary": "Between -4 and 30, the divergence stops being news and starts being structure: legitimacy arrears sets the agenda, and the Ptolemaic Egypt adjusts.",
+      "pressures": [
+        {
+          "name": "Legitimacy arrears",
+          "kind": "ideological",
+          "description": "The story Ptolemaic Egypt tells about itself has not been updated for the new circumstances; someone will update it first.",
+          "intensity": 0.75
+        },
+        {
+          "name": "Timber and water",
+          "kind": "environmental",
+          "description": "Ptolemaic Egypt is drawing down forests and channels faster than they renew.",
+          "intensity": 0.89
+        },
+        {
+          "name": "Strained treasury",
+          "kind": "economic",
+          "description": "The ledgers of Ptolemaic Egypt run on short credit; every initiative competes with the interest bill.",
+          "intensity": 0.42
+        },
+        {
+          "name": "A crowded generation",
+          "kind": "demographic",
+          "description": "A large cohort comes of age around Ptolemaic Egypt with fewer places than claimants.",
+          "intensity": 0.71
+        }
+      ],
+      "status": "skeleton",
+      "detail": null,
+      "speculative": false,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.882Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYFZGKPMZ6RMX3B529QFX",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "ordinal": 5,
+      "startYear": 30,
+      "endYear": 85,
+      "title": "Old Roads, New Traffic",
+      "summary": "Between 30 and 85, the divergence stops being news and starts being structure: tooling gap sets the agenda, and the Ptolemaic Egypt adjusts.",
+      "pressures": [
+        {
+          "name": "Tooling gap",
+          "kind": "technological",
+          "description": "Rivals of The Roman Republic are re-equipping faster than its own arsenals admit.",
+          "intensity": 0.9
+        },
+        {
+          "name": "Doctrinal quarrel",
+          "kind": "ideological",
+          "description": "A dispute of principle inside The Roman Republic is becoming a dispute of office.",
+          "intensity": 0.48
+        },
+        {
+          "name": "Harvest variance",
+          "kind": "environmental",
+          "description": "Two lean years in the districts around The Roman Republic would exhaust the granary math.",
+          "intensity": 0.75
+        },
+        {
+          "name": "Route dependence",
+          "kind": "economic",
+          "description": "Too much of what The Roman Republic eats and sells moves along a single corridor that others can tax or close.",
+          "intensity": 0.79
+        },
+        {
+          "name": "A crowded generation",
+          "kind": "demographic",
+          "description": "A large cohort comes of age around The Roman Republic with fewer places than claimants.",
+          "intensity": 0.74
+        }
+      ],
+      "status": "skeleton",
+      "detail": null,
+      "speculative": false,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.888Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYFZTY8M6W2ZGFK7N3XKD",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "ordinal": 6,
+      "startYear": 85,
+      "endYear": 172,
+      "title": "The Second Harvest",
+      "summary": "Between 85 and 172, the divergence stops being news and starts being structure: harvest variance sets the agenda, and the Ptolemaic Egypt adjusts.",
+      "pressures": [
+        {
+          "name": "Harvest variance",
+          "kind": "environmental",
+          "description": "Two lean years in the districts around The Roman Republic would exhaust the granary math.",
+          "intensity": 0.83
+        },
+        {
+          "name": "Price memory",
+          "kind": "economic",
+          "description": "Markets around The Roman Republic still price in the last shock; hoarding begins at rumors now.",
+          "intensity": 0.45
+        },
+        {
+          "name": "A crowded generation",
+          "kind": "demographic",
+          "description": "A large cohort comes of age around The Roman Republic with fewer places than claimants.",
+          "intensity": 0.75
+        },
+        {
+          "name": "Tooling gap",
+          "kind": "technological",
+          "description": "Rivals of The Roman Republic are re-equipping faster than its own arsenals admit.",
+          "intensity": 0.82
+        },
+        {
+          "name": "Doctrinal quarrel",
+          "kind": "ideological",
+          "description": "A dispute of principle inside The Roman Republic is becoming a dispute of office.",
+          "intensity": 0.87
+        }
+      ],
+      "status": "skeleton",
+      "detail": null,
+      "speculative": false,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.898Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG060JKNQWZC9CQQHJCS",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "ordinal": 7,
+      "startYear": 172,
+      "endYear": 222,
+      "title": "The Settling Accounts",
+      "summary": "Between 172 and 222, the divergence stops being news and starts being structure: technique spillover sets the agenda, and the Ptolemaic Egypt adjusts.",
+      "pressures": [
+        {
+          "name": "Technique spillover",
+          "kind": "technological",
+          "description": "A working method has left the workshops that guarded it; Ptolemaic Egypt can no longer control who learns it.",
+          "intensity": 0.46
+        },
+        {
+          "name": "Legitimacy arrears",
+          "kind": "ideological",
+          "description": "The story Ptolemaic Egypt tells about itself has not been updated for the new circumstances; someone will update it first.",
+          "intensity": 0.82
+        },
+        {
+          "name": "Harvest variance",
+          "kind": "environmental",
+          "description": "Two lean years in the districts around Ptolemaic Egypt would exhaust the granary math.",
+          "intensity": 0.58
+        },
+        {
+          "name": "Route dependence",
+          "kind": "economic",
+          "description": "Too much of what Ptolemaic Egypt eats and sells moves along a single corridor that others can tax or close.",
+          "intensity": 0.68
+        },
+        {
+          "name": "Thin countryside",
+          "kind": "demographic",
+          "description": "The hinterland feeding Ptolemaic Egypt has fewer hands than mouths in the capital assume.",
+          "intensity": 0.76
+        }
+      ],
+      "status": "skeleton",
+      "detail": null,
+      "speculative": true,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.910Z",
+        "mode": "mock"
+      }
+    }
+  ],
+  "events": [
+    {
+      "id": "01KYTAYFY076REY7BK53QXAGM2",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eraId": "01KYTAYFXVS8NWJRJ5NSWNFZX1",
+      "ordinal": 0,
+      "date": {
+        "year": -48,
+        "label": "48 BC"
+      },
+      "title": "The archive stands",
+      "summary": "The Library of Alexandria never burns in 48 BC. In Alexandria the criers say little and the letter-writers say too much; between them, a usable account of the new situation takes a season to form.",
+      "detail": null,
+      "entityIds": ["01KYTAYFY019608T0BNP14HZ8B", "01KYTAYFY0C07SP66MWA2DB29N"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYFY019608T0BNP14HZ8B",
+          "patch": {
+            "divergenceAbsorbed": true,
+            "mood": "wary relief"
+          },
+          "note": "The immediate shock is absorbed; the accounting begins."
+        }
+      ],
+      "lenses": ["cultural"],
+      "plausibility": {
+        "score": 0.86,
+        "rationale": "Direct restatement of the divergence itself; the least contingent claim in the timeline."
+      },
+      "distanceFromPod": 0,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": true,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "seed-consequences",
+        "templateVersion": "1.2.0",
+        "generatedAt": "2026-07-30T20:20:11.835Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYFY0N67J3W52T5466EKQ",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eraId": "01KYTAYFXVS8NWJRJ5NSWNFZX1",
+      "ordinal": 1,
+      "date": {
+        "year": -48,
+        "label": "48 BC"
+      },
+      "title": "The Mouseion of Alexandria convenes over the changed course",
+      "summary": "The Mouseion of Alexandria meets in extraordinary session. Sosigenes of Alexandria argues that the moment must be committed to record before rumor rewrites it; a survey of holdings, obligations, and precedents is ordered.",
+      "detail": null,
+      "entityIds": ["01KYTAYFY0QBGXD2F4Y49NY34F", "01KYTAYFY0C07SP66MWA2DB29N"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYFY0QBGXD2F4Y49NY34F",
+          "patch": {
+            "session": "extraordinary"
+          },
+          "note": "The institution claims the divergence as its business."
+        },
+        {
+          "entityId": "01KYTAYFY0C07SP66MWA2DB29N",
+          "patch": {
+            "position": "convenor of the survey"
+          },
+          "note": "Responsibility, and visibility, attach to the one who asked for the record."
+        }
+      ],
+      "lenses": ["political", "cultural"],
+      "plausibility": {
+        "score": 0.74,
+        "rationale": "Institutions reliably respond to discontinuity with procedure; the specific convenor is the contingent part."
+      },
+      "distanceFromPod": 0,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "seed-consequences",
+        "templateVersion": "1.2.0",
+        "generatedAt": "2026-07-30T20:20:11.835Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYFY018FWT3RQF7F2Y1X4",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eraId": "01KYTAYFXVS8NWJRJ5NSWNFZX1",
+      "ordinal": 2,
+      "date": {
+        "year": -47,
+        "label": "47 BC"
+      },
+      "title": "Grain prices shift in the Alexandria markets",
+      "summary": "The first measurable consequence arrives where it always does: in prices. Grain moves against last season's rate in Alexandria, and porters, brokers, and household stewards adjust before any council does.",
+      "detail": null,
+      "entityIds": ["01KYTAYFY019608T0BNP14HZ8B"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYFY019608T0BNP14HZ8B",
+          "patch": {
+            "marketSignal": "grain repriced",
+            "treasury": "strained but liquid"
+          },
+          "note": "The exchequer notices what the market already knew."
+        }
+      ],
+      "lenses": ["economic", "daily-life"],
+      "plausibility": {
+        "score": 0.78,
+        "rationale": "Price adjustment is the most reliable early transmission channel of any structural change."
+      },
+      "distanceFromPod": 1,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "seed-consequences",
+        "templateVersion": "1.2.0",
+        "generatedAt": "2026-07-30T20:20:11.835Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYFY0VPC6A0STG12KVSH0",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eraId": "01KYTAYFXVS8NWJRJ5NSWNFZX1",
+      "ordinal": 3,
+      "date": {
+        "year": -46,
+        "label": "46 BC"
+      },
+      "title": "The Roman Republic recalculates",
+      "summary": "In the chanceries of the Roman Republic, the first response is to ask for better copies of the dispatches. The second is to move money. Only the third, months later, is anything resembling a policy.",
+      "detail": null,
+      "entityIds": ["01KYTAYFY15YEB2S8HA7S2BTC6"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYFY15YEB2S8HA7S2BTC6",
+          "patch": {
+            "policy": "reopened"
+          },
+          "note": "The rival’s settled policy quietly goes back to committee."
+        }
+      ],
+      "lenses": ["political"],
+      "plausibility": {
+        "score": 0.68,
+        "rationale": "Neighbors always reprice risk after a discontinuity; the two-year lag matches the speed of credible intelligence."
+      },
+      "distanceFromPod": 2,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "seed-consequences",
+        "templateVersion": "1.2.0",
+        "generatedAt": "2026-07-30T20:20:11.835Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYFYFFW728N6PYT4WJRXR",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eraId": "01KYTAYFYBGFEWM06MWTW44980",
+      "ordinal": 4,
+      "date": {
+        "year": -45,
+        "label": "45 BC"
+      },
+      "title": "The markets reprice around Ptolemaic Egypt",
+      "summary": "A working method has left the workshops that guarded it; The Roman Republic can no longer control who learns it. Brokers adjust before any edict: contracts shorten, surety costs rise, and household stewards change what they store.",
+      "detail": null,
+      "entityIds": ["01KYTAYFY019608T0BNP14HZ8B"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYFY019608T0BNP14HZ8B",
+          "patch": {
+            "creditTerms": "shortened",
+            "householdStores": "deepened"
+          },
+          "note": "The market hedges; kitchens follow."
+        }
+      ],
+      "lenses": ["economic", "daily-life"],
+      "plausibility": {
+        "score": 0.78,
+        "rationale": "Price adjustment is the most reliable transmission channel of structural pressure."
+      },
+      "distanceFromPod": 3,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": true,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.851Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYFYFQ1TNN8RM7YCMNWQQ",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eraId": "01KYTAYFYBGFEWM06MWTW44980",
+      "ordinal": 5,
+      "date": {
+        "year": -43,
+        "label": "43 BC"
+      },
+      "title": "A working technique crosses the Roman Republic's border",
+      "summary": "What the Mouseion of Alexandria kept close now travels with journeymen. A dispute of principle inside The Roman Republic is becoming a dispute of office.",
+      "detail": null,
+      "entityIds": [
+        "01KYTAYFY0QBGXD2F4Y49NY34F",
+        "01KYTAYFY15YEB2S8HA7S2BTC6",
+        "01KYTAYFYFK8B5PCRQN5B6HGVZ"
+      ],
+      "deltas": [
+        {
+          "entityId": "01KYTAYFY15YEB2S8HA7S2BTC6",
+          "patch": {
+            "technique": "acquired by hire"
+          },
+          "note": "Knowledge proves cheaper to hire than to guard."
+        },
+        {
+          "entityId": "01KYTAYFYFK8B5PCRQN5B6HGVZ",
+          "patch": {
+            "standing": "newly consequential"
+          },
+          "note": "A new name starts appearing in the registers."
+        }
+      ],
+      "lenses": ["technological", "economic"],
+      "plausibility": {
+        "score": 0.66,
+        "rationale": "Techniques diffuse along wage gradients; guarding them raises the wage."
+      },
+      "distanceFromPod": 5,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.851Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYFYFBDGV0CV9WD3SD8GD",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eraId": "01KYTAYFYBGFEWM06MWTW44980",
+      "ordinal": 6,
+      "date": {
+        "year": -41,
+        "label": "41 BC"
+      },
+      "title": "The Mouseion of Alexandria revises what the young are taught",
+      "summary": "Over the following season the old arrangement gives way. A new syllabus fixes the changed world into schoolroom fact. Two lean years in the districts around The Roman Republic would exhaust the granary math. Children now learn as ordinary what their grandparents called impossible.",
+      "detail": null,
+      "entityIds": ["01KYTAYFY0QBGXD2F4Y49NY34F", "01KYTAYFY0C07SP66MWA2DB29N"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYFY0QBGXD2F4Y49NY34F",
+          "patch": {
+            "curriculum": "revised to the new circumstances"
+          },
+          "note": "The syllabus quietly rewrites what counts as common knowledge."
+        }
+      ],
+      "lenses": ["cultural", "daily-life"],
+      "plausibility": {
+        "score": 0.75,
+        "rationale": "Institutions metabolize discontinuity into curriculum within a generation. Revised after review: the mechanism is now named instead of asserted."
+      },
+      "distanceFromPod": 7,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.851Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYFYF9KYM2C5FPD3D6SXX",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eraId": "01KYTAYFYBGFEWM06MWTW44980",
+      "ordinal": 7,
+      "date": {
+        "year": -39,
+        "label": "39 BC"
+      },
+      "title": "The Roman Republic tests the new balance",
+      "summary": "Too much of what The Roman Republic eats and sells moves along a single corridor that others can tax or close. A probe at the margin (an envoy recalled, a toll raised, a garrison reinforced) measures how much the world has actually changed.",
+      "detail": null,
+      "entityIds": ["01KYTAYFY15YEB2S8HA7S2BTC6", "01KYTAYFY019608T0BNP14HZ8B"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYFY15YEB2S8HA7S2BTC6",
+          "patch": {
+            "posture": "probing"
+          },
+          "note": "The rival prices the new equilibrium in small provocations."
+        }
+      ],
+      "lenses": ["political"],
+      "plausibility": {
+        "score": 0.69,
+        "rationale": "Neighbors test any settlement whose guarantors look distracted."
+      },
+      "distanceFromPod": 9,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.851Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYFYZWJZKBB2PJMT8MHYS",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eraId": "01KYTAYFYYNS0CASTKD2K89GEY",
+      "ordinal": 8,
+      "date": {
+        "year": -36,
+        "label": "36 BC"
+      },
+      "title": "A working technique crosses the Roman Republic's border",
+      "summary": "What the Mouseion of Alexandria kept close now travels with journeymen. The story The Roman Republic tells about itself has not been updated for the new circumstances; someone will update it first.",
+      "detail": null,
+      "entityIds": ["01KYTAYFY0QBGXD2F4Y49NY34F", "01KYTAYFY15YEB2S8HA7S2BTC6"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYFY15YEB2S8HA7S2BTC6",
+          "patch": {
+            "technique": "acquired by hire"
+          },
+          "note": "Knowledge proves cheaper to hire than to guard."
+        }
+      ],
+      "lenses": ["technological", "economic"],
+      "plausibility": {
+        "score": 0.66,
+        "rationale": "Techniques diffuse along wage gradients; guarding them raises the wage."
+      },
+      "distanceFromPod": 12,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.870Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYFYZW0YCTN7FPZ8ADR5F",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eraId": "01KYTAYFYYNS0CASTKD2K89GEY",
+      "ordinal": 9,
+      "date": {
+        "year": -33,
+        "label": "33 BC"
+      },
+      "title": "The Mouseion of Alexandria revises what the young are taught",
+      "summary": "A new syllabus fixes the changed world into schoolroom fact. The Roman Republic is drawing down forests and channels faster than they renew. Children now learn as ordinary what their grandparents called impossible.",
+      "detail": null,
+      "entityIds": ["01KYTAYFY0QBGXD2F4Y49NY34F", "01KYTAYFY0C07SP66MWA2DB29N"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYFY0QBGXD2F4Y49NY34F",
+          "patch": {
+            "curriculum": "revised to the new circumstances"
+          },
+          "note": "The syllabus quietly rewrites what counts as common knowledge."
+        }
+      ],
+      "lenses": ["cultural", "daily-life"],
+      "plausibility": {
+        "score": 0.7,
+        "rationale": "Institutions metabolize discontinuity into curriculum within a generation."
+      },
+      "distanceFromPod": 15,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.870Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYFYZST7EFVTECC9STEVF",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eraId": "01KYTAYFYYNS0CASTKD2K89GEY",
+      "ordinal": 10,
+      "date": {
+        "year": -30,
+        "label": "30 BC"
+      },
+      "title": "The Roman Republic tests the new balance",
+      "summary": "Too much of what The Roman Republic eats and sells moves along a single corridor that others can tax or close. A probe at the margin (an envoy recalled, a toll raised, a garrison reinforced) measures how much the world has actually changed.",
+      "detail": null,
+      "entityIds": ["01KYTAYFY15YEB2S8HA7S2BTC6", "01KYTAYFY019608T0BNP14HZ8B"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYFY15YEB2S8HA7S2BTC6",
+          "patch": {
+            "posture": "probing"
+          },
+          "note": "The rival prices the new equilibrium in small provocations."
+        }
+      ],
+      "lenses": ["political"],
+      "plausibility": {
+        "score": 0.69,
+        "rationale": "Neighbors test any settlement whose guarantors look distracted."
+      },
+      "distanceFromPod": 18,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": true,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.870Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYFYZW9MTCF9KVQ3FR1N1",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eraId": "01KYTAYFYYNS0CASTKD2K89GEY",
+      "ordinal": 11,
+      "date": {
+        "year": -27,
+        "label": "27 BC"
+      },
+      "title": "Sosigenes of Alexandria attempts the grand reconciliation",
+      "summary": "Against every counsel, Sosigenes of Alexandria stakes the season on reconciling parties whose interests the ledgers say cannot meet.",
+      "detail": null,
+      "entityIds": ["01KYTAYFY0C07SP66MWA2DB29N"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYFY0C07SP66MWA2DB29N",
+          "patch": {
+            "influence": "sets the season"
+          },
+          "note": "Manners record the divergence more durably than treaties."
+        }
+      ],
+      "lenses": ["daily-life", "cultural"],
+      "plausibility": {
+        "score": 0.3,
+        "rationale": "It would take personal force to overcome what the state of the world says is overdetermined."
+      },
+      "distanceFromPod": 21,
+      "wildcard": false,
+      "flags": {
+        "disputed": true,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": [
+        {
+          "type": "implausible-leap",
+          "severity": "fail",
+          "note": "The stated causes cannot carry this outcome (self-assessed plausibility 0.3); no regeneration will change the underlying claim."
+        },
+        {
+          "type": "great-man-overreach",
+          "severity": "warning",
+          "note": "The draft leans on individual daring where the snapshot offers no structural door."
+        }
+      ],
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.870Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYFZ67M61HZ0676920SBY",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eraId": "01KYTAYFZ4H60TMN2KM58RHMZ5",
+      "ordinal": 12,
+      "date": {
+        "year": -22,
+        "label": "22 BC"
+      },
+      "title": "The Mouseion of Alexandria revises what the young are taught",
+      "summary": "A new syllabus fixes the changed world into schoolroom fact. A large cohort comes of age around Sosigenes of Alexandria with fewer places than claimants. Children now learn as ordinary what their grandparents called impossible.",
+      "detail": null,
+      "entityIds": ["01KYTAYFY0QBGXD2F4Y49NY34F", "01KYTAYFY0C07SP66MWA2DB29N"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYFY0QBGXD2F4Y49NY34F",
+          "patch": {
+            "curriculum": "revised to the new circumstances"
+          },
+          "note": "The syllabus quietly rewrites what counts as common knowledge."
+        }
+      ],
+      "lenses": ["cultural", "daily-life"],
+      "plausibility": {
+        "score": 0.7,
+        "rationale": "Institutions metabolize discontinuity into curriculum within a generation."
+      },
+      "distanceFromPod": 26,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.876Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYFZ6YCKH83SZJCM5MPK1",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eraId": "01KYTAYFZ4H60TMN2KM58RHMZ5",
+      "ordinal": 13,
+      "date": {
+        "year": -17,
+        "label": "17 BC"
+      },
+      "title": "The Roman Republic tests the new balance",
+      "summary": "Rivals of Sosigenes of Alexandria are re-equipping faster than its own arsenals admit. A probe at the margin (an envoy recalled, a toll raised, a garrison reinforced) measures how much the world has actually changed.",
+      "detail": null,
+      "entityIds": [
+        "01KYTAYFY15YEB2S8HA7S2BTC6",
+        "01KYTAYFY019608T0BNP14HZ8B",
+        "01KYTAYFZ6P7YV639VN35MC0Y8"
+      ],
+      "deltas": [
+        {
+          "entityId": "01KYTAYFY15YEB2S8HA7S2BTC6",
+          "patch": {
+            "posture": "probing"
+          },
+          "note": "The rival prices the new equilibrium in small provocations."
+        },
+        {
+          "entityId": "01KYTAYFZ6P7YV639VN35MC0Y8",
+          "patch": {
+            "standing": "newly consequential"
+          },
+          "note": "A new name starts appearing in the registers."
+        }
+      ],
+      "lenses": ["political"],
+      "plausibility": {
+        "score": 0.69,
+        "rationale": "Neighbors test any settlement whose guarantors look distracted."
+      },
+      "distanceFromPod": 31,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.876Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYFZ6YKH5NK5FDRG8MMXQ",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eraId": "01KYTAYFZ4H60TMN2KM58RHMZ5",
+      "ordinal": 14,
+      "date": {
+        "year": -12,
+        "label": "12 BC"
+      },
+      "title": "Sosigenes of Alexandria sets the fashion of the season",
+      "summary": "Style declares allegiance: the cut of a coat, a turn of phrase, a way of dating letters \"since the change\". A dispute of principle inside Sosigenes of Alexandria is becoming a dispute of office.",
+      "detail": null,
+      "entityIds": ["01KYTAYFY0C07SP66MWA2DB29N"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYFY0C07SP66MWA2DB29N",
+          "patch": {
+            "influence": "sets the season"
+          },
+          "note": "Manners record the divergence more durably than treaties."
+        }
+      ],
+      "lenses": ["daily-life", "cultural"],
+      "plausibility": {
+        "score": 0.74,
+        "rationale": "Fashion metabolizes politics faster than institutions do."
+      },
+      "distanceFromPod": 36,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.876Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYFZ6E2H57VEGC1KSTP15",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eraId": "01KYTAYFZ4H60TMN2KM58RHMZ5",
+      "ordinal": 15,
+      "date": {
+        "year": -7,
+        "label": "7 BC"
+      },
+      "title": "Ptolemaic Egypt reorders its accounts under timber and water",
+      "summary": "Sosigenes of Alexandria is drawing down forests and channels faster than they renew. The council answers with a reform that costs three offices their perquisites and creates two new registers.",
+      "detail": null,
+      "entityIds": ["01KYTAYFY019608T0BNP14HZ8B", "01KYTAYFY0QBGXD2F4Y49NY34F"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYFY019608T0BNP14HZ8B",
+          "patch": {
+            "administration": "reformed under timber and water"
+          },
+          "note": "Offices are consolidated; the registers survive their authors."
+        }
+      ],
+      "lenses": ["political"],
+      "plausibility": {
+        "score": 0.5,
+        "rationale": "Administrative reform is the standard discharge of fiscal and legitimacy pressure. A chronicler would call this one surprising."
+      },
+      "distanceFromPod": 41,
+      "wildcard": true,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.876Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYFZC99ERM7XQ3F412JMT",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eraId": "01KYTAYFZA92VXYPF2SNKPFJCC",
+      "ordinal": 16,
+      "date": {
+        "year": -1,
+        "label": "1 BC"
+      },
+      "title": "The Roman Republic tests the new balance",
+      "summary": "The story Ptolemaic Egypt tells about itself has not been updated for the new circumstances; someone will update it first. A probe at the margin (an envoy recalled, a toll raised, a garrison reinforced) measures how much the world has actually changed.",
+      "detail": null,
+      "entityIds": ["01KYTAYFY15YEB2S8HA7S2BTC6", "01KYTAYFY019608T0BNP14HZ8B"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYFY15YEB2S8HA7S2BTC6",
+          "patch": {
+            "posture": "probing"
+          },
+          "note": "The rival prices the new equilibrium in small provocations."
+        }
+      ],
+      "lenses": ["political"],
+      "plausibility": {
+        "score": 0.69,
+        "rationale": "Neighbors test any settlement whose guarantors look distracted."
+      },
+      "distanceFromPod": 47,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.882Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYFZCSQ6QA39CK4RW3SFN",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eraId": "01KYTAYFZA92VXYPF2SNKPFJCC",
+      "ordinal": 17,
+      "date": {
+        "year": 6,
+        "label": "6"
+      },
+      "title": "Sosigenes of Alexandria sets the fashion of the season",
+      "summary": "Style declares allegiance: the cut of a coat, a turn of phrase, a way of dating letters \"since the change\". Ptolemaic Egypt is drawing down forests and channels faster than they renew.",
+      "detail": null,
+      "entityIds": ["01KYTAYFY0C07SP66MWA2DB29N", "01KYTAYFZCJPMPX310MPX46E25"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYFY0C07SP66MWA2DB29N",
+          "patch": {
+            "influence": "sets the season"
+          },
+          "note": "Manners record the divergence more durably than treaties."
+        },
+        {
+          "entityId": "01KYTAYFZCJPMPX310MPX46E25",
+          "patch": {
+            "standing": "newly consequential"
+          },
+          "note": "A new name starts appearing in the registers."
+        }
+      ],
+      "lenses": ["daily-life", "cultural"],
+      "plausibility": {
+        "score": 0.74,
+        "rationale": "Fashion metabolizes politics faster than institutions do."
+      },
+      "distanceFromPod": 54,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.882Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYFZCNJPYXYGWDW9THWJ7",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eraId": "01KYTAYFZA92VXYPF2SNKPFJCC",
+      "ordinal": 18,
+      "date": {
+        "year": 13,
+        "label": "13"
+      },
+      "title": "Ptolemaic Egypt reorders its accounts under strained treasury",
+      "summary": "The ledgers of Ptolemaic Egypt run on short credit; every initiative competes with the interest bill. The council answers with a reform that costs three offices their perquisites and creates two new registers.",
+      "detail": null,
+      "entityIds": ["01KYTAYFY019608T0BNP14HZ8B", "01KYTAYFY0QBGXD2F4Y49NY34F"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYFY019608T0BNP14HZ8B",
+          "patch": {
+            "administration": "reformed under strained treasury"
+          },
+          "note": "Offices are consolidated; the registers survive their authors."
+        }
+      ],
+      "lenses": ["political"],
+      "plausibility": {
+        "score": 0.72,
+        "rationale": "Administrative reform is the standard discharge of fiscal and legitimacy pressure."
+      },
+      "distanceFromPod": 61,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.882Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYFZCAH305SM8CFKQ1ARZ",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eraId": "01KYTAYFZA92VXYPF2SNKPFJCC",
+      "ordinal": 19,
+      "date": {
+        "year": 20,
+        "label": "20"
+      },
+      "title": "The markets reprice around Ptolemaic Egypt",
+      "summary": "A large cohort comes of age around Ptolemaic Egypt with fewer places than claimants. Brokers adjust before any edict: contracts shorten, surety costs rise, and household stewards change what they store.",
+      "detail": null,
+      "entityIds": ["01KYTAYFY019608T0BNP14HZ8B"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYFY019608T0BNP14HZ8B",
+          "patch": {
+            "creditTerms": "shortened",
+            "householdStores": "deepened"
+          },
+          "note": "The market hedges; kitchens follow."
+        }
+      ],
+      "lenses": ["economic", "daily-life"],
+      "plausibility": {
+        "score": 0.5,
+        "rationale": "Price adjustment is the most reliable transmission channel of structural pressure. A chronicler would call this one surprising."
+      },
+      "distanceFromPod": 68,
+      "wildcard": true,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.882Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYFZCFMD4AFQJFR7K6NRH",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eraId": "01KYTAYFZA92VXYPF2SNKPFJCC",
+      "ordinal": 20,
+      "date": {
+        "year": 27,
+        "label": "27"
+      },
+      "title": "A working technique crosses the Roman Republic's border",
+      "summary": "What the Mouseion of Alexandria kept close now travels with journeymen. The story Ptolemaic Egypt tells about itself has not been updated for the new circumstances; someone will update it first.",
+      "detail": null,
+      "entityIds": ["01KYTAYFY0QBGXD2F4Y49NY34F", "01KYTAYFY15YEB2S8HA7S2BTC6"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYFY15YEB2S8HA7S2BTC6",
+          "patch": {
+            "technique": "acquired by hire"
+          },
+          "note": "Knowledge proves cheaper to hire than to guard."
+        }
+      ],
+      "lenses": ["technological", "economic"],
+      "plausibility": {
+        "score": 0.5,
+        "rationale": "Techniques diffuse along wage gradients; guarding them raises the wage. A chronicler would call this one surprising."
+      },
+      "distanceFromPod": 75,
+      "wildcard": true,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.882Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYFZNXWQ4JPSQQ18NXVZA",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eraId": "01KYTAYFZGKPMZ6RMX3B529QFX",
+      "ordinal": 21,
+      "date": {
+        "year": 36,
+        "label": "36"
+      },
+      "title": "Sosigenes of Alexandria sets the fashion of the season",
+      "summary": "Style declares allegiance: the cut of a coat, a turn of phrase, a way of dating letters \"since the change\". Rivals of The Roman Republic are re-equipping faster than its own arsenals admit.",
+      "detail": null,
+      "entityIds": ["01KYTAYFY0C07SP66MWA2DB29N"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYFY0C07SP66MWA2DB29N",
+          "patch": {
+            "influence": "sets the season"
+          },
+          "note": "Manners record the divergence more durably than treaties."
+        }
+      ],
+      "lenses": ["daily-life", "cultural"],
+      "plausibility": {
+        "score": 0.74,
+        "rationale": "Fashion metabolizes politics faster than institutions do."
+      },
+      "distanceFromPod": 84,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.888Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYFZPXJXHAW92Q65AFNZP",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eraId": "01KYTAYFZGKPMZ6RMX3B529QFX",
+      "ordinal": 22,
+      "date": {
+        "year": 47,
+        "label": "47"
+      },
+      "title": "Ptolemaic Egypt reorders its accounts under doctrinal quarrel",
+      "summary": "A dispute of principle inside The Roman Republic is becoming a dispute of office. The council answers with a reform that costs three offices their perquisites and creates two new registers.",
+      "detail": null,
+      "entityIds": ["01KYTAYFY019608T0BNP14HZ8B", "01KYTAYFY0QBGXD2F4Y49NY34F"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYFY019608T0BNP14HZ8B",
+          "patch": {
+            "administration": "reformed under doctrinal quarrel"
+          },
+          "note": "Offices are consolidated; the registers survive their authors."
+        }
+      ],
+      "lenses": ["political"],
+      "plausibility": {
+        "score": 0.72,
+        "rationale": "Administrative reform is the standard discharge of fiscal and legitimacy pressure."
+      },
+      "distanceFromPod": 95,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.888Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYFZP1NWJTXBC2BE18R2C",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eraId": "01KYTAYFZGKPMZ6RMX3B529QFX",
+      "ordinal": 23,
+      "date": {
+        "year": 58,
+        "label": "58"
+      },
+      "title": "The markets reprice around Ptolemaic Egypt",
+      "summary": "Two lean years in the districts around The Roman Republic would exhaust the granary math. Brokers adjust before any edict: contracts shorten, surety costs rise, and household stewards change what they store.",
+      "detail": null,
+      "entityIds": ["01KYTAYFY019608T0BNP14HZ8B"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYFY019608T0BNP14HZ8B",
+          "patch": {
+            "creditTerms": "shortened",
+            "householdStores": "deepened"
+          },
+          "note": "The market hedges; kitchens follow."
+        }
+      ],
+      "lenses": ["economic", "daily-life"],
+      "plausibility": {
+        "score": 0.5,
+        "rationale": "Price adjustment is the most reliable transmission channel of structural pressure. A chronicler would call this one surprising."
+      },
+      "distanceFromPod": 106,
+      "wildcard": true,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.888Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYFZPBGQDX1ZTHCNSNHFK",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eraId": "01KYTAYFZGKPMZ6RMX3B529QFX",
+      "ordinal": 24,
+      "date": {
+        "year": 69,
+        "label": "69"
+      },
+      "title": "A working technique crosses the Roman Republic's border",
+      "summary": "What the Mouseion of Alexandria kept close now travels with journeymen. Too much of what The Roman Republic eats and sells moves along a single corridor that others can tax or close.",
+      "detail": null,
+      "entityIds": ["01KYTAYFY0QBGXD2F4Y49NY34F", "01KYTAYFY15YEB2S8HA7S2BTC6"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYFY15YEB2S8HA7S2BTC6",
+          "patch": {
+            "technique": "acquired by hire"
+          },
+          "note": "Knowledge proves cheaper to hire than to guard."
+        }
+      ],
+      "lenses": ["technological", "economic"],
+      "plausibility": {
+        "score": 0.5,
+        "rationale": "Techniques diffuse along wage gradients; guarding them raises the wage. A chronicler would call this one surprising."
+      },
+      "distanceFromPod": 117,
+      "wildcard": true,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.888Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG013GP5Z6DZTYAM10FZ",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eraId": "01KYTAYFZTY8M6W2ZGFK7N3XKD",
+      "ordinal": 25,
+      "date": {
+        "year": 91,
+        "label": "91"
+      },
+      "title": "Ptolemaic Egypt reorders its accounts under harvest variance",
+      "summary": "Two lean years in the districts around The Roman Republic would exhaust the granary math. The council answers with a reform that costs three offices their perquisites and creates two new registers.",
+      "detail": null,
+      "entityIds": ["01KYTAYFY019608T0BNP14HZ8B", "01KYTAYFY0QBGXD2F4Y49NY34F"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYFY019608T0BNP14HZ8B",
+          "patch": {
+            "administration": "reformed under harvest variance"
+          },
+          "note": "Offices are consolidated; the registers survive their authors."
+        }
+      ],
+      "lenses": ["political"],
+      "plausibility": {
+        "score": 0.72,
+        "rationale": "Administrative reform is the standard discharge of fiscal and legitimacy pressure."
+      },
+      "distanceFromPod": 139,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.898Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG01P8EHZJTW3H2S7HY6",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eraId": "01KYTAYFZTY8M6W2ZGFK7N3XKD",
+      "ordinal": 26,
+      "date": {
+        "year": 104,
+        "label": "104"
+      },
+      "title": "The markets reprice around Ptolemaic Egypt",
+      "summary": "Markets around The Roman Republic still price in the last shock; hoarding begins at rumors now. Brokers adjust before any edict: contracts shorten, surety costs rise, and household stewards change what they store.",
+      "detail": null,
+      "entityIds": ["01KYTAYFY019608T0BNP14HZ8B"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYFY019608T0BNP14HZ8B",
+          "patch": {
+            "creditTerms": "shortened",
+            "householdStores": "deepened"
+          },
+          "note": "The market hedges; kitchens follow."
+        }
+      ],
+      "lenses": ["economic", "daily-life"],
+      "plausibility": {
+        "score": 0.78,
+        "rationale": "Price adjustment is the most reliable transmission channel of structural pressure."
+      },
+      "distanceFromPod": 152,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.898Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG01WPYX3YEN4A2RBTTM",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eraId": "01KYTAYFZTY8M6W2ZGFK7N3XKD",
+      "ordinal": 27,
+      "date": {
+        "year": 116,
+        "label": "116"
+      },
+      "title": "A working technique crosses the Roman Republic's border",
+      "summary": "What the Mouseion of Alexandria kept close now travels with journeymen. A large cohort comes of age around The Roman Republic with fewer places than claimants.",
+      "detail": null,
+      "entityIds": ["01KYTAYFY0QBGXD2F4Y49NY34F", "01KYTAYFY15YEB2S8HA7S2BTC6"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYFY15YEB2S8HA7S2BTC6",
+          "patch": {
+            "technique": "acquired by hire"
+          },
+          "note": "Knowledge proves cheaper to hire than to guard."
+        }
+      ],
+      "lenses": ["technological", "economic"],
+      "plausibility": {
+        "score": 0.66,
+        "rationale": "Techniques diffuse along wage gradients; guarding them raises the wage."
+      },
+      "distanceFromPod": 164,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.898Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG01TEMBJ1V6Q4KBRSDB",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eraId": "01KYTAYFZTY8M6W2ZGFK7N3XKD",
+      "ordinal": 28,
+      "date": {
+        "year": 141,
+        "label": "141"
+      },
+      "title": "The Roman Republic tests the new balance",
+      "summary": "A dispute of principle inside The Roman Republic is becoming a dispute of office. A probe at the margin (an envoy recalled, a toll raised, a garrison reinforced) measures how much the world has actually changed.",
+      "detail": null,
+      "entityIds": ["01KYTAYFY15YEB2S8HA7S2BTC6", "01KYTAYFY019608T0BNP14HZ8B"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYFY15YEB2S8HA7S2BTC6",
+          "patch": {
+            "posture": "probing"
+          },
+          "note": "The rival prices the new equilibrium in small provocations."
+        }
+      ],
+      "lenses": ["political"],
+      "plausibility": {
+        "score": 0.5,
+        "rationale": "Neighbors test any settlement whose guarantors look distracted. A chronicler would call this one surprising."
+      },
+      "distanceFromPod": 189,
+      "wildcard": true,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.898Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG017GSQHX6A4B7PADFP",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eraId": "01KYTAYFZTY8M6W2ZGFK7N3XKD",
+      "ordinal": 29,
+      "date": {
+        "year": 166,
+        "label": "166"
+      },
+      "title": "Ptolemaic Egypt reorders its accounts under price memory",
+      "summary": "Markets around The Roman Republic still price in the last shock; hoarding begins at rumors now. The council answers with a reform that costs three offices their perquisites and creates two new registers.",
+      "detail": null,
+      "entityIds": ["01KYTAYFY019608T0BNP14HZ8B", "01KYTAYFY0QBGXD2F4Y49NY34F"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYFY019608T0BNP14HZ8B",
+          "patch": {
+            "administration": "reformed under price memory"
+          },
+          "note": "Offices are consolidated; the registers survive their authors."
+        }
+      ],
+      "lenses": ["political"],
+      "plausibility": {
+        "score": 0.5,
+        "rationale": "Administrative reform is the standard discharge of fiscal and legitimacy pressure. A chronicler would call this one surprising."
+      },
+      "distanceFromPod": 214,
+      "wildcard": true,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.898Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG0D8594ZVM3AHR7KBWJ",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eraId": "01KYTAYG060JKNQWZC9CQQHJCS",
+      "ordinal": 30,
+      "date": {
+        "year": 176,
+        "label": "176"
+      },
+      "title": "The markets reprice around Ptolemaic Egypt",
+      "summary": "A working method has left the workshops that guarded it; Ptolemaic Egypt can no longer control who learns it. Brokers adjust before any edict: contracts shorten, surety costs rise, and household stewards change what they store.",
+      "detail": null,
+      "entityIds": ["01KYTAYFY019608T0BNP14HZ8B"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYFY019608T0BNP14HZ8B",
+          "patch": {
+            "creditTerms": "shortened",
+            "householdStores": "deepened"
+          },
+          "note": "The market hedges; kitchens follow."
+        }
+      ],
+      "lenses": ["economic", "daily-life"],
+      "plausibility": {
+        "score": 0.78,
+        "rationale": "Price adjustment is the most reliable transmission channel of structural pressure."
+      },
+      "distanceFromPod": 224,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": true,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.910Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG0DQSV995RX3RZM4Y9J",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eraId": "01KYTAYG060JKNQWZC9CQQHJCS",
+      "ordinal": 31,
+      "date": {
+        "year": 183,
+        "label": "183"
+      },
+      "title": "A working technique crosses the Roman Republic's border",
+      "summary": "What the Mouseion of Alexandria kept close now travels with journeymen. The story Ptolemaic Egypt tells about itself has not been updated for the new circumstances; someone will update it first.",
+      "detail": null,
+      "entityIds": ["01KYTAYFY0QBGXD2F4Y49NY34F", "01KYTAYFY15YEB2S8HA7S2BTC6"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYFY15YEB2S8HA7S2BTC6",
+          "patch": {
+            "technique": "acquired by hire"
+          },
+          "note": "Knowledge proves cheaper to hire than to guard."
+        }
+      ],
+      "lenses": ["technological", "economic"],
+      "plausibility": {
+        "score": 0.66,
+        "rationale": "Techniques diffuse along wage gradients; guarding them raises the wage."
+      },
+      "distanceFromPod": 231,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.910Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG0D9MQXPHGHCEMWRYRV",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eraId": "01KYTAYG060JKNQWZC9CQQHJCS",
+      "ordinal": 32,
+      "date": {
+        "year": 197,
+        "label": "197"
+      },
+      "title": "The Roman Republic tests the new balance",
+      "summary": "Too much of what Ptolemaic Egypt eats and sells moves along a single corridor that others can tax or close. A probe at the margin (an envoy recalled, a toll raised, a garrison reinforced) measures how much the world has actually changed.",
+      "detail": null,
+      "entityIds": ["01KYTAYFY15YEB2S8HA7S2BTC6", "01KYTAYFY019608T0BNP14HZ8B"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYFY15YEB2S8HA7S2BTC6",
+          "patch": {
+            "posture": "probing"
+          },
+          "note": "The rival prices the new equilibrium in small provocations."
+        }
+      ],
+      "lenses": ["political"],
+      "plausibility": {
+        "score": 0.69,
+        "rationale": "Neighbors test any settlement whose guarantors look distracted."
+      },
+      "distanceFromPod": 245,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.910Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG0D249RBPMJJS1N38YX",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eraId": "01KYTAYG060JKNQWZC9CQQHJCS",
+      "ordinal": 33,
+      "date": {
+        "year": 211,
+        "label": "211"
+      },
+      "title": "Ptolemaic Egypt reorders its accounts under technique spillover",
+      "summary": "A working method has left the workshops that guarded it; Ptolemaic Egypt can no longer control who learns it. The council answers with a reform that costs three offices their perquisites and creates two new registers.",
+      "detail": null,
+      "entityIds": ["01KYTAYFY019608T0BNP14HZ8B", "01KYTAYFY0QBGXD2F4Y49NY34F"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYFY019608T0BNP14HZ8B",
+          "patch": {
+            "administration": "reformed under technique spillover"
+          },
+          "note": "Offices are consolidated; the registers survive their authors."
+        }
+      ],
+      "lenses": ["political"],
+      "plausibility": {
+        "score": 0.5,
+        "rationale": "Administrative reform is the standard discharge of fiscal and legitimacy pressure. A chronicler would call this one surprising."
+      },
+      "distanceFromPod": 259,
+      "wildcard": true,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.910Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG0DPHJ7M91MP1ESNPJB",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eraId": "01KYTAYG060JKNQWZC9CQQHJCS",
+      "ordinal": 34,
+      "date": {
+        "year": 218,
+        "label": "218"
+      },
+      "title": "The markets reprice around Ptolemaic Egypt",
+      "summary": "The story Ptolemaic Egypt tells about itself has not been updated for the new circumstances; someone will update it first. Brokers adjust before any edict: contracts shorten, surety costs rise, and household stewards change what they store.",
+      "detail": null,
+      "entityIds": ["01KYTAYFY019608T0BNP14HZ8B"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYFY019608T0BNP14HZ8B",
+          "patch": {
+            "creditTerms": "shortened",
+            "householdStores": "deepened"
+          },
+          "note": "The market hedges; kitchens follow."
+        }
+      ],
+      "lenses": ["economic", "daily-life"],
+      "plausibility": {
+        "score": 0.5,
+        "rationale": "Price adjustment is the most reliable transmission channel of structural pressure. A chronicler would call this one surprising."
+      },
+      "distanceFromPod": 266,
+      "wildcard": true,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.910Z",
+        "mode": "mock"
+      }
+    }
+  ],
+  "entities": [
+    {
+      "id": "01KYTAYFY019608T0BNP14HZ8B",
+      "timelineId": "01KYTAYFX96DS1NW7R3EX516J7",
+      "slug": "ptolemaic-egypt",
+      "type": "nation",
+      "name": "Ptolemaic Egypt",
+      "description": "The power most immediately shaped by the divergence, seated at Alexandria.",
+      "initialState": {
+        "seat": "Alexandria",
+        "standing": "steady but watched",
+        "treasury": "strained"
+      },
+      "introducedByEventId": "01KYTAYFY076REY7BK53QXAGM2",
+      "bornYear": null,
+      "counterfactual": false,
+      "succeedsSlug": null,
+      "createdAt": "2026-07-30T20:20:11.840Z",
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "seed-consequences",
+        "templateVersion": "1.2.0",
+        "generatedAt": "2026-07-30T20:20:11.835Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYFY0C07SP66MWA2DB29N",
+      "timelineId": "01KYTAYFX96DS1NW7R3EX516J7",
+      "slug": "sosigenes-of-alexandria",
+      "type": "person",
+      "name": "Sosigenes of Alexandria",
+      "description": "A figure of Alexandria whose fortunes ride on the changed course of events.",
+      "initialState": {
+        "position": "well-placed observer",
+        "reputation": "rising"
+      },
+      "introducedByEventId": "01KYTAYFY076REY7BK53QXAGM2",
+      "bornYear": null,
+      "counterfactual": false,
+      "succeedsSlug": null,
+      "createdAt": "2026-07-30T20:20:11.840Z",
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "seed-consequences",
+        "templateVersion": "1.2.0",
+        "generatedAt": "2026-07-30T20:20:11.835Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYFY0QBGXD2F4Y49NY34F",
+      "timelineId": "01KYTAYFX96DS1NW7R3EX516J7",
+      "slug": "mouseion-of-alexandria",
+      "type": "institution",
+      "name": "The Mouseion of Alexandria",
+      "description": "The body in Alexandria that turns events into records and records into policy.",
+      "initialState": {
+        "agenda": "survey the changed circumstance",
+        "influence": "procedural but real"
+      },
+      "introducedByEventId": "01KYTAYFY0N67J3W52T5466EKQ",
+      "bornYear": null,
+      "counterfactual": false,
+      "succeedsSlug": null,
+      "createdAt": "2026-07-30T20:20:11.840Z",
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "seed-consequences",
+        "templateVersion": "1.2.0",
+        "generatedAt": "2026-07-30T20:20:11.835Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYFY15YEB2S8HA7S2BTC6",
+      "timelineId": "01KYTAYFX96DS1NW7R3EX516J7",
+      "slug": "roman-republic",
+      "type": "nation",
+      "name": "The Roman Republic",
+      "description": "The neighboring power whose plans assumed the old course of history.",
+      "initialState": {
+        "posture": "recalculating",
+        "intelligence": "secondhand and late"
+      },
+      "introducedByEventId": "01KYTAYFY0VPC6A0STG12KVSH0",
+      "bornYear": null,
+      "counterfactual": false,
+      "succeedsSlug": null,
+      "createdAt": "2026-07-30T20:20:11.840Z",
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "seed-consequences",
+        "templateVersion": "1.2.0",
+        "generatedAt": "2026-07-30T20:20:11.835Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYFYFK8B5PCRQN5B6HGVZ",
+      "timelineId": "01KYTAYFX96DS1NW7R3EX516J7",
+      "slug": "the-improved-method",
+      "type": "technology",
+      "name": "The Improved Method",
+      "description": "A working technique, escaped from the shops that guarded it, now spreading by apprenticeship.",
+      "initialState": {
+        "diffusion": "apprentice to apprentice"
+      },
+      "introducedByEventId": "01KYTAYFYFQ1TNN8RM7YCMNWQQ",
+      "bornYear": null,
+      "counterfactual": false,
+      "succeedsSlug": null,
+      "createdAt": "2026-07-30T20:20:11.855Z",
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.851Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYFZ6P7YV639VN35MC0Y8",
+      "timelineId": "01KYTAYFX96DS1NW7R3EX516J7",
+      "slug": "the-plain-speech-circle",
+      "type": "movement",
+      "name": "The Plain Speech Circle",
+      "description": "A loose movement of clerks and preachers who want the new circumstances named honestly.",
+      "initialState": {
+        "membership": "clerks, preachers, a few merchants"
+      },
+      "introducedByEventId": "01KYTAYFZ6YCKH83SZJCM5MPK1",
+      "bornYear": null,
+      "counterfactual": false,
+      "succeedsSlug": null,
+      "createdAt": "2026-07-30T20:20:11.878Z",
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.876Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYFZCJPMPX310MPX46E25",
+      "timelineId": "01KYTAYFX96DS1NW7R3EX516J7",
+      "slug": "the-younger-generation",
+      "type": "movement",
+      "name": "The Second Generation",
+      "description": "Those born after the divergence, for whom the changed world is simply the world.",
+      "initialState": {
+        "memory": "none of the old course"
+      },
+      "introducedByEventId": "01KYTAYFZCSQ6QA39CK4RW3SFN",
+      "bornYear": null,
+      "counterfactual": false,
+      "succeedsSlug": null,
+      "createdAt": "2026-07-30T20:20:11.884Z",
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.882Z",
+        "mode": "mock"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "01KYTAYFY0403BG91BP39NQX8N",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "fromEventId": "01KYTAYFY076REY7BK53QXAGM2",
+      "toEventId": "01KYTAYFY0N67J3W52T5466EKQ",
+      "kind": "causes",
+      "strength": 0.85
+    },
+    {
+      "id": "01KYTAYFY13JDY7ESEBK3N5T3R",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "fromEventId": "01KYTAYFY076REY7BK53QXAGM2",
+      "toEventId": "01KYTAYFY018FWT3RQF7F2Y1X4",
+      "kind": "causes",
+      "strength": 0.7
+    },
+    {
+      "id": "01KYTAYFY1V23PB2VP1BSB15CB",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "fromEventId": "01KYTAYFY0N67J3W52T5466EKQ",
+      "toEventId": "01KYTAYFY0VPC6A0STG12KVSH0",
+      "kind": "enables",
+      "strength": 0.5
+    },
+    {
+      "id": "01KYTAYFY1A7H8A0BN0DRK6PAV",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "fromEventId": "01KYTAYFY076REY7BK53QXAGM2",
+      "toEventId": "01KYTAYFY0VPC6A0STG12KVSH0",
+      "kind": "causes",
+      "strength": 0.65
+    },
+    {
+      "id": "01KYTAYFYFZ2F4K3XP04BE19WW",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "fromEventId": "01KYTAYFY0VPC6A0STG12KVSH0",
+      "toEventId": "01KYTAYFYFFW728N6PYT4WJRXR",
+      "kind": "causes",
+      "strength": 0.6
+    },
+    {
+      "id": "01KYTAYFYFN19ENA5CK2THKXRY",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "fromEventId": "01KYTAYFYFFW728N6PYT4WJRXR",
+      "toEventId": "01KYTAYFYFQ1TNN8RM7YCMNWQQ",
+      "kind": "causes",
+      "strength": 0.5363089322578162
+    },
+    {
+      "id": "01KYTAYFYFRKMB9402DSVXGEW9",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "fromEventId": "01KYTAYFYFQ1TNN8RM7YCMNWQQ",
+      "toEventId": "01KYTAYFYFBDGV0CV9WD3SD8GD",
+      "kind": "enables",
+      "strength": 0.6978567230748013
+    },
+    {
+      "id": "01KYTAYFYFX4R05TNV0N2DTQHS",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "fromEventId": "01KYTAYFYFBDGV0CV9WD3SD8GD",
+      "toEventId": "01KYTAYFYF9KYM2C5FPD3D6SXX",
+      "kind": "enables",
+      "strength": 0.7076354486867785
+    },
+    {
+      "id": "01KYTAYFYZRH6R3E7HZE8V6DGD",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "fromEventId": "01KYTAYFYF9KYM2C5FPD3D6SXX",
+      "toEventId": "01KYTAYFYZWJZKBB2PJMT8MHYS",
+      "kind": "causes",
+      "strength": 0.6
+    },
+    {
+      "id": "01KYTAYFYZSZYK2S6TAY5V7G3D",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "fromEventId": "01KYTAYFYZWJZKBB2PJMT8MHYS",
+      "toEventId": "01KYTAYFYZW0YCTN7FPZ8ADR5F",
+      "kind": "enables",
+      "strength": 0.6202444338705391
+    },
+    {
+      "id": "01KYTAYFYZY8X0MAF0YVD2D0V4",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "fromEventId": "01KYTAYFYZW0YCTN7FPZ8ADR5F",
+      "toEventId": "01KYTAYFYZST7EFVTECC9STEVF",
+      "kind": "causes",
+      "strength": 0.7525334022007882
+    },
+    {
+      "id": "01KYTAYFYZ1EDTQES2Q7GYDCEK",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "fromEventId": "01KYTAYFYZST7EFVTECC9STEVF",
+      "toEventId": "01KYTAYFYZW9MTCF9KVQ3FR1N1",
+      "kind": "causes",
+      "strength": 0.6466530536068603
+    },
+    {
+      "id": "01KYTAYFZ65HRG4XAVZTBKZCWK",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "fromEventId": "01KYTAYFYZW9MTCF9KVQ3FR1N1",
+      "toEventId": "01KYTAYFZ67M61HZ0676920SBY",
+      "kind": "causes",
+      "strength": 0.6
+    },
+    {
+      "id": "01KYTAYFZ6MJ0XQYHEYY60B27T",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "fromEventId": "01KYTAYFZ67M61HZ0676920SBY",
+      "toEventId": "01KYTAYFZ6YCKH83SZJCM5MPK1",
+      "kind": "enables",
+      "strength": 0.7472805673489347
+    },
+    {
+      "id": "01KYTAYFZ6X6EB8QFPB3RQCSNZ",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "fromEventId": "01KYTAYFZ6YCKH83SZJCM5MPK1",
+      "toEventId": "01KYTAYFZ6YKH5NK5FDRG8MMXQ",
+      "kind": "causes",
+      "strength": 0.635191822075285
+    },
+    {
+      "id": "01KYTAYFZ63FYE7H26D5J415TZ",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "fromEventId": "01KYTAYFZ6YKH5NK5FDRG8MMXQ",
+      "toEventId": "01KYTAYFZ6E2H57VEGC1KSTP15",
+      "kind": "enables",
+      "strength": 0.6679714822676033
+    },
+    {
+      "id": "01KYTAYFZC638KPDQJ769DQH31",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "fromEventId": "01KYTAYFZ6E2H57VEGC1KSTP15",
+      "toEventId": "01KYTAYFZC99ERM7XQ3F412JMT",
+      "kind": "causes",
+      "strength": 0.6
+    },
+    {
+      "id": "01KYTAYFZCYEMKDECNHTG62TX7",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "fromEventId": "01KYTAYFZC99ERM7XQ3F412JMT",
+      "toEventId": "01KYTAYFZCSQ6QA39CK4RW3SFN",
+      "kind": "enables",
+      "strength": 0.5558998334920033
+    },
+    {
+      "id": "01KYTAYFZC7GQ2VT4PQ8RVHMEP",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "fromEventId": "01KYTAYFZCSQ6QA39CK4RW3SFN",
+      "toEventId": "01KYTAYFZCNJPYXYGWDW9THWJ7",
+      "kind": "enables",
+      "strength": 0.5713639735011384
+    },
+    {
+      "id": "01KYTAYFZC4NKBF5J8BT9Y3VT7",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "fromEventId": "01KYTAYFZCNJPYXYGWDW9THWJ7",
+      "toEventId": "01KYTAYFZCAH305SM8CFKQ1ARZ",
+      "kind": "causes",
+      "strength": 0.6402384407352656
+    },
+    {
+      "id": "01KYTAYFZCG3H7Y15BY11AV5MM",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "fromEventId": "01KYTAYFZCAH305SM8CFKQ1ARZ",
+      "toEventId": "01KYTAYFZCFMD4AFQJFR7K6NRH",
+      "kind": "enables",
+      "strength": 0.683512637228705
+    },
+    {
+      "id": "01KYTAYFZPSCT1ARKRS8JGFXBN",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "fromEventId": "01KYTAYFZCFMD4AFQJFR7K6NRH",
+      "toEventId": "01KYTAYFZNXWQ4JPSQQ18NXVZA",
+      "kind": "causes",
+      "strength": 0.6
+    },
+    {
+      "id": "01KYTAYFZPV4JCGJ539KT3QDY7",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "fromEventId": "01KYTAYFZNXWQ4JPSQQ18NXVZA",
+      "toEventId": "01KYTAYFZPXJXHAW92Q65AFNZP",
+      "kind": "enables",
+      "strength": 0.7060489930212498
+    },
+    {
+      "id": "01KYTAYFZP4JFV4HSH4TAXNE78",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "fromEventId": "01KYTAYFZPXJXHAW92Q65AFNZP",
+      "toEventId": "01KYTAYFZP1NWJTXBC2BE18R2C",
+      "kind": "enables",
+      "strength": 0.509608750604093
+    },
+    {
+      "id": "01KYTAYFZPE2QFHDKC2J2MF7JJ",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "fromEventId": "01KYTAYFZP1NWJTXBC2BE18R2C",
+      "toEventId": "01KYTAYFZPBGQDX1ZTHCNSNHFK",
+      "kind": "causes",
+      "strength": 0.7411960693774745
+    },
+    {
+      "id": "01KYTAYG014HKAFVA3N5C6Y4Q4",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "fromEventId": "01KYTAYFZPBGQDX1ZTHCNSNHFK",
+      "toEventId": "01KYTAYG013GP5Z6DZTYAM10FZ",
+      "kind": "causes",
+      "strength": 0.6
+    },
+    {
+      "id": "01KYTAYG01XVG20M44VXCE29JE",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "fromEventId": "01KYTAYG013GP5Z6DZTYAM10FZ",
+      "toEventId": "01KYTAYG01P8EHZJTW3H2S7HY6",
+      "kind": "enables",
+      "strength": 0.7218542520422488
+    },
+    {
+      "id": "01KYTAYG02T73F8BR3VPW8330Y",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "fromEventId": "01KYTAYG01P8EHZJTW3H2S7HY6",
+      "toEventId": "01KYTAYG01WPYX3YEN4A2RBTTM",
+      "kind": "enables",
+      "strength": 0.7274383466225117
+    },
+    {
+      "id": "01KYTAYG0D72JKCH7KFAQ2GGXQ",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "fromEventId": "01KYTAYG017GSQHX6A4B7PADFP",
+      "toEventId": "01KYTAYG0D8594ZVM3AHR7KBWJ",
+      "kind": "causes",
+      "strength": 0.6
+    },
+    {
+      "id": "01KYTAYG0D0SH5AD1DW5H8425C",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "fromEventId": "01KYTAYG0D8594ZVM3AHR7KBWJ",
+      "toEventId": "01KYTAYG0DQSV995RX3RZM4Y9J",
+      "kind": "causes",
+      "strength": 0.6639125436311588
+    },
+    {
+      "id": "01KYTAYG0DQSRSFPM07GBGAE4Z",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "fromEventId": "01KYTAYG0D249RBPMJJS1N38YX",
+      "toEventId": "01KYTAYG0DPHJ7M91MP1ESNPJB",
+      "kind": "causes",
+      "strength": 0.7911741235526278
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "01KYTAYG2GAFRXFD5SJTM3PVGQ",
+      "eventId": "01KYTAYFY018FWT3RQF7F2Y1X4",
+      "kind": "telegram",
+      "title": "Wire from Alexandria, 47 BC",
+      "body": {
+        "kind": "telegram",
+        "office": "COURIER STATION ALEXANDRIA",
+        "from": "Arsinoë Philopator",
+        "to": "THE OFFICE OF THE SECRETARY",
+        "filedAt": "47 BC, 5h",
+        "words": [
+          "MATTER CONFIRMED THIS DAY 47 BC",
+          "SUBSTANCE AS REPORTED GRAIN PRICES SHIFT IN THE ALEXANDRIA MARKETS",
+          "LOCAL PARTIES ALREADY MOVING",
+          "REQUIRE INSTRUCTION BEFORE COMMITTING FUNDS",
+          "DELAY COSTS MORE THAN ERROR"
+        ],
+        "endorsement": "Received and copied to the second desk."
+      },
+      "stylingHints": {
+        "tone": null,
+        "period": null
+      },
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "artifact-telegram",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:11.984Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG1Z8HDZCCH144QR88Y4",
+      "eventId": "01KYTAYFY076REY7BK53QXAGM2",
+      "kind": "newspaper",
+      "title": "ACTA OF ALEXANDRIA, 48 BC",
+      "body": {
+        "kind": "newspaper",
+        "masthead": "ACTA OF ALEXANDRIA",
+        "dateline": "Alexandria, 48 BC; price: what the crier asks",
+        "headline": "THE ARCHIVE STANDS",
+        "subhead": "From our own correspondents; the particulars as far as they can be known",
+        "columns": [
+          {
+            "heading": null,
+            "paragraphs": [
+              "The Library of Alexandria never burns in 48 BC. In Alexandria the criers say little and the letter-writers say too much; between them, a usable account of the new situation takes a season to form.",
+              "Those closest to the affair counsel patience; those furthest from it, as usual, counsel everything else. The Mouseion of Alexandria is said to be preparing an accounting, which is what it is always said to be preparing."
+            ]
+          },
+          {
+            "heading": "The view from the grain exchange",
+            "paragraphs": [
+              "Prices answered before opinions did. Dealers in grain report the season's contracts rewritten twice in a fortnight, and the porters, who always know first, have raised their rates.",
+              "It is meanwhile reported that position=well-placed observer; reputation=rising."
+            ]
+          }
+        ],
+        "notices": [
+          "Grain measures certified at the temple scales; short measures answer to the eparch.",
+          "A copyist, neat hand, seeks engagement by the season. Ask at the second colonnade.",
+          "Lost: one seal-ring, lion device. Reward in silver, no questions."
+        ]
+      },
+      "stylingHints": {
+        "tone": null,
+        "period": null
+      },
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "artifact-newspaper",
+        "templateVersion": "1.1.0",
+        "generatedAt": "2026-07-30T20:20:11.967Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG26X524Y5FH6ADCJTB3",
+      "eventId": "01KYTAYFY0N67J3W52T5466EKQ",
+      "kind": "letter",
+      "title": "Letter of Theodotos of Chios on the mouseion of alexandria convenes over the changed course",
+      "body": {
+        "kind": "letter",
+        "from": "Theodotos of Chios",
+        "to": "my brother in the trade",
+        "place": "Alexandria",
+        "dateLabel": "48 BC",
+        "salutation": "Brother,",
+        "paragraphs": [
+          "You will have heard some version of it by now, so let me give you the true one before rumor improves it further. The Mouseion of Alexandria meets in extraordinary session. Sosigenes of Alexandria argues that the moment must be committed to record before rumor rewrites it; a survey of holdings, obligations, and precedents is ordered.",
+          "What it means for us: the grain contracts must be re-sworn, and I would not extend credit past the season until we see how the Mouseion of Alexandria settles. Aunt Zoe asks after your health and whether the northern road is safe; I have told her yes to the first and lied about the second.",
+          "Send word by the first reliable carrier. And send the account-book. The real one."
+        ],
+        "closing": "Your brother, in haste,",
+        "signature": "Theodotos",
+        "postscript": "P.S. The price of candles has doubled. Draw your own conclusions about how late the council is sitting."
+      },
+      "stylingHints": {
+        "tone": null,
+        "period": null
+      },
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "artifact-letter",
+        "templateVersion": "1.1.0",
+        "generatedAt": "2026-07-30T20:20:11.974Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG2Q75H61FMHK5ZN0N1M",
+      "eventId": "01KYTAYFY0VPC6A0STG12KVSH0",
+      "kind": "classified",
+      "title": "Notices, Alexandria, 46 BC",
+      "body": {
+        "kind": "classified",
+        "publication": "The Alexandria Register",
+        "dateLabel": "46 BC",
+        "sections": [
+          {
+            "heading": "Wanted",
+            "notices": [
+              "Steady hands for the season, paid weekly, no questions about the last place.",
+              "Anyone with news of the northern consignment. The owner has stopped expecting it and now only wants to know."
+            ]
+          },
+          {
+            "heading": "For sale or exchange",
+            "notices": [
+              "Grain measures certified at the temple scales; short measures answer to the eparch.",
+              "A copyist, neat hand, seeks engagement by the season. Ask at the second colonnade.",
+              "Household effects of a family leaving the district. Everything must go by the week end; the reason is not your business."
+            ]
+          },
+          {
+            "heading": "Personal",
+            "notices": [
+              "To the party who knows what was said at the quay: it need not go further, and it will not, if matters are settled."
+            ]
+          }
+        ]
+      },
+      "stylingHints": {
+        "tone": null,
+        "period": null
+      },
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "artifact-classified",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:11.991Z",
+        "mode": "mock"
+      }
+    }
+  ],
+  "convergencePoints": [
+    {
+      "id": "01KYTAYFY6JFK3Z2Z1FEYSCQ34",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eventId": "01KYTAYFY076REY7BK53QXAGM2",
+      "anchorId": "bl-alexandria-fire",
+      "similarityNote": "Structure reasserts itself; the shape of \"Fire reaches the Library of Alexandria\" emerges here despite the divergence.",
+      "attractor": "technological",
+      "latenessYears": 0,
+      "pathNote": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "convergence-scan",
+        "templateVersion": "1.4.0",
+        "generatedAt": "2026-07-30T20:20:11.846Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYFYM3GY4QRJAASB4QP2D",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eventId": "01KYTAYFYFFW728N6PYT4WJRXR",
+      "anchorId": "bl-caesar-assassinated",
+      "similarityNote": "Structure reasserts itself; the shape of \"Caesar is assassinated\" emerges here despite the divergence.",
+      "attractor": "economic",
+      "latenessYears": -1,
+      "pathNote": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "convergence-scan",
+        "templateVersion": "1.4.0",
+        "generatedAt": "2026-07-30T20:20:11.860Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYFZ2SS5Y8XW31VV6JH7C",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eventId": "01KYTAYFYZST7EFVTECC9STEVF",
+      "anchorId": "bl-egypt-annexed",
+      "similarityNote": "Structure reasserts itself; the shape of \"Rome annexes Egypt\" emerges here despite the divergence.",
+      "attractor": "demographic",
+      "latenessYears": 0,
+      "pathNote": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "convergence-scan",
+        "templateVersion": "1.4.0",
+        "generatedAt": "2026-07-30T20:20:11.875Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG0FZQNXJX8N1HWTZ5AV",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eventId": "01KYTAYG0D8594ZVM3AHR7KBWJ",
+      "anchorId": "bl-marcus-meditations",
+      "similarityNote": "Structure reasserts itself; the shape of \"Marcus Aurelius keeps the Meditations\" emerges here despite the divergence.",
+      "attractor": "geographic",
+      "latenessYears": 1,
+      "pathNote": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "convergence-scan",
+        "templateVersion": "1.4.0",
+        "generatedAt": "2026-07-30T20:20:11.919Z",
+        "mode": "mock"
+      }
+    }
+  ],
+  "critiqueReports": [
+    {
+      "id": "01KYTAYFY45TXJ2JSKEEMRJHZ9",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "batchId": "01KYTAYFY4JXEBXWD5V3QYR35M",
+      "eraId": "01KYTAYFXVS8NWJRJ5NSWNFZX1",
+      "verdicts": [
+        {
+          "eventId": "01KYTAYFY076REY7BK53QXAGM2",
+          "issues": [
+            {
+              "type": "presentism",
+              "severity": "note",
+              "note": "Phrasing edges modern; acceptable, but watch the vocabulary."
+            }
+          ],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYFY0N67J3W52T5466EKQ",
+          "issues": [],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYFY018FWT3RQF7F2Y1X4",
+          "issues": [],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYFY0VPC6A0STG12KVSH0",
+          "issues": [],
+          "verdict": "pass"
+        }
+      ],
+      "createdAt": "2026-07-30T20:20:11.844Z",
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "seed-consequences",
+        "templateVersion": "1.2.0",
+        "generatedAt": "2026-07-30T20:20:11.835Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYFYJBZBJTMW6XE07C8H4",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "batchId": "01KYTAYFYJ3M9TJ3B83XH12FAM",
+      "eraId": "01KYTAYFYBGFEWM06MWTW44980",
+      "verdicts": [
+        {
+          "eventId": "01KYTAYFYFFW728N6PYT4WJRXR",
+          "issues": [
+            {
+              "type": "presentism",
+              "severity": "note",
+              "note": "Phrasing edges modern; acceptable, but watch the vocabulary."
+            }
+          ],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYFYFQ1TNN8RM7YCMNWQQ",
+          "issues": [],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYFYFBDGV0CV9WD3SD8GD",
+          "issues": [
+            {
+              "type": "presentism",
+              "severity": "note",
+              "note": "Phrasing edges modern; acceptable, but watch the vocabulary."
+            }
+          ],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYFYF9KYM2C5FPD3D6SXX",
+          "issues": [],
+          "verdict": "pass"
+        }
+      ],
+      "createdAt": "2026-07-30T20:20:11.858Z",
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.851Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYFZ18AHWPYXSSF14JGZV",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "batchId": "01KYTAYFZ1X16K2ADA55KVF1V6",
+      "eraId": "01KYTAYFYYNS0CASTKD2K89GEY",
+      "verdicts": [
+        {
+          "eventId": "01KYTAYFYZWJZKBB2PJMT8MHYS",
+          "issues": [],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYFYZW0YCTN7FPZ8ADR5F",
+          "issues": [
+            {
+              "type": "presentism",
+              "severity": "note",
+              "note": "Phrasing edges modern; acceptable, but watch the vocabulary."
+            }
+          ],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYFYZST7EFVTECC9STEVF",
+          "issues": [],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYFYZW9MTCF9KVQ3FR1N1",
+          "issues": [
+            {
+              "type": "implausible-leap",
+              "severity": "fail",
+              "note": "The stated causes cannot carry this outcome (self-assessed plausibility 0.3); no regeneration will change the underlying claim."
+            },
+            {
+              "type": "great-man-overreach",
+              "severity": "warning",
+              "note": "The draft leans on individual daring where the snapshot offers no structural door."
+            }
+          ],
+          "verdict": "dispute"
+        }
+      ],
+      "createdAt": "2026-07-30T20:20:11.873Z",
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.870Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYFZ7D761XSH2KH5E23YA",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "batchId": "01KYTAYFZ7E02KFTJR7B5GBD43",
+      "eraId": "01KYTAYFZ4H60TMN2KM58RHMZ5",
+      "verdicts": [
+        {
+          "eventId": "01KYTAYFZ67M61HZ0676920SBY",
+          "issues": [],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYFZ6YCKH83SZJCM5MPK1",
+          "issues": [
+            {
+              "type": "presentism",
+              "severity": "note",
+              "note": "Phrasing edges modern; acceptable, but watch the vocabulary."
+            }
+          ],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYFZ6YKH5NK5FDRG8MMXQ",
+          "issues": [],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYFZ6E2H57VEGC1KSTP15",
+          "issues": [],
+          "verdict": "pass"
+        }
+      ],
+      "createdAt": "2026-07-30T20:20:11.879Z",
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.876Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYFZEMDKZAYMNHCG66C5W",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "batchId": "01KYTAYFZERXTSR950QMMZXNQW",
+      "eraId": "01KYTAYFZA92VXYPF2SNKPFJCC",
+      "verdicts": [
+        {
+          "eventId": "01KYTAYFZC99ERM7XQ3F412JMT",
+          "issues": [
+            {
+              "type": "presentism",
+              "severity": "note",
+              "note": "Phrasing edges modern; acceptable, but watch the vocabulary."
+            }
+          ],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYFZCSQ6QA39CK4RW3SFN",
+          "issues": [],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYFZCNJPYXYGWDW9THWJ7",
+          "issues": [],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYFZCAH305SM8CFKQ1ARZ",
+          "issues": [],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYFZCFMD4AFQJFR7K6NRH",
+          "issues": [
+            {
+              "type": "presentism",
+              "severity": "note",
+              "note": "Phrasing edges modern; acceptable, but watch the vocabulary."
+            }
+          ],
+          "verdict": "pass"
+        }
+      ],
+      "createdAt": "2026-07-30T20:20:11.886Z",
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.882Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYFZQSP5HYEYHPZW6P8Q3",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "batchId": "01KYTAYFZQ1WSH3MN74PJNAY8X",
+      "eraId": "01KYTAYFZGKPMZ6RMX3B529QFX",
+      "verdicts": [
+        {
+          "eventId": "01KYTAYFZNXWQ4JPSQQ18NXVZA",
+          "issues": [
+            {
+              "type": "presentism",
+              "severity": "note",
+              "note": "Phrasing edges modern; acceptable, but watch the vocabulary."
+            }
+          ],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYFZPXJXHAW92Q65AFNZP",
+          "issues": [],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYFZP1NWJTXBC2BE18R2C",
+          "issues": [
+            {
+              "type": "presentism",
+              "severity": "note",
+              "note": "Phrasing edges modern; acceptable, but watch the vocabulary."
+            }
+          ],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYFZPBGQDX1ZTHCNSNHFK",
+          "issues": [],
+          "verdict": "pass"
+        }
+      ],
+      "createdAt": "2026-07-30T20:20:11.895Z",
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.888Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG031XZ6WT7YT19N8KT4",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "batchId": "01KYTAYG0380RTQ3629MPRWRAN",
+      "eraId": "01KYTAYFZTY8M6W2ZGFK7N3XKD",
+      "verdicts": [
+        {
+          "eventId": "01KYTAYG013GP5Z6DZTYAM10FZ",
+          "issues": [
+            {
+              "type": "presentism",
+              "severity": "note",
+              "note": "Phrasing edges modern; acceptable, but watch the vocabulary."
+            }
+          ],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYG01P8EHZJTW3H2S7HY6",
+          "issues": [
+            {
+              "type": "presentism",
+              "severity": "note",
+              "note": "Phrasing edges modern; acceptable, but watch the vocabulary."
+            }
+          ],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYG01WPYX3YEN4A2RBTTM",
+          "issues": [],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYG01TEMBJ1V6Q4KBRSDB",
+          "issues": [],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYG017GSQHX6A4B7PADFP",
+          "issues": [],
+          "verdict": "pass"
+        }
+      ],
+      "createdAt": "2026-07-30T20:20:11.907Z",
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.898Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG0EF406WG7N3RETT4NF",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "batchId": "01KYTAYG0ECHR79ZBXBFZT54JA",
+      "eraId": "01KYTAYG060JKNQWZC9CQQHJCS",
+      "verdicts": [
+        {
+          "eventId": "01KYTAYG0D8594ZVM3AHR7KBWJ",
+          "issues": [],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYG0DQSV995RX3RZM4Y9J",
+          "issues": [],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYG0D9MQXPHGHCEMWRYRV",
+          "issues": [],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYG0D249RBPMJJS1N38YX",
+          "issues": [],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYG0DPHJ7M91MP1ESNPJB",
+          "issues": [
+            {
+              "type": "presentism",
+              "severity": "note",
+              "note": "Phrasing edges modern; acceptable, but watch the vocabulary."
+            }
+          ],
+          "verdict": "pass"
+        }
+      ],
+      "createdAt": "2026-07-30T20:20:11.918Z",
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.910Z",
+        "mode": "mock"
+      }
+    }
+  ],
+  "biographies": [],
+  "courtRecords": [],
+  "claims": [
+    {
+      "id": "01KYTAYFYJK4PRR8E4CVRGXW1N",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eventId": "01KYTAYFYF9KYM2C5FPD3D6SXX",
+      "year": -38,
+      "body": {
+        "kind": "regional-index",
+        "region": "Mediterranean",
+        "index": "population",
+        "value": 51,
+        "delta": 0,
+        "note": "A settled generation: the parish rolls lengthen at the pace they always do when nothing catches fire."
+      },
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.858Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYFYJ0MBT0WVWY84AQKJQ",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eventId": "01KYTAYFYF9KYM2C5FPD3D6SXX",
+      "year": -38,
+      "body": {
+        "kind": "regional-index",
+        "region": "Mediterranean",
+        "index": "economicVitality",
+        "value": 50,
+        "delta": 0,
+        "note": "The books balance about as they did before; the divergence has not yet reached the counting house."
+      },
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.858Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYFYKSVH7N30Z03X1EHQ2",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eventId": "01KYTAYFYF9KYM2C5FPD3D6SXX",
+      "year": -38,
+      "body": {
+        "kind": "region-control",
+        "region": "Mediterranean",
+        "holder": "ptolemaic-egypt",
+        "grip": "contested",
+        "note": "Ptolemaic Egypt holds the theatre this era, but not everywhere, and not cheaply."
+      },
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.858Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYFYKSW2SF490GMR1XVAJ",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eventId": "01KYTAYFYFQ1TNN8RM7YCMNWQQ",
+      "year": -43,
+      "body": {
+        "kind": "name-drift",
+        "nameKind": "institution",
+        "attested": "the chancery",
+        "drifted": "the standing office",
+        "note": "What began as an emergency committee kept sitting, and kept the plain name it had been given in haste."
+      },
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.858Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYFZ1M6A27HKYRED6NBS4",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eventId": "01KYTAYFYZW9MTCF9KVQ3FR1N1",
+      "year": -25,
+      "body": {
+        "kind": "regional-index",
+        "region": "Mediterranean",
+        "index": "population",
+        "value": 54,
+        "delta": 3,
+        "note": "A settled generation: the parish rolls lengthen at the pace they always do when nothing catches fire."
+      },
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.873Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYFZ2CNQ2VADNJ90M99AW",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eventId": "01KYTAYFYZW9MTCF9KVQ3FR1N1",
+      "year": -25,
+      "body": {
+        "kind": "regional-index",
+        "region": "Mediterranean",
+        "index": "economicVitality",
+        "value": 49,
+        "delta": -1,
+        "note": "The books balance about as they did before; the divergence has not yet reached the counting house."
+      },
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.873Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYFZ2KF3PGPTW7R5N9SS6",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eventId": "01KYTAYFYZW9MTCF9KVQ3FR1N1",
+      "year": -25,
+      "body": {
+        "kind": "region-control",
+        "region": "Mediterranean",
+        "holder": "ptolemaic-egypt",
+        "grip": "contested",
+        "note": "Ptolemaic Egypt holds the theatre this era, but not everywhere, and not cheaply."
+      },
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.873Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYFZ8H2GWMCGWEZBNWRZ9",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eventId": "01KYTAYFZ6E2H57VEGC1KSTP15",
+      "year": -4,
+      "body": {
+        "kind": "regional-index",
+        "region": "Mediterranean",
+        "index": "population",
+        "value": 56,
+        "delta": 2,
+        "note": "A settled generation: the parish rolls lengthen at the pace they always do when nothing catches fire."
+      },
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.880Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYFZ8F4S3DM0DNSWFBFA2",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eventId": "01KYTAYFZ6E2H57VEGC1KSTP15",
+      "year": -4,
+      "body": {
+        "kind": "regional-index",
+        "region": "Mediterranean",
+        "index": "economicVitality",
+        "value": 51,
+        "delta": 2,
+        "note": "The books balance about as they did before; the divergence has not yet reached the counting house."
+      },
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.880Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYFZ8XHJRSPQS4KDFTJV1",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eventId": "01KYTAYFZ6E2H57VEGC1KSTP15",
+      "year": -4,
+      "body": {
+        "kind": "region-control",
+        "region": "Mediterranean",
+        "holder": "ptolemaic-egypt",
+        "grip": "contested",
+        "note": "Ptolemaic Egypt holds the theatre this era, but not everywhere, and not cheaply."
+      },
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.880Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYFZEPSGJ756XAYPQGDC6",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eventId": "01KYTAYFZCFMD4AFQJFR7K6NRH",
+      "year": 30,
+      "body": {
+        "kind": "regional-index",
+        "region": "Mediterranean",
+        "index": "population",
+        "value": 51,
+        "delta": -5,
+        "note": "The strain of the era is paid in households: levies, bad harvests, and the quiet migration that follows both."
+      },
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.886Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYFZEKW1J5YQ3GMKBRQ42",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eventId": "01KYTAYFZCFMD4AFQJFR7K6NRH",
+      "year": 30,
+      "body": {
+        "kind": "regional-index",
+        "region": "Mediterranean",
+        "index": "economicVitality",
+        "value": 55,
+        "delta": 4,
+        "note": "Far enough from the divergence for its second-order effects to reach the markets rather than the chronicles."
+      },
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.886Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYFZE78FX141F2G2B9MN2",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eventId": "01KYTAYFZCFMD4AFQJFR7K6NRH",
+      "year": 30,
+      "body": {
+        "kind": "region-control",
+        "region": "Mediterranean",
+        "holder": "ptolemaic-egypt",
+        "grip": "held",
+        "note": "Ptolemaic Egypt holds the theatre this era, and the arrangements are beginning to look permanent."
+      },
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.886Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYFZEYTM4B11N64B33BXW",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eventId": "01KYTAYFZCSQ6QA39CK4RW3SFN",
+      "year": 6,
+      "body": {
+        "kind": "name-drift",
+        "nameKind": "title",
+        "attested": "protostrator",
+        "drifted": "warden of the roads",
+        "note": "The office outlived the court that coined its name, and the clerks translated it into something a carter could follow."
+      },
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.886Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYFZRZFT0JG891VTYHC3N",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eventId": "01KYTAYFZPBGQDX1ZTHCNSNHFK",
+      "year": 85,
+      "body": {
+        "kind": "regional-index",
+        "region": "Mediterranean",
+        "index": "population",
+        "value": 47,
+        "delta": -4,
+        "note": "The strain of the era is paid in households: levies, bad harvests, and the quiet migration that follows both."
+      },
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.896Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYFZRE8YFA4W9DAQQ0VXJ",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eventId": "01KYTAYFZPBGQDX1ZTHCNSNHFK",
+      "year": 85,
+      "body": {
+        "kind": "regional-index",
+        "region": "Mediterranean",
+        "index": "economicVitality",
+        "value": 61,
+        "delta": 6,
+        "note": "Far enough from the divergence for its second-order effects to reach the markets rather than the chronicles."
+      },
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.896Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYFZR28Y4C5E76GWA6W4T",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eventId": "01KYTAYFZPBGQDX1ZTHCNSNHFK",
+      "year": 85,
+      "body": {
+        "kind": "region-control",
+        "region": "Mediterranean",
+        "holder": "ptolemaic-egypt",
+        "grip": "held",
+        "note": "Ptolemaic Egypt holds the theatre this era, and the arrangements are beginning to look permanent."
+      },
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.896Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG03GZAKSRAZ1NGB98YT",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eventId": "01KYTAYG017GSQHX6A4B7PADFP",
+      "year": 172,
+      "body": {
+        "kind": "regional-index",
+        "region": "Mediterranean",
+        "index": "population",
+        "value": 44,
+        "delta": -3,
+        "note": "The strain of the era is paid in households: levies, bad harvests, and the quiet migration that follows both."
+      },
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.907Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG042A9QXB3G1VBYG00S",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eventId": "01KYTAYG017GSQHX6A4B7PADFP",
+      "year": 172,
+      "body": {
+        "kind": "regional-index",
+        "region": "Mediterranean",
+        "index": "economicVitality",
+        "value": 67,
+        "delta": 6,
+        "note": "Far enough from the divergence for its second-order effects to reach the markets rather than the chronicles."
+      },
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.907Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG04TRQWTBA38HHSHW7X",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eventId": "01KYTAYG017GSQHX6A4B7PADFP",
+      "year": 172,
+      "body": {
+        "kind": "region-control",
+        "region": "Mediterranean",
+        "holder": "ptolemaic-egypt",
+        "grip": "consolidated",
+        "note": "Ptolemaic Egypt holds the theatre this era, and the arrangements are beginning to look permanent."
+      },
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.907Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG0EHPHWH005WPP807S2",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eventId": "01KYTAYG0DPHJ7M91MP1ESNPJB",
+      "year": 222,
+      "body": {
+        "kind": "regional-index",
+        "region": "Mediterranean",
+        "index": "population",
+        "value": 47,
+        "delta": 3,
+        "note": "A settled generation: the parish rolls lengthen at the pace they always do when nothing catches fire."
+      },
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.918Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG0EX4F877V7Q6TMJ850",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eventId": "01KYTAYG0DPHJ7M91MP1ESNPJB",
+      "year": 222,
+      "body": {
+        "kind": "regional-index",
+        "region": "Mediterranean",
+        "index": "economicVitality",
+        "value": 72,
+        "delta": 5,
+        "note": "Far enough from the divergence for its second-order effects to reach the markets rather than the chronicles."
+      },
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.918Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG0F2CX70663W13WV46K",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eventId": "01KYTAYG0DPHJ7M91MP1ESNPJB",
+      "year": 222,
+      "body": {
+        "kind": "region-control",
+        "region": "Mediterranean",
+        "holder": "ptolemaic-egypt",
+        "grip": "consolidated",
+        "note": "Ptolemaic Egypt holds the theatre this era, and the arrangements are beginning to look permanent."
+      },
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.918Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG0FKTP9J6EWFCK11SKX",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eventId": "01KYTAYG0DQSV995RX3RZM4Y9J",
+      "year": 183,
+      "body": {
+        "kind": "name-drift",
+        "nameKind": "institution",
+        "attested": "the chancery",
+        "drifted": "the standing office",
+        "note": "What began as an emergency committee kept sitting, and kept the plain name it had been given in haste."
+      },
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:11.918Z",
+        "mode": "mock"
+      }
+    }
+  ],
+  "schools": [
+    {
+      "id": "01KYTAYG390T428AZY3NGRHMN9",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "name": "the Ledger School",
+      "stance": "history is what the accounts will bear, and every settlement is legible in what somebody agreed to pay for it",
+      "seat": "the counting house at Istanbul",
+      "blindSpot": "anything nobody thought worth writing down",
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "historiography-schools",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.009Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG39JYBH31JVFD7EY65K",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "name": "the Assembly School",
+      "stance": "history turns on who was in the room and what they were willing to lose, and the rest is weather",
+      "seat": "the assembly rooms at Istanbul",
+      "blindSpot": "the century of quiet in which the room itself was built",
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "historiography-schools",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.009Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG39C05MBESCVJM1GJ2C",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "name": "the Parish School",
+      "stance": "the state records the story last, and what actually changed can be read in births, prices, and what people stopped bothering to do",
+      "seat": "the parish registries of the Istanbul hinterland",
+      "blindSpot": "the decision, taken in an afternoon, that made all of it necessary",
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "historiography-schools",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.009Z",
+        "mode": "mock"
+      }
+    }
+  ],
+  "interpretations": [
+    {
+      "id": "01KYTAYG3BCSHW9CFSS1C2HJV1",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eventId": "01KYTAYFZCSQ6QA39CK4RW3SFN",
+      "schoolId": "01KYTAYG390T428AZY3NGRHMN9",
+      "gloss": "Read the accounts and \"Sosigenes of Alexandria sets the fashion of the season\" stops being a decision at all. The money had already moved; what the chronicles record as a choice is the moment somebody finally wrote down an arrangement that had been operating for two seasons. Our rivals want a villain here. We have a ledger, and the ledger balances.",
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "event-interpretation",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.011Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG3B3WJ3SN8N4Y1M39P3",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eventId": "01KYTAYFZCSQ6QA39CK4RW3SFN",
+      "schoolId": "01KYTAYG39JYBH31JVFD7EY65K",
+      "gloss": "\"Sosigenes of Alexandria sets the fashion of the season\" happened because three people in one room preferred it to the alternative in front of them, and the alternative in front of them was not the one posterity imagines. The Ledger School will tell you the money decided. The money was available for either course. Somebody chose.",
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "event-interpretation",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.011Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG3B4AHDXMHKQ98A0CRB",
+      "branchId": "01KYTAYFXAQ803SKNSXYACDH81",
+      "eventId": "01KYTAYFZCSQ6QA39CK4RW3SFN",
+      "schoolId": "01KYTAYG39C05MBESCVJM1GJ2C",
+      "gloss": "The registers show the change arriving in the district a full generation before \"Sosigenes of Alexandria sets the fashion of the season\" is supposed to have caused it: fewer apprentices bound, more women in the trades, the old feast quietly dropped. What the assembly did that year was ratify a fact. The event is a date the capital gave to something the country had already finished doing.",
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "event-interpretation",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.011Z",
+        "mode": "mock"
+      }
+    }
+  ]
+}

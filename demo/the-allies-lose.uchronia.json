@@ -1,0 +1,2815 @@
+{
+  "formatVersion": 1,
+  "timeline": {
+    "id": "01KYTAYG8040NSVZM9VHYXJHJF",
+    "title": "The Allies Lose",
+    "createdAt": "2026-07-30T20:20:12.157Z",
+    "settings": {
+      "dial": 55,
+      "derivation": "standard",
+      "court": true,
+      "epilogue": false,
+      "horizonYears": 85,
+      "defaultLenses": ["political", "technological", "cultural", "economic", "daily-life"],
+      "models": {
+        "generation": "claude-sonnet-5",
+        "critic": "claude-haiku-4-5-20251001",
+        "mode": "mock"
+      }
+    }
+  },
+  "pod": {
+    "id": "01KYTAYG80CTMJPZ5DZ3FSS5P8",
+    "timelineId": "01KYTAYG8040NSVZM9VHYXJHJF",
+    "raw": "The Allies lose the Second World War: Britain is forced out after the fall of France in 1940 and the Axis powers dictate the peace",
+    "statement": "The Allies lose the Second World War: Britain is forced out after the fall of France in 1940 and the Axis powers dictate the peace.",
+    "year": 1940,
+    "dateLabel": "1940",
+    "region": "Europe",
+    "mechanism": "politics",
+    "baselineContext": "In the attested record of 1940, Europe stood at a hinge: thrones, levies, and alliances were being renegotiated by force and marriage alike. The divergence bends the Second World War. The divergence departs from that settled course.",
+    "provenance": {
+      "kind": "generated",
+      "model": "mock",
+      "templateId": "pod-normalize",
+      "templateVersion": "1.0.0",
+      "generatedAt": "2026-07-30T20:20:12.157Z",
+      "mode": "mock"
+    }
+  },
+  "branches": [
+    {
+      "id": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "timelineId": "01KYTAYG8040NSVZM9VHYXJHJF",
+      "parentBranchId": null,
+      "forkEventId": null,
+      "subPod": null,
+      "name": "main line",
+      "createdAt": "2026-07-30T20:20:12.157Z"
+    }
+  ],
+  "eras": [
+    {
+      "id": "01KYTAYG8B6E9A4PVGQ0W1HNHM",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "ordinal": 0,
+      "startYear": 1940,
+      "endYear": 1942,
+      "title": "The News Travels",
+      "summary": "The world does not change so much as re-file itself: what was certain becomes pending, and clerks inherit the first draft of the new history.",
+      "pressures": [],
+      "status": "expanded",
+      "detail": "The world does not change so much as re-file itself: what was certain becomes pending, and clerks inherit the first draft of the new history. The span from 1940 to 1942 reads, in retrospect, as one argument conducted in many registers: what would the ordinary strains of a changed world be allowed to cost, and who would pay it.\n\nThe record answers through its events. The succession holds (1940); The war cabinet secretariat convenes over the changed course (Later that year, 1940); Petrol prices shift in the London markets (Spring 1941). Each was a partial discharge of the same accumulated pressure, none a settlement. Contemporaries disagreed about what had happened well before they disagreed about what it meant.\n\nBy 1942 the question had not been answered so much as re-priced. What the era settled, it settled in habits and ledgers rather than treaties; what it left loaded, the next era would inherit with interest.",
+      "speculative": false,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "seed-consequences",
+        "templateVersion": "1.2.0",
+        "generatedAt": "2026-07-30T20:20:12.171Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG8EKA1V0RBH439B6469",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "ordinal": 1,
+      "startYear": 1942,
+      "endYear": 1950,
+      "title": "The Long Adjustment",
+      "summary": "Between 1942 and 1950, the divergence stops being news and starts being structure: thin countryside sets the agenda, and the United Kingdom adjusts.",
+      "pressures": [
+        {
+          "name": "Thin countryside",
+          "kind": "demographic",
+          "description": "The hinterland feeding The German Reich has fewer hands than mouths in the capital assume.",
+          "intensity": 0.48
+        },
+        {
+          "name": "Tooling gap",
+          "kind": "technological",
+          "description": "Rivals of The German Reich are re-equipping faster than its own arsenals admit.",
+          "intensity": 0.85
+        },
+        {
+          "name": "Legitimacy arrears",
+          "kind": "ideological",
+          "description": "The story The German Reich tells about itself has not been updated for the new circumstances; someone will update it first.",
+          "intensity": 0.67
+        },
+        {
+          "name": "Timber and water",
+          "kind": "environmental",
+          "description": "The German Reich is drawing down forests and channels faster than they renew.",
+          "intensity": 0.89
+        },
+        {
+          "name": "Strained treasury",
+          "kind": "economic",
+          "description": "The ledgers of The German Reich run on short credit; every initiative competes with the interest bill.",
+          "intensity": 0.79
+        }
+      ],
+      "status": "expanded",
+      "detail": "Between 1942 and 1950, the divergence stops being news and starts being structure: thin countryside sets the agenda, and the United Kingdom adjusts. The span from 1942 to 1950 reads, in retrospect, as one argument conducted in many registers: what would thin countryside (demographic, 0.48) be allowed to cost, and who would pay it.\n\nThe record answers through its events. The markets reprice around the United Kingdom (1943); A working technique crosses the German Reich's border (1945); The war cabinet secretariat revises what the young are taught (1947). Each was a partial discharge of the same accumulated pressure, none a settlement. The official account was written within the month; the honest one took a generation.\n\nBy 1950 the question had not been answered so much as re-priced. What the era settled, it settled in habits and ledgers rather than treaties; what it left loaded, the next era would inherit with interest.",
+      "speculative": false,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:12.174Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG8MZ1Q21ERT3YSRE31G",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "ordinal": 2,
+      "startYear": 1950,
+      "endYear": 1963,
+      "title": "The Long Adjustment",
+      "summary": "Between 1950 and 1963, the divergence stops being news and starts being structure: a crowded generation sets the agenda, and the United Kingdom adjusts.",
+      "pressures": [
+        {
+          "name": "A crowded generation",
+          "kind": "demographic",
+          "description": "A large cohort comes of age around The German Reich with fewer places than claimants.",
+          "intensity": 0.58
+        },
+        {
+          "name": "Tooling gap",
+          "kind": "technological",
+          "description": "Rivals of The German Reich are re-equipping faster than its own arsenals admit.",
+          "intensity": 0.88
+        },
+        {
+          "name": "Doctrinal quarrel",
+          "kind": "ideological",
+          "description": "A dispute of principle inside The German Reich is becoming a dispute of office.",
+          "intensity": 0.62
+        }
+      ],
+      "status": "expanded",
+      "detail": "Between 1950 and 1963, the divergence stops being news and starts being structure: a crowded generation sets the agenda, and the United Kingdom adjusts. The span from 1950 to 1963 reads, in retrospect, as one argument conducted in many registers: what would a crowded generation (demographic, 0.58) be allowed to cost, and who would pay it.\n\nThe record answers through its events. A working technique crosses the German Reich's border (1952); The war cabinet secretariat revises what the young are taught (1955); The German Reich tests the new balance (1958). Each was a partial discharge of the same accumulated pressure, none a settlement. The registers record it drily; the letters that survive do not.\n\nBy 1963 the question had not been answered so much as re-priced. What the era settled, it settled in habits and ledgers rather than treaties; what it left loaded, the next era would inherit with interest.",
+      "speculative": false,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:12.180Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG8T8YY7PC57FD131G7Y",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "ordinal": 3,
+      "startYear": 1963,
+      "endYear": 1984,
+      "title": "The Inheritance Divided",
+      "summary": "Between 1963 and 1984, the divergence stops being news and starts being structure: thin countryside sets the agenda, and the United Kingdom adjusts.",
+      "pressures": [
+        {
+          "name": "Thin countryside",
+          "kind": "demographic",
+          "description": "The hinterland feeding Dr. Lene Aldinger has fewer hands than mouths in the capital assume.",
+          "intensity": 0.44
+        },
+        {
+          "name": "Tooling gap",
+          "kind": "technological",
+          "description": "Rivals of Dr. Lene Aldinger are re-equipping faster than its own arsenals admit.",
+          "intensity": 0.54
+        },
+        {
+          "name": "Legitimacy arrears",
+          "kind": "ideological",
+          "description": "The story Dr. Lene Aldinger tells about itself has not been updated for the new circumstances; someone will update it first.",
+          "intensity": 0.64
+        }
+      ],
+      "status": "skeleton",
+      "detail": null,
+      "speculative": false,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:12.186Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG8ZZJ5CX2YGRMH3ZA2Z",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "ordinal": 4,
+      "startYear": 1984,
+      "endYear": 2018,
+      "title": "The Second Harvest",
+      "summary": "Between 1984 and 2018, the divergence stops being news and starts being structure: doctrinal quarrel sets the agenda, and the United Kingdom adjusts.",
+      "pressures": [
+        {
+          "name": "Doctrinal quarrel",
+          "kind": "ideological",
+          "description": "A dispute of principle inside The United Kingdom is becoming a dispute of office.",
+          "intensity": 0.56
+        },
+        {
+          "name": "Timber and water",
+          "kind": "environmental",
+          "description": "The United Kingdom is drawing down forests and channels faster than they renew.",
+          "intensity": 0.56
+        },
+        {
+          "name": "Price memory",
+          "kind": "economic",
+          "description": "Markets around The United Kingdom still price in the last shock; hoarding begins at rumors now.",
+          "intensity": 0.49
+        },
+        {
+          "name": "A crowded generation",
+          "kind": "demographic",
+          "description": "A large cohort comes of age around The United Kingdom with fewer places than claimants.",
+          "intensity": 0.47
+        },
+        {
+          "name": "Technique spillover",
+          "kind": "technological",
+          "description": "A working method has left the workshops that guarded it; The United Kingdom can no longer control who learns it.",
+          "intensity": 0.81
+        }
+      ],
+      "status": "skeleton",
+      "detail": null,
+      "speculative": false,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:12.191Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG955J6X1ANDKJ1R7QRP",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "ordinal": 5,
+      "startYear": 2018,
+      "endYear": 2025,
+      "title": "Old Roads, New Traffic",
+      "summary": "Between 2018 and 2025, the divergence stops being news and starts being structure: tooling gap sets the agenda, and the United Kingdom adjusts.",
+      "pressures": [
+        {
+          "name": "Tooling gap",
+          "kind": "technological",
+          "description": "Rivals of The German Reich are re-equipping faster than its own arsenals admit.",
+          "intensity": 0.6
+        },
+        {
+          "name": "Legitimacy arrears",
+          "kind": "ideological",
+          "description": "The story The German Reich tells about itself has not been updated for the new circumstances; someone will update it first.",
+          "intensity": 0.59
+        },
+        {
+          "name": "Harvest variance",
+          "kind": "environmental",
+          "description": "Two lean years in the districts around The German Reich would exhaust the granary math.",
+          "intensity": 0.67
+        }
+      ],
+      "status": "skeleton",
+      "detail": null,
+      "speculative": false,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:12.197Z",
+        "mode": "mock"
+      }
+    }
+  ],
+  "events": [
+    {
+      "id": "01KYTAYG8BXKV5PD9NT6W1KE8G",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "eraId": "01KYTAYG8B6E9A4PVGQ0W1HNHM",
+      "ordinal": 0,
+      "date": {
+        "year": 1940,
+        "label": "1940"
+      },
+      "title": "The succession holds",
+      "summary": "The Allies lose the Second World War: Britain is forced out after the fall of France in 1940 and the Axis powers dictate the peace. London takes the news the way ports take weather: schedules shift before opinions do, and the harbormaster knows before the council does.",
+      "detail": null,
+      "entityIds": ["01KYTAYG8B6GDHN3NVGXJETDTW", "01KYTAYG8BKPSPNF1M1GF605AF"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYG8B6GDHN3NVGXJETDTW",
+          "patch": {
+            "divergenceAbsorbed": true,
+            "mood": "wary relief"
+          },
+          "note": "The immediate shock is absorbed; the accounting begins."
+        }
+      ],
+      "lenses": ["political"],
+      "plausibility": {
+        "score": 0.86,
+        "rationale": "Direct restatement of the divergence itself; the least contingent claim in the timeline."
+      },
+      "distanceFromPod": 0,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "seed-consequences",
+        "templateVersion": "1.2.0",
+        "generatedAt": "2026-07-30T20:20:12.171Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG8B92C37PQ8DJ2EGQC0",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "eraId": "01KYTAYG8B6E9A4PVGQ0W1HNHM",
+      "ordinal": 1,
+      "date": {
+        "year": 1940,
+        "label": "Later that year, 1940"
+      },
+      "title": "The war cabinet secretariat convenes over the changed course",
+      "summary": "The war cabinet secretariat meets in extraordinary session. Dr. Lene Aldinger argues that the moment must be committed to record before rumor rewrites it; a survey of holdings, obligations, and precedents is ordered.",
+      "detail": null,
+      "entityIds": ["01KYTAYG8BJSNZNBD4R29K143A", "01KYTAYG8BKPSPNF1M1GF605AF"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYG8BJSNZNBD4R29K143A",
+          "patch": {
+            "session": "extraordinary"
+          },
+          "note": "The institution claims the divergence as its business."
+        },
+        {
+          "entityId": "01KYTAYG8BKPSPNF1M1GF605AF",
+          "patch": {
+            "position": "convenor of the survey"
+          },
+          "note": "Responsibility, and visibility, attach to the one who asked for the record."
+        }
+      ],
+      "lenses": ["political", "cultural"],
+      "plausibility": {
+        "score": 0.74,
+        "rationale": "Institutions reliably respond to discontinuity with procedure; the specific convenor is the contingent part."
+      },
+      "distanceFromPod": 0,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "seed-consequences",
+        "templateVersion": "1.2.0",
+        "generatedAt": "2026-07-30T20:20:12.171Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG8BRYSD0PH4G93CC44H",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "eraId": "01KYTAYG8B6E9A4PVGQ0W1HNHM",
+      "ordinal": 2,
+      "date": {
+        "year": 1941,
+        "label": "Spring 1941"
+      },
+      "title": "Petrol prices shift in the London markets",
+      "summary": "The first measurable consequence arrives where it always does: in prices. Petrol moves against last season's rate in London, and porters, brokers, and household stewards adjust before any council does.",
+      "detail": null,
+      "entityIds": ["01KYTAYG8B6GDHN3NVGXJETDTW"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYG8B6GDHN3NVGXJETDTW",
+          "patch": {
+            "marketSignal": "petrol repriced",
+            "treasury": "strained but liquid"
+          },
+          "note": "The exchequer notices what the market already knew."
+        }
+      ],
+      "lenses": ["economic", "daily-life"],
+      "plausibility": {
+        "score": 0.78,
+        "rationale": "Price adjustment is the most reliable early transmission channel of any structural change."
+      },
+      "distanceFromPod": 1,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "seed-consequences",
+        "templateVersion": "1.2.0",
+        "generatedAt": "2026-07-30T20:20:12.171Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG8B8B62YSJCRKPG61KZ",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "eraId": "01KYTAYG8B6E9A4PVGQ0W1HNHM",
+      "ordinal": 3,
+      "date": {
+        "year": 1942,
+        "label": "Autumn 1942"
+      },
+      "title": "The German Reich recalculates",
+      "summary": "the German Reich greets the news with practiced calm and private arithmetic: garrison rosters are recounted, grain contracts re-read, and an heirloom map quietly redrawn.",
+      "detail": null,
+      "entityIds": ["01KYTAYG8BPXGMETHBAYRHNWZR"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYG8BPXGMETHBAYRHNWZR",
+          "patch": {
+            "policy": "reopened"
+          },
+          "note": "The rival’s settled policy quietly goes back to committee."
+        }
+      ],
+      "lenses": ["political"],
+      "plausibility": {
+        "score": 0.68,
+        "rationale": "Neighbors always reprice risk after a discontinuity; the two-year lag matches the speed of credible intelligence."
+      },
+      "distanceFromPod": 2,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "seed-consequences",
+        "templateVersion": "1.2.0",
+        "generatedAt": "2026-07-30T20:20:12.171Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG8GX86B5VTNRK0K754K",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "eraId": "01KYTAYG8EKA1V0RBH439B6469",
+      "ordinal": 4,
+      "date": {
+        "year": 1943,
+        "label": "1943"
+      },
+      "title": "The markets reprice around the United Kingdom",
+      "summary": "The hinterland feeding The German Reich has fewer hands than mouths in the capital assume. Brokers adjust before any edict: contracts shorten, surety costs rise, and household stewards change what they store.",
+      "detail": null,
+      "entityIds": ["01KYTAYG8B6GDHN3NVGXJETDTW"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYG8B6GDHN3NVGXJETDTW",
+          "patch": {
+            "creditTerms": "shortened",
+            "householdStores": "deepened"
+          },
+          "note": "The market hedges; kitchens follow."
+        }
+      ],
+      "lenses": ["economic", "daily-life"],
+      "plausibility": {
+        "score": 0.78,
+        "rationale": "Price adjustment is the most reliable transmission channel of structural pressure."
+      },
+      "distanceFromPod": 3,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:12.174Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG8G8H60AKQEM4WHJHKD",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "eraId": "01KYTAYG8EKA1V0RBH439B6469",
+      "ordinal": 5,
+      "date": {
+        "year": 1945,
+        "label": "1945"
+      },
+      "title": "A working technique crosses the German Reich's border",
+      "summary": "What the war cabinet secretariat kept close now travels with journeymen. Rivals of The German Reich are re-equipping faster than its own arsenals admit.",
+      "detail": null,
+      "entityIds": [
+        "01KYTAYG8BJSNZNBD4R29K143A",
+        "01KYTAYG8BPXGMETHBAYRHNWZR",
+        "01KYTAYG8G278DB1J98E6YR03H"
+      ],
+      "deltas": [
+        {
+          "entityId": "01KYTAYG8BPXGMETHBAYRHNWZR",
+          "patch": {
+            "technique": "acquired by hire"
+          },
+          "note": "Knowledge proves cheaper to hire than to guard."
+        },
+        {
+          "entityId": "01KYTAYG8G278DB1J98E6YR03H",
+          "patch": {
+            "standing": "newly consequential"
+          },
+          "note": "A new name starts appearing in the registers."
+        }
+      ],
+      "lenses": ["technological", "economic"],
+      "plausibility": {
+        "score": 0.66,
+        "rationale": "Techniques diffuse along wage gradients; guarding them raises the wage."
+      },
+      "distanceFromPod": 5,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:12.174Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG8G4EJ08WHQEBRHG7F6",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "eraId": "01KYTAYG8EKA1V0RBH439B6469",
+      "ordinal": 6,
+      "date": {
+        "year": 1947,
+        "label": "1947"
+      },
+      "title": "The war cabinet secretariat revises what the young are taught",
+      "summary": "Over the following season the old arrangement gives way. A new syllabus fixes the changed world into schoolroom fact. The story The German Reich tells about itself has not been updated for the new circumstances; someone will update it first. Children now learn as ordinary what their grandparents called impossible.",
+      "detail": null,
+      "entityIds": ["01KYTAYG8BJSNZNBD4R29K143A", "01KYTAYG8BKPSPNF1M1GF605AF"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYG8BJSNZNBD4R29K143A",
+          "patch": {
+            "curriculum": "revised to the new circumstances"
+          },
+          "note": "The syllabus quietly rewrites what counts as common knowledge."
+        }
+      ],
+      "lenses": ["cultural", "daily-life"],
+      "plausibility": {
+        "score": 0.75,
+        "rationale": "Institutions metabolize discontinuity into curriculum within a generation. Revised after review: the mechanism is now named instead of asserted."
+      },
+      "distanceFromPod": 7,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:12.174Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG8G7M7RCAHSKAEDVMDY",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "eraId": "01KYTAYG8EKA1V0RBH439B6469",
+      "ordinal": 7,
+      "date": {
+        "year": 1949,
+        "label": "1949"
+      },
+      "title": "The German Reich tests the new balance",
+      "summary": "The German Reich is drawing down forests and channels faster than they renew. A probe at the margin (an envoy recalled, a toll raised, a garrison reinforced) measures how much the world has actually changed.",
+      "detail": null,
+      "entityIds": ["01KYTAYG8BPXGMETHBAYRHNWZR", "01KYTAYG8B6GDHN3NVGXJETDTW"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYG8BPXGMETHBAYRHNWZR",
+          "patch": {
+            "posture": "probing"
+          },
+          "note": "The rival prices the new equilibrium in small provocations."
+        }
+      ],
+      "lenses": ["political"],
+      "plausibility": {
+        "score": 0.69,
+        "rationale": "Neighbors test any settlement whose guarantors look distracted."
+      },
+      "distanceFromPod": 9,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:12.174Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG8PCT5NTSTPGE5X5H6T",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "eraId": "01KYTAYG8MZ1Q21ERT3YSRE31G",
+      "ordinal": 8,
+      "date": {
+        "year": 1952,
+        "label": "1952"
+      },
+      "title": "A working technique crosses the German Reich's border",
+      "summary": "What the war cabinet secretariat kept close now travels with journeymen. A large cohort comes of age around The German Reich with fewer places than claimants.",
+      "detail": null,
+      "entityIds": ["01KYTAYG8BJSNZNBD4R29K143A", "01KYTAYG8BPXGMETHBAYRHNWZR"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYG8BPXGMETHBAYRHNWZR",
+          "patch": {
+            "technique": "acquired by hire"
+          },
+          "note": "Knowledge proves cheaper to hire than to guard."
+        }
+      ],
+      "lenses": ["technological", "economic"],
+      "plausibility": {
+        "score": 0.66,
+        "rationale": "Techniques diffuse along wage gradients; guarding them raises the wage."
+      },
+      "distanceFromPod": 12,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:12.180Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG8PGEP4XMYJS4J6Y7A5",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "eraId": "01KYTAYG8MZ1Q21ERT3YSRE31G",
+      "ordinal": 9,
+      "date": {
+        "year": 1955,
+        "label": "1955"
+      },
+      "title": "The war cabinet secretariat revises what the young are taught",
+      "summary": "A new syllabus fixes the changed world into schoolroom fact. Rivals of The German Reich are re-equipping faster than its own arsenals admit. Children now learn as ordinary what their grandparents called impossible.",
+      "detail": null,
+      "entityIds": ["01KYTAYG8BJSNZNBD4R29K143A", "01KYTAYG8BKPSPNF1M1GF605AF"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYG8BJSNZNBD4R29K143A",
+          "patch": {
+            "curriculum": "revised to the new circumstances"
+          },
+          "note": "The syllabus quietly rewrites what counts as common knowledge."
+        }
+      ],
+      "lenses": ["cultural", "daily-life"],
+      "plausibility": {
+        "score": 0.7,
+        "rationale": "Institutions metabolize discontinuity into curriculum within a generation."
+      },
+      "distanceFromPod": 15,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:12.180Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG8PPGZ0T318NNGD22A7",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "eraId": "01KYTAYG8MZ1Q21ERT3YSRE31G",
+      "ordinal": 10,
+      "date": {
+        "year": 1958,
+        "label": "1958"
+      },
+      "title": "The German Reich tests the new balance",
+      "summary": "A dispute of principle inside The German Reich is becoming a dispute of office. A probe at the margin (an envoy recalled, a toll raised, a garrison reinforced) measures how much the world has actually changed.",
+      "detail": null,
+      "entityIds": ["01KYTAYG8BPXGMETHBAYRHNWZR", "01KYTAYG8B6GDHN3NVGXJETDTW"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYG8BPXGMETHBAYRHNWZR",
+          "patch": {
+            "posture": "probing"
+          },
+          "note": "The rival prices the new equilibrium in small provocations."
+        }
+      ],
+      "lenses": ["political"],
+      "plausibility": {
+        "score": 0.69,
+        "rationale": "Neighbors test any settlement whose guarantors look distracted."
+      },
+      "distanceFromPod": 18,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:12.180Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG8PHMVG01T2Q4W9DTQG",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "eraId": "01KYTAYG8MZ1Q21ERT3YSRE31G",
+      "ordinal": 11,
+      "date": {
+        "year": 1961,
+        "label": "1961"
+      },
+      "title": "Dr. Lene Aldinger attempts the grand reconciliation",
+      "summary": "Against every counsel, Dr. Lene Aldinger stakes the season on reconciling parties whose interests the ledgers say cannot meet.",
+      "detail": null,
+      "entityIds": ["01KYTAYG8BKPSPNF1M1GF605AF"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYG8BKPSPNF1M1GF605AF",
+          "patch": {
+            "influence": "sets the season"
+          },
+          "note": "Manners record the divergence more durably than treaties."
+        }
+      ],
+      "lenses": ["daily-life", "cultural"],
+      "plausibility": {
+        "score": 0.35,
+        "rationale": "It would take personal force to overcome what the state of the world says is overdetermined. Revised after review: the mechanism is now named instead of asserted."
+      },
+      "distanceFromPod": 21,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:12.180Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG8VVXHJK9DCBQTJ3WMN",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "eraId": "01KYTAYG8T8YY7PC57FD131G7Y",
+      "ordinal": 12,
+      "date": {
+        "year": 1966,
+        "label": "1966"
+      },
+      "title": "The war cabinet secretariat revises what the young are taught",
+      "summary": "A new syllabus fixes the changed world into schoolroom fact. The hinterland feeding Dr. Lene Aldinger has fewer hands than mouths in the capital assume. Children now learn as ordinary what their grandparents called impossible.",
+      "detail": null,
+      "entityIds": ["01KYTAYG8BJSNZNBD4R29K143A", "01KYTAYG8BKPSPNF1M1GF605AF"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYG8BJSNZNBD4R29K143A",
+          "patch": {
+            "curriculum": "revised to the new circumstances"
+          },
+          "note": "The syllabus quietly rewrites what counts as common knowledge."
+        }
+      ],
+      "lenses": ["cultural", "daily-life"],
+      "plausibility": {
+        "score": 0.7,
+        "rationale": "Institutions metabolize discontinuity into curriculum within a generation."
+      },
+      "distanceFromPod": 26,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:12.186Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG8VFQTCXK0F19CFJR49",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "eraId": "01KYTAYG8T8YY7PC57FD131G7Y",
+      "ordinal": 13,
+      "date": {
+        "year": 1971,
+        "label": "1971"
+      },
+      "title": "The German Reich tests the new balance",
+      "summary": "Rivals of Dr. Lene Aldinger are re-equipping faster than its own arsenals admit. A probe at the margin (an envoy recalled, a toll raised, a garrison reinforced) measures how much the world has actually changed.",
+      "detail": null,
+      "entityIds": [
+        "01KYTAYG8BPXGMETHBAYRHNWZR",
+        "01KYTAYG8B6GDHN3NVGXJETDTW",
+        "01KYTAYG8VNWP8KTWZVT7K3B8F"
+      ],
+      "deltas": [
+        {
+          "entityId": "01KYTAYG8BPXGMETHBAYRHNWZR",
+          "patch": {
+            "posture": "probing"
+          },
+          "note": "The rival prices the new equilibrium in small provocations."
+        },
+        {
+          "entityId": "01KYTAYG8VNWP8KTWZVT7K3B8F",
+          "patch": {
+            "standing": "newly consequential"
+          },
+          "note": "A new name starts appearing in the registers."
+        }
+      ],
+      "lenses": ["political"],
+      "plausibility": {
+        "score": 0.69,
+        "rationale": "Neighbors test any settlement whose guarantors look distracted."
+      },
+      "distanceFromPod": 31,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:12.186Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG8V31E3BWKZDV67BZMD",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "eraId": "01KYTAYG8T8YY7PC57FD131G7Y",
+      "ordinal": 14,
+      "date": {
+        "year": 1976,
+        "label": "1976"
+      },
+      "title": "Dr. Lene Aldinger sets the fashion of the season",
+      "summary": "Style declares allegiance: the cut of a coat, a turn of phrase, a way of dating letters \"since the change\". The story Dr. Lene Aldinger tells about itself has not been updated for the new circumstances; someone will update it first.",
+      "detail": null,
+      "entityIds": ["01KYTAYG8BKPSPNF1M1GF605AF"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYG8BKPSPNF1M1GF605AF",
+          "patch": {
+            "influence": "sets the season"
+          },
+          "note": "Manners record the divergence more durably than treaties."
+        }
+      ],
+      "lenses": ["daily-life", "cultural"],
+      "plausibility": {
+        "score": 0.74,
+        "rationale": "Fashion metabolizes politics faster than institutions do."
+      },
+      "distanceFromPod": 36,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:12.186Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG8VGEQ6MFPCV1E0HZDB",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "eraId": "01KYTAYG8T8YY7PC57FD131G7Y",
+      "ordinal": 15,
+      "date": {
+        "year": 1981,
+        "label": "1981"
+      },
+      "title": "The United Kingdom reorders its accounts under thin countryside",
+      "summary": "The hinterland feeding Dr. Lene Aldinger has fewer hands than mouths in the capital assume. The council answers with a reform that costs three offices their perquisites and creates two new registers.",
+      "detail": null,
+      "entityIds": ["01KYTAYG8B6GDHN3NVGXJETDTW", "01KYTAYG8BJSNZNBD4R29K143A"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYG8B6GDHN3NVGXJETDTW",
+          "patch": {
+            "administration": "reformed under thin countryside"
+          },
+          "note": "Offices are consolidated; the registers survive their authors."
+        }
+      ],
+      "lenses": ["political"],
+      "plausibility": {
+        "score": 0.5,
+        "rationale": "Administrative reform is the standard discharge of fiscal and legitimacy pressure. A chronicler would call this one surprising."
+      },
+      "distanceFromPod": 41,
+      "wildcard": true,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:12.186Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG9025D1WD01VN4K5S5Y",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "eraId": "01KYTAYG8ZZJ5CX2YGRMH3ZA2Z",
+      "ordinal": 16,
+      "date": {
+        "year": 1987,
+        "label": "1987"
+      },
+      "title": "The German Reich tests the new balance",
+      "summary": "A dispute of principle inside The United Kingdom is becoming a dispute of office. A probe at the margin (an envoy recalled, a toll raised, a garrison reinforced) measures how much the world has actually changed.",
+      "detail": null,
+      "entityIds": ["01KYTAYG8BPXGMETHBAYRHNWZR", "01KYTAYG8B6GDHN3NVGXJETDTW"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYG8BPXGMETHBAYRHNWZR",
+          "patch": {
+            "posture": "probing"
+          },
+          "note": "The rival prices the new equilibrium in small provocations."
+        }
+      ],
+      "lenses": ["political"],
+      "plausibility": {
+        "score": 0.69,
+        "rationale": "Neighbors test any settlement whose guarantors look distracted."
+      },
+      "distanceFromPod": 47,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:12.191Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG905VY66MD229F696P1",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "eraId": "01KYTAYG8ZZJ5CX2YGRMH3ZA2Z",
+      "ordinal": 17,
+      "date": {
+        "year": 1994,
+        "label": "1994"
+      },
+      "title": "Dr. Lene Aldinger sets the fashion of the season",
+      "summary": "Style declares allegiance: the cut of a coat, a turn of phrase, a way of dating letters \"since the change\". The United Kingdom is drawing down forests and channels faster than they renew.",
+      "detail": null,
+      "entityIds": ["01KYTAYG8BKPSPNF1M1GF605AF", "01KYTAYG906GHD81VJYV8RZ3WX"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYG8BKPSPNF1M1GF605AF",
+          "patch": {
+            "influence": "sets the season"
+          },
+          "note": "Manners record the divergence more durably than treaties."
+        },
+        {
+          "entityId": "01KYTAYG906GHD81VJYV8RZ3WX",
+          "patch": {
+            "standing": "newly consequential"
+          },
+          "note": "A new name starts appearing in the registers."
+        }
+      ],
+      "lenses": ["daily-life", "cultural"],
+      "plausibility": {
+        "score": 0.74,
+        "rationale": "Fashion metabolizes politics faster than institutions do."
+      },
+      "distanceFromPod": 54,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": true,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:12.191Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG90T28CBR1RGPTF42CS",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "eraId": "01KYTAYG8ZZJ5CX2YGRMH3ZA2Z",
+      "ordinal": 18,
+      "date": {
+        "year": 2001,
+        "label": "2001"
+      },
+      "title": "The United Kingdom reorders its accounts under price memory",
+      "summary": "Markets around The United Kingdom still price in the last shock; hoarding begins at rumors now. The council answers with a reform that costs three offices their perquisites and creates two new registers.",
+      "detail": null,
+      "entityIds": ["01KYTAYG8B6GDHN3NVGXJETDTW", "01KYTAYG8BJSNZNBD4R29K143A"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYG8B6GDHN3NVGXJETDTW",
+          "patch": {
+            "administration": "reformed under price memory"
+          },
+          "note": "Offices are consolidated; the registers survive their authors."
+        }
+      ],
+      "lenses": ["political"],
+      "plausibility": {
+        "score": 0.72,
+        "rationale": "Administrative reform is the standard discharge of fiscal and legitimacy pressure."
+      },
+      "distanceFromPod": 61,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:12.191Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG902XKDHWRTCZDD8CFE",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "eraId": "01KYTAYG8ZZJ5CX2YGRMH3ZA2Z",
+      "ordinal": 19,
+      "date": {
+        "year": 2008,
+        "label": "2008"
+      },
+      "title": "The markets reprice around the United Kingdom",
+      "summary": "A large cohort comes of age around The United Kingdom with fewer places than claimants. Brokers adjust before any edict: contracts shorten, surety costs rise, and household stewards change what they store.",
+      "detail": null,
+      "entityIds": ["01KYTAYG8B6GDHN3NVGXJETDTW"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYG8B6GDHN3NVGXJETDTW",
+          "patch": {
+            "creditTerms": "shortened",
+            "householdStores": "deepened"
+          },
+          "note": "The market hedges; kitchens follow."
+        }
+      ],
+      "lenses": ["economic", "daily-life"],
+      "plausibility": {
+        "score": 0.78,
+        "rationale": "Price adjustment is the most reliable transmission channel of structural pressure."
+      },
+      "distanceFromPod": 68,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:12.191Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG90TC1Q06XZ5JMRVMFJ",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "eraId": "01KYTAYG8ZZJ5CX2YGRMH3ZA2Z",
+      "ordinal": 20,
+      "date": {
+        "year": 2015,
+        "label": "2015"
+      },
+      "title": "A working technique crosses the German Reich's border",
+      "summary": "What the war cabinet secretariat kept close now travels with journeymen. A working method has left the workshops that guarded it; The United Kingdom can no longer control who learns it.",
+      "detail": null,
+      "entityIds": ["01KYTAYG8BJSNZNBD4R29K143A", "01KYTAYG8BPXGMETHBAYRHNWZR"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYG8BPXGMETHBAYRHNWZR",
+          "patch": {
+            "technique": "acquired by hire"
+          },
+          "note": "Knowledge proves cheaper to hire than to guard."
+        }
+      ],
+      "lenses": ["technological", "economic"],
+      "plausibility": {
+        "score": 0.5,
+        "rationale": "Techniques diffuse along wage gradients; guarding them raises the wage. A chronicler would call this one surprising."
+      },
+      "distanceFromPod": 75,
+      "wildcard": true,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:12.191Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG972JPZ4NF19N4VHG3B",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "eraId": "01KYTAYG955J6X1ANDKJ1R7QRP",
+      "ordinal": 21,
+      "date": {
+        "year": 2019,
+        "label": "2019"
+      },
+      "title": "Dr. Lene Aldinger sets the fashion of the season",
+      "summary": "Style declares allegiance: the cut of a coat, a turn of phrase, a way of dating letters \"since the change\". Rivals of The German Reich are re-equipping faster than its own arsenals admit.",
+      "detail": null,
+      "entityIds": ["01KYTAYG8BKPSPNF1M1GF605AF"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYG8BKPSPNF1M1GF605AF",
+          "patch": {
+            "influence": "sets the season"
+          },
+          "note": "Manners record the divergence more durably than treaties."
+        }
+      ],
+      "lenses": ["daily-life", "cultural"],
+      "plausibility": {
+        "score": 0.74,
+        "rationale": "Fashion metabolizes politics faster than institutions do."
+      },
+      "distanceFromPod": 79,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:12.197Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG9748M6KNP37MPYJ1W4",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "eraId": "01KYTAYG955J6X1ANDKJ1R7QRP",
+      "ordinal": 22,
+      "date": {
+        "year": 2020,
+        "label": "2020"
+      },
+      "title": "The United Kingdom reorders its accounts under legitimacy arrears",
+      "summary": "The story The German Reich tells about itself has not been updated for the new circumstances; someone will update it first. The council answers with a reform that costs three offices their perquisites and creates two new registers.",
+      "detail": null,
+      "entityIds": ["01KYTAYG8B6GDHN3NVGXJETDTW", "01KYTAYG8BJSNZNBD4R29K143A"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYG8B6GDHN3NVGXJETDTW",
+          "patch": {
+            "administration": "reformed under legitimacy arrears"
+          },
+          "note": "Offices are consolidated; the registers survive their authors."
+        }
+      ],
+      "lenses": ["political"],
+      "plausibility": {
+        "score": 0.72,
+        "rationale": "Administrative reform is the standard discharge of fiscal and legitimacy pressure."
+      },
+      "distanceFromPod": 80,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": true,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:12.197Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG97TTKTRZHABE9YPAA8",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "eraId": "01KYTAYG955J6X1ANDKJ1R7QRP",
+      "ordinal": 23,
+      "date": {
+        "year": 2022,
+        "label": "2022"
+      },
+      "title": "The markets reprice around the United Kingdom",
+      "summary": "Two lean years in the districts around The German Reich would exhaust the granary math. Brokers adjust before any edict: contracts shorten, surety costs rise, and household stewards change what they store.",
+      "detail": null,
+      "entityIds": ["01KYTAYG8B6GDHN3NVGXJETDTW"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYG8B6GDHN3NVGXJETDTW",
+          "patch": {
+            "creditTerms": "shortened",
+            "householdStores": "deepened"
+          },
+          "note": "The market hedges; kitchens follow."
+        }
+      ],
+      "lenses": ["economic", "daily-life"],
+      "plausibility": {
+        "score": 0.78,
+        "rationale": "Price adjustment is the most reliable transmission channel of structural pressure."
+      },
+      "distanceFromPod": 82,
+      "wildcard": false,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:12.197Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG97WVMBHT5ZVJKDZXV7",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "eraId": "01KYTAYG955J6X1ANDKJ1R7QRP",
+      "ordinal": 24,
+      "date": {
+        "year": 2023,
+        "label": "2023"
+      },
+      "title": "A working technique crosses the German Reich's border",
+      "summary": "What the war cabinet secretariat kept close now travels with journeymen. Rivals of The German Reich are re-equipping faster than its own arsenals admit.",
+      "detail": null,
+      "entityIds": ["01KYTAYG8BJSNZNBD4R29K143A", "01KYTAYG8BPXGMETHBAYRHNWZR"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYG8BPXGMETHBAYRHNWZR",
+          "patch": {
+            "technique": "acquired by hire"
+          },
+          "note": "Knowledge proves cheaper to hire than to guard."
+        }
+      ],
+      "lenses": ["technological", "economic"],
+      "plausibility": {
+        "score": 0.5,
+        "rationale": "Techniques diffuse along wage gradients; guarding them raises the wage. A chronicler would call this one surprising."
+      },
+      "distanceFromPod": 83,
+      "wildcard": true,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:12.197Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG97Y268SX10XDDKWQ2N",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "eraId": "01KYTAYG955J6X1ANDKJ1R7QRP",
+      "ordinal": 25,
+      "date": {
+        "year": 2024,
+        "label": "2024"
+      },
+      "title": "The war cabinet secretariat revises what the young are taught",
+      "summary": "A new syllabus fixes the changed world into schoolroom fact. The story The German Reich tells about itself has not been updated for the new circumstances; someone will update it first. Children now learn as ordinary what their grandparents called impossible.",
+      "detail": null,
+      "entityIds": ["01KYTAYG8BJSNZNBD4R29K143A", "01KYTAYG8BKPSPNF1M1GF605AF"],
+      "deltas": [
+        {
+          "entityId": "01KYTAYG8BJSNZNBD4R29K143A",
+          "patch": {
+            "curriculum": "revised to the new circumstances"
+          },
+          "note": "The syllabus quietly rewrites what counts as common knowledge."
+        }
+      ],
+      "lenses": ["cultural", "daily-life"],
+      "plausibility": {
+        "score": 0.5,
+        "rationale": "Institutions metabolize discontinuity into curriculum within a generation. A chronicler would call this one surprising."
+      },
+      "distanceFromPod": 84,
+      "wildcard": true,
+      "flags": {
+        "disputed": false,
+        "convergence": false,
+        "contested": false
+      },
+      "criticNotes": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:12.197Z",
+        "mode": "mock"
+      }
+    }
+  ],
+  "entities": [
+    {
+      "id": "01KYTAYG8B6GDHN3NVGXJETDTW",
+      "timelineId": "01KYTAYG8040NSVZM9VHYXJHJF",
+      "slug": "united-kingdom",
+      "type": "nation",
+      "name": "The United Kingdom",
+      "description": "The power most immediately shaped by the divergence, seated at London.",
+      "initialState": {
+        "seat": "London",
+        "standing": "steady but watched",
+        "treasury": "strained"
+      },
+      "introducedByEventId": "01KYTAYG8BXKV5PD9NT6W1KE8G",
+      "bornYear": null,
+      "counterfactual": false,
+      "succeedsSlug": null,
+      "createdAt": "2026-07-30T20:20:12.171Z",
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "seed-consequences",
+        "templateVersion": "1.2.0",
+        "generatedAt": "2026-07-30T20:20:12.171Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG8BKPSPNF1M1GF605AF",
+      "timelineId": "01KYTAYG8040NSVZM9VHYXJHJF",
+      "slug": "lene-aldinger",
+      "type": "person",
+      "name": "Dr. Lene Aldinger",
+      "description": "A figure of London whose fortunes ride on the changed course of events.",
+      "initialState": {
+        "position": "well-placed observer",
+        "reputation": "rising"
+      },
+      "introducedByEventId": "01KYTAYG8BXKV5PD9NT6W1KE8G",
+      "bornYear": null,
+      "counterfactual": false,
+      "succeedsSlug": null,
+      "createdAt": "2026-07-30T20:20:12.171Z",
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "seed-consequences",
+        "templateVersion": "1.2.0",
+        "generatedAt": "2026-07-30T20:20:12.171Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG8BJSNZNBD4R29K143A",
+      "timelineId": "01KYTAYG8040NSVZM9VHYXJHJF",
+      "slug": "war-cabinet-secretariat",
+      "type": "institution",
+      "name": "The war cabinet secretariat",
+      "description": "The body in London that turns events into records and records into policy.",
+      "initialState": {
+        "agenda": "survey the changed circumstance",
+        "influence": "procedural but real"
+      },
+      "introducedByEventId": "01KYTAYG8B92C37PQ8DJ2EGQC0",
+      "bornYear": null,
+      "counterfactual": false,
+      "succeedsSlug": null,
+      "createdAt": "2026-07-30T20:20:12.171Z",
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "seed-consequences",
+        "templateVersion": "1.2.0",
+        "generatedAt": "2026-07-30T20:20:12.171Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG8BPXGMETHBAYRHNWZR",
+      "timelineId": "01KYTAYG8040NSVZM9VHYXJHJF",
+      "slug": "german-reich",
+      "type": "nation",
+      "name": "The German Reich",
+      "description": "The neighboring power whose plans assumed the old course of history.",
+      "initialState": {
+        "posture": "recalculating",
+        "intelligence": "secondhand and late"
+      },
+      "introducedByEventId": "01KYTAYG8B8B62YSJCRKPG61KZ",
+      "bornYear": null,
+      "counterfactual": false,
+      "succeedsSlug": null,
+      "createdAt": "2026-07-30T20:20:12.171Z",
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "seed-consequences",
+        "templateVersion": "1.2.0",
+        "generatedAt": "2026-07-30T20:20:12.171Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG8G278DB1J98E6YR03H",
+      "timelineId": "01KYTAYG8040NSVZM9VHYXJHJF",
+      "slug": "the-improved-method",
+      "type": "technology",
+      "name": "The Improved Method",
+      "description": "A working technique, escaped from the shops that guarded it, now spreading by apprenticeship.",
+      "initialState": {
+        "diffusion": "apprentice to apprentice"
+      },
+      "introducedByEventId": "01KYTAYG8G8H60AKQEM4WHJHKD",
+      "bornYear": null,
+      "counterfactual": false,
+      "succeedsSlug": null,
+      "createdAt": "2026-07-30T20:20:12.176Z",
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:12.174Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG8VNWP8KTWZVT7K3B8F",
+      "timelineId": "01KYTAYG8040NSVZM9VHYXJHJF",
+      "slug": "the-plain-speech-circle",
+      "type": "movement",
+      "name": "The Plain Speech Circle",
+      "description": "A loose movement of clerks and preachers who want the new circumstances named honestly.",
+      "initialState": {
+        "membership": "clerks, preachers, a few merchants"
+      },
+      "introducedByEventId": "01KYTAYG8VFQTCXK0F19CFJR49",
+      "bornYear": null,
+      "counterfactual": false,
+      "succeedsSlug": null,
+      "createdAt": "2026-07-30T20:20:12.187Z",
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:12.186Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG906GHD81VJYV8RZ3WX",
+      "timelineId": "01KYTAYG8040NSVZM9VHYXJHJF",
+      "slug": "the-younger-generation",
+      "type": "movement",
+      "name": "The Second Generation",
+      "description": "Those born after the divergence, for whom the changed world is simply the world.",
+      "initialState": {
+        "memory": "none of the old course"
+      },
+      "introducedByEventId": "01KYTAYG905VY66MD229F696P1",
+      "bornYear": null,
+      "counterfactual": false,
+      "succeedsSlug": null,
+      "createdAt": "2026-07-30T20:20:12.192Z",
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:12.191Z",
+        "mode": "mock"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "01KYTAYG8BKZPF7H96SZ25HEAK",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "fromEventId": "01KYTAYG8BXKV5PD9NT6W1KE8G",
+      "toEventId": "01KYTAYG8B92C37PQ8DJ2EGQC0",
+      "kind": "causes",
+      "strength": 0.85
+    },
+    {
+      "id": "01KYTAYG8B86QMCFR8C30Q0YS3",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "fromEventId": "01KYTAYG8BXKV5PD9NT6W1KE8G",
+      "toEventId": "01KYTAYG8BRYSD0PH4G93CC44H",
+      "kind": "causes",
+      "strength": 0.7
+    },
+    {
+      "id": "01KYTAYG8BXFPXEAXHKSFXWC5J",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "fromEventId": "01KYTAYG8B92C37PQ8DJ2EGQC0",
+      "toEventId": "01KYTAYG8B8B62YSJCRKPG61KZ",
+      "kind": "enables",
+      "strength": 0.5
+    },
+    {
+      "id": "01KYTAYG8CCK7K0BEH3PG55G9F",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "fromEventId": "01KYTAYG8BXKV5PD9NT6W1KE8G",
+      "toEventId": "01KYTAYG8B8B62YSJCRKPG61KZ",
+      "kind": "causes",
+      "strength": 0.65
+    },
+    {
+      "id": "01KYTAYG8G8HX37P42E0GG1V2A",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "fromEventId": "01KYTAYG8B8B62YSJCRKPG61KZ",
+      "toEventId": "01KYTAYG8GX86B5VTNRK0K754K",
+      "kind": "causes",
+      "strength": 0.6
+    },
+    {
+      "id": "01KYTAYG8GVVZ1J3YN9GWERXT5",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "fromEventId": "01KYTAYG8GX86B5VTNRK0K754K",
+      "toEventId": "01KYTAYG8G8H60AKQEM4WHJHKD",
+      "kind": "enables",
+      "strength": 0.7252426478546112
+    },
+    {
+      "id": "01KYTAYG8GAT2B0W2ZNQWRV61Q",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "fromEventId": "01KYTAYG8G8H60AKQEM4WHJHKD",
+      "toEventId": "01KYTAYG8G4EJ08WHQEBRHG7F6",
+      "kind": "causes",
+      "strength": 0.676607544021681
+    },
+    {
+      "id": "01KYTAYG8GRVTCEHH0Q4JSKRHT",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "fromEventId": "01KYTAYG8G4EJ08WHQEBRHG7F6",
+      "toEventId": "01KYTAYG8G7M7RCAHSKAEDVMDY",
+      "kind": "causes",
+      "strength": 0.7716378382407129
+    },
+    {
+      "id": "01KYTAYG8PRNRX4QGYD92D49DS",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "fromEventId": "01KYTAYG8G7M7RCAHSKAEDVMDY",
+      "toEventId": "01KYTAYG8PCT5NTSTPGE5X5H6T",
+      "kind": "causes",
+      "strength": 0.6
+    },
+    {
+      "id": "01KYTAYG8PAPRPY35GGH1XJ3XX",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "fromEventId": "01KYTAYG8PCT5NTSTPGE5X5H6T",
+      "toEventId": "01KYTAYG8PGEP4XMYJS4J6Y7A5",
+      "kind": "causes",
+      "strength": 0.691023799800314
+    },
+    {
+      "id": "01KYTAYG8PVA4178SBTWSWFK1V",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "fromEventId": "01KYTAYG8PGEP4XMYJS4J6Y7A5",
+      "toEventId": "01KYTAYG8PPGZ0T318NNGD22A7",
+      "kind": "enables",
+      "strength": 0.6454938929760828
+    },
+    {
+      "id": "01KYTAYG8P0B6GH6WGV8YS78S0",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "fromEventId": "01KYTAYG8PPGZ0T318NNGD22A7",
+      "toEventId": "01KYTAYG8PHMVG01T2Q4W9DTQG",
+      "kind": "causes",
+      "strength": 0.7912760550389066
+    },
+    {
+      "id": "01KYTAYG8VK35K1HCV4HF05YD4",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "fromEventId": "01KYTAYG8PHMVG01T2Q4W9DTQG",
+      "toEventId": "01KYTAYG8VVXHJK9DCBQTJ3WMN",
+      "kind": "causes",
+      "strength": 0.6
+    },
+    {
+      "id": "01KYTAYG8VHT6JS2G8SB7R0VCH",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "fromEventId": "01KYTAYG8VVXHJK9DCBQTJ3WMN",
+      "toEventId": "01KYTAYG8VFQTCXK0F19CFJR49",
+      "kind": "causes",
+      "strength": 0.6627420037984848
+    },
+    {
+      "id": "01KYTAYG8V563FXS9Y6M84NGJE",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "fromEventId": "01KYTAYG8VFQTCXK0F19CFJR49",
+      "toEventId": "01KYTAYG8V31E3BWKZDV67BZMD",
+      "kind": "causes",
+      "strength": 0.7315654510864988
+    },
+    {
+      "id": "01KYTAYG8VKV9EH6Z5P94YTZ3V",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "fromEventId": "01KYTAYG8V31E3BWKZDV67BZMD",
+      "toEventId": "01KYTAYG8VGEQ6MFPCV1E0HZDB",
+      "kind": "enables",
+      "strength": 0.5076533680548891
+    },
+    {
+      "id": "01KYTAYG90DAT4GTNK5RR0T0D9",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "fromEventId": "01KYTAYG8VGEQ6MFPCV1E0HZDB",
+      "toEventId": "01KYTAYG9025D1WD01VN4K5S5Y",
+      "kind": "causes",
+      "strength": 0.6
+    },
+    {
+      "id": "01KYTAYG919C5WGWXD3PS1CDFH",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "fromEventId": "01KYTAYG9025D1WD01VN4K5S5Y",
+      "toEventId": "01KYTAYG905VY66MD229F696P1",
+      "kind": "causes",
+      "strength": 0.642132431990467
+    },
+    {
+      "id": "01KYTAYG91KX7TM5FK0ECDVMZR",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "fromEventId": "01KYTAYG905VY66MD229F696P1",
+      "toEventId": "01KYTAYG90T28CBR1RGPTF42CS",
+      "kind": "causes",
+      "strength": 0.7516531091649086
+    },
+    {
+      "id": "01KYTAYG91H4QPHQSCT3EYJED5",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "fromEventId": "01KYTAYG90T28CBR1RGPTF42CS",
+      "toEventId": "01KYTAYG902XKDHWRTCZDD8CFE",
+      "kind": "causes",
+      "strength": 0.6059141853591428
+    },
+    {
+      "id": "01KYTAYG91RBYBFFJ2C8F7JN9G",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "fromEventId": "01KYTAYG902XKDHWRTCZDD8CFE",
+      "toEventId": "01KYTAYG90TC1Q06XZ5JMRVMFJ",
+      "kind": "causes",
+      "strength": 0.5246928085340187
+    },
+    {
+      "id": "01KYTAYG9788FGFGQNGTBQ0KVS",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "fromEventId": "01KYTAYG90TC1Q06XZ5JMRVMFJ",
+      "toEventId": "01KYTAYG972JPZ4NF19N4VHG3B",
+      "kind": "causes",
+      "strength": 0.6
+    },
+    {
+      "id": "01KYTAYG9780NJV49TDPBAG0KP",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "fromEventId": "01KYTAYG972JPZ4NF19N4VHG3B",
+      "toEventId": "01KYTAYG9748M6KNP37MPYJ1W4",
+      "kind": "enables",
+      "strength": 0.7851996754296124
+    },
+    {
+      "id": "01KYTAYG97P73VKJ2NW37M474Z",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "fromEventId": "01KYTAYG9748M6KNP37MPYJ1W4",
+      "toEventId": "01KYTAYG97TTKTRZHABE9YPAA8",
+      "kind": "enables",
+      "strength": 0.5435001947451383
+    },
+    {
+      "id": "01KYTAYG972NSP1F9P301DBPR8",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "fromEventId": "01KYTAYG97TTKTRZHABE9YPAA8",
+      "toEventId": "01KYTAYG97WVMBHT5ZVJKDZXV7",
+      "kind": "causes",
+      "strength": 0.7963299220893532
+    },
+    {
+      "id": "01KYTAYG97EJY9TM0J1M1V74MA",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "fromEventId": "01KYTAYG97WVMBHT5ZVJKDZXV7",
+      "toEventId": "01KYTAYG97Y268SX10XDDKWQ2N",
+      "kind": "causes",
+      "strength": 0.5605409472715109
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "01KYTAYGASTAJN1M95GG3PQ83Z",
+      "eventId": "01KYTAYG8B8B62YSJCRKPG61KZ",
+      "kind": "classified",
+      "title": "Notices, London, Autumn 1942",
+      "body": {
+        "kind": "classified",
+        "publication": "The London Register",
+        "dateLabel": "Autumn 1942",
+        "sections": [
+          {
+            "heading": "Wanted",
+            "notices": [
+              "Steady hands for the season, paid weekly, no questions about the last place.",
+              "Anyone with news of the northern consignment. The owner has stopped expecting it and now only wants to know."
+            ]
+          },
+          {
+            "heading": "For sale or exchange",
+            "notices": [
+              "Ration books for the quarter are ready at the district office; bring the old cover.",
+              "Wireless sets repaired while you wait; valves in short supply, patience requested.",
+              "Household effects of a family leaving the district. Everything must go by the week end; the reason is not your business."
+            ]
+          },
+          {
+            "heading": "Personal",
+            "notices": [
+              "To the party who knows what was said at the quay: it need not go further, and it will not, if matters are settled."
+            ]
+          }
+        ]
+      },
+      "stylingHints": {
+        "tone": null,
+        "period": null
+      },
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "artifact-classified",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.249Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYGAE3Q09XSSBQG6TWG1S",
+      "eventId": "01KYTAYG8B92C37PQ8DJ2EGQC0",
+      "kind": "letter",
+      "title": "Letter of the broadcaster Hugh Carden on the war cabinet secretariat convenes over the changed course",
+      "body": {
+        "kind": "letter",
+        "from": "the broadcaster Hugh Carden",
+        "to": "my brother in the trade",
+        "place": "London",
+        "dateLabel": "Later that year, 1940",
+        "salutation": "Brother,",
+        "paragraphs": [
+          "You will have heard some version of it by now, so let me give you the true one before rumor improves it further. The war cabinet secretariat meets in extraordinary session. Dr. Lene Aldinger argues that the moment must be committed to record before rumor rewrites it; a survey of holdings, obligations, and precedents is ordered.",
+          "What it means for us: the petrol contracts must be re-sworn, and I would not extend credit past the season until we see how the war cabinet secretariat settles. Aunt Zoe asks after your health and whether the northern road is safe; I have told her yes to the first and lied about the second.",
+          "Send word by the first reliable carrier. And send the account-book. The real one."
+        ],
+        "closing": "Your brother, in haste,",
+        "signature": "the",
+        "postscript": "P.S. The price of candles has doubled. Draw your own conclusions about how late the council is sitting."
+      },
+      "stylingHints": {
+        "tone": null,
+        "period": null
+      },
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "artifact-letter",
+        "templateVersion": "1.1.0",
+        "generatedAt": "2026-07-30T20:20:12.238Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYGAMKMFEDW9V2V7MNF20",
+      "eventId": "01KYTAYG8BRYSD0PH4G93CC44H",
+      "kind": "telegram",
+      "title": "Wire from London, Spring 1941",
+      "body": {
+        "kind": "telegram",
+        "office": "LONDON CENTRAL OFFICE",
+        "from": "Dr. Lene Aldinger",
+        "to": "THE OFFICE OF THE SECRETARY",
+        "filedAt": "Spring 1941, 4h",
+        "words": [
+          "MATTER CONFIRMED THIS DAY SPRING 1941",
+          "SUBSTANCE AS REPORTED PETROL PRICES SHIFT IN THE LONDON MARKETS",
+          "LOCAL PARTIES ALREADY MOVING",
+          "REQUIRE INSTRUCTION BEFORE COMMITTING FUNDS",
+          "DELAY COSTS MORE THAN ERROR"
+        ],
+        "endorsement": null
+      },
+      "stylingHints": {
+        "tone": null,
+        "period": null
+      },
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "artifact-telegram",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.244Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYGA89EAST7D9D3MM3HRS",
+      "eventId": "01KYTAYG8BXKV5PD9NT6W1KE8G",
+      "kind": "newspaper",
+      "title": "The London Evening Dispatch, 1940",
+      "body": {
+        "kind": "newspaper",
+        "masthead": "The London Evening Dispatch",
+        "dateline": "London, 1940; price: what the crier asks",
+        "headline": "THE SUCCESSION HOLDS",
+        "subhead": "From our own correspondents; the particulars as far as they can be known",
+        "columns": [
+          {
+            "heading": null,
+            "paragraphs": [
+              "The Allies lose the Second World War: Britain is forced out after the fall of France in 1940 and the Axis powers dictate the peace. London takes the news the way ports take weather: schedules shift before opinions do, and the harbormaster knows before the council does.",
+              "Those closest to the affair counsel patience; those furthest from it, as usual, counsel everything else. The war cabinet secretariat is said to be preparing an accounting, which is what it is always said to be preparing."
+            ]
+          },
+          {
+            "heading": "The view from the petrol exchange",
+            "paragraphs": [
+              "Prices answered before opinions did. Dealers in petrol report the season's contracts rewritten twice in a fortnight, and the porters, who always know first, have raised their rates.",
+              "It is meanwhile reported that position=well-placed observer; reputation=rising."
+            ]
+          }
+        ],
+        "notices": [
+          "Ration books for the quarter are ready at the district office; bring the old cover.",
+          "Wireless sets repaired while you wait; valves in short supply, patience requested.",
+          "Lost near the tram depot: one identity card, initials R.V. Honest finder rewarded."
+        ]
+      },
+      "stylingHints": {
+        "tone": null,
+        "period": null
+      },
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "artifact-newspaper",
+        "templateVersion": "1.1.0",
+        "generatedAt": "2026-07-30T20:20:12.232Z",
+        "mode": "mock"
+      }
+    }
+  ],
+  "convergencePoints": [
+    {
+      "id": "01KYTAYG93TT6WFE6PH5P56HM1",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "eventId": "01KYTAYG905VY66MD229F696P1",
+      "anchorId": "bl-srebrenica",
+      "similarityNote": "Structure reasserts itself; the shape of \"Srebrenica's men and boys are murdered\" emerges here despite the divergence.",
+      "attractor": "institutional",
+      "latenessYears": -1,
+      "pathNote": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "convergence-scan",
+        "templateVersion": "1.4.0",
+        "generatedAt": "2026-07-30T20:20:12.196Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG99ZYZ62K3YRXSZYGM9",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "eventId": "01KYTAYG9748M6KNP37MPYJ1W4",
+      "anchorId": "bl-covid-pandemic",
+      "similarityNote": "Different causes, familiar outcome: the attested \"COVID-19 becomes a pandemic\" finds its counterpart in this line.",
+      "attractor": "economic",
+      "latenessYears": 0,
+      "pathNote": null,
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "convergence-scan",
+        "templateVersion": "1.4.0",
+        "generatedAt": "2026-07-30T20:20:12.201Z",
+        "mode": "mock"
+      }
+    }
+  ],
+  "critiqueReports": [
+    {
+      "id": "01KYTAYG8DN9HN34JKND44J7G6",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "batchId": "01KYTAYG8DDADN7Y58T8KEAA6C",
+      "eraId": "01KYTAYG8B6E9A4PVGQ0W1HNHM",
+      "verdicts": [
+        {
+          "eventId": "01KYTAYG8BXKV5PD9NT6W1KE8G",
+          "issues": [],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYG8B92C37PQ8DJ2EGQC0",
+          "issues": [],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYG8BRYSD0PH4G93CC44H",
+          "issues": [
+            {
+              "type": "presentism",
+              "severity": "note",
+              "note": "Phrasing edges modern; acceptable, but watch the vocabulary."
+            }
+          ],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYG8B8B62YSJCRKPG61KZ",
+          "issues": [],
+          "verdict": "pass"
+        }
+      ],
+      "createdAt": "2026-07-30T20:20:12.173Z",
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "seed-consequences",
+        "templateVersion": "1.2.0",
+        "generatedAt": "2026-07-30T20:20:12.171Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG8HYK5WSXMC8EC8WCGA",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "batchId": "01KYTAYG8HVZ5DJXQH6M2NYJ2B",
+      "eraId": "01KYTAYG8EKA1V0RBH439B6469",
+      "verdicts": [
+        {
+          "eventId": "01KYTAYG8GX86B5VTNRK0K754K",
+          "issues": [
+            {
+              "type": "presentism",
+              "severity": "note",
+              "note": "Phrasing edges modern; acceptable, but watch the vocabulary."
+            }
+          ],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYG8G8H60AKQEM4WHJHKD",
+          "issues": [
+            {
+              "type": "presentism",
+              "severity": "note",
+              "note": "Phrasing edges modern; acceptable, but watch the vocabulary."
+            }
+          ],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYG8G4EJ08WHQEBRHG7F6",
+          "issues": [],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYG8G7M7RCAHSKAEDVMDY",
+          "issues": [],
+          "verdict": "pass"
+        }
+      ],
+      "createdAt": "2026-07-30T20:20:12.177Z",
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:12.174Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG8QYBNVT7DXS07MY7M2",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "batchId": "01KYTAYG8QPMWP4SM52T6P2QCG",
+      "eraId": "01KYTAYG8MZ1Q21ERT3YSRE31G",
+      "verdicts": [
+        {
+          "eventId": "01KYTAYG8PCT5NTSTPGE5X5H6T",
+          "issues": [],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYG8PGEP4XMYJS4J6Y7A5",
+          "issues": [],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYG8PPGZ0T318NNGD22A7",
+          "issues": [],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYG8PHMVG01T2Q4W9DTQG",
+          "issues": [
+            {
+              "type": "implausible-leap",
+              "severity": "fail",
+              "note": "The stated causes cannot carry this outcome (self-assessed plausibility 0.3); no regeneration will change the underlying claim."
+            },
+            {
+              "type": "great-man-overreach",
+              "severity": "warning",
+              "note": "The draft leans on individual daring where the snapshot offers no structural door."
+            }
+          ],
+          "verdict": "pass"
+        }
+      ],
+      "createdAt": "2026-07-30T20:20:12.183Z",
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:12.180Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG8WGJK74RV36RQ74XXE",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "batchId": "01KYTAYG8XTJDXQTD6TNCWXQYX",
+      "eraId": "01KYTAYG8T8YY7PC57FD131G7Y",
+      "verdicts": [
+        {
+          "eventId": "01KYTAYG8VVXHJK9DCBQTJ3WMN",
+          "issues": [],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYG8VFQTCXK0F19CFJR49",
+          "issues": [],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYG8V31E3BWKZDV67BZMD",
+          "issues": [
+            {
+              "type": "presentism",
+              "severity": "note",
+              "note": "Phrasing edges modern; acceptable, but watch the vocabulary."
+            }
+          ],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYG8VGEQ6MFPCV1E0HZDB",
+          "issues": [
+            {
+              "type": "presentism",
+              "severity": "note",
+              "note": "Phrasing edges modern; acceptable, but watch the vocabulary."
+            }
+          ],
+          "verdict": "pass"
+        }
+      ],
+      "createdAt": "2026-07-30T20:20:12.189Z",
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:12.186Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG9372W7QE2G38Q183FQ",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "batchId": "01KYTAYG933S0FAKHMNPDP7G21",
+      "eraId": "01KYTAYG8ZZJ5CX2YGRMH3ZA2Z",
+      "verdicts": [
+        {
+          "eventId": "01KYTAYG9025D1WD01VN4K5S5Y",
+          "issues": [],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYG905VY66MD229F696P1",
+          "issues": [],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYG90T28CBR1RGPTF42CS",
+          "issues": [],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYG902XKDHWRTCZDD8CFE",
+          "issues": [],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYG90TC1Q06XZ5JMRVMFJ",
+          "issues": [],
+          "verdict": "pass"
+        }
+      ],
+      "createdAt": "2026-07-30T20:20:12.195Z",
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:12.191Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG98AH8N2K2E9AREXEYG",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "batchId": "01KYTAYG989NAWSN04BEJ2G6HR",
+      "eraId": "01KYTAYG955J6X1ANDKJ1R7QRP",
+      "verdicts": [
+        {
+          "eventId": "01KYTAYG972JPZ4NF19N4VHG3B",
+          "issues": [],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYG9748M6KNP37MPYJ1W4",
+          "issues": [],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYG97TTKTRZHABE9YPAA8",
+          "issues": [],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYG97WVMBHT5ZVJKDZXV7",
+          "issues": [
+            {
+              "type": "presentism",
+              "severity": "note",
+              "note": "Phrasing edges modern; acceptable, but watch the vocabulary."
+            }
+          ],
+          "verdict": "pass"
+        },
+        {
+          "eventId": "01KYTAYG97Y268SX10XDDKWQ2N",
+          "issues": [
+            {
+              "type": "presentism",
+              "severity": "note",
+              "note": "Phrasing edges modern; acceptable, but watch the vocabulary."
+            }
+          ],
+          "verdict": "pass"
+        }
+      ],
+      "createdAt": "2026-07-30T20:20:12.200Z",
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:12.197Z",
+        "mode": "mock"
+      }
+    }
+  ],
+  "biographies": [],
+  "courtRecords": [
+    {
+      "id": "01KYTAYG8P517MBD5949XM217Z",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "eventId": "01KYTAYG8PHMVG01T2Q4W9DTQG",
+      "advocate": "The advocate submits that \"Dr. Lene Aldinger attempts the grand reconciliation\" stands within the record given: its cited causes are live in the world-state, its scale is modest for the era, and the objection mistakes an unfamiliar outcome for an unearned one. Histories of this dial are permitted to surprise; they are not permitted to float, and this event does not float.",
+      "skeptic": "The skeptic answers that \"Dr. Lene Aldinger attempts the grand reconciliation\" asks its causes to carry more than they weigh: the cited chain establishes opportunity, not outcome, and the world-state shows no actor with both the means and the appetite. Absent an intermediate step, the event is an assertion wearing a date.",
+      "ruling": {
+        "outcome": "revise",
+        "opinion": "The court finds the skeptic's narrower point proven: the outcome of \"Dr. Lene Aldinger attempts the grand reconciliation\" is reachable but not yet reached on the page. One retelling is ordered, per the instruction.",
+        "instruction": "Name the intermediate step that carries the outcome; the leap as written is unearned."
+      },
+      "createdAt": "2026-07-30T20:20:12.182Z",
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "court-judge",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.182Z",
+        "mode": "mock"
+      }
+    }
+  ],
+  "claims": [
+    {
+      "id": "01KYTAYG8JMKX9FESS0ZZFHDYN",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "eventId": "01KYTAYG8G7M7RCAHSKAEDVMDY",
+      "year": 1950,
+      "body": {
+        "kind": "regional-index",
+        "region": "Europe",
+        "index": "population",
+        "value": 53,
+        "delta": 0,
+        "note": "A settled generation: the parish rolls lengthen at the pace they always do when nothing catches fire."
+      },
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:12.178Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG8JE0E6NDGA55S1E56N",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "eventId": "01KYTAYG8G7M7RCAHSKAEDVMDY",
+      "year": 1950,
+      "body": {
+        "kind": "regional-index",
+        "region": "Europe",
+        "index": "economicVitality",
+        "value": 53,
+        "delta": 0,
+        "note": "The books balance about as they did before; the divergence has not yet reached the counting house."
+      },
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:12.178Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG8JHQ07HHE6CT9BEHZ1",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "eventId": "01KYTAYG8G7M7RCAHSKAEDVMDY",
+      "year": 1950,
+      "body": {
+        "kind": "region-control",
+        "region": "Europe",
+        "holder": "united-kingdom",
+        "grip": "contested",
+        "note": "The United Kingdom holds the theatre this era, but not everywhere, and not cheaply."
+      },
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:12.178Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG8JF1BZXKN7MB5MTV1F",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "eventId": "01KYTAYG8G8H60AKQEM4WHJHKD",
+      "year": 1945,
+      "body": {
+        "kind": "name-drift",
+        "nameKind": "institution",
+        "attested": "the chancery",
+        "drifted": "the standing office",
+        "note": "What began as an emergency committee kept sitting, and kept the plain name it had been given in haste."
+      },
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:12.178Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG8R405MA28G5B4EP5MZ",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "eventId": "01KYTAYG8PHMVG01T2Q4W9DTQG",
+      "year": 1963,
+      "body": {
+        "kind": "regional-index",
+        "region": "Europe",
+        "index": "population",
+        "value": 54,
+        "delta": 1,
+        "note": "A settled generation: the parish rolls lengthen at the pace they always do when nothing catches fire."
+      },
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:12.184Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG8R6X625Z19H80184H1",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "eventId": "01KYTAYG8PHMVG01T2Q4W9DTQG",
+      "year": 1963,
+      "body": {
+        "kind": "regional-index",
+        "region": "Europe",
+        "index": "economicVitality",
+        "value": 52,
+        "delta": -1,
+        "note": "The books balance about as they did before; the divergence has not yet reached the counting house."
+      },
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:12.184Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG8RCF2TEGHWPWF390PQ",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "eventId": "01KYTAYG8PHMVG01T2Q4W9DTQG",
+      "year": 1963,
+      "body": {
+        "kind": "region-control",
+        "region": "Europe",
+        "holder": "united-kingdom",
+        "grip": "contested",
+        "note": "The United Kingdom holds the theatre this era, but not everywhere, and not cheaply."
+      },
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:12.184Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG8X5X328T2SE7Z9VVNA",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "eventId": "01KYTAYG8VGEQ6MFPCV1E0HZDB",
+      "year": 1984,
+      "body": {
+        "kind": "regional-index",
+        "region": "Europe",
+        "index": "population",
+        "value": 54,
+        "delta": 0,
+        "note": "A settled generation: the parish rolls lengthen at the pace they always do when nothing catches fire."
+      },
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:12.189Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG8X9Q36C304QXFAJAZ6",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "eventId": "01KYTAYG8VGEQ6MFPCV1E0HZDB",
+      "year": 1984,
+      "body": {
+        "kind": "regional-index",
+        "region": "Europe",
+        "index": "economicVitality",
+        "value": 54,
+        "delta": 2,
+        "note": "The books balance about as they did before; the divergence has not yet reached the counting house."
+      },
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:12.189Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG8XMA63J8PRNMZWF49G",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "eventId": "01KYTAYG8VGEQ6MFPCV1E0HZDB",
+      "year": 1984,
+      "body": {
+        "kind": "region-control",
+        "region": "Europe",
+        "holder": "united-kingdom",
+        "grip": "contested",
+        "note": "The United Kingdom holds the theatre this era, but not everywhere, and not cheaply."
+      },
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:12.189Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG93WNAVCYWM697SQ1CE",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "eventId": "01KYTAYG90TC1Q06XZ5JMRVMFJ",
+      "year": 2018,
+      "body": {
+        "kind": "regional-index",
+        "region": "Europe",
+        "index": "population",
+        "value": 56,
+        "delta": 2,
+        "note": "A settled generation: the parish rolls lengthen at the pace they always do when nothing catches fire."
+      },
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:12.195Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG935CGX9MKD8H1RPY4S",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "eventId": "01KYTAYG90TC1Q06XZ5JMRVMFJ",
+      "year": 2018,
+      "body": {
+        "kind": "regional-index",
+        "region": "Europe",
+        "index": "economicVitality",
+        "value": 61,
+        "delta": 7,
+        "note": "Far enough from the divergence for its second-order effects to reach the markets rather than the chronicles."
+      },
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:12.195Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG93N738K1S930N3PB3K",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "eventId": "01KYTAYG90TC1Q06XZ5JMRVMFJ",
+      "year": 2018,
+      "body": {
+        "kind": "region-control",
+        "region": "Europe",
+        "holder": "united-kingdom",
+        "grip": "held",
+        "note": "The United Kingdom holds the theatre this era, and the arrangements are beginning to look permanent."
+      },
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:12.195Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG93VJJ026YX40HWKCXJ",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "eventId": "01KYTAYG905VY66MD229F696P1",
+      "year": 1994,
+      "body": {
+        "kind": "name-drift",
+        "nameKind": "title",
+        "attested": "protostrator",
+        "drifted": "warden of the roads",
+        "note": "The office outlived the court that coined its name, and the clerks translated it into something a carter could follow."
+      },
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:12.195Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG98AQ7XW4E4PF7V0W5G",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "eventId": "01KYTAYG97Y268SX10XDDKWQ2N",
+      "year": 2025,
+      "body": {
+        "kind": "regional-index",
+        "region": "Europe",
+        "index": "population",
+        "value": 59,
+        "delta": 3,
+        "note": "A settled generation: the parish rolls lengthen at the pace they always do when nothing catches fire."
+      },
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:12.200Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG99J2EFF9KQ9R583KH2",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "eventId": "01KYTAYG97Y268SX10XDDKWQ2N",
+      "year": 2025,
+      "body": {
+        "kind": "regional-index",
+        "region": "Europe",
+        "index": "economicVitality",
+        "value": 66,
+        "delta": 5,
+        "note": "Far enough from the divergence for its second-order effects to reach the markets rather than the chronicles."
+      },
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:12.200Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYG995A333WXZB08S70T2",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "eventId": "01KYTAYG97Y268SX10XDDKWQ2N",
+      "year": 2025,
+      "body": {
+        "kind": "region-control",
+        "region": "Europe",
+        "holder": "united-kingdom",
+        "grip": "held",
+        "note": "The United Kingdom holds the theatre this era, and the arrangements are beginning to look permanent."
+      },
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "era-generate",
+        "templateVersion": "1.6.0",
+        "generatedAt": "2026-07-30T20:20:12.200Z",
+        "mode": "mock"
+      }
+    }
+  ],
+  "schools": [
+    {
+      "id": "01KYTAYGB10AFM1HQ45KG62VKJ",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "name": "the Ledger School",
+      "stance": "history is what the accounts will bear, and every settlement is legible in what somebody agreed to pay for it",
+      "seat": "the counting house at Paris",
+      "blindSpot": "anything nobody thought worth writing down",
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "historiography-schools",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.257Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYGB12YMVMY06RJQ939W3",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "name": "the Assembly School",
+      "stance": "history turns on who was in the room and what they were willing to lose, and the rest is weather",
+      "seat": "the assembly rooms at Paris",
+      "blindSpot": "the century of quiet in which the room itself was built",
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "historiography-schools",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.257Z",
+        "mode": "mock"
+      }
+    }
+  ],
+  "interpretations": [
+    {
+      "id": "01KYTAYGB2SK0HQPPX9K2Y1FFF",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "eventId": "01KYTAYG8VFQTCXK0F19CFJR49",
+      "schoolId": "01KYTAYGB10AFM1HQ45KG62VKJ",
+      "gloss": "Read the accounts and \"The German Reich tests the new balance\" stops being a decision at all. The money had already moved; what the chronicles record as a choice is the moment somebody finally wrote down an arrangement that had been operating for two seasons. Our rivals want a villain here. We have a ledger, and the ledger balances.",
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "event-interpretation",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.258Z",
+        "mode": "mock"
+      }
+    },
+    {
+      "id": "01KYTAYGB2A694Q77FZESN0KAT",
+      "branchId": "01KYTAYG806N2GD3GGY9ZNBNR2",
+      "eventId": "01KYTAYG8VFQTCXK0F19CFJR49",
+      "schoolId": "01KYTAYGB12YMVMY06RJQ939W3",
+      "gloss": "\"The German Reich tests the new balance\" happened because three people in one room preferred it to the alternative in front of them, and the alternative in front of them was not the one posterity imagines. The Ledger School will tell you the money decided. The money was available for either course. Somebody chose.",
+      "provenance": {
+        "kind": "generated",
+        "model": "mock",
+        "templateId": "event-interpretation",
+        "templateVersion": "1.0.0",
+        "generatedAt": "2026-07-30T20:20:12.258Z",
+        "mode": "mock"
+      }
+    }
+  ]
+}

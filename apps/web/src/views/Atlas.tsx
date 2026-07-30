@@ -16,6 +16,39 @@ import { Shell, Wordmark } from '../components/Shell.js'
 import { ApiError, api } from '../lib/api.js'
 import { GALLERY, type GalleryEntry } from '../lib/gallery.js'
 
+/**
+ * The showcase chronicles (v2/M25): one ancient, one early modern, one
+ * twentieth century, each already derived so a first visit has something to
+ * read. Loaded lazily, so an Atlas nobody clicks downloads none of them.
+ */
+const SHOWCASES = {
+  library: {
+    title: 'The Unburnt Library',
+    yearLabel: '48 BC',
+    line: 'Alexandria keeps its stacks, and the ancient world keeps its memory.',
+    load: () => import('../../../../demo/the-unburnt-library.uchronia.json'),
+  },
+  alexandria: {
+    title: 'The Alexandrian Inheritance',
+    yearLabel: '48 BC',
+    line: 'The same divergence, carried two hundred years further, with an epilogue past the horizon.',
+    load: () => import('../../../../demo/the-alexandrian-inheritance.uchronia.json'),
+  },
+  armada: {
+    title: 'The Armada Lands',
+    yearLabel: '1588',
+    line: 'Parma crosses. Derived by symposium, with the court sitting on what the chairs could not settle.',
+    load: () => import('../../../../demo/the-armada-lands.uchronia.json'),
+  },
+  allies: {
+    title: 'The Allies Lose',
+    yearLabel: '1940',
+    line: 'Britain is forced out after the fall of France, and the postwar order is written by the victors.',
+    load: () => import('../../../../demo/the-allies-lose.uchronia.json'),
+  },
+} as const
+type ShowcaseKey = keyof typeof SHOWCASES
+
 /** V1 - Atlas: the POD studio. Composer + curated catalogue + open ledgers. */
 export function Atlas() {
   const navigate = useNavigate()
@@ -148,11 +181,12 @@ export function Atlas() {
     },
   })
 
-  // The showcase ledger ships with the app; loading it is one click. The JSON
-  // chunk only downloads when asked for. A re-import finds the existing copy.
+  // The showcase ledgers ship with the app; loading one is a click. Each JSON
+  // chunk only downloads when asked for, so an Atlas that nobody clicks costs
+  // nothing. A re-import finds the existing copy.
   const loadDemo = useMutation({
-    mutationFn: async () => {
-      const demo = (await import('../../../../demo/the-unburnt-library.uchronia.json')).default
+    mutationFn: async (which: ShowcaseKey) => {
+      const demo = (await SHOWCASES[which].load()).default
       try {
         return await api.importAggregate(demo)
       } catch (error) {
@@ -531,18 +565,41 @@ export function Atlas() {
       </section>
 
       {timelines.isSuccess && timelines.data.length === 0 && (
-        <p className="mx-auto mt-6 max-w-[680px] text-center font-data text-[13px] text-ink-faded">
-          first time here?{' '}
-          <button
-            type="button"
-            onClick={() => loadDemo.mutate()}
-            disabled={loadDemo.isPending}
-            className="text-thread underline underline-offset-4 hover:no-underline disabled:opacity-50"
-          >
-            {loadDemo.isPending ? 'binding the showcase ledger…' : 'load the showcase chronicle'}
-          </button>{' '}
-          (67 events of an Alexandria that never burned)
-        </p>
+        <section className="mx-auto mt-6 max-w-[680px]" aria-label="showcase chronicles">
+          <p className="text-center font-data text-[13px] text-ink-faded">
+            first time here? open one already derived, rather than starting from nothing.
+          </p>
+          <ul className="mt-3 divide-y divide-rule border-y border-rule">
+            {(Object.keys(SHOWCASES) as ShowcaseKey[]).map((key) => (
+              <li key={key}>
+                <button
+                  type="button"
+                  onClick={() => loadDemo.mutate(key)}
+                  disabled={loadDemo.isPending}
+                  data-testid={`showcase-${key}`}
+                  className="group grid w-full grid-cols-[86px_1fr] gap-4 px-1 py-3 text-left hover:bg-paper-raised disabled:opacity-50"
+                >
+                  <span className="pt-0.5 text-right font-data text-[13px] text-ink-faded">
+                    {SHOWCASES[key].yearLabel}
+                  </span>
+                  <span className="min-w-0">
+                    <span className="block text-[16px] font-semibold leading-snug group-hover:underline decoration-rule underline-offset-4">
+                      {SHOWCASES[key].title}
+                    </span>
+                    <span className="mt-0.5 block text-[14px] text-ink-faded">
+                      {SHOWCASES[key].line}
+                    </span>
+                  </span>
+                </button>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-2 text-center font-data text-[11.5px] text-ink-faded">
+            {loadDemo.isPending
+              ? 'binding the showcase ledger…'
+              : 'all three were derived by the demo engine, and say so on the page'}
+          </p>
+        </section>
       )}
       {demoError && (
         <p
