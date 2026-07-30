@@ -24,6 +24,7 @@ The build is driven by a master prompt (mirrored expectations live throughout `d
 | **record vs. ink** | *Record* = curated real history (Prussian blue, `provenance: curated`). *Ink* = generated content (iron-gall ink, full provenance: model, template id+version, timestamp, mock/live) |
 | **pressures** | 3–7 named tensions derived from world-state, feeding the next era's generation |
 | **wildcard** | A low-structural-implication candidate event; the dial sets how many survive |
+| **demo mode** | The user-facing name (v2/M13) for the keyless deterministic MockProvider engine: DEMO pill + composer banner say so; **live** = real API derivation. `mode: 'live' \| 'demo'` rides `/api/config` |
 
 ## 3. Architecture map
 
@@ -67,7 +68,7 @@ apps/server        Hono. Routes + SSE, AnthropicProvider, Drizzle + better-sqlit
   src/seed-demo.ts   showcase seeding (bundled ledger or demo/ on disk)
   src/http-error.ts  ApiError  ·  src/test-helpers.ts  in-memory test app
   scripts/           copy-vercel-assets.mjs stages dist/drizzle + dist/fonts
-  src/routes/        meta (config/baseline), timelines (CRUD+PATCH+validated import+export),
+  src/routes/        meta (config/baseline/live-check: 1-token key proof), timelines (CRUD+PATCH+validated import+export),
                      branches (view + md/html export + leaf DELETE), generate (SSE;
                      persist-before-stream; per-branch lock; era healing; token ceiling),
                      expand (event/era/entity + regenerate-in-place), fork, artifacts
@@ -110,9 +111,11 @@ corepack enable pnpm        # once per machine (pnpm 11.x)
 pnpm install                # install everything
 
 pnpm dev                    # server (8787) + web (5173) in parallel
-pnpm dev:mock               # same, keyless mock mode + demo pacing (cross-platform)
+pnpm dev:mock               # same, keyless demo mode + demo pacing (cross-platform)
 pnpm dev:server             # server only (tsx watch)
 pnpm dev:web                # web only (vite)
+pnpm dev:preview            # demo mode with the server in-process (no tsx watch);
+                            # used by .claude/launch.json for browser-pane previews
 
 pnpm test                   # vitest, all packages
 pnpm typecheck              # tsc --noEmit, all packages
@@ -125,6 +128,8 @@ pnpm e2e                    # playwright mock-mode journey (boots server+web its
                             # first run: pnpm --filter @uchronia/web exec playwright install chromium)
 pnpm verify:vercel          # build the serverless bundle, stage it as Vercel ships it,
                             # smoke it with real requests (CI runs this on ubuntu)
+pnpm check:secrets          # scan working tree + staged diff for key material
+                            # (CI runs it; run before every push)
 ```
 
 Node ≥ 22.13 (pnpm 11.16's own engine floor; `.nvmrc` pins 22.13).
@@ -136,7 +141,7 @@ Per package: `pnpm --filter @uchronia/<schemas|core|server|web> <script>`.
 | Var | Effect when set | Effect when absent |
 | --- | --- | --- |
 | `ANTHROPIC_API_KEY` | Live generation (server-side only; never logged, never sent to client) | App degrades to mock mode |
-| `UCHRONIA_MOCK=1` | Forces deterministic MockProvider everywhere (CI always sets this) | Live if key present, else mock |
+| `UCHRONIA_MOCK=1` | Forces the deterministic demo engine (MockProvider) everywhere, even with a key (CI always sets this) | Live if key present, else demo |
 | `UCHRONIA_MODEL_GENERATION` | Overrides generation model (must support structured outputs) | `claude-sonnet-5` |
 | `UCHRONIA_MODEL_CRITIC` | Overrides critic/utility model | `claude-haiku-4-5-20251001` |
 | `UCHRONIA_PORT` | Server port | `8787` |
@@ -158,14 +163,16 @@ Set-but-empty variables count as unset (a copied template can't silently disable
 
 ## 7. Engineering conventions
 
-- **Commits**: Conventional Commits, `type(scope): imperative subject ≤ 72 chars`. Types: feat fix test docs chore refactor perf ci. Scopes: repo schemas core server web prompts design docs ci. Atomic: one logical change (+ its tests + its doc updates); never mix features, or refactor with feature. 5–15 commits per milestone. Push at milestone boundaries.
-- **Code**: TS strict, no `any` (Biome enforces). `packages/core` stays pure (IO via injected ports only). All LLM output Zod-validated at the boundary. Typed error taxonomy. Secrets never logged/committed/sent to client.
+- **Commits**: Conventional Commits, `type(scope): imperative subject ≤ 72 chars`. Types: feat fix test docs chore refactor perf ci. Scopes: repo schemas core server web prompts design docs ci evals maps. Atomic: one logical change (+ its tests + its doc updates); never mix features, or refactor with feature. 5–15 commits per milestone. Push at milestone boundaries.
+- **Code**: TS strict, no `any` (Biome enforces). `packages/core` stays pure (IO via injected ports only). All LLM output Zod-validated at the boundary. Typed error taxonomy. Secrets never logged/committed/sent to client: the key lives only in the untracked `.env` (local) and the Vercel dashboard; docs use placeholders; `pnpm check:secrets` scans the tree and staged diff (CI enforces it, and it runs before every push).
 - **No em dashes, anywhere**: not in docs, comments, UI strings, or data (per user direction, 2026-07-26; generated prose was already banned from them). Use commas, colons, hyphens, or parentheses; en dashes for year ranges are fine. Sole exception: the scrubber's detection regex and its test fixtures (`packages/core/src/pipeline/structured.ts` + `.test.ts`) must contain the character in order to eliminate it.
 - **Tests**: matrix in [docs/TESTING.md](docs/TESTING.md). A milestone is done only when its acceptance criteria pass.
 - **Docs**: see the sync directive below. ADRs in `docs/adr/` for every deviation from the master prompt.
 - **Sensitive history**: every generation prompt embeds a sober historiographic register; no glorification of atrocity; the critic treats tonal violations as failures. README carries the speculative-fiction disclaimer.
 
 ## 8. Current status
+
+**The v2.0.0 program ("The Second Derivation") is underway** (opened 2026-07-29): milestones M13-M25 toward the WW2 gate, tracked honestly in [docs/ROADMAP.md](docs/ROADMAP.md). M13 is complete: demo-mode honesty (mode field, DEMO pill, composer banner, notice-register tokens), `/api/live-check`, the per-model cost meter with `run.usage` frames and dated pricing estimates (`core/src/pricing.ts`), the secret scan (`pnpm check:secrets`, CI-enforced), and the in-process `dev:preview` launch path. Live-only gates verify on the deployed instance, not this machine (ADR-0004): no key ever lands in this tree; demo-side gates stay enforced in CI.
 
 **v1.0.0 (2026-07-26) = v0.1.0 + the 0.2 hardening series (2026-07-23) + the deployment-hardening pass (2026-07-26)**: all milestones M0–M12 complete, then a ~15-commit audit-driven pass (graph-fed generation, region-aware convergence, entity lifecycle/9th validator rule, dial-aware critic, generation locking + import validation + era healing, abort/usage/cost ceiling, lifecycle routes, web code-splitting, CI matrix, Docker), then a full line-by-line audit that rebuilt the Vercel chain on a prebundled function (`build:vercel` → `api/index.mjs`, with a body-reconstructing `(req, res)` bridge for the Node runtime's helpers), pinned the toolchain (Node ≥ 22.13, pnpm without corepack), moved the generation default to a structured-outputs-capable model (`claude-sonnet-5`), added the fake-Vercel smoke (`pnpm verify:vercel`, CI `vercel-shape` job), fixed a dozen audit-found bugs across core/server/web, and removed em dashes repo-wide. See [docs/ROADMAP.md](docs/ROADMAP.md) for the honest record and open threads (notably: live mode is provider-unit-tested and cost-capped but still unexercised against the real API from this machine). The Vercel deployment is live at <https://uchronia-server.vercel.app/> (confirmed 2026-07-26). The full mock-mode product works keyless: `pnpm dev:mock`, then "load the showcase chronicle" on the empty Atlas. Deployment posture: [docs/DEPLOY.md](docs/DEPLOY.md) + ADR-0003 (mock is public, live is local).
 

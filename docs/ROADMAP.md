@@ -42,6 +42,30 @@ A full line-by-line audit (five parallel reviewers over packages, server, web, r
 
 Released as **v1.0.0** (2026-07-26), the first stable cut: engine, interface, deployment chain, and the live playground all verified.
 
+## v2.0.0: The Second Derivation (program opened 2026-07-29)
+
+v2 exists because of a relevance failure: a user asked "What if the Allies lost World War 2" and the silent mock fallback served a canned history set in the 1600s (the mock's year regex read "2" as a year, found nothing, and rolled a random century). The release's north star: **the engine answers the question asked, provably.** The headline acceptance test (the WW2 gate): that prompt must produce, in live mode, an interpretation card offering real WW2 divergence mechanisms and a derived history that stays on subject (eval-scored, relevance mean >= 4.0 with no benchmark POD below 3), and in demo mode a POD snapped to 1939-1945 with an unmissable banner explaining that demo content is canned. If the WW2 gate does not pass, v2.0.0 does not ship.
+
+Ground rules for the program: milestone order M13-M25 with all gates green at every boundary; the app releasable at every boundary; mock parity and keyless CI/e2e forever; secrets never in the repo (the scan is CI-enforced); build-time API spend tracked and reported here at release; docs synced in the same commit series as every change.
+
+| Milestone | Status | Scope (planned) |
+| --- | --- | --- |
+| M13: Honest modes and live foundations | done 2026-07-29 (live smoke deferred per ADR-0004) | Landed: mode field + DEMO pill + composer banner (amber notice register, both themes), Settings v2 with guided go-live steps, POST /api/live-check (1-token proof, injectable, route-tested), per-model usage accounting + run.usage SSE frames + dated pricing table in core (cache tiers included ahead of M24), secret scan in CI, e2e demo-honesty spec, in-process dev:preview launch. The first real live derivation happens on the deployed instance (owner sets the key in Vercel; ADR-0004) |
+| M14: POD Intake 2.0 | planned | pod-interpret stage (generation tier) with baseline retrieval + candidate mechanisms, interpretation card UI, relevance guard (on-divergence critic dimension + POD-reachability check), demo intake that snaps named events to curated anchors (the random-year fallback dies) |
+| M15: Quality machinery | planned | packages/evals benchmark (25+ PODs, mock + budget-capped live lanes, thresholds in docs/EVALS.md), critic model A/B with seeded violations, Engine Room trace inspector (run_traces), validator expansion (tech-prerequisite DAG, demographic sanity, geographic plausibility), fast-check fuzzing |
+| M16: Baseline 2.0 and the POD gallery | planned | Anchor schema v2 (tags, regions, magnitude, attractorStrength), 1500+ anchors with era/region quotas and a per-batch self-review, curation browse view, 60+ entry POD gallery with intake hints |
+| M17: Symposium and the Court | planned | Optional historian-panel derivation mode (specialist passes + synthesizer, contested marks), Court of Plausibility for high-magnitude/disputed events (advocate/skeptic/judge, transcript persisted), multi-axis dial flyout |
+| M18: Lives, deep time, convergence, language | planned | Entity simulation 2.0 (lifespans, succession, counterfactual persons, regional indices), deep time to the present + speculative epilogue era, Convergence 2.0 (attractor explanations, lateness, path-altered notes), language-drift claims + philology lens |
+| M19: Branch algebra and probes | planned | Counterfactual pulse (predicted deltas + commit-fork), graft with validator gating, tri-column compare, cross-branch entity tracker |
+| M20: The literary surface | planned | New artifact kinds (newspaper, letter, telegram, radio transcript, court record, obituary, classified ad), Encyclopaedia Uchronica, in-world historiography schools + interpretations tab, biography deep-dives + deterministic procedural heraldry |
+| M21: The Book and publishing | planned | Commission-the-chronicle book compiler (print-CSS HTML + EPUB), site-bundle download + documented GitHub Pages path |
+| M22: Maps, motion, comparison, navigation | planned | Stylized SVG cartography with region-control claims + era scrubber, Chronoscope play mode, Compare 2.0 (synced spines, rhyme ties, divergence heat strip), Atlas fork constellation, Ctrl+K command palette |
+| M23: The Archivist and the Grand Inquiry | planned | Per-branch archivist chat (retrieval + citation pins, persisted, honest silence), Grand Inquiry thesis essays saved as artifacts, shared tested retrieval module |
+| M24: Platform and live ops | planned | Prompt caching with measured savings, parallel fan-out for expanders, resumable runs + snapshots + undo-burn, gated live on Vercel (UCHRONIA_ACCESS_TOKEN unlock, rate limits, daily budget, ADR-0004 superseding ADR-0003) |
+| M25: Onboarding, showcases, release | planned | First-run onboarding + tour, three live-derived curated showcase chronicles (incl. the Allies-lose-WW2 dogfood), version 2.0.0, CHANGELOG, README + full docs sweep, final gates incl. the WW2 gate, tag + deploy |
+
+Build-time API spend so far: none (no key present yet; all work to date is mock-side).
+
 ## Open threads
 
 - Live-mode generation is wired, provider-unit-tested, and cost-capped, but still has not been exercised against the real API from this machine (no key present); mock parity is the tested path. First run with a key should start with one small timeline. (The structured-outputs model landmine above is fixed, which removes the known first-call blocker.)
