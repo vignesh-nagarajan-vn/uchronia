@@ -21,6 +21,9 @@ function freshWorld(): { world: World; rootId: string; ctx: PipelineCtx } {
     createdAt: NOW,
     settings: {
       dial: 55,
+      derivation: 'standard',
+      court: false,
+      epilogue: false,
       horizonYears: 120,
       defaultLenses: ['political', 'economic'],
       models: { generation: 'mock', critic: 'mock', mode: 'mock' },

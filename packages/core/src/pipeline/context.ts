@@ -128,3 +128,22 @@ export function summarizeRecentEvents(world: World, branchId: string, limit = 12
     })
     .join('\n')
 }
+
+/**
+ * The branch's coarse regional readings, pre-rendered for prompts (v2/M18).
+ * Empty string when no era has moved a dial yet, which is the common case
+ * early on and reads better than a table of nothing.
+ */
+export function summarizeIndices(world: World, branchId: string): string {
+  const latest = world.regionalIndices(branchId)
+  if (latest.size === 0) return ''
+  const byRegion = new Map<string, string[]>()
+  for (const claim of latest.values()) {
+    const line = `${claim.index} ${claim.value}`
+    byRegion.set(claim.region, [...(byRegion.get(claim.region) ?? []), line])
+  }
+  return [...byRegion.entries()]
+    .sort((a, b) => a[0].localeCompare(b[0]))
+    .map(([region, lines]) => `- ${region}: ${lines.sort().join(', ')}`)
+    .join('\n')
+}

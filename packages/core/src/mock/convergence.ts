@@ -1,4 +1,4 @@
-import type { ConvergenceScanOut } from '@uchronia/schemas'
+import { CONVERGENCE_ATTRACTORS, type ConvergenceScanOut } from '@uchronia/schemas'
 import type { ConvergenceScanArgs } from '../prompts/convergence-scan.js'
 import type { Rng } from '../rng.js'
 
@@ -34,7 +34,22 @@ export function mockConvergenceScan(rawArgs: unknown, rng: Rng): ConvergenceScan
 
   const note = NOTE_TEMPLATES[rng.int(0, NOTE_TEMPLATES.length - 1)] ?? NOTE_TEMPLATES[0]
   if (!note) return { matches: [] }
+  // v2/M18: the demo names an attractor and, when the years actually differ,
+  // says the road was not the attested one. Lateness itself is arithmetic and
+  // is computed by the pipeline, never asserted here.
+  const anchor = candidates.find((c) => c.id === best.anchorId)
   return {
-    matches: [{ ref: best.ref, anchorId: best.anchorId, similarityNote: note(best.title) }],
+    matches: [
+      {
+        ref: best.ref,
+        anchorId: best.anchorId,
+        similarityNote: note(best.title),
+        attractor: rng.pick(CONVERGENCE_ATTRACTORS),
+        pathNote:
+          best.gap > 5 && anchor
+            ? `It arrives anyway, ${best.gap} years off the attested schedule and by a road the record does not know.`
+            : null,
+      },
+    ],
   }
 }

@@ -40,6 +40,13 @@ export function EraHeader({ era }: { era: Era }) {
             {formatYearRange(era.startYear, era.endYear)}
           </span>
         </h2>
+        {/* The epilogue says what it is before anything it contains is read. */}
+        {era.speculative && (
+          <div className="mt-1 flex items-center gap-2" data-testid="epilogue-mark">
+            <span className="stamp text-notice">not history: a projection past the horizon</span>
+            <span className="speculative-hatch h-2 flex-1 rounded-[1px]" aria-hidden="true" />
+          </div>
+        )}
         <p className="mt-0.5 text-[15px] text-ink-faded">{era.summary}</p>
         {era.pressures.length > 0 && (
           <p className="mt-1 font-data text-[12px] text-ink-faded">

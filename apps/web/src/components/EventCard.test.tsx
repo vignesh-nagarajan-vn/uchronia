@@ -23,7 +23,7 @@ const baseEvent: EventView = {
   plausibility: { score: 0.78, rationale: 'Prices move first.' },
   distanceFromPod: 1,
   wildcard: false,
-  flags: { disputed: false, convergence: false },
+  flags: { disputed: false, convergence: false, contested: false },
   criticNotes: null,
   provenance: { kind: 'user' },
   causes: [],
@@ -42,11 +42,15 @@ const entities = new Map<string, EntityView>([
       description: 'The riverine power.',
       initialState: {},
       introducedByEventId: null,
+      bornYear: null,
+      counterfactual: false,
+      succeedsSlug: null,
       createdAt: '2026-07-22T12:00:00.000Z',
       provenance: { kind: 'user' },
       state: {},
       changeLog: [],
       endedByEventId: null,
+      tenures: [],
     },
   ],
 ])
@@ -77,7 +81,7 @@ describe('EventCard', () => {
   it('shows disputed and convergence marks when flagged', () => {
     renderCard({
       ...baseEvent,
-      flags: { disputed: true, convergence: true },
+      flags: { disputed: true, convergence: true, contested: false },
       criticNotes: [{ type: 'teleology', severity: 'fail', note: 'written toward an ending' }],
     })
     expect(screen.getByTestId('disputed-mark').textContent).toContain('disputed')

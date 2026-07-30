@@ -30,6 +30,12 @@ function persistPipelineEvent(deps: ServerDeps, ev: PipelineEvent): void {
     case 'critique.completed':
       deps.repo.insertCritique(ev.report)
       break
+    case 'court.completed':
+      deps.repo.insertCourtRecord(ev.record)
+      break
+    case 'claim.recorded':
+      deps.repo.insertClaim(ev.claim)
+      break
     case 'convergence.found':
       deps.repo.insertConvergence(ev.point)
       deps.repo.updateEventFlags(ev.eventId, { convergence: true })

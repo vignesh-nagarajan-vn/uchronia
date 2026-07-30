@@ -22,3 +22,13 @@ export function formatUsd(usd: number): string {
   if (usd >= 0.01) return `$${usd.toFixed(3)}`
   return `$${usd.toFixed(4)}`
 }
+
+/**
+ * How far a convergence landed from the attested schedule (v2/M18). Zero is
+ * the interesting case for the opposite reason, so it gets its own words.
+ */
+export function describeLateness(years: number): string {
+  if (years === 0) return 'on schedule'
+  const n = Math.abs(years)
+  return `${n} ${n === 1 ? 'year' : 'years'} ${years > 0 ? 'late' : 'early'}`
+}

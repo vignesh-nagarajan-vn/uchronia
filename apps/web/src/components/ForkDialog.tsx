@@ -11,13 +11,16 @@ export function ForkDialog({
   branchId,
   timelineId,
   onClose,
+  /** Prefilled sub-divergence, when a pulse proposed one (v2/M19). */
+  initialSubPod = '',
 }: {
   event: EventView
   branchId: string
   timelineId: string
   onClose: () => void
+  initialSubPod?: string
 }) {
-  const [subPod, setSubPod] = useState('')
+  const [subPod, setSubPod] = useState(initialSubPod)
   const navigate = useNavigate()
   const queryClient = useQueryClient()
 

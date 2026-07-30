@@ -1,5 +1,7 @@
 import { z } from 'zod'
 import { EncyclopediaBody, LetterBody, NewspaperBody, PosterBody } from './artifact.js'
+import { NAME_DRIFT_KINDS, REGIONAL_INDICES } from './claim.js'
+import { ANCHOR_REGIONS, CONVERGENCE_ATTRACTORS } from './convergence.js'
 import { EDGE_KINDS } from './edge.js'
 import { ENTITY_TYPES } from './entity.js'
 import { Pressure } from './era.js'
@@ -39,8 +41,40 @@ export const DraftNewEntity = z.object({
   type: z.enum(ENTITY_TYPES),
   description: z.string().min(1),
   initialState: z.array(StateFact).min(1),
+  /** Birth, founding, or first working example (v2/M18); null when unfixed. */
+  bornYear: z.number().int().nullable().optional(),
+  /**
+   * True for a person or body this history invented (v2/M18). The engine
+   * records which of its actors never existed rather than hoping nobody asks.
+   */
+  counterfactual: z.boolean().optional(),
+  /** The entity this one follows in a line or an office, by slug. */
+  succeedsSlug: Slug.nullable().optional(),
 })
 export type DraftNewEntity = z.infer<typeof DraftNewEntity>
+
+/**
+ * A regional index reading an era asserts (v2/M18). Bounded by the validator:
+ * a jump beyond MAX_INDEX_DELTA needs a catastrophe, not a sentence.
+ */
+export const DraftIndexShift = z.object({
+  region: z.enum(ANCHOR_REGIONS),
+  index: z.enum(REGIONAL_INDICES),
+  /** The reading after this era, 0-100. */
+  value: z.number().int().min(0).max(100),
+  note: z.string().min(1),
+})
+export type DraftIndexShift = z.infer<typeof DraftIndexShift>
+
+/** A name this history moved (v2/M18). Naming only, never a constructed language. */
+export const DraftNameDrift = z.object({
+  ref: DraftRef,
+  nameKind: z.enum(NAME_DRIFT_KINDS),
+  attested: z.string().min(1),
+  drifted: z.string().min(1),
+  note: z.string().min(1),
+})
+export type DraftNameDrift = z.infer<typeof DraftNameDrift>
 
 export const DraftDelta = z.object({
   entitySlug: Slug,
@@ -132,6 +166,35 @@ export const PodInterpretedOut = z.object({
 })
 export type PodInterpretedOut = z.infer<typeof PodInterpretedOut>
 
+/** The symposium synthesizer's output (v2/M17): a merged era + disagreements. */
+export const SymposiumOut = z.object({
+  title: z.string().min(1),
+  summary: z.string().min(1),
+  events: z.array(DraftEvent).min(2).max(10),
+  /** Refs where the specialists genuinely disagreed, with the disagreement. */
+  contested: z.array(
+    z.object({
+      ref: DraftRef,
+      note: z.string().min(1),
+    }),
+  ),
+})
+export type SymposiumOut = z.infer<typeof SymposiumOut>
+
+/** Court of Plausibility briefs and ruling (v2/M17). */
+export const CourtBriefOut = z.object({
+  brief: z.string().min(1),
+})
+export type CourtBriefOut = z.infer<typeof CourtBriefOut>
+
+export const CourtRulingOut = z.object({
+  outcome: z.enum(['uphold', 'revise', 'dispute']),
+  opinion: z.string().min(1),
+  /** Required when the outcome is revise: what the retelling must fix. */
+  instruction: z.string().nullable(),
+})
+export type CourtRulingOut = z.infer<typeof CourtRulingOut>
+
 /** derive-pressures output. */
 export const PressuresOut = z.object({
   pressures: z.array(Pressure).min(3).max(7),
@@ -143,6 +206,16 @@ export const EraBatchOut = z.object({
   title: z.string().min(1),
   summary: z.string().min(1),
   events: z.array(DraftEvent).min(2).max(10),
+  /**
+   * Where the era left the coarse regional dials (v2/M18). Optional: an era
+   * that moved nothing says nothing, and the previous reading stands.
+   */
+  indexShifts: z.array(DraftIndexShift).max(8).optional(),
+  /**
+   * Names this era moved (v2/M18), emitted opportunistically rather than by
+   * a separate call. Usually empty; a conquest or a schism fills it.
+   */
+  nameDrift: z.array(DraftNameDrift).max(6).optional(),
 })
 export type EraBatchOut = z.infer<typeof EraBatchOut>
 
@@ -173,6 +246,10 @@ export const ConvergenceScanOut = z.object({
       ref: DraftRef,
       anchorId: z.string().min(1),
       similarityNote: z.string().min(1),
+      /** Which structural attractor did the pulling (v2/M18). */
+      attractor: z.enum(CONVERGENCE_ATTRACTORS).optional(),
+      /** How the road differed, when it did; null when it did not. */
+      pathNote: z.string().nullable().optional(),
     }),
   ),
 })

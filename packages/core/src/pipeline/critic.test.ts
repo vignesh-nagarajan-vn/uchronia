@@ -23,6 +23,7 @@ function setup(): { world: World; era: Era; ctx: PipelineCtx } {
     pressures: [],
     status: 'skeleton',
     detail: null,
+    speculative: false,
     provenance: {
       kind: 'generated',
       model: 'mock',

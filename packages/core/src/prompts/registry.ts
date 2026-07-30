@@ -5,14 +5,17 @@ import {
   artifactPoster,
 } from './artifacts.js'
 import { convergenceScan } from './convergence-scan.js'
+import { courtAdvocate, courtJudge, courtSkeptic } from './court.js'
 import { criticReview } from './critic-review.js'
 import { derivePressures } from './derive-pressures.js'
 import { eraGenerate } from './era-generate.js'
 import { entityBiography, eraDeepDive, eventExpand } from './expanders.js'
 import { podInterpret } from './pod-interpret.js'
 import { podNormalize } from './pod-normalize.js'
+import { pulse } from './pulse.js'
 import { regenerateEvent } from './regenerate-event.js'
 import { seedConsequences } from './seed-consequences.js'
+import { eraSpecialist, eraSynthesize } from './symposium.js'
 import type { PromptTemplate } from './types.js'
 
 /**
@@ -29,7 +32,13 @@ export const PROMPT_REGISTRY: Record<string, PromptTemplate<any, any>> = {
   [regenerateEvent.id]: regenerateEvent,
   [derivePressures.id]: derivePressures,
   [eraGenerate.id]: eraGenerate,
+  [eraSpecialist.id]: eraSpecialist,
+  [eraSynthesize.id]: eraSynthesize,
+  [courtAdvocate.id]: courtAdvocate,
+  [courtSkeptic.id]: courtSkeptic,
+  [courtJudge.id]: courtJudge,
   [convergenceScan.id]: convergenceScan,
+  [pulse.id]: pulse,
   [eventExpand.id]: eventExpand,
   [eraDeepDive.id]: eraDeepDive,
   [entityBiography.id]: entityBiography,

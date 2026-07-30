@@ -21,6 +21,9 @@ function freshWorld(): { world: World; branchId: string } {
     createdAt: NOW,
     settings: {
       dial: 45,
+      derivation: 'standard',
+      court: false,
+      epilogue: false,
       horizonYears: 150,
       defaultLenses: ['political', 'cultural'],
       models: { generation: 'mock', critic: 'mock', mode: 'mock' },

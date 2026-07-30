@@ -1,4 +1,12 @@
-import type { DraftEvent, EraBatchOut, Lens, Pressure } from '@uchronia/schemas'
+import {
+  ANCHOR_REGIONS,
+  type DraftEvent,
+  type DraftIndexShift,
+  type DraftNameDrift,
+  type EraBatchOut,
+  type Lens,
+  type Pressure,
+} from '@uchronia/schemas'
 import type { EraGenerateArgs } from '../prompts/era-generate.js'
 import type { Rng } from '../rng.js'
 
@@ -355,5 +363,94 @@ export function mockEraGenerate(rawArgs: unknown, rng: Rng): EraBatchOut {
     title: ERA_TITLES[(args.ordinal + rng.int(0, 2)) % ERA_TITLES.length] ?? 'The Years Between',
     summary: `Between ${span.startYear} and ${span.endYear}, the divergence stops being news and starts being structure: ${args.pressures[0]?.name.toLowerCase() ?? 'quiet strain'} sets the agenda, and the ${roster.nation.name.replace(/^The /, '')} adjusts.`,
     events,
+    indexShifts: mockIndexShifts(args, rng),
+    nameDrift: mockNameDrift(args, events, rng),
   }
+}
+
+/**
+ * Demo-mode regional readings (v2/M18). The dials walk, they never jump: the
+ * demo has to exercise the index-continuity rule without tripping it, so
+ * every step stays inside the validator's bound.
+ */
+function mockIndexShifts(args: EraGenerateArgs, rng: Rng): DraftIndexShift[] {
+  // Only the divergence's own theatre moves in demo mode; a canned engine has
+  // no business asserting readings for regions it never mentions.
+  const region = ANCHOR_REGIONS.find((r) => r === args.podRegion) ?? 'the wider world'
+  const opening = parseIndexSummary(args.indexSummary ?? '', region)
+  const strain = args.pressures[0]?.intensity ?? 0.5
+  const step = (base: number, drift: number): number =>
+    Math.max(0, Math.min(100, base + drift + rng.int(-2, 2)))
+  return [
+    {
+      region,
+      index: 'population',
+      value: step(opening.population, strain > 0.7 ? -4 : 2),
+      note:
+        strain > 0.7
+          ? 'The strain of the era is paid in households: levies, bad harvests, and the quiet migration that follows both.'
+          : 'A settled generation: the parish rolls lengthen at the pace they always do when nothing catches fire.',
+    },
+    {
+      region,
+      index: 'economicVitality',
+      value: step(opening.economicVitality, args.distanceYears > 40 ? 5 : 1),
+      note:
+        args.distanceYears > 40
+          ? 'Far enough from the divergence for its second-order effects to reach the markets rather than the chronicles.'
+          : 'The books balance about as they did before; the divergence has not yet reached the counting house.',
+    },
+  ]
+}
+
+/** Read the pre-rendered index summary back, so demo dials continue rather than reset. */
+function parseIndexSummary(
+  summary: string,
+  region: string,
+): { population: number; economicVitality: number } {
+  const line = summary.split('\n').find((l) => l.startsWith(`- ${region}:`)) ?? ''
+  const read = (index: string): number => {
+    const match = line.match(new RegExp(`${index} (\\d+)`))
+    return match?.[1] ? Number(match[1]) : 50
+  }
+  return { population: read('population'), economicVitality: read('economicVitality') }
+}
+
+const DRIFT_BANK: ReadonlyArray<{
+  nameKind: DraftNameDrift['nameKind']
+  attested: string
+  drifted: string
+  note: string
+}> = [
+  {
+    nameKind: 'toponym',
+    attested: 'the old quarter',
+    drifted: 'the Printers Quarter',
+    note: 'The trade that took the district over took its name with it, and the older one survives only on deeds.',
+  },
+  {
+    nameKind: 'title',
+    attested: 'protostrator',
+    drifted: 'warden of the roads',
+    note: 'The office outlived the court that coined its name, and the clerks translated it into something a carter could follow.',
+  },
+  {
+    nameKind: 'institution',
+    attested: 'the chancery',
+    drifted: 'the standing office',
+    note: 'What began as an emergency committee kept sitting, and kept the plain name it had been given in haste.',
+  },
+]
+
+/**
+ * Demo-mode name drift (v2/M18): rare, tied to a real event in the batch, and
+ * naming only. Fires on every third era so the philology lens has something to
+ * show without every span turning into a glossary.
+ */
+function mockNameDrift(args: EraGenerateArgs, events: DraftEvent[], rng: Rng): DraftNameDrift[] {
+  if (args.ordinal % 3 !== 1) return []
+  const target = events[Math.min(1, events.length - 1)]
+  if (!target) return []
+  const drift = rng.pick(DRIFT_BANK)
+  return [{ ref: target.ref, ...drift }]
 }

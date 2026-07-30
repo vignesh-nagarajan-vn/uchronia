@@ -18,6 +18,7 @@ const LENS_MECHANISM: Record<Lens, Mechanism> = {
   cultural: 'culture',
   economic: 'economics',
   'daily-life': 'culture',
+  philology: 'culture',
 }
 
 /**
@@ -45,7 +46,14 @@ export function mockPodInterpret(rawArgs: unknown, rng: Rng): PodInterpretedOut 
       ambiguities.push(`which hinge of ${sketch.aliasLabel} the divergence bends`)
     }
   } else {
+    // When the ask names a year or a known event, the candidates it produced
+    // are ranked by nearness to it: retrieval suggests, the ask decides. A
+    // 2016 anchor is not the reading of "the Moon landing program".
     const near = retrieveAnchors(anchors, text, { year: sketch.year, limit: 3 })
+    if (sketch.year !== null && sketch.yearSource !== 'anchor') {
+      const hint = sketch.year
+      near.sort((a, b) => Math.abs(a.year - hint) - Math.abs(b.year - hint))
+    }
     candidates = near.map((anchor) => ({
       label: `${anchor.title}, otherwise`,
       year: anchor.year,
@@ -82,7 +90,9 @@ export function mockPodInterpret(rawArgs: unknown, rng: Rng): PodInterpretedOut 
 
   const primary = candidates[0]
   if (!primary) throw new Error('mock interpretation produced no candidates')
-  const year = sketch.yearSource === 'explicit' && sketch.year !== null ? sketch.year : primary.year
+  // An explicit year, or a year the ask's own named event fixes, is the read.
+  // Only an anchor-snapped guess yields to the leading candidate.
+  const year = sketch.year !== null && sketch.yearSource !== 'anchor' ? sketch.year : primary.year
   const region = sketch.region ?? primary.region
   const mechanism = sketch.mechanism ?? primary.mechanism
   const label = sketch.yearSource === 'explicit' ? yearLabel(year) : primary.dateLabel

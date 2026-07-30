@@ -27,6 +27,7 @@ export function assembleBranchView(world: World, branchId: string): BranchView {
     state: state.get(entity.id) ?? { ...entity.initialState },
     changeLog: world.changeLog(branchId, entity.id),
     endedByEventId: ended.get(entity.id)?.eventId ?? null,
+    tenures: world.roleTenures(branchId, entity.id),
   }))
 
   return {
@@ -41,5 +42,7 @@ export function assembleBranchView(world: World, branchId: string): BranchView {
     convergences: world.resolveConvergences(branchId),
     artifacts: resolvedEvents.flatMap((e) => world.artifactsForEvent(e.id)),
     biographies: world.allBiographies().filter((b) => b.branchId === branchId),
+    courtRecords: world.courtRecordsFor(branchId),
+    claims: world.resolveClaims(branchId),
   }
 }

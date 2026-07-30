@@ -41,6 +41,12 @@ export const Era = z.object({
   status: EraStatus,
   /** Lazily generated deep-dive essay; null until expanded. */
   detail: z.string().nullable(),
+  /**
+   * The epilogue era (v2/M18): past the horizon, and openly a guess rather
+   * than a derivation. Rendered in its own uncertain register and labelled
+   * non-historical wherever it appears. Defaulted so old exports import.
+   */
+  speculative: z.boolean().default(false),
   provenance: Provenance,
 })
 export type Era = z.infer<typeof Era>

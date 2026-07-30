@@ -1,7 +1,9 @@
 import { z } from 'zod'
 import { Artifact } from './artifact.js'
 import { Branch } from './branch.js'
+import { Claim } from './claim.js'
 import { BaselineAnchor, ConvergencePoint } from './convergence.js'
+import { CourtRecord } from './court.js'
 import { CausalEdge } from './edge.js'
 import { EntityBiography, EntityView } from './entity.js'
 import { Era } from './era.js'
@@ -9,7 +11,7 @@ import { EventView } from './event.js'
 import { Lens } from './lens.js'
 import { PodInterpretedOut } from './llm.js'
 import { Mechanism, PointOfDivergence } from './pod.js'
-import { Dial, Timeline, TimelineSettings } from './timeline.js'
+import { Dial, DialAxes, Timeline, TimelineSettings } from './timeline.js'
 
 /**
  * API contracts shared by server and web. The client parses responses against
@@ -48,7 +50,16 @@ export const CreateTimelineRequest = z.object({
   podText: z.string().min(4).max(2000),
   title: z.string().min(1).max(120).optional(),
   dial: Dial.optional(),
-  horizonYears: z.number().int().min(10).max(3000).optional(),
+  /** Advanced dial axes (v2/M17); absent = derived from the master dial. */
+  axes: DialAxes.optional(),
+  /** Symposium derivation is opt-in and costs roughly four times the tokens. */
+  derivation: z.enum(['standard', 'symposium']).optional(),
+  /** The Court of Plausibility on disputed events (v2/M17; opt-in). */
+  court: z.boolean().optional(),
+  /** Append one speculative era past the horizon (v2/M18). */
+  epilogue: z.boolean().optional(),
+  /** Absent means deep time: the history runs to the present day (v2/M18). */
+  horizonYears: z.number().int().min(10).max(6000).optional(),
   lenses: z.array(Lens).min(1).optional(),
   interpretation: ConfirmedInterpretation.optional(),
 })
@@ -101,6 +112,10 @@ export const BranchView = z.object({
   convergences: z.array(ConvergencePoint),
   artifacts: z.array(Artifact),
   biographies: z.array(EntityBiography),
+  /** Court of Plausibility transcripts visible on this branch (v2/M17). */
+  courtRecords: z.array(CourtRecord).default([]),
+  /** Regional index readings and name drift visible on this branch (v2/M18). */
+  claims: z.array(Claim).default([]),
 })
 export type BranchView = z.infer<typeof BranchView>
 
@@ -118,7 +133,11 @@ export const UpdateTimelineRequest = z
   .object({
     title: z.string().min(1).max(120).optional(),
     dial: Dial.optional(),
-    horizonYears: z.number().int().min(10).max(3000).optional(),
+    axes: DialAxes.nullable().optional(),
+    derivation: z.enum(['standard', 'symposium']).optional(),
+    court: z.boolean().optional(),
+    epilogue: z.boolean().optional(),
+    horizonYears: z.number().int().min(10).max(6000).optional(),
     defaultLenses: z.array(Lens).min(1).optional(),
   })
   .refine((r) => Object.values(r).some((v) => v !== undefined), 'nothing to update')

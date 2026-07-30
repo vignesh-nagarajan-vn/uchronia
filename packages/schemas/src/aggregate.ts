@@ -1,7 +1,9 @@
 import { z } from 'zod'
 import { Artifact } from './artifact.js'
 import { Branch } from './branch.js'
+import { Claim } from './claim.js'
 import { ConvergencePoint } from './convergence.js'
+import { CourtRecord } from './court.js'
 import { CritiqueReport } from './critique.js'
 import { CausalEdge } from './edge.js'
 import { Entity, EntityBiography } from './entity.js'
@@ -28,5 +30,9 @@ export const TimelineAggregate = z.object({
   convergencePoints: z.array(ConvergencePoint),
   critiqueReports: z.array(CritiqueReport),
   biographies: z.array(EntityBiography),
+  /** v2/M17; defaulted so pre-court exports import unchanged. */
+  courtRecords: z.array(CourtRecord).default([]),
+  /** v2/M18; defaulted so pre-claim exports import unchanged. */
+  claims: z.array(Claim).default([]),
 })
 export type TimelineAggregate = z.infer<typeof TimelineAggregate>

@@ -1,6 +1,8 @@
 import type {
   CausalEdge,
+  Claim,
   ConvergencePoint,
+  CourtRecord,
   CritiqueReport,
   Entity,
   Era,
@@ -19,6 +21,10 @@ export type PipelineEvent =
   /** Disputed events arrive here too - flags.disputed + criticNotes already set. */
   | { type: 'event.accepted'; event: Event; edges: CausalEdge[] }
   | { type: 'critique.completed'; report: CritiqueReport }
+  /** The Court of Plausibility sat on this event (v2/M17). */
+  | { type: 'court.completed'; record: CourtRecord }
+  /** An era asserted a regional index reading or a name drift (v2/M18). */
+  | { type: 'claim.recorded'; claim: Claim }
   | { type: 'convergence.found'; point: ConvergencePoint; eventId: string }
   | { type: 'era.completed'; era: Era }
   | { type: 'warning'; message: string }

@@ -25,6 +25,9 @@ const ArtifactReader = lazy(() =>
 const EngineRoomView = lazy(() =>
   import('./views/EngineRoomView.js').then((m) => ({ default: m.EngineRoomView })),
 )
+const RecordView = lazy(() =>
+  import('./views/RecordView.js').then((m) => ({ default: m.RecordView })),
+)
 
 function NotFound() {
   return (
@@ -44,6 +47,7 @@ export function App() {
       <Routes>
         <Route path="/" element={<Atlas />} />
         <Route path="/settings" element={<SettingsView />} />
+        <Route path="/record" element={<RecordView />} />
         <Route path="/t/:timelineId/compare" element={<CompareView />} />
         <Route path="/t/:timelineId/b/:branchId" element={<TimelineView />} />
         <Route path="/t/:timelineId/b/:branchId/delta" element={<DeltaView />} />

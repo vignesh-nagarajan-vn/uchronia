@@ -1,6 +1,8 @@
 import type {
   ArtifactBody,
   ArtifactKind,
+  ClaimBody,
+  ConvergenceAttractor,
   CritiqueIssue,
   EdgeKind,
   EntityType,
@@ -76,6 +78,8 @@ export const eras = sqliteTable(
     pressures: text('pressures', { mode: 'json' }).$type<Pressure[]>().notNull(),
     status: text('status').$type<EraStatus>().notNull(),
     detail: text('detail'),
+    /** The epilogue era: past the horizon, and openly a guess (v2/M18). */
+    speculative: integer('speculative', { mode: 'boolean' }).notNull().default(false),
     provenance: text('provenance', { mode: 'json' }).$type<Provenance>().notNull(),
   },
   (t) => [index('eras_branch_idx').on(t.branchId)],
@@ -101,6 +105,7 @@ export const events = sqliteTable(
     wildcard: integer('wildcard', { mode: 'boolean' }).notNull(),
     disputed: integer('disputed', { mode: 'boolean' }).notNull(),
     convergence: integer('convergence', { mode: 'boolean' }).notNull(),
+    contested: integer('contested', { mode: 'boolean' }).notNull().default(false),
     criticNotes: text('critic_notes', { mode: 'json' }).$type<CritiqueIssue[] | null>(),
     provenance: text('provenance', { mode: 'json' }).$type<Provenance>().notNull(),
   },
@@ -123,6 +128,10 @@ export const entities = sqliteTable(
     description: text('description').notNull(),
     initialState: text('initial_state', { mode: 'json' }).$type<StateRecord>().notNull(),
     introducedByEventId: text('introduced_by_event_id'),
+    /** Lives (v2/M18): when it began, whether it ever existed, whom it follows. */
+    bornYear: integer('born_year'),
+    counterfactual: integer('counterfactual', { mode: 'boolean' }).notNull().default(false),
+    succeedsSlug: text('succeeds_slug'),
     createdAt: text('created_at').notNull(),
     provenance: text('provenance', { mode: 'json' }).$type<Provenance>().notNull(),
   },
@@ -167,9 +176,49 @@ export const convergencePoints = sqliteTable(
     eventId: text('event_id').notNull(),
     anchorId: text('anchor_id').notNull(),
     similarityNote: text('similarity_note').notNull(),
+    /** Convergence 2.0 (v2/M18): which attractor pulled, how late, by what road. */
+    attractor: text('attractor').$type<ConvergenceAttractor>().notNull().default('institutional'),
+    latenessYears: integer('lateness_years').notNull().default(0),
+    pathNote: text('path_note'),
     provenance: text('provenance', { mode: 'json' }).$type<Provenance>().notNull(),
   },
   (t) => [index('convergence_branch_idx').on(t.branchId)],
+)
+
+/** Claims (v2/M18): regional index readings and name drift, bound to events. */
+export const claims = sqliteTable(
+  'claims',
+  {
+    id: text('id').primaryKey(),
+    branchId: text('branch_id').notNull(),
+    eventId: text('event_id').notNull(),
+    year: integer('year').notNull(),
+    body: text('body', { mode: 'json' }).$type<ClaimBody>().notNull(),
+    provenance: text('provenance', { mode: 'json' }).$type<Provenance>().notNull(),
+  },
+  (t) => [index('claims_branch_idx').on(t.branchId), index('claims_event_idx').on(t.eventId)],
+)
+
+/** Court of Plausibility transcripts (v2/M17), one exchange per tried event. */
+export const courtRecords = sqliteTable(
+  'court_records',
+  {
+    id: text('id').primaryKey(),
+    branchId: text('branch_id').notNull(),
+    eventId: text('event_id').notNull(),
+    advocate: text('advocate').notNull(),
+    skeptic: text('skeptic').notNull(),
+    ruling: text('ruling', { mode: 'json' })
+      .$type<{
+        outcome: 'uphold' | 'revise' | 'dispute'
+        opinion: string
+        instruction: string | null
+      }>()
+      .notNull(),
+    createdAt: text('created_at').notNull(),
+    provenance: text('provenance', { mode: 'json' }).$type<Provenance>().notNull(),
+  },
+  (t) => [index('court_branch_idx').on(t.branchId), index('court_event_idx').on(t.eventId)],
 )
 
 export const critiqueReports = sqliteTable(

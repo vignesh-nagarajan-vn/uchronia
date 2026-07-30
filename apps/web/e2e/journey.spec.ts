@@ -70,6 +70,59 @@ test('the WW2 gate, demo side: the ask lands in 1939-1945 through the card', asy
   })
 })
 
+test('the symposium sits, the court rules, and the axes come off the master dial', async ({
+  page,
+}) => {
+  await page.goto('/')
+
+  // The axes flyout takes technology off the master dial and hands it back.
+  await page.getByTestId('dial-axes-toggle').click()
+  await expect(page.getByTestId('dial-axes-flyout')).toBeVisible()
+  await expect(page.getByText('external shocks')).toBeVisible()
+  await page.getByRole('slider', { name: 'technology' }).press('End')
+  await expect(page.getByTestId('dial-axes-toggle')).toHaveText('hide the axes')
+  await page.getByRole('button', { name: 'hand them back to the dial' }).click()
+  await page.getByTestId('dial-axes-toggle').click()
+
+  // Symposium derivation and the court are opt-in, and say what they cost.
+  await page.getByRole('button', { name: 'symposium', exact: true }).click()
+  await expect(page.getByTestId('derivation-controls')).toContainText('Three specialist historians')
+  await page.getByTestId('court-toggle').click()
+  await expect(page.getByTestId('derivation-controls')).toContainText('argued out')
+
+  await page.getByLabel('the point of divergence').fill('The Spanish Armada lands in 1588')
+  await page.getByRole('button', { name: 'Just derive' }).click()
+  await expect(page).toHaveURL(/\/t\/.+\/b\/.+/)
+  await expect(page.getByRole('button', { name: 'Continue derivation' })).toBeVisible({
+    timeout: 90_000,
+  })
+
+  const branchId = page.url().match(/\/b\/([0-9A-Z]+)/)?.[1]
+  const view = (await (
+    await page.request.get(`http://localhost:8787/api/branches/${branchId}/view`)
+  ).json()) as {
+    events: Array<{ id: string; flags: { contested: boolean } }>
+    courtRecords: Array<{ eventId: string }>
+  }
+  // The chairs disagreed about something, and the court left a transcript.
+  const contested = view.events.filter((e) => e.flags.contested)
+  expect(contested.length).toBeGreaterThanOrEqual(1)
+  expect(view.courtRecords.length).toBeGreaterThanOrEqual(1)
+
+  // Both marks are readable where a reader would look for them.
+  await page.getByTestId('timeline-scroll').click({ position: { x: 5, y: 5 } })
+  await walkUntilVisible(page, 'contested-mark')
+
+  const judged = view.courtRecords[0]
+  expect(judged).toBeDefined()
+  await page.goto(
+    `/t/${page.url().match(/\/t\/([0-9A-Z]+)/)?.[1]}/b/${branchId}/e/${judged?.eventId}`,
+  )
+  await expect(page.getByTestId('court-record')).toBeVisible()
+  await expect(page.getByTestId('court-record')).toContainText('the court of plausibility')
+  await expect(page.getByTestId('court-record')).toContainText('ruling:')
+})
+
 test('a vanished branch gets the honest dead end, not a retry loop', async ({ page }) => {
   // Ephemeral serverless instances forget chronicles (recycling, redeploys);
   // a 404 must read as the truth with a way out, not "ask again".
@@ -83,9 +136,15 @@ test('a vanished branch gets the honest dead end, not a retry loop', async ({ pa
 test('the full journey, keyless', async ({ page }) => {
   await page.goto('/')
 
-  // 1. Choose a divergence from the catalogue.
+  // 1. Choose a divergence from the catalogue: one click composes with the
+  //    curated hints applied (v2/M16), then the reading is confirmed.
   await expect(page.getByText('or choose from the catalogue')).toBeVisible()
   await page.getByRole('button', { name: /Constantinople holds/ }).click()
+  await expect(page.getByTestId('interpretation-card')).toBeVisible()
+  await expect(
+    page.getByTestId('interpretation-card').getByText('from the catalogue'),
+  ).toBeVisible()
+  await page.getByRole('button', { name: 'Open the ledger' }).click()
 
   // 2. Events stream in over SSE until the run completes.
   await expect(page).toHaveURL(/\/t\/.+\/b\/.+/)
@@ -113,6 +172,13 @@ test('the full journey, keyless', async ({ page }) => {
   await expect(page.getByText('causes (')).toBeVisible()
   await page.getByRole('button', { name: 'Expand' }).click()
   await expect(page.getByRole('button', { name: 'Expand' })).toBeHidden({ timeout: 20_000 })
+
+  // 3b. Pulse the event (v2/M19): a forecast, and nothing is committed by it.
+  await page.getByLabel('the flip').fill('the reform is refused outright')
+  await page.getByTestId('pulse-button').click()
+  await expect(page.getByTestId('pulse-card')).toBeVisible({ timeout: 20_000 })
+  await expect(page.getByTestId('pulse-card')).toContainText('a forecast, not a record')
+  await expect(page.getByTestId('commit-fork')).toBeVisible()
 
   // 4. Generate an artifact and read it.
   await page.getByTestId('generate-letter').click()

@@ -1,4 +1,4 @@
-import { TECH_PREREQUISITES } from '@uchronia/schemas'
+import { MAX_INDEX_DELTA, TECH_PREREQUISITES } from '@uchronia/schemas'
 import { regionsAreFar } from './baseline.js'
 import { REGION_KEYWORDS } from './pod-sketch.js'
 import type { World } from './world.js'
@@ -20,6 +20,7 @@ export type RuleId =
   | 'fork-normalized'
   | 'tech-prerequisite'
   | 'demographic-plausibility'
+  | 'index-continuity'
   | 'geographic-plausibility'
 
 export interface ValidationIssue {
@@ -362,6 +363,47 @@ export const demographicPlausibility: Rule = (world, branchId) => {
   return issues
 }
 
+/**
+ * Regional indices move by degrees, not by decree (v2/M18, rule 12). A
+ * population or vitality reading may drift up to MAX_INDEX_DELTA per claim;
+ * anything larger is a catastrophe or a boom, and the engine requires the
+ * claim's own note to say which. The recorded delta must also match the
+ * arithmetic, so a claim cannot understate the jump it is making.
+ */
+const CATASTROPHE_WORDS =
+  /\b(plague|pestilence|famine|starvation|war|invasion|conquest|massacre|genocide|collapse|siege|sack|epidemic|pandemic|flood|drought|eruption|earthquake|deportation|expulsion|exodus|boom|windfall|bonanza|industriali[sz]|colonis|coloniz|migration|resettle)/i
+
+export const indexContinuity: Rule = (world, branchId) => {
+  const issues: ValidationIssue[] = []
+  const previous = new Map<string, number>()
+  for (const claim of world.resolveClaims(branchId)) {
+    if (claim.body.kind !== 'regional-index') continue
+    const { region, index, value, delta, note } = claim.body
+    const key = `${region}|${index}`
+    const before = previous.get(key)
+    previous.set(key, value)
+    if (before !== undefined && value - before !== delta) {
+      issues.push({
+        rule: 'index-continuity',
+        eventId: claim.eventId,
+        message: `${index} for ${region} reports delta ${delta} but moved from ${before} to ${value} (${value - before})`,
+      })
+    }
+    // Judge the size of the move by what the readings actually did, not by
+    // what the claim says they did: `delta` is precisely the field an
+    // understated jump would hide in.
+    const moved = before === undefined ? delta : value - before
+    if (Math.abs(moved) > MAX_INDEX_DELTA && !CATASTROPHE_WORDS.test(note)) {
+      issues.push({
+        rule: 'index-continuity',
+        eventId: claim.eventId,
+        message: `${index} for ${region} moves ${moved} in one step (limit ${MAX_INDEX_DELTA}) and the note names no catastrophe or boom to explain it: "${note}"`,
+      })
+    }
+  }
+  return issues
+}
+
 export const ALL_RULES: readonly Rule[] = [
   forkNormalized,
   datesMonotonicWithinEra,
@@ -374,6 +416,7 @@ export const ALL_RULES: readonly Rule[] = [
   eraRangesNonOverlapping,
   techPrerequisites,
   demographicPlausibility,
+  indexContinuity,
 ]
 
 /**

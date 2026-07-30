@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useRef, useState } from 'react'
-import { useNavigate } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 import { EmptyState, ErrorState, Shell } from '../components/Shell.js'
 import { api } from '../lib/api.js'
 import { useTheme } from '../lib/theme.js'
@@ -130,6 +130,23 @@ export function SettingsView() {
           <p className="mt-2 font-data text-[11.5px] text-ink-faded">
             the check spends one output token when a key is configured; models are configured with
             UCHRONIA_MODEL_GENERATION / UCHRONIA_MODEL_CRITIC
+          </p>
+        </section>
+
+        <section className="mt-8" aria-label="the record">
+          <h2 className="border-b border-rule pb-1 font-data text-[13px] text-ink-faded">
+            the record
+          </h2>
+          <p className="mt-2 flex items-center justify-between text-[15px]">
+            <span className="text-ink-faded">
+              Browse the curated baseline the engine grounds on.
+            </span>
+            <Link
+              to="/record"
+              className="shrink-0 rounded-[2px] border border-rule px-3 py-1 text-[14px] hover:bg-paper-raised"
+            >
+              Open the record
+            </Link>
           </p>
         </section>
 

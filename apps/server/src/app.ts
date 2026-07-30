@@ -19,6 +19,7 @@ import { expandRoutes } from './routes/expand.js'
 import { forkRoutes } from './routes/fork.js'
 import { generateRoutes } from './routes/generate.js'
 import { metaRoutes } from './routes/meta.js'
+import { pulseRoutes } from './routes/pulse.js'
 import { timelineRoutes } from './routes/timelines.js'
 import { traceRoutes } from './routes/traces.js'
 
@@ -50,6 +51,7 @@ export function createApp(deps: ServerDeps): Hono {
   app.route('/api', generateRoutes(deps))
   app.route('/api', expandRoutes(deps))
   app.route('/api', forkRoutes(deps))
+  app.route('/api', pulseRoutes(deps))
   app.route('/api', artifactRoutes(deps))
   app.route('/api', traceRoutes(deps))
 

@@ -31,6 +31,9 @@
   --color-lens-cultural: #6d4e63;
   --color-lens-economic: #6b5e3f;
   --color-lens-daily-life: #57604a;
+  /* Philology (v2/M18): the faintest of the five registers, because most eras
+     have nothing to say in it and a loud tick would lie about how often. */
+  --color-lens-philology: #6a5a52;
 
   --font-fell: 'IM Fell English', 'Iowan Old Style', 'Palatino Linotype', serif;
   --font-body: 'Spectral', Georgia, 'Times New Roman', serif;
@@ -55,6 +58,20 @@
   --color-lens-cultural: #b391a8;
   --color-lens-economic: #b3a37d;
   --color-lens-daily-life: #9aa688;
+  --color-lens-philology: #b0a096;
+}
+
+/* The epilogue's register (v2/M18): hatched paper, so a speculative era is
+   visibly not the same kind of thing as a derived one at any zoom. */
+.speculative-hatch {
+  background-image: repeating-linear-gradient(
+    135deg,
+    transparent,
+    transparent 5px,
+    var(--color-rule) 5px,
+    var(--color-rule) 6px
+  );
+  opacity: 0.5;
 }
 
 @custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));

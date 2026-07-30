@@ -78,10 +78,26 @@ describe('sketchPod - the WW2 gate, demo side', () => {
     expect(sketchPod('the french revolution fails', anchors).year).toBe(1789)
   })
 
-  it('snaps unnamed asks to the nearest anchor instead of rolling dice', () => {
+  it('snaps unnamed asks to a real anchor on the subject instead of rolling dice', () => {
     const sketch = sketchPod('What if Constantinople held against the siege', anchors)
-    expect(sketch.year).toBe(1453)
-    expect(['explicit', 'alias', 'anchor']).toContain(sketch.yearSource)
+    expect(sketch.yearSource).toBe('anchor')
+    // The ask names a city and a siege, so the snap must land on an attested
+    // siege of that city. Which one is a reading, not a fact: the record holds
+    // several, and the interpretation card is where the user picks.
+    expect(sketch.matchedAnchor?.title).toMatch(/constantinople/i)
+    expect(sketch.year).not.toBeNull()
+    const anchorYears = anchors.filter((a) => /constantinople/i.test(a.title)).map((a) => a.year)
+    expect(anchorYears).toContain(sketch.year)
+  })
+
+  it('discriminates between the sieges when the ask says which one', () => {
+    // Denser baselines make this sharper, not vaguer: naming the besieger
+    // must pick the besieger's siege.
+    expect(sketchPod('What if Constantinople held against the Ottomans', anchors).year).toBe(1453)
+    expect(sketchPod('What if Constantinople had not fallen to Mehmed', anchors).year).toBe(1453)
+    expect(sketchPod('What if the Arab siege of Constantinople had taken it', anchors).year).toBe(
+      718,
+    )
   })
 
   it('leaves everything null for pure garbage - the caller picks the honest default', () => {

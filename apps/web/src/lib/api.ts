@@ -7,11 +7,13 @@ import {
   type CreateTimelineRequest,
   CreateTimelineResponse,
   type EntityBiography,
+  EntityFatesResponse,
   type Era,
   type Event,
   type EventView,
   ForkResponse,
   InterpretResponse,
+  PulseResponse,
   TimelineAggregate,
   TimelineSummary,
   type UpdateTimelineRequest,
@@ -156,6 +158,21 @@ export const api = {
     ),
 
   trace: (id: string) => request<{ trace: TraceDetail }>(`/api/traces/${id}`),
+
+  /** The counterfactual pulse (v2/M19): one forecast, nothing committed. */
+  pulse: async (branchId: string, eventId: string, flip: string) =>
+    PulseResponse.parse(
+      await request(`/api/branches/${branchId}/events/${eventId}/pulse`, {
+        method: 'POST',
+        body: JSON.stringify({ flip }),
+      }),
+    ).pulse,
+
+  /** What became of one entity on every branch (v2/M19). Pure data, no call. */
+  entityFates: async (branchId: string, entityId: string) =>
+    EntityFatesResponse.parse(
+      await request(`/api/branches/${branchId}/entities/${entityId}/fates`),
+    ),
 }
 
 /** Engine Room rows (v2/M15); shapes owned by the server's trace routes. */

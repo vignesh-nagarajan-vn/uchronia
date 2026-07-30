@@ -14,6 +14,8 @@ export interface PressuresArgs {
   attractorHints: string[]
   /** What drove the era before this one; each must be carried, escalated, or discharged. */
   previousPressures: Pressure[]
+  /** Latest coarse regional readings, pre-rendered (v2/M18); empty when none yet. */
+  indexSummary?: string
 }
 
 /**
@@ -25,11 +27,12 @@ export interface PressuresArgs {
  */
 export const derivePressures: PromptTemplate<PressuresArgs, PressuresOut> = {
   id: 'derive-pressures',
-  version: '1.2.0',
+  version: '1.3.0',
   changelog: [
     '1.0.0 - initial template',
     '1.1.0 - attractor language scales with the dial instead of a mid-band cliff; previous pressures must be carried or discharged',
     '1.2.0 - prompt strings stop modeling the em dash',
+    '1.3.0 - reads the coarse regional indices (v2/M18)',
   ],
   role: 'critic',
   schemaName: 'PressuresOut',
@@ -50,6 +53,7 @@ ${SENSITIVE_HISTORY_STANCE}`,
     dial,
     attractorHints,
     previousPressures,
+    indexSummary,
   }) => {
     const p = dial.convergencePressure
     let attractorBlock = ''
@@ -76,7 +80,7 @@ ${stateSummary}
 
 Recent events:
 ${recentEvents}
-${carryBlock}${attractorBlock}
+${indexSummary ? `\nCoarse regional readings (0-100). A region that has fallen far is under demographic or economic pressure whether or not the prose has said so yet:\n${indexSummary}\n` : ''}${carryBlock}${attractorBlock}
 Name the 3–7 pressures that will drive the years ${nextSpan.startYear}–${nextSpan.endYear}. Each: a short name, its kind, a 1–2 sentence description grounding it in the snapshot above (not in drama), and an intensity 0–1.`
   },
   seedKey: ({ nextSpan, dial, stateSummary }) =>

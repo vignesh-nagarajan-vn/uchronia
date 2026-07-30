@@ -2,6 +2,7 @@ import type { EntityView, EventView } from '@uchronia/schemas'
 import { clsx } from 'clsx'
 import { Link } from 'react-router'
 import {
+  ContestedMark,
   ConvergenceGlyph,
   DisputedMark,
   LensTicks,
@@ -94,6 +95,9 @@ export function EventCard({
             {event.wildcard && <WildcardMark />}
             {event.flags.convergence && <ConvergenceGlyph note={convergenceNote} />}
             {event.flags.disputed && <DisputedMark />}
+            {event.flags.contested && (
+              <ContestedMark note={event.criticNotes?.find((n) => n.type === 'contested')?.note} />
+            )}
             {(up > 0 || down > 0) && (
               <span
                 className="stamp text-thread"

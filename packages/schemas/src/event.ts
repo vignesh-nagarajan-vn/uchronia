@@ -28,6 +28,7 @@ export const CRITIQUE_ISSUE_TYPES = [
   'cliche-collapse',
   'tone',
   'on-divergence',
+  'contested',
 ] as const
 export const CritiqueIssueType = z.enum(CRITIQUE_ISSUE_TYPES)
 export type CritiqueIssueType = z.infer<typeof CritiqueIssueType>
@@ -67,6 +68,8 @@ export const Event = z.object({
   flags: z.object({
     disputed: z.boolean(),
     convergence: z.boolean(),
+    /** Symposium specialists genuinely disagreed here (v2/M17). */
+    contested: z.boolean().default(false),
   }),
   /** Attached when the critic keeps flagging after bounded retries. */
   criticNotes: z.array(CritiqueIssue).nullable(),

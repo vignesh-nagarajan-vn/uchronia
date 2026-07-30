@@ -11,9 +11,12 @@ export default defineConfig({
   },
   webServer: [
     {
-      command: 'pnpm --filter @uchronia/server start:mock',
+      // An in-memory database, so every run starts on an empty shelf. A file
+      // database let chronicles from a previous run linger in the catalogue,
+      // where they collided with the journey's own locators.
+      command: 'pnpm --filter @uchronia/server start:e2e',
       url: 'http://localhost:8787/api/health',
-      reuseExistingServer: !process.env.CI,
+      reuseExistingServer: false,
       cwd: '../..',
       timeout: 60_000,
     },

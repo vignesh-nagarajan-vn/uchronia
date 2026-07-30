@@ -1,5 +1,5 @@
 import type { BaselineAnchor, Lens, Mechanism, PodCandidate } from '@uchronia/schemas'
-import { keywordScore, tokenize } from './retrieval.js'
+import { corpusSpecificity, keywordScore, tokenize } from './retrieval.js'
 
 /**
  * Deterministic intake heuristics (v2/M14), shared by the demo engine and by
@@ -384,6 +384,29 @@ const LENS_MECHANISM: Record<Lens, Mechanism> = {
   cultural: 'culture',
   economic: 'economics',
   'daily-life': 'culture',
+  philology: 'culture',
+}
+
+/**
+ * Tie-break between two anchors carrying identical keyword evidence. A named
+ * year decides first when there is one. Otherwise the larger event wins
+ * (v2/M16 magnitude): asked about a siege at Constantinople with no year, the
+ * fall of the city should beat a same-scoring footnote three centuries later.
+ * The later year is the last resort, so the rule stays total and deterministic.
+ */
+function beatsSnapped(
+  anchor: BaselineAnchor,
+  snapped: BaselineAnchor | null,
+  yearHint: number | null,
+): boolean {
+  if (snapped === null) return true
+  if (yearHint !== null) {
+    const near = Math.abs(anchor.year - yearHint)
+    const incumbent = Math.abs(snapped.year - yearHint)
+    if (near !== incumbent) return near < incumbent
+  }
+  if (anchor.magnitude !== snapped.magnitude) return anchor.magnitude > snapped.magnitude
+  return anchor.year > snapped.year
 }
 
 /**
@@ -407,21 +430,15 @@ export function sketchPod(text: string, anchors: readonly BaselineAnchor[]): Pod
   const yearHint = explicitYear ?? alias?.year ?? null
   let snapped: BaselineAnchor | null = null
   if (tokens.length > 0) {
+    const specificity = corpusSpecificity(anchors)
     let bestScore = 0
     for (const anchor of anchors) {
       // A named year scopes the search: an anchor centuries away is noise
       // however well a common word ("march") happens to match its title.
       if (yearHint !== null && Math.abs(anchor.year - yearHint) > 150) continue
-      const score = keywordScore(anchor, tokens)
+      const score = keywordScore(anchor, tokens, specificity)
       if (score === 0) continue
-      // Equal evidence breaks toward the year hint when there is one, else
-      // toward the later year: "Constantinople held" means the famous fall.
-      const beatsTie =
-        snapped !== null &&
-        (yearHint !== null
-          ? Math.abs(anchor.year - yearHint) < Math.abs(snapped.year - yearHint)
-          : anchor.year > snapped.year)
-      if (score > bestScore || (score === bestScore && beatsTie)) {
+      if (score > bestScore || (score === bestScore && beatsSnapped(anchor, snapped, yearHint))) {
         bestScore = score
         snapped = anchor
       }

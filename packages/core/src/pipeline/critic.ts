@@ -1,4 +1,5 @@
 import type {
+  CourtRecord,
   CritiqueIssue,
   CritiqueReport,
   DraftEvent,
@@ -7,11 +8,12 @@ import type {
   GeneratedProvenance,
 } from '@uchronia/schemas'
 import type { DialParams } from '../dial.js'
+import { courtAdvocate, courtJudge, courtSkeptic } from '../prompts/court.js'
 import { criticReview } from '../prompts/critic-review.js'
 import { regenerateEvent } from '../prompts/regenerate-event.js'
 import type { World } from '../world.js'
 import { summarizeRecentEvents, summarizeState } from './context.js'
-import { callOpts, type PipelineCtx } from './ctx.js'
+import { callOpts, makeProvenance, type PipelineCtx } from './ctx.js'
 import {
   type DraftContext,
   dropBackwardsEdges,
@@ -24,6 +26,8 @@ import { validateBatchOnClone } from './validate.js'
 const MAX_REVISIONS = 2
 /** Cap on concurrent regenerate-event calls per revision pass (live-mode courtesy). */
 const REVISION_CONCURRENCY = 3
+/** The court hears at most this many cases per era (cost discipline, v2/M17). */
+const MAX_COURT_CASES = 3
 
 export interface RefinedBatch {
   batch: ResolvedBatch
@@ -31,6 +35,8 @@ export interface RefinedBatch {
   verdicts: EventVerdict[]
   /** Draft refs dropped because machine rules still failed after retries. */
   droppedRefs: string[]
+  /** Court of Plausibility transcripts (v2/M17), when the court sat. */
+  courtRecords: CourtRecord[]
   warnings: string[]
 }
 
@@ -210,6 +216,90 @@ export async function refineBatch(args: {
     warnings.push(`batch-level validation issues: ${batchIssues.join('; ')}`)
   }
 
+  // ---- The Court of Plausibility (v2/M17, opt-in) --------------------------
+  // One bounded adversarial exchange per critic-disputed draft: advocate and
+  // skeptic brief on the critic tier, a judge rules on the generation tier.
+  // uphold clears the mark; revise orders one retelling (machine-validated,
+  // falling back to the dispute if the retelling breaks graph rules);
+  // dispute keeps the mark with the transcript attached. No loops.
+  const courtOutcomes = new Map<
+    string,
+    { advocate: string; skeptic: string; ruling: CourtRecord['ruling']; model: string }
+  >()
+  if (world.timeline.settings.court && disputedRefs.size > 0) {
+    for (const ref of [...disputedRefs].slice(0, MAX_COURT_CASES)) {
+      const draft = drafts.find((d) => d.ref === ref)
+      if (!draft) continue
+      const criticIssues = (finalIssues.get(ref) ?? []).map(
+        (i) => `${i.type} (${i.severity}): ${i.note}`,
+      )
+      const briefArgs = {
+        podStatement: criticContext.podStatement,
+        eraSpan: criticContext.eraSpan,
+        stateSummary: criticContext.stateSummary,
+        causeGlossary: buildCauseGlossary(world, branchId, drafts),
+        draft,
+        criticIssues,
+      }
+      const [advocate, skeptic] = await Promise.all([
+        generateStructured(ctx.provider, courtAdvocate, briefArgs, callOpts(ctx)),
+        generateStructured(ctx.provider, courtSkeptic, briefArgs, callOpts(ctx)),
+      ])
+      const judged = await generateStructured(
+        ctx.provider,
+        courtJudge,
+        { ...briefArgs, advocateBrief: advocate.value.brief, skepticBrief: skeptic.value.brief },
+        callOpts(ctx),
+      )
+      const ruling = judged.value
+      courtOutcomes.set(ref, {
+        advocate: advocate.value.brief,
+        skeptic: skeptic.value.brief,
+        ruling,
+        model: judged.model,
+      })
+      if (ruling.outcome === 'uphold') {
+        disputedRefs.delete(ref)
+      } else if (ruling.outcome === 'revise') {
+        const replacement = await generateStructured(
+          ctx.provider,
+          regenerateEvent,
+          {
+            podStatement: criticContext.podStatement,
+            eraTitle: criticContext.eraTitle,
+            eraSpan: criticContext.eraSpan,
+            stateSummary: criticContext.stateSummary,
+            draft,
+            issues: [ruling.instruction ?? ruling.opinion],
+            voice: dial.voiceLanguage,
+          },
+          callOpts(ctx),
+        )
+        const retold = replacement.value.event
+        const trial = drafts.map((d) => (d.ref === ref ? retold : d))
+        const trialBatch = dropBackwardsEdges(
+          resolveDrafts(
+            draftCtx(),
+            trial.filter((d) => !droppedRefs.includes(d.ref)),
+          ),
+        )
+        const trialEventId = trialBatch.refToEventId.get(ref)
+        const trialIssues = validateBatchOnClone(world, branchId, era, trialBatch).filter(
+          (issue) => issue.eventId === trialEventId,
+        )
+        if (trialIssues.length === 0) {
+          drafts = trial
+          disputedRefs.delete(ref)
+          warnings.push(`the court ordered a retelling of "${draft.title}"; the retelling stands`)
+        } else {
+          warnings.push(
+            `the court ordered a retelling of "${draft.title}" but the retelling broke graph rules; the original stands, disputed`,
+          )
+        }
+      }
+    }
+  }
+
   const kept = drafts.filter((d) => !droppedRefs.includes(d.ref))
   let batch = dropBackwardsEdges(resolveDrafts(draftCtx(), kept))
   warnings.push(...batch.warnings.splice(0))
@@ -239,7 +329,25 @@ export async function refineBatch(args: {
     })
   }
 
-  return { batch, verdicts, droppedRefs, warnings }
+  // Transcripts bind to the committed event ids; a case whose draft was
+  // ultimately dropped leaves no record (there is nothing to attach it to).
+  const courtRecords: CourtRecord[] = []
+  for (const [ref, outcome] of courtOutcomes) {
+    const eventId = batch.refToEventId.get(ref)
+    if (!eventId) continue
+    courtRecords.push({
+      id: ctx.idgen.next(),
+      branchId,
+      eventId,
+      advocate: outcome.advocate,
+      skeptic: outcome.skeptic,
+      ruling: outcome.ruling,
+      createdAt: ctx.clock.now().toISOString(),
+      provenance: makeProvenance(ctx, courtJudge, outcome.model),
+    })
+  }
+
+  return { batch, verdicts, droppedRefs, courtRecords, warnings }
 }
 
 /**

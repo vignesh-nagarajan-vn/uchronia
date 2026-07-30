@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import type {
   ConfirmedInterpretation,
+  DialAxes,
   Lens,
   PodCandidate,
   PodInterpretedOut,
@@ -21,14 +22,20 @@ export function Atlas() {
   const queryClient = useQueryClient()
   const [podText, setPodText] = useState('')
   const [dial, setDial] = useState(50)
+  const [axes, setAxes] = useState<DialAxes | null>(null)
+  const [derivation, setDerivation] = useState<'standard' | 'symposium'>('standard')
+  const [court, setCourt] = useState(false)
+  const [epilogue, setEpilogue] = useState(false)
   const [horizon, setHorizon] = useState(150)
   const [lenses, setLenses] = useState<Lens[]>([...LENSES])
   const [burning, setBurning] = useState<TimelineSummary | null>(null)
   const [renaming, setRenaming] = useState<{ id: string; title: string } | null>(null)
   const [demoError, setDemoError] = useState<string | null>(null)
   // Intake 2.0 (v2/M14): the interpretation card between typing and deriving.
+  // card is null when the reading came from curated gallery hints (M16):
+  // there is nothing model-read to show chips or confidence for.
   const [reading, setReading] = useState<{
-    card: PodInterpretedOut
+    card: PodInterpretedOut | null
     edit: ConfirmedInterpretation
   } | null>(null)
   const timelines = useQuery({ queryKey: ['timelines'], queryFn: api.listTimelines })
@@ -38,6 +45,10 @@ export function Atlas() {
     mutationFn: (args: {
       podText: string
       dial: number
+      axes?: DialAxes
+      derivation?: 'standard' | 'symposium'
+      court?: boolean
+      epilogue?: boolean
       horizonYears: number
       lenses: Lens[]
       interpretation?: ConfirmedInterpretation
@@ -84,14 +95,40 @@ export function Atlas() {
     )
   }
 
-  const begin = (entry?: GalleryEntry) => {
+  const begin = () => {
     create.mutate({
-      podText: entry?.podText ?? podText,
-      dial: entry?.dial ?? dial,
-      horizonYears: entry?.horizonYears ?? horizon,
-      lenses: entry?.lenses ?? lenses,
-      ...(entry === undefined && reading ? { interpretation: reading.edit } : {}),
+      podText,
+      dial,
+      ...(axes ? { axes } : {}),
+      derivation,
+      court,
+      epilogue,
+      horizonYears: horizon,
+      lenses,
+      ...(reading ? { interpretation: reading.edit } : {}),
     })
+  }
+
+  // Gallery hints (v2/M16): one click composes the divergence with the card
+  // prefilled from curated hints - no API call, nothing created yet.
+  const compose = (entry: GalleryEntry) => {
+    setPodText(entry.podText)
+    setDial(entry.dial)
+    setHorizon(entry.horizonYears)
+    if (entry.lenses) setLenses(entry.lenses)
+    setReading({
+      card: null,
+      edit: {
+        statement: entry.hint.statement,
+        year: entry.hint.year,
+        dateLabel: entry.hint.dateLabel,
+        region: entry.region,
+        mechanism: entry.mechanism,
+        baselineContext: entry.hint.baselineContext,
+        suggestedTitle: entry.title,
+      },
+    })
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   const remove = useMutation({
@@ -186,7 +223,7 @@ export function Atlas() {
           className="mt-1 w-full resize-none rounded-[2px] border border-rule bg-paper px-3 py-2 text-[16px] placeholder:text-ink-faded/70 focus:outline-2 focus:outline-thread"
         />
         <div className="mt-4 grid gap-5 sm:grid-cols-[1fr_140px]">
-          <DialControl value={dial} onChange={setDial} />
+          <DialControl value={dial} onChange={setDial} axes={axes} onAxesChange={setAxes} />
           <div>
             <label htmlFor="horizon" className="font-data text-[13px] text-ink-faded">
               horizon (years)
@@ -231,6 +268,65 @@ export function Atlas() {
             })}
           </div>
         </fieldset>
+        {/* Derivation mode (v2/M17). Both options cost real tokens in live mode,
+            so the price is on the label rather than buried in a tooltip. */}
+        <fieldset className="mt-4" data-testid="derivation-controls">
+          <legend className="font-data text-[13px] text-ink-faded">derivation</legend>
+          <div className="mt-1.5 flex flex-wrap gap-2">
+            {(
+              [
+                ['standard', 'standard', 'one historian, one pass'],
+                ['symposium', 'symposium', 'three chairs and a synthesis, roughly 4x the tokens'],
+              ] as const
+            ).map(([mode, label, gloss]) => (
+              <button
+                key={mode}
+                type="button"
+                aria-pressed={derivation === mode}
+                onClick={() => setDerivation(mode)}
+                title={gloss}
+                className={`rounded-[2px] border px-2 py-0.5 font-data text-[12px] ${
+                  derivation === mode
+                    ? 'border-ink-faded text-ink'
+                    : 'border-rule text-ink-faded hover:text-ink'
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+            <button
+              type="button"
+              aria-pressed={court}
+              onClick={() => setCourt((c) => !c)}
+              title="Disputed events get an advocate, a skeptic, and a ruling, at most three per era"
+              data-testid="court-toggle"
+              className={`rounded-[2px] border px-2 py-0.5 font-data text-[12px] ${
+                court ? 'border-ink-faded text-ink' : 'border-rule text-ink-faded hover:text-ink'
+              }`}
+            >
+              court of plausibility
+            </button>
+            <button
+              type="button"
+              aria-pressed={epilogue}
+              onClick={() => setEpilogue((e) => !e)}
+              title="One era past the horizon, marked as a projection rather than a derivation"
+              data-testid="epilogue-toggle"
+              className={`rounded-[2px] border px-2 py-0.5 font-data text-[12px] ${
+                epilogue ? 'border-ink-faded text-ink' : 'border-rule text-ink-faded hover:text-ink'
+              }`}
+            >
+              epilogue
+            </button>
+          </div>
+          <p className="mt-1.5 font-data text-[11.5px] leading-snug text-ink-faded">
+            {derivation === 'symposium'
+              ? 'Three specialist historians draft each era and a fourth pass merges them, keeping what they could not settle as contested marks.'
+              : 'One historian drafts each era. The critic still reviews every event.'}
+            {court ? ' Disputed events are argued out before the ledger closes.' : ''}
+            {epilogue ? ' One era past the horizon is added as an openly marked projection.' : ''}
+          </p>
+        </fieldset>
         {reading && (
           <div
             className="mt-4 rounded-[2px] border border-rule bg-paper p-4"
@@ -239,20 +335,22 @@ export function Atlas() {
             <div className="flex flex-wrap items-baseline justify-between gap-2">
               <p className="stamp text-thread">the reading</p>
               <p className="font-data text-[11.5px] text-ink-faded">
-                confidence {(reading.card.confidence * 100).toFixed(0)}%
+                {reading.card
+                  ? `confidence ${(reading.card.confidence * 100).toFixed(0)}%`
+                  : 'from the catalogue'}
               </p>
             </div>
-            {reading.card.clarifyingQuestion && (
+            {reading.card?.clarifyingQuestion && (
               <p className="mt-2 text-[14px] font-medium text-notice">
                 {reading.card.clarifyingQuestion.question}
               </p>
             )}
-            {reading.card.ambiguities.length > 0 && (
+            {reading.card && reading.card.ambiguities.length > 0 && (
               <p className="mt-1 font-data text-[11.5px] text-ink-faded">
                 open questions: {reading.card.ambiguities.join('; ')}
               </p>
             )}
-            {reading.card.candidates.length > 1 && (
+            {reading.card && reading.card.candidates.length > 1 && (
               <fieldset className="mt-3">
                 <legend className="font-data text-[12px] text-ink-faded">
                   ways this divergence could happen (pick one, or edit below)
@@ -464,7 +562,7 @@ export function Atlas() {
             <li key={entry.slug}>
               <button
                 type="button"
-                onClick={() => begin(entry)}
+                onClick={() => compose(entry)}
                 disabled={create.isPending}
                 className="group grid w-full grid-cols-[92px_1fr] gap-4 px-1 py-3 text-left hover:bg-paper-raised disabled:opacity-50"
               >

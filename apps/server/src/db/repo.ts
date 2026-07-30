@@ -2,7 +2,9 @@ import type {
   Artifact,
   Branch,
   CausalEdge,
+  Claim,
   ConvergencePoint,
+  CourtRecord,
   CritiqueIssue,
   CritiqueReport,
   Entity,
@@ -41,7 +43,7 @@ function rowToEvent(row: EventRow): Event {
     plausibility: row.plausibility,
     distanceFromPod: row.distanceFromPod,
     wildcard: row.wildcard,
-    flags: { disputed: row.disputed, convergence: row.convergence },
+    flags: { disputed: row.disputed, convergence: row.convergence, contested: row.contested },
     criticNotes: row.criticNotes ?? null,
     provenance: row.provenance,
   }
@@ -66,6 +68,7 @@ function eventToRow(e: Event): typeof t.events.$inferInsert {
     wildcard: e.wildcard,
     disputed: e.flags.disputed,
     convergence: e.flags.convergence,
+    contested: e.flags.contested,
     criticNotes: e.criticNotes,
     provenance: e.provenance,
   }
@@ -212,6 +215,16 @@ export class Repo {
     const biographyRows = branchIds.length
       ? this.db.select().from(t.biographies).where(inArray(t.biographies.branchId, branchIds)).all()
       : []
+    const courtRows = branchIds.length
+      ? this.db
+          .select()
+          .from(t.courtRecords)
+          .where(inArray(t.courtRecords.branchId, branchIds))
+          .all()
+      : []
+    const claimRows = branchIds.length
+      ? this.db.select().from(t.claims).where(inArray(t.claims.branchId, branchIds)).all()
+      : []
 
     return {
       formatVersion: 1,
@@ -242,6 +255,8 @@ export class Repo {
       convergencePoints: convergenceRows,
       critiqueReports: critiqueRows.map((c) => ({ ...c, eraId: c.eraId ?? null })),
       biographies: biographyRows,
+      courtRecords: courtRows,
+      claims: claimRows,
     }
   }
 
@@ -280,7 +295,17 @@ export class Repo {
         tx.insert(t.convergencePoints).values(agg.convergencePoints).run()
       if (agg.critiqueReports.length) tx.insert(t.critiqueReports).values(agg.critiqueReports).run()
       if (agg.biographies.length) tx.insert(t.biographies).values(agg.biographies).run()
+      if (agg.courtRecords.length) tx.insert(t.courtRecords).values(agg.courtRecords).run()
+      if (agg.claims.length) tx.insert(t.claims).values(agg.claims).run()
     })
+  }
+
+  insertCourtRecord(record: CourtRecord): void {
+    this.db.insert(t.courtRecords).values(record).run()
+  }
+
+  insertClaim(claim: Claim): void {
+    this.db.insert(t.claims).values(claim).run()
   }
 
   deleteTimeline(timelineId: string): boolean {
@@ -305,6 +330,8 @@ export class Repo {
         tx.delete(t.convergencePoints).where(inArray(t.convergencePoints.branchId, branchIds)).run()
         tx.delete(t.critiqueReports).where(inArray(t.critiqueReports.branchId, branchIds)).run()
         tx.delete(t.biographies).where(inArray(t.biographies.branchId, branchIds)).run()
+        tx.delete(t.courtRecords).where(inArray(t.courtRecords.branchId, branchIds)).run()
+        tx.delete(t.claims).where(inArray(t.claims.branchId, branchIds)).run()
         tx.delete(t.runTraces).where(inArray(t.runTraces.branchId, branchIds)).run()
         tx.delete(t.edges).where(inArray(t.edges.branchId, branchIds)).run()
         tx.delete(t.events).where(inArray(t.events.branchId, branchIds)).run()
@@ -495,6 +522,8 @@ export class Repo {
       tx.delete(t.convergencePoints).where(eq(t.convergencePoints.branchId, branchId)).run()
       tx.delete(t.critiqueReports).where(eq(t.critiqueReports.branchId, branchId)).run()
       tx.delete(t.biographies).where(eq(t.biographies.branchId, branchId)).run()
+      tx.delete(t.courtRecords).where(eq(t.courtRecords.branchId, branchId)).run()
+      tx.delete(t.claims).where(eq(t.claims.branchId, branchId)).run()
       tx.delete(t.runTraces).where(eq(t.runTraces.branchId, branchId)).run()
       tx.delete(t.events).where(eq(t.events.branchId, branchId)).run()
       tx.delete(t.eras).where(eq(t.eras.branchId, branchId)).run()

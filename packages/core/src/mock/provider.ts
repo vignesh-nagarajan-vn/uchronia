@@ -9,13 +9,16 @@ import {
   mockArtifactPoster,
 } from './artifacts.js'
 import { mockConvergenceScan } from './convergence.js'
+import { mockCourtAdvocate, mockCourtJudge, mockCourtSkeptic } from './court.js'
 import { mockCriticReview, mockRegenerateEvent } from './critic.js'
 import { mockEraGenerate } from './era.js'
 import { mockBiography, mockEraDeepDive, mockEventExpand } from './expanders.js'
 import { mockPodInterpret } from './pod-interpret.js'
 import { mockPodNormalize } from './pod-normalize.js'
 import { mockDerivePressures } from './pressures.js'
+import { mockPulse } from './pulse.js'
 import { mockSeedConsequences } from './seed.js'
+import { mockEraSpecialist, mockEraSynthesize } from './symposium.js'
 
 export type MockHandler = (args: unknown, rng: Rng) => unknown
 
@@ -61,7 +64,13 @@ const DEFAULT_HANDLERS: Record<string, MockHandler> = {
   'regenerate-event': mockRegenerateEvent,
   'derive-pressures': mockDerivePressures,
   'era-generate': mockEraGenerate,
+  'era-specialist': mockEraSpecialist,
+  'era-synthesize': mockEraSynthesize,
+  'court-advocate': mockCourtAdvocate,
+  'court-skeptic': mockCourtSkeptic,
+  'court-judge': mockCourtJudge,
   'convergence-scan': mockConvergenceScan,
+  pulse: mockPulse,
   'event-expand': mockEventExpand,
   'era-deepdive': mockEraDeepDive,
   'entity-biography': mockBiography,

@@ -47,6 +47,9 @@ function aggregateFor(pod: BenchPod, interpretation: PodInterpretedOut): Timelin
       createdAt: now,
       settings: {
         dial: 50,
+        derivation: 'standard',
+        court: false,
+        epilogue: false,
         horizonYears: 40,
         defaultLenses: ['political', 'technological', 'cultural', 'economic', 'daily-life'],
         models: {
@@ -87,6 +90,8 @@ function aggregateFor(pod: BenchPod, interpretation: PodInterpretedOut): Timelin
     convergencePoints: [],
     critiqueReports: [],
     biographies: [],
+    courtRecords: [],
+    claims: [],
   }
 }
 

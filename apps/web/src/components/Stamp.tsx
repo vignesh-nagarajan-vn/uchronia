@@ -18,6 +18,24 @@ export function DisputedMark({ withNotes = true }: { withNotes?: boolean }) {
   )
 }
 
+/**
+ * Symposium marginalia (v2/M17): the chairs read this event differently and
+ * the synthesizer kept both readings. Deliberately quiet and colourless - it
+ * is an archivist's note in the margin, not a verdict, so it borrows neither
+ * record blue nor thread red.
+ */
+export function ContestedMark({ note }: { note?: string | undefined }) {
+  return (
+    <span
+      className="stamp italic text-ink-faded"
+      title={note ?? 'the symposium could not settle this reading'}
+      data-testid="contested-mark"
+    >
+      [contested]
+    </span>
+  )
+}
+
 export function ConvergenceGlyph({ note }: { note?: string | undefined }) {
   return (
     <span

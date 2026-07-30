@@ -1,4 +1,4 @@
-import { EraBatchOut, type Pressure } from '@uchronia/schemas'
+import { EraBatchOut, MAX_INDEX_DELTA, type Pressure } from '@uchronia/schemas'
 import type { DialParams } from '../dial.js'
 import {
   ANTI_CLICHE_MANDATES,
@@ -11,6 +11,8 @@ import type { PromptTemplate } from './types.js'
 export interface EraGenerateArgs {
   podStatement: string
   podMechanism: string
+  /** The divergence's theatre, from the anchor region taxonomy (v2/M18). */
+  podRegion: string
   span: { startYear: number; endYear: number }
   ordinal: number
   /**
@@ -29,6 +31,10 @@ export interface EraGenerateArgs {
   wildcardBudget: number
   dial: DialParams
   subPodStatement: string | null
+  /** Latest coarse regional readings, pre-rendered (v2/M18); empty when none yet. */
+  indexSummary?: string
+  /** True for the epilogue era: past the horizon, and openly a guess (v2/M18). */
+  speculative?: boolean
 }
 
 /**
@@ -38,13 +44,14 @@ export interface EraGenerateArgs {
  */
 export const eraGenerate: PromptTemplate<EraGenerateArgs, EraBatchOut> = {
   id: 'era-generate',
-  version: '1.4.0',
+  version: '1.5.0',
   changelog: [
     '1.0.0 - initial template',
     '1.1.0 - discipline measured from the branch origin; recent events carry causal marks; chain-extension mandate',
     '1.2.0 - entity lifecycle: terminal deltas (ends:true), roster excludes the dead',
     '1.3.0 - human voice mandate; prose register frays or steadies with the dial',
     '1.4.0 - relevance guard: mechanism named, on-divergence mandate (v2/M14)',
+    '1.5.0 - lives (birth years, counterfactual persons, succession), regional indices, name drift, the epilogue register (v2/M18)',
   ],
   role: 'generation',
   schemaName: 'EraBatchOut',
@@ -77,6 +84,8 @@ ${HANDLE_CONVENTIONS}`,
     batchSize,
     wildcardBudget,
     subPodStatement,
+    indexSummary,
+    speculative,
   }) => {
     const pressureLines = pressures
       .map((p) => `- ${p.name} (${p.kind}, intensity ${p.intensity}): ${p.description}`)
@@ -106,7 +115,11 @@ ${recentEvents}
 
 Entity roster (referenceable by slug):
 ${roster}
-
+${indexSummary ? `\nRegional readings as this era opens (0-100, coarse by design):\n${indexSummary}\n` : ''}${
+  speculative
+    ? `\nTHIS IS THE EPILOGUE. It lies past the horizon this history was derived to, and it is openly a projection rather than a derivation. Keep the same discipline (state, causes, deltas) but stay conservative: extend trends already on the ledger, do not introduce a new hinge, and let the prose carry the provisional tone of someone reasoning forward rather than reporting back.\n`
+    : ''
+}
 Generate ${batchSize} events for this era. Rules:
 - Every event's year lies within ${span.startYear}–${span.endYear}; order them chronologically.
 - ${wildcardRule}
@@ -114,6 +127,10 @@ Generate ${batchSize} events for this era. Rules:
 - Entities can end. When an event kills a person, dissolves an institution, or extinguishes a movement for good, mark that delta ends:true. Ended entities never receive another delta and never act again; the snapshot lists them under "no longer extant". People age - a person active since the divergence may be due an ending.
 - Claim causes: most events should cite at least one cause (e<n> or d<n>); use kinds precisely (causes / enables / prevents / accelerates / delays). The recent events show their own parents as [from e<n>] - prefer extending those live chains or visibly closing them over opening disconnected new ones.
 - Spread lenses: across the era, at least one event must be primarily economic and at least one cultural or daily-life. ${distanceYears > 30 ? 'This far from the divergence, second-order consequences dominate: prices, schooling, custom, language.' : ''}
+- New people and bodies carry their beginnings: give a new entity a bornYear (birth, founding, or first working example) when the record would fix one. If this history invented a person who has no attested counterpart, set counterfactual: true, and name them plausibly for their region and generation. When one actor takes up another's office or line, set succeedsSlug to the slug they follow.
+- When an event puts someone into an office, say so in the delta as a "role" fact. That is what the record reads to know who held what, and for how long.
+- indexShifts (optional): where this era left the coarse regional dials, 0-100. Move them by degrees, not decrees: a step larger than ${MAX_INDEX_DELTA} points needs a catastrophe or a boom named in the note, and the note is what makes the movement auditable. Only report regions this era actually moved.
+- nameDrift (optional, usually empty): when an event genuinely changes what something is called (a city renamed by a conqueror, a title that outlives its office, a people who came to call themselves otherwise), record it against that event's ref: the attested name, the drifted name, and one line on how it happened. Names only. Do not invent grammar, and do not drift a name the event did not touch.
 - Also return the era's title (the mood of this span, not its verdict) and a 1–2 sentence summary.`
   },
   seedKey: ({ span, ordinal, dial, batchSize }) =>

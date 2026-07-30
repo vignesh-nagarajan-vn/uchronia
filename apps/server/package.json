@@ -8,6 +8,7 @@
     "dev:preview": "node --import tsx src/index.ts",
     "start": "tsx src/index.ts",
     "start:mock": "cross-env UCHRONIA_MOCK=1 tsx src/index.ts",
+    "start:e2e": "cross-env UCHRONIA_MOCK=1 UCHRONIA_DB=:memory: tsx src/index.ts",
     "build": "esbuild src/index.ts --bundle --platform=node --format=esm --outfile=dist/index.js --external:better-sqlite3 --banner:js=\"import { createRequire as topLevelCreateRequire } from 'node:module'; const require = topLevelCreateRequire(import.meta.url);\"",
     "build:vercel": "esbuild src/vercel.ts --bundle --platform=node --format=esm --outfile=dist/vercel.js --external:better-sqlite3 --banner:js=\"import { createRequire as topLevelCreateRequire } from 'node:module'; const require = topLevelCreateRequire(import.meta.url);\" && node scripts/copy-vercel-assets.mjs",
     "migrate": "drizzle-kit generate",

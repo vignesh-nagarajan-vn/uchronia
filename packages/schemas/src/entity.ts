@@ -24,10 +24,40 @@ export const Entity = z.object({
   initialState: StateRecord,
   /** Event that introduced it; null when seeded at POD intake. */
   introducedByEventId: UlidString.nullable(),
+  /**
+   * When it began: birth for a person, founding for a nation, institution, or
+   * movement, first working example for a technology (v2/M18). Null when the
+   * record does not fix one. The end is never stored: an entity is ended on a
+   * branch iff a visible delta says so (see {@link StateDelta.ends}).
+   */
+  bornYear: z.number().int().nullable().default(null),
+  /**
+   * True for people and bodies this history invented, who have no attested
+   * counterpart (v2/M18). The divergence is allowed to mint them; the reader
+   * is entitled to know which ones it minted.
+   */
+  counterfactual: z.boolean().default(false),
+  /** The entity this one follows in a line or an office; null when it opens one. */
+  succeedsSlug: Slug.nullable().default(null),
   createdAt: z.iso.datetime(),
   provenance: Provenance,
 })
 export type Entity = z.infer<typeof Entity>
+
+/**
+ * One span during which an entity held a role, derived by replaying the
+ * `role` key of the deltas visible on a branch (v2/M18). Never stored: like
+ * all state, a tenure is whatever the visible events say it is.
+ */
+export const RoleTenure = z.object({
+  role: z.string().min(1),
+  startYear: z.number().int(),
+  /** Null while the role is still held at the end of the visible record. */
+  endYear: z.number().int().nullable(),
+  startEventId: UlidString,
+  endEventId: UlidString.nullable(),
+})
+export type RoleTenure = z.infer<typeof RoleTenure>
 
 /** One rendered line of a dossier's ledger. */
 export const LedgerLine = z.object({
@@ -49,6 +79,8 @@ export const EntityView = Entity.extend({
    * sibling branch that cannot see the ending event still shows it alive.
    */
   endedByEventId: UlidString.nullable().default(null),
+  /** Role spans read off this branch's ledger (v2/M18); empty for most entities. */
+  tenures: z.array(RoleTenure).default([]),
 })
 export type EntityView = z.infer<typeof EntityView>
 

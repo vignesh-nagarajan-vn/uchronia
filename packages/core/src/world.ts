@@ -2,7 +2,9 @@ import type {
   Artifact,
   Branch,
   CausalEdge,
+  Claim,
   ConvergencePoint,
+  CourtRecord,
   CritiqueIssue,
   CritiqueReport,
   Entity,
@@ -12,6 +14,8 @@ import type {
   EventView,
   LedgerLine,
   PointOfDivergence,
+  RegionalIndexClaim,
+  RoleTenure,
   StateRecord,
   SubPod,
   Timeline,
@@ -49,6 +53,8 @@ export class World {
   private readonly artifacts = new Map<string, Artifact>()
   private readonly convergences = new Map<string, ConvergencePoint>()
   private readonly critiques = new Map<string, CritiqueReport>()
+  private readonly courts = new Map<string, CourtRecord>()
+  private readonly claims = new Map<string, Claim>()
   private readonly biographies = new Map<string, EntityBiography>()
   private readonly slugToEntityId = new Map<string, string>()
 
@@ -71,6 +77,8 @@ export class World {
     for (const a of aggregate.artifacts) world.artifacts.set(a.id, a)
     for (const c of aggregate.convergencePoints) world.convergences.set(c.id, c)
     for (const c of aggregate.critiqueReports) world.critiques.set(c.id, c)
+    for (const c of aggregate.courtRecords) world.courts.set(c.id, c)
+    for (const c of aggregate.claims) world.claims.set(c.id, c)
     for (const b of aggregate.biographies)
       world.biographies.set(World.bioKey(b.entityId, b.branchId), b)
     return world
@@ -90,6 +98,8 @@ export class World {
       convergencePoints: [...this.convergences.values()],
       critiqueReports: [...this.critiques.values()],
       biographies: [...this.biographies.values()],
+      courtRecords: [...this.courts.values()],
+      claims: [...this.claims.values()],
     })
   }
 
@@ -475,6 +485,88 @@ export class World {
     if (this.critiques.has(report.id)) throw new IntegrityError(`critique ${report.id} exists`)
     this.getBranch(report.branchId)
     this.critiques.set(report.id, report)
+  }
+
+  addCourtRecord(record: CourtRecord): void {
+    if (this.courts.has(record.id)) throw new IntegrityError(`court record ${record.id} exists`)
+    this.assertOwnEvent(record.branchId, record.eventId)
+    this.courts.set(record.id, record)
+  }
+
+  /** Court records visible from a branch (its own and its ancestors'). */
+  courtRecordsFor(branchId: string): CourtRecord[] {
+    const chain = new Set(this.segments(branchId).map((s) => s.branchId))
+    return [...this.courts.values()].filter((r) => chain.has(r.branchId))
+  }
+
+  addClaim(claim: Claim): void {
+    if (this.claims.has(claim.id)) throw new IntegrityError(`claim ${claim.id} exists`)
+    this.assertOwnEvent(claim.branchId, claim.eventId)
+    this.claims.set(claim.id, claim)
+  }
+
+  /**
+   * Claims visible from a branch, chronological (v2/M18). A claim rides its
+   * event, so this resolves through the visible events rather than the branch
+   * chain: a fork cut mid-history must not inherit claims made after the cut.
+   */
+  resolveClaims(branchId: string): Claim[] {
+    const visible = new Set(this.resolveEvents(branchId).map((e) => e.id))
+    return [...this.claims.values()]
+      .filter((c) => visible.has(c.eventId))
+      .sort((a, b) => a.year - b.year || a.id.localeCompare(b.id))
+  }
+
+  /**
+   * The latest reading of each regional index on a branch (v2/M18), keyed
+   * `region|index`. This is what the pressures step reads, so it must reflect
+   * only what the branch can actually see.
+   */
+  regionalIndices(branchId: string): Map<string, RegionalIndexClaim> {
+    const latest = new Map<string, RegionalIndexClaim>()
+    for (const claim of this.resolveClaims(branchId)) {
+      if (claim.body.kind !== 'regional-index') continue
+      latest.set(`${claim.body.region}|${claim.body.index}`, claim.body)
+    }
+    return latest
+  }
+
+  /**
+   * Role spans for one entity, replayed off the branch's ledger (v2/M18). A
+   * delta that sets `role` opens a tenure and closes the previous one; a
+   * terminal delta closes whatever is open. Derived, never stored, so a
+   * sibling branch that cannot see the succession still shows the old holder.
+   */
+  roleTenures(branchId: string, entityId: string): RoleTenure[] {
+    const tenures: RoleTenure[] = []
+    const openTenure = (): RoleTenure | undefined => {
+      const last = tenures[tenures.length - 1]
+      return last && last.endEventId === null ? last : undefined
+    }
+    const close = (year: number, eventId: string): void => {
+      const open = openTenure()
+      if (!open) return
+      open.endYear = year
+      open.endEventId = eventId
+    }
+    for (const event of this.resolveEvents(branchId)) {
+      for (const delta of event.deltas) {
+        if (delta.entityId !== entityId) continue
+        const role = delta.patch.role
+        if (typeof role === 'string' && role !== openTenure()?.role) {
+          close(event.date.year, event.id)
+          tenures.push({
+            role,
+            startYear: event.date.year,
+            endYear: null,
+            startEventId: event.id,
+            endEventId: null,
+          })
+        }
+        if (delta.ends) close(event.date.year, event.id)
+      }
+    }
+    return tenures
   }
 
   /**

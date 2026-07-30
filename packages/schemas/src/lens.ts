@@ -1,10 +1,22 @@
 import { z } from 'zod'
 
 /**
- * Lenses are the five registers every consequence must be able to speak in.
- * They filter and recolor the timeline (F5) and are a first-class field on events.
+ * Lenses are the registers every consequence must be able to speak in. They
+ * filter and recolor the timeline (F5) and are a first-class field on events.
+ *
+ * The first five are the original set. `philology` (v2/M18) is narrower on
+ * purpose: it collects the events that moved a name, so a reader can follow
+ * how the vocabulary of a history drifted away from the attested one. It is
+ * never a default lens, because most eras have nothing to say in it.
  */
-export const LENSES = ['political', 'technological', 'cultural', 'economic', 'daily-life'] as const
+export const LENSES = [
+  'political',
+  'technological',
+  'cultural',
+  'economic',
+  'daily-life',
+  'philology',
+] as const
 
 export const Lens = z.enum(LENSES)
 export type Lens = z.infer<typeof Lens>

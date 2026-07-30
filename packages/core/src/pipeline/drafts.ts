@@ -104,6 +104,13 @@ export function resolveDrafts(ctx: DraftContext, drafts: DraftEvent[]): Resolved
         description: def.description,
         initialState: factsToRecord(def.initialState),
         introducedByEventId: eventId,
+        // Lives (v2/M18). The birth year defaults to the introducing event's:
+        // an actor with no stated beginning began where the record first has
+        // it. Succession points at the drafted slug, not the stored rename,
+        // because that is the name the rest of the batch used.
+        bornYear: def.bornYear ?? null,
+        counterfactual: def.counterfactual ?? false,
+        succeedsSlug: def.succeedsSlug ?? null,
         createdAt: now,
         provenance,
       }
@@ -182,7 +189,7 @@ export function resolveDrafts(ctx: DraftContext, drafts: DraftEvent[]): Resolved
       plausibility: draft.plausibility,
       distanceFromPod: Math.max(0, draft.year - podYear),
       wildcard: draft.wildcard,
-      flags: { disputed: false, convergence: false },
+      flags: { disputed: false, convergence: false, contested: false },
       criticNotes: null,
       provenance,
     })

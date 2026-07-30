@@ -1,4 +1,5 @@
 import {
+  defaultHorizonYears,
   generateStructured,
   loadBaseline,
   podInterpret,
@@ -16,6 +17,7 @@ import {
   type PointOfDivergence,
   type Timeline,
   TimelineAggregate,
+  type TimelineSettings,
   UpdateTimelineRequest,
 } from '@uchronia/schemas'
 import { Hono } from 'hono'
@@ -94,7 +96,14 @@ export function timelineRoutes(deps: ServerDeps): Hono {
       createdAt: now,
       settings: {
         dial: body.dial ?? 50,
-        horizonYears: body.horizonYears ?? 150,
+        ...(body.axes ? { axes: body.axes } : {}),
+        derivation: body.derivation ?? 'standard',
+        court: body.court ?? false,
+        epilogue: body.epilogue ?? false,
+        // Deep time by default (v2/M18): a divergence runs to the present
+        // unless the composer names a shorter road.
+        horizonYears:
+          body.horizonYears ?? defaultHorizonYears(pod.year, clock.now().getUTCFullYear()),
         defaultLenses: body.lenses ?? [...LENSES],
         models: {
           generation: config.models.generation,
@@ -168,9 +177,16 @@ export function timelineRoutes(deps: ServerDeps): Hono {
       )
     }
 
-    const settings = {
-      ...aggregate.timeline.settings,
+    // `axes: null` clears the overrides and hands the axes back to the master dial.
+    const { axes: currentAxes, ...restSettings } = aggregate.timeline.settings
+    const nextAxes = body.axes === undefined ? currentAxes : (body.axes ?? undefined)
+    const settings: TimelineSettings = {
+      ...restSettings,
+      ...(nextAxes ? { axes: nextAxes } : {}),
       ...(body.dial !== undefined ? { dial: body.dial } : {}),
+      ...(body.derivation !== undefined ? { derivation: body.derivation } : {}),
+      ...(body.court !== undefined ? { court: body.court } : {}),
+      ...(body.epilogue !== undefined ? { epilogue: body.epilogue } : {}),
       ...(body.horizonYears !== undefined ? { horizonYears: body.horizonYears } : {}),
       ...(body.defaultLenses !== undefined ? { defaultLenses: body.defaultLenses } : {}),
     }
