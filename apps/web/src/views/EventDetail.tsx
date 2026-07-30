@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { ARTIFACT_KINDS, type ArtifactKind, type BranchView } from '@uchronia/schemas'
+import { type ArtifactKind, type BranchView, FORGEABLE_ARTIFACT_KINDS } from '@uchronia/schemas'
 import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router'
 import { ForkDialog } from '../components/ForkDialog.js'
@@ -404,7 +404,7 @@ export function EventDetail() {
             </ul>
           )}
           <div className="mt-2.5 flex flex-wrap gap-2">
-            {ARTIFACT_KINDS.map((kind) => (
+            {FORGEABLE_ARTIFACT_KINDS.map((kind) => (
               <button
                 key={kind}
                 type="button"

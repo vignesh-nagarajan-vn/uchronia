@@ -17,9 +17,10 @@ import type { World } from '../world.js'
 import { callOpts, makeProvenance, type PipelineCtx } from './ctx.js'
 import { generateStructured } from './structured.js'
 
-const TEMPLATES: Record<
-  ArtifactKind,
-  PromptTemplate<ArtifactArgs, { title: string; body: Artifact['body'] }>
+// Partial because `inquiry` is stored as an artifact but is not forged from
+// an event; it is saved from a Grand Inquiry, which starts from a thesis.
+const TEMPLATES: Partial<
+  Record<ArtifactKind, PromptTemplate<ArtifactArgs, { title: string; body: Artifact['body'] }>>
 > = {
   newspaper: artifactNewspaper,
   letter: artifactLetter,
@@ -62,6 +63,9 @@ export async function generateArtifact(
   }
 
   const template = TEMPLATES[kind]
+  if (!template) {
+    throw new NotFoundError('artifact template', kind)
+  }
   const generated = await generateStructured(
     ctx.provider,
     template,

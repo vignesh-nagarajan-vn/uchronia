@@ -6,6 +6,7 @@ import { clsx } from 'clsx'
 import { motion, useReducedMotion } from 'motion/react'
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router'
+import { AskDrawer } from '../components/AskDrawer.js'
 import { CommissionDialog } from '../components/CommissionDialog.js'
 import { EraHeader } from '../components/EraHeader.js'
 import { EventCard } from '../components/EventCard.js'
@@ -54,6 +55,7 @@ export function TimelineView() {
   const [forkAt, setForkAt] = useState<EventView | null>(null)
   const [shortcutsOpen, setShortcutsOpen] = useState(false)
   const [commissioning, setCommissioning] = useState(false)
+  const [asking, setAsking] = useState(false)
   const searchRef = useRef<HTMLInputElement>(null)
   const reduced = useReducedMotion()
 
@@ -441,6 +443,15 @@ export function TimelineView() {
           </Link>
           <button
             type="button"
+            onClick={() => setAsking(true)}
+            data-testid="ask-button"
+            className="text-ink-faded hover:text-ink"
+            title="ask this chronicle's archivist"
+          >
+            ask
+          </button>
+          <button
+            type="button"
             onClick={() => setCommissioning(true)}
             data-testid="commission-button"
             className="text-ink-faded hover:text-ink"
@@ -667,6 +678,9 @@ export function TimelineView() {
           timelineId={timelineId}
           onClose={() => setForkAt(null)}
         />
+      )}
+      {asking && (
+        <AskDrawer branchId={branchId} branchPath={branchPath} onClose={() => setAsking(false)} />
       )}
       <ShortcutsDialog open={shortcutsOpen} onClose={() => setShortcutsOpen(false)} />
       {commissioning && (

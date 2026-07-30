@@ -8,6 +8,7 @@ import {
   artifactRadio,
   artifactTelegram,
 } from './artifacts.js'
+import { archivistAsk, grandInquiry } from './ask.js'
 import { convergenceScan } from './convergence-scan.js'
 import { courtAdvocate, courtJudge, courtSkeptic } from './court.js'
 import { criticReview } from './critic-review.js'
@@ -49,6 +50,8 @@ export const PROMPT_REGISTRY: Record<string, PromptTemplate<any, any>> = {
   [entityBiography.id]: entityBiography,
   [historiographySchools.id]: historiographySchools,
   [eventInterpretation.id]: eventInterpretation,
+  [archivistAsk.id]: archivistAsk,
+  [grandInquiry.id]: grandInquiry,
   [artifactNewspaper.id]: artifactNewspaper,
   [artifactLetter.id]: artifactLetter,
   [artifactEncyclopedia.id]: artifactEncyclopedia,

@@ -1,4 +1,9 @@
-import { ARTIFACT_KINDS, Artifact, BranchView, CreateTimelineResponse } from '@uchronia/schemas'
+import {
+  Artifact,
+  BranchView,
+  CreateTimelineResponse,
+  FORGEABLE_ARTIFACT_KINDS,
+} from '@uchronia/schemas'
 import { describe, expect, it } from 'vitest'
 import { makeTestApp, postJson } from './test-helpers.js'
 
@@ -30,7 +35,7 @@ describe('the artifact forge, second shelf (v2/M20)', () => {
     const event = view.events[3]
     expect(event).toBeDefined()
 
-    for (const kind of ARTIFACT_KINDS) {
+    for (const kind of FORGEABLE_ARTIFACT_KINDS) {
       const res = await postJson(app, `/api/branches/${branchId}/events/${event?.id}/artifacts`, {
         kind,
       })

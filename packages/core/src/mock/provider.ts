@@ -12,6 +12,7 @@ import {
   mockArtifactRadio,
   mockArtifactTelegram,
 } from './artifacts.js'
+import { mockArchivistAsk, mockGrandInquiry } from './ask.js'
 import { mockConvergenceScan } from './convergence.js'
 import { mockCourtAdvocate, mockCourtJudge, mockCourtSkeptic } from './court.js'
 import { mockCriticReview, mockRegenerateEvent } from './critic.js'
@@ -81,6 +82,8 @@ const DEFAULT_HANDLERS: Record<string, MockHandler> = {
   'entity-biography': mockBiography,
   'historiography-schools': mockHistoriographySchools,
   'event-interpretation': mockEventInterpretation,
+  'archivist-ask': mockArchivistAsk,
+  'grand-inquiry': mockGrandInquiry,
   'artifact-newspaper': mockArtifactNewspaper,
   'artifact-letter': mockArtifactLetter,
   'artifact-encyclopedia': mockArtifactEncyclopedia,

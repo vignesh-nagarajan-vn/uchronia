@@ -65,7 +65,9 @@ export function ArtifactReader() {
       }
     >
       <p className="mx-auto max-w-[760px] pt-6 text-center font-data text-[12px] text-ink-faded">
-        a {artifact.kind} produced from inside this timeline - speculative fiction, not a source
+        {artifact.kind === 'inquiry'
+          ? 'a finding about this timeline, made from its own record - speculative fiction, not a source'
+          : `a ${artifact.kind} produced from inside this timeline - speculative fiction, not a source`}
       </p>
       <div className="mx-auto mt-4 max-w-[760px]">
         <ArtifactBody artifact={artifact} />
@@ -328,6 +330,61 @@ export function ArtifactBody({ artifact }: { artifact: Artifact }) {
               </section>
             ))}
           </div>
+        </div>
+      )
+    // A finding, not a period source. It gets the app's own register (rules,
+    // mono labels, a stated confidence) precisely so nobody reads it as one
+    // of the documents on the shelf beside it.
+    case 'inquiry':
+      return (
+        <div className="sheet px-8 py-8 sm:px-12" data-testid="inquiry-body">
+          <p className="stamp text-thread">a finding, not a document</p>
+          <h1 className="mt-2 text-[22px] font-semibold leading-tight">{body.thesis}</h1>
+          <p className="mt-4 border-l-2 border-thread bg-thread-wash px-4 py-3 text-[16px]">
+            {body.verdict}
+          </p>
+          <p className="mt-1 font-data text-[11.5px] text-ink-faded">
+            confidence in the record, not in the argument: {(body.confidence * 100).toFixed(0)}%
+          </p>
+
+          <h2 className="mt-6 border-b border-rule pb-1 font-data text-[13px] text-ink-faded">
+            the chain
+          </h2>
+          <ol className="mt-2 space-y-2">
+            {body.chain.map((step) => (
+              <li key={`${step.pin}-${step.claim}`} className="flex items-baseline gap-2">
+                <span className="font-data text-[11px] text-thread">[{step.pin}]</span>
+                <span className="text-[15px]">{step.claim}</span>
+              </li>
+            ))}
+          </ol>
+
+          <h2 className="mt-6 border-b border-rule pb-1 font-data text-[13px] text-ink-faded">
+            what cuts against it
+          </h2>
+          <ul className="mt-2 space-y-2">
+            {body.counterConsiderations.map((point) => (
+              <li key={point} className="text-[15px] text-ink-faded">
+                {point}
+              </li>
+            ))}
+          </ul>
+
+          {body.citations.length > 0 && (
+            <>
+              <h2 className="mt-6 border-b border-rule pb-1 font-data text-[13px] text-ink-faded">
+                what it rests on
+              </h2>
+              <ul className="mt-2 space-y-1">
+                {body.citations.map((citation) => (
+                  <li key={citation.pin} className="flex items-baseline gap-2">
+                    <span className="font-data text-[11px] text-thread">[{citation.pin}]</span>
+                    <span className="text-[13.5px] text-ink-faded">{citation.label}</span>
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
         </div>
       )
     default:

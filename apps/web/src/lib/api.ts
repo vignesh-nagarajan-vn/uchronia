@@ -1,5 +1,6 @@
 import {
   type Artifact,
+  AskResponse,
   type BaselineAnchor,
   BranchView,
   CompareView,
@@ -176,6 +177,24 @@ export const api = {
       schools: HistoriographicSchool[]
       interpretations: Interpretation[]
     }>(`/api/branches/${branchId}/events/${eventId}/interpretations`, { method: 'POST' }),
+
+  /** Ask the Archivist (v2/M23). Nothing persisted: the question is the reader's. */
+  ask: async (branchId: string, question: string) =>
+    AskResponse.parse(
+      await request(`/api/branches/${branchId}/ask`, {
+        method: 'POST',
+        body: JSON.stringify({ question }),
+      }),
+    ),
+
+  /** The Grand Inquiry (v2/M23): a finding, saved to the shelf. */
+  inquiry: async (branchId: string, thesis: string) =>
+    (
+      await request<{ artifact: Artifact }>(`/api/branches/${branchId}/inquiry`, {
+        method: 'POST',
+        body: JSON.stringify({ thesis }),
+      })
+    ).artifact,
 
   /** What became of one entity on every branch (v2/M19). Pure data, no call. */
   entityFates: async (branchId: string, entityId: string) =>

@@ -14,9 +14,21 @@ export const ARTIFACT_KINDS = [
   'radio',
   'obituary',
   'classified',
+  // A finding, saved (v2/M23). Not a period document: the app's own answer.
+  'inquiry',
 ] as const
 export const ArtifactKind = z.enum(ARTIFACT_KINDS)
 export type ArtifactKind = z.infer<typeof ArtifactKind>
+
+/**
+ * The kinds the forge can produce from an event. `inquiry` is stored as an
+ * artifact so it lands on the same shelf and travels in the same export, but
+ * it is not forgeable: it is saved from a Grand Inquiry, which starts from a
+ * thesis rather than from an event.
+ */
+export const FORGEABLE_ARTIFACT_KINDS = ARTIFACT_KINDS.filter(
+  (k) => k !== 'inquiry',
+) as readonly ArtifactKind[]
 
 /** A front page from inside the timeline. */
 export const NewspaperBody = z.object({
@@ -144,6 +156,29 @@ export const ClassifiedBody = z.object({
 })
 export type ClassifiedBody = z.infer<typeof ClassifiedBody>
 
+/**
+ * A saved Grand Inquiry (v2/M23). Unlike its shelf-mates this is not a
+ * diegetic document: it is the app answering a question about the history,
+ * and it is rendered so nobody mistakes it for a period source.
+ */
+export const InquiryBody = z.object({
+  kind: z.literal('inquiry'),
+  thesis: z.string().min(1),
+  verdict: z.string().min(1),
+  confidence: z.number().min(0).max(1),
+  chain: z.array(z.object({ pin: z.string().min(1), claim: z.string().min(1) })),
+  counterConsiderations: z.array(z.string().min(1)),
+  citations: z.array(
+    z.object({
+      pin: z.string().min(1),
+      kind: z.enum(['event', 'artifact', 'claim']),
+      id: z.string().min(1),
+      label: z.string().min(1),
+    }),
+  ),
+})
+export type InquiryBody = z.infer<typeof InquiryBody>
+
 export const ArtifactBody = z.discriminatedUnion('kind', [
   NewspaperBody,
   LetterBody,
@@ -153,6 +188,7 @@ export const ArtifactBody = z.discriminatedUnion('kind', [
   RadioBody,
   ObituaryBody,
   ClassifiedBody,
+  InquiryBody,
 ])
 export type ArtifactBody = z.infer<typeof ArtifactBody>
 

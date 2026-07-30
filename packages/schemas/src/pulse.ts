@@ -89,6 +89,28 @@ export const GraftResponse = z.object({
 })
 export type GraftResponse = z.infer<typeof GraftResponse>
 
+/** POST /branches/:branchId/ask (v2/M23) */
+export const AskRequest = z.object({ question: z.string().min(3).max(500) })
+export type AskRequest = z.infer<typeof AskRequest>
+
+export const AskResponse = z.object({
+  answer: z.string(),
+  silent: z.boolean(),
+  citations: z.array(
+    z.object({
+      pin: z.string(),
+      kind: z.enum(['event', 'artifact', 'claim']),
+      id: z.string(),
+      label: z.string(),
+    }),
+  ),
+})
+export type AskResponse = z.infer<typeof AskResponse>
+
+/** POST /branches/:branchId/inquiry (v2/M23) */
+export const InquiryRequest = z.object({ thesis: z.string().min(8).max(500) })
+export type InquiryRequest = z.infer<typeof InquiryRequest>
+
 /** Entity fates across every branch of a timeline (v2/M19). Pure data, no calls. */
 export const EntityFate = z.object({
   branchId: UlidString,

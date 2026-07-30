@@ -14,6 +14,7 @@ import { ZodError } from 'zod'
 import type { ServerDeps } from './deps.js'
 import { ApiError } from './http-error.js'
 import { artifactRoutes } from './routes/artifacts.js'
+import { askRoutes } from './routes/ask.js'
 import { branchRoutes } from './routes/branches.js'
 import { expandRoutes } from './routes/expand.js'
 import { forkRoutes } from './routes/fork.js'
@@ -54,6 +55,7 @@ export function createApp(deps: ServerDeps): Hono {
   app.route('/api', forkRoutes(deps))
   app.route('/api', pulseRoutes(deps))
   app.route('/api', historiographyRoutes(deps))
+  app.route('/api', askRoutes(deps))
   app.route('/api', artifactRoutes(deps))
   app.route('/api', traceRoutes(deps))
 

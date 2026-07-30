@@ -213,6 +213,28 @@ export const CourtRulingOut = z.object({
 })
 export type CourtRulingOut = z.infer<typeof CourtRulingOut>
 
+/** archivist-ask output (v2/M23). */
+export const ArchivistOut = z.object({
+  /** Prose with inline pins: "[E3]". */
+  answer: z.string().min(1),
+  /** True when the record does not settle the question. */
+  silent: z.boolean(),
+})
+export type ArchivistOut = z.infer<typeof ArchivistOut>
+
+/** grand-inquiry output (v2/M23): a finding, not an essay. */
+export const InquiryOut = z.object({
+  verdict: z.string().min(1),
+  /** 0-1: how firmly the RECORD supports it, not how well it is argued. */
+  confidence: z.number().min(0).max(1),
+  chain: z
+    .array(z.object({ pin: z.string().min(1), claim: z.string().min(1) }))
+    .min(1)
+    .max(8),
+  counterConsiderations: z.array(z.string().min(1)).min(1).max(5),
+})
+export type InquiryOut = z.infer<typeof InquiryOut>
+
 /** derive-pressures output. */
 export const PressuresOut = z.object({
   pressures: z.array(Pressure).min(3).max(7),

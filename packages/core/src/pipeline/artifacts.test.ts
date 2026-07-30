@@ -1,4 +1,4 @@
-import { ARTIFACT_KINDS, Artifact } from '@uchronia/schemas'
+import { Artifact, FORGEABLE_ARTIFACT_KINDS } from '@uchronia/schemas'
 import { FX, fixtureAggregate } from '@uchronia/schemas/fixtures'
 import { describe, expect, it } from 'vitest'
 import { NotFoundError } from '../errors.js'
@@ -22,7 +22,7 @@ function setup(): { world: World; ctx: PipelineCtx } {
 describe('generateArtifact - the four diegetic kinds', () => {
   it('generates a schema-valid artifact of every kind', async () => {
     const { world, ctx } = setup()
-    for (const kind of ARTIFACT_KINDS) {
+    for (const kind of FORGEABLE_ARTIFACT_KINDS) {
       const { artifact, created } = await generateArtifact(ctx, world, FX.rootBranch, FX.e0, kind)
       expect(created).toBe(true)
       const parsed = Artifact.parse(artifact)
@@ -30,7 +30,7 @@ describe('generateArtifact - the four diegetic kinds', () => {
       expect(parsed.body.kind).toBe(kind)
       expect(parsed.eventId).toBe(FX.e0)
     }
-    expect(world.artifactsForEvent(FX.e0)).toHaveLength(ARTIFACT_KINDS.length)
+    expect(world.artifactsForEvent(FX.e0)).toHaveLength(FORGEABLE_ARTIFACT_KINDS.length)
   })
 
   it('is period-aware: medieval Mediterranean flavor reaches the page', async () => {
