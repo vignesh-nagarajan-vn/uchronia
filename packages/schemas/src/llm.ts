@@ -1,5 +1,14 @@
 import { z } from 'zod'
-import { EncyclopediaBody, LetterBody, NewspaperBody, PosterBody } from './artifact.js'
+import {
+  ClassifiedBody,
+  EncyclopediaBody,
+  LetterBody,
+  NewspaperBody,
+  ObituaryBody,
+  PosterBody,
+  RadioBody,
+  TelegramBody,
+} from './artifact.js'
 import { NAME_DRIFT_KINDS, REGIONAL_INDICES } from './claim.js'
 import { ANCHOR_REGIONS, CONVERGENCE_ATTRACTORS } from './convergence.js'
 import { EDGE_KINDS } from './edge.js'
@@ -272,6 +281,14 @@ export const NewspaperOut = z.object({ title: z.string().min(1), body: Newspaper
 export const LetterOut = z.object({ title: z.string().min(1), body: LetterBody })
 export const EncyclopediaOut = z.object({ title: z.string().min(1), body: EncyclopediaBody })
 export const PosterOut = z.object({ title: z.string().min(1), body: PosterBody })
+export const TelegramOut = z.object({ title: z.string().min(1), body: TelegramBody })
+export const RadioOut = z.object({ title: z.string().min(1), body: RadioBody })
+export const ObituaryOut = z.object({ title: z.string().min(1), body: ObituaryBody })
+export const ClassifiedOut = z.object({ title: z.string().min(1), body: ClassifiedBody })
+export type TelegramOut = z.infer<typeof TelegramOut>
+export type RadioOut = z.infer<typeof RadioOut>
+export type ObituaryOut = z.infer<typeof ObituaryOut>
+export type ClassifiedOut = z.infer<typeof ClassifiedOut>
 export type NewspaperOut = z.infer<typeof NewspaperOut>
 export type LetterOut = z.infer<typeof LetterOut>
 export type EncyclopediaOut = z.infer<typeof EncyclopediaOut>

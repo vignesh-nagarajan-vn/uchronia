@@ -36,6 +36,13 @@
       "when": 1785437236400,
       "tag": "0004_curved_zodiak",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1785440533614,
+      "tag": "0005_far_overlord",
+      "breakpoints": true
     }
   ]
 }

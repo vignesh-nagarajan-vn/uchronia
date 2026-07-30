@@ -44,5 +44,7 @@ export function assembleBranchView(world: World, branchId: string): BranchView {
     biographies: world.allBiographies().filter((b) => b.branchId === branchId),
     courtRecords: world.courtRecordsFor(branchId),
     claims: world.resolveClaims(branchId),
+    schools: world.schoolsFor(branchId),
+    interpretations: world.interpretationsFor(branchId),
   }
 }

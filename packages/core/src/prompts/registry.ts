@@ -1,8 +1,12 @@
 import {
+  artifactClassified,
   artifactEncyclopedia,
   artifactLetter,
   artifactNewspaper,
+  artifactObituary,
   artifactPoster,
+  artifactRadio,
+  artifactTelegram,
 } from './artifacts.js'
 import { convergenceScan } from './convergence-scan.js'
 import { courtAdvocate, courtJudge, courtSkeptic } from './court.js'
@@ -10,6 +14,7 @@ import { criticReview } from './critic-review.js'
 import { derivePressures } from './derive-pressures.js'
 import { eraGenerate } from './era-generate.js'
 import { entityBiography, eraDeepDive, eventExpand } from './expanders.js'
+import { eventInterpretation, historiographySchools } from './historiography.js'
 import { podInterpret } from './pod-interpret.js'
 import { podNormalize } from './pod-normalize.js'
 import { pulse } from './pulse.js'
@@ -42,10 +47,16 @@ export const PROMPT_REGISTRY: Record<string, PromptTemplate<any, any>> = {
   [eventExpand.id]: eventExpand,
   [eraDeepDive.id]: eraDeepDive,
   [entityBiography.id]: entityBiography,
+  [historiographySchools.id]: historiographySchools,
+  [eventInterpretation.id]: eventInterpretation,
   [artifactNewspaper.id]: artifactNewspaper,
   [artifactLetter.id]: artifactLetter,
   [artifactEncyclopedia.id]: artifactEncyclopedia,
   [artifactPoster.id]: artifactPoster,
+  [artifactTelegram.id]: artifactTelegram,
+  [artifactRadio.id]: artifactRadio,
+  [artifactObituary.id]: artifactObituary,
+  [artifactClassified.id]: artifactClassified,
 }
 
 export function templateVersions(): Array<{ id: string; version: string; role: string }> {

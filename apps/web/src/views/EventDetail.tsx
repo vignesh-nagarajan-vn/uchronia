@@ -31,6 +31,13 @@ export function EventDetail() {
   const pulse = useMutation({
     mutationFn: () => api.pulse(branchId, eventId, flip.trim()),
   })
+  // The glosses are fill-once on the server, so the mutation's own result is
+  // the freshest view of them; the branch view supplies whatever was already
+  // written on an earlier visit.
+  const interpret = useMutation({
+    mutationFn: () => api.interpretations(branchId, eventId),
+    onSuccess: () => void queryClient.invalidateQueries({ queryKey: ['branch-view', branchId] }),
+  })
 
   const expand = useMutation({
     mutationFn: () => api.expandEvent(branchId, eventId),
@@ -119,6 +126,10 @@ export function EventDetail() {
   const nameDrifts = data.claims.filter(
     (c) => c.eventId === event.id && c.body.kind === 'name-drift',
   )
+  const stored = data.interpretations.filter((i) => i.eventId === event.id)
+  const glosses =
+    interpret.data ??
+    (stored.length > 0 ? { schools: data.schools, interpretations: stored } : null)
 
   return (
     <Shell
@@ -408,6 +419,57 @@ export function EventDetail() {
               </button>
             ))}
           </div>
+        </section>
+
+        {/* In-world historiography (v2/M20): how this world's own rival
+            schools read the event. Fill-once, so the argument stays put. */}
+        <section className="mt-8" aria-label="interpretations">
+          <div className="flex flex-wrap items-baseline justify-between gap-2 border-b border-rule pb-1">
+            <h2 className="font-data text-[13px] text-ink-faded">how the schools read it</h2>
+            {!glosses && (
+              <button
+                type="button"
+                onClick={() => interpret.mutate()}
+                disabled={interpret.isPending}
+                data-testid="interpret-button"
+                className="font-data text-[11.5px] text-ink-faded underline decoration-rule underline-offset-2 hover:text-ink disabled:opacity-40"
+              >
+                {interpret.isPending ? 'asking the schools…' : 'ask the schools'}
+              </button>
+            )}
+          </div>
+          {glosses ? (
+            <div className="mt-3 space-y-4" data-testid="interpretations">
+              {glosses.interpretations.map((gloss) => {
+                const school = glosses.schools.find((s) => s.id === gloss.schoolId)
+                return (
+                  <article key={gloss.id}>
+                    <h3 className="text-[15px] font-semibold">{school?.name ?? 'a school'}</h3>
+                    {school && (
+                      <p className="font-data text-[11.5px] text-ink-faded">
+                        {school.seat} · holds that {school.stance}
+                      </p>
+                    )}
+                    <p className="mt-1 text-[15px] leading-relaxed">{gloss.gloss}</p>
+                  </article>
+                )
+              })}
+              <p className="font-data text-[11.5px] text-ink-faded">
+                These are schools inside this history. None of them knows ours, and none of them is
+                right.
+              </p>
+            </div>
+          ) : (
+            <p className="mt-2 text-[14px] text-ink-faded">
+              Every history that gets written down gets argued about. Ask this one's historians what
+              they make of the event.
+            </p>
+          )}
+          {interpret.isError && (
+            <p className="mt-2 text-[14px] text-thread">
+              The schools did not answer: {(interpret.error as Error)?.message ?? 'unknown'}
+            </p>
+          )}
         </section>
 
         {/* The counterfactual pulse (v2/M19): a forecast, not a fork. Rendered

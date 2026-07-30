@@ -11,6 +11,8 @@ import type {
   EntityBiography,
   Era,
   Event,
+  HistoriographicSchool,
+  Interpretation,
   PointOfDivergence,
   Timeline,
   TimelineAggregate,
@@ -225,6 +227,16 @@ export class Repo {
     const claimRows = branchIds.length
       ? this.db.select().from(t.claims).where(inArray(t.claims.branchId, branchIds)).all()
       : []
+    const schoolRows = branchIds.length
+      ? this.db.select().from(t.schools).where(inArray(t.schools.branchId, branchIds)).all()
+      : []
+    const interpretationRows = branchIds.length
+      ? this.db
+          .select()
+          .from(t.interpretations)
+          .where(inArray(t.interpretations.branchId, branchIds))
+          .all()
+      : []
 
     return {
       formatVersion: 1,
@@ -257,6 +269,8 @@ export class Repo {
       biographies: biographyRows,
       courtRecords: courtRows,
       claims: claimRows,
+      schools: schoolRows,
+      interpretations: interpretationRows,
     }
   }
 
@@ -297,6 +311,8 @@ export class Repo {
       if (agg.biographies.length) tx.insert(t.biographies).values(agg.biographies).run()
       if (agg.courtRecords.length) tx.insert(t.courtRecords).values(agg.courtRecords).run()
       if (agg.claims.length) tx.insert(t.claims).values(agg.claims).run()
+      if (agg.schools.length) tx.insert(t.schools).values(agg.schools).run()
+      if (agg.interpretations.length) tx.insert(t.interpretations).values(agg.interpretations).run()
     })
   }
 
@@ -306,6 +322,14 @@ export class Repo {
 
   insertClaim(claim: Claim): void {
     this.db.insert(t.claims).values(claim).run()
+  }
+
+  insertSchool(school: HistoriographicSchool): void {
+    this.db.insert(t.schools).values(school).run()
+  }
+
+  insertInterpretation(interpretation: Interpretation): void {
+    this.db.insert(t.interpretations).values(interpretation).run()
   }
 
   deleteTimeline(timelineId: string): boolean {
@@ -332,6 +356,8 @@ export class Repo {
         tx.delete(t.biographies).where(inArray(t.biographies.branchId, branchIds)).run()
         tx.delete(t.courtRecords).where(inArray(t.courtRecords.branchId, branchIds)).run()
         tx.delete(t.claims).where(inArray(t.claims.branchId, branchIds)).run()
+        tx.delete(t.schools).where(inArray(t.schools.branchId, branchIds)).run()
+        tx.delete(t.interpretations).where(inArray(t.interpretations.branchId, branchIds)).run()
         tx.delete(t.runTraces).where(inArray(t.runTraces.branchId, branchIds)).run()
         tx.delete(t.edges).where(inArray(t.edges.branchId, branchIds)).run()
         tx.delete(t.events).where(inArray(t.events.branchId, branchIds)).run()
@@ -524,6 +550,8 @@ export class Repo {
       tx.delete(t.biographies).where(eq(t.biographies.branchId, branchId)).run()
       tx.delete(t.courtRecords).where(eq(t.courtRecords.branchId, branchId)).run()
       tx.delete(t.claims).where(eq(t.claims.branchId, branchId)).run()
+      tx.delete(t.schools).where(eq(t.schools.branchId, branchId)).run()
+      tx.delete(t.interpretations).where(eq(t.interpretations.branchId, branchId)).run()
       tx.delete(t.runTraces).where(eq(t.runTraces.branchId, branchId)).run()
       tx.delete(t.events).where(eq(t.events.branchId, branchId)).run()
       tx.delete(t.eras).where(eq(t.eras.branchId, branchId)).run()

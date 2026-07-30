@@ -3,16 +3,21 @@ import { ProviderResponseError } from '../llm.js'
 import type { Rng } from '../rng.js'
 import { seededRng } from '../rng.js'
 import {
+  mockArtifactClassified,
   mockArtifactEncyclopedia,
   mockArtifactLetter,
   mockArtifactNewspaper,
+  mockArtifactObituary,
   mockArtifactPoster,
+  mockArtifactRadio,
+  mockArtifactTelegram,
 } from './artifacts.js'
 import { mockConvergenceScan } from './convergence.js'
 import { mockCourtAdvocate, mockCourtJudge, mockCourtSkeptic } from './court.js'
 import { mockCriticReview, mockRegenerateEvent } from './critic.js'
 import { mockEraGenerate } from './era.js'
 import { mockBiography, mockEraDeepDive, mockEventExpand } from './expanders.js'
+import { mockEventInterpretation, mockHistoriographySchools } from './historiography.js'
 import { mockPodInterpret } from './pod-interpret.js'
 import { mockPodNormalize } from './pod-normalize.js'
 import { mockDerivePressures } from './pressures.js'
@@ -74,8 +79,14 @@ const DEFAULT_HANDLERS: Record<string, MockHandler> = {
   'event-expand': mockEventExpand,
   'era-deepdive': mockEraDeepDive,
   'entity-biography': mockBiography,
+  'historiography-schools': mockHistoriographySchools,
+  'event-interpretation': mockEventInterpretation,
   'artifact-newspaper': mockArtifactNewspaper,
   'artifact-letter': mockArtifactLetter,
   'artifact-encyclopedia': mockArtifactEncyclopedia,
   'artifact-poster': mockArtifactPoster,
+  'artifact-telegram': mockArtifactTelegram,
+  'artifact-radio': mockArtifactRadio,
+  'artifact-obituary': mockArtifactObituary,
+  'artifact-classified': mockArtifactClassified,
 }

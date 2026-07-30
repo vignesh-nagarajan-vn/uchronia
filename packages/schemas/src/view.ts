@@ -8,6 +8,7 @@ import { CausalEdge } from './edge.js'
 import { EntityBiography, EntityView } from './entity.js'
 import { Era } from './era.js'
 import { EventView } from './event.js'
+import { HistoriographicSchool, Interpretation } from './historiography.js'
 import { Lens } from './lens.js'
 import { PodInterpretedOut } from './llm.js'
 import { Mechanism, PointOfDivergence } from './pod.js'
@@ -116,6 +117,9 @@ export const BranchView = z.object({
   courtRecords: z.array(CourtRecord).default([]),
   /** Regional index readings and name drift visible on this branch (v2/M18). */
   claims: z.array(Claim).default([]),
+  /** In-world schools and their glosses on this branch (v2/M20). */
+  schools: z.array(HistoriographicSchool).default([]),
+  interpretations: z.array(Interpretation).default([]),
 })
 export type BranchView = z.infer<typeof BranchView>
 

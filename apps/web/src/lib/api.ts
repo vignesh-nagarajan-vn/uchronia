@@ -12,6 +12,8 @@ import {
   type Event,
   type EventView,
   ForkResponse,
+  type HistoriographicSchool,
+  type Interpretation,
   InterpretResponse,
   PulseResponse,
   TimelineAggregate,
@@ -167,6 +169,13 @@ export const api = {
         body: JSON.stringify({ flip }),
       }),
     ).pulse,
+
+  /** In-world historiography (v2/M20): fill-once per branch and per event. */
+  interpretations: (branchId: string, eventId: string) =>
+    request<{
+      schools: HistoriographicSchool[]
+      interpretations: Interpretation[]
+    }>(`/api/branches/${branchId}/events/${eventId}/interpretations`, { method: 'POST' }),
 
   /** What became of one entity on every branch (v2/M19). Pure data, no call. */
   entityFates: async (branchId: string, entityId: string) =>

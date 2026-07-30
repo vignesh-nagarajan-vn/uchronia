@@ -3,10 +3,14 @@ import { dialParams } from '../dial.js'
 import { NotFoundError } from '../errors.js'
 import {
   type ArtifactArgs,
+  artifactClassified,
   artifactEncyclopedia,
   artifactLetter,
   artifactNewspaper,
+  artifactObituary,
   artifactPoster,
+  artifactRadio,
+  artifactTelegram,
 } from '../prompts/artifacts.js'
 import type { PromptTemplate } from '../prompts/types.js'
 import type { World } from '../world.js'
@@ -21,6 +25,10 @@ const TEMPLATES: Record<
   letter: artifactLetter,
   encyclopedia: artifactEncyclopedia,
   poster: artifactPoster,
+  telegram: artifactTelegram,
+  radio: artifactRadio,
+  obituary: artifactObituary,
+  classified: artifactClassified,
 }
 
 /**

@@ -12,6 +12,8 @@ import type {
   Era,
   Event,
   EventView,
+  HistoriographicSchool,
+  Interpretation,
   LedgerLine,
   PointOfDivergence,
   RegionalIndexClaim,
@@ -55,6 +57,8 @@ export class World {
   private readonly critiques = new Map<string, CritiqueReport>()
   private readonly courts = new Map<string, CourtRecord>()
   private readonly claims = new Map<string, Claim>()
+  private readonly schools = new Map<string, HistoriographicSchool>()
+  private readonly interpretations = new Map<string, Interpretation>()
   private readonly biographies = new Map<string, EntityBiography>()
   private readonly slugToEntityId = new Map<string, string>()
 
@@ -79,6 +83,8 @@ export class World {
     for (const c of aggregate.critiqueReports) world.critiques.set(c.id, c)
     for (const c of aggregate.courtRecords) world.courts.set(c.id, c)
     for (const c of aggregate.claims) world.claims.set(c.id, c)
+    for (const s of aggregate.schools) world.schools.set(s.id, s)
+    for (const i of aggregate.interpretations) world.interpretations.set(i.id, i)
     for (const b of aggregate.biographies)
       world.biographies.set(World.bioKey(b.entityId, b.branchId), b)
     return world
@@ -100,6 +106,8 @@ export class World {
       biographies: [...this.biographies.values()],
       courtRecords: [...this.courts.values()],
       claims: [...this.claims.values()],
+      schools: [...this.schools.values()],
+      interpretations: [...this.interpretations.values()],
     })
   }
 
@@ -497,6 +505,31 @@ export class World {
   courtRecordsFor(branchId: string): CourtRecord[] {
     const chain = new Set(this.segments(branchId).map((s) => s.branchId))
     return [...this.courts.values()].filter((r) => chain.has(r.branchId))
+  }
+
+  addSchool(school: HistoriographicSchool): void {
+    if (this.schools.has(school.id)) throw new IntegrityError(`school ${school.id} exists`)
+    this.getBranch(school.branchId)
+    this.schools.set(school.id, school)
+  }
+
+  addInterpretation(interpretation: Interpretation): void {
+    if (this.interpretations.has(interpretation.id))
+      throw new IntegrityError(`interpretation ${interpretation.id} exists`)
+    this.assertOwnEvent(interpretation.branchId, interpretation.eventId)
+    this.interpretations.set(interpretation.id, interpretation)
+  }
+
+  /** Schools declared on a branch's chain (v2/M20). */
+  schoolsFor(branchId: string): HistoriographicSchool[] {
+    const chain = new Set(this.segments(branchId).map((s) => s.branchId))
+    return [...this.schools.values()].filter((s) => chain.has(s.branchId))
+  }
+
+  /** Glosses hanging off events this branch can see (v2/M20). */
+  interpretationsFor(branchId: string): Interpretation[] {
+    const visible = new Set(this.resolveEvents(branchId).map((e) => e.id))
+    return [...this.interpretations.values()].filter((i) => visible.has(i.eventId))
   }
 
   addClaim(claim: Claim): void {

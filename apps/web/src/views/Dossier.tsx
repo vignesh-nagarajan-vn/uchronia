@@ -79,8 +79,22 @@ export function Dossier() {
         <p className="font-data text-[13px] text-ink-faded">
           dossier · {entity.type} · {entity.slug}
         </p>
-        <h1 className="mt-1 text-[26px] font-semibold leading-tight">{entity.name}</h1>
-        <p className="mt-1 text-[15.5px] text-ink-faded">{entity.description}</p>
+        <div className="mt-1 flex items-start gap-4">
+          {/* Procedural arms (v2/M20): derived from the slug, so a house looks
+              the same everywhere it appears and nothing is stored for it. */}
+          <img
+            src={`/api/arms/${entity.slug}?size=72`}
+            alt=""
+            width={72}
+            height={72}
+            className="mt-1 shrink-0"
+            data-testid="entity-arms"
+          />
+          <div className="min-w-0">
+            <h1 className="text-[26px] font-semibold leading-tight">{entity.name}</h1>
+            <p className="mt-1 text-[15.5px] text-ink-faded">{entity.description}</p>
+          </div>
+        </div>
 
         {/* Lives (v2/M18): when it began, whether it ever existed, whom it
             follows, and what it held. A reader is entitled to know which of

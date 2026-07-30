@@ -185,6 +185,37 @@ export const convergencePoints = sqliteTable(
   (t) => [index('convergence_branch_idx').on(t.branchId)],
 )
 
+/** In-world historiography (v2/M20): rival schools and their glosses. */
+export const schools = sqliteTable(
+  'schools',
+  {
+    id: text('id').primaryKey(),
+    branchId: text('branch_id').notNull(),
+    name: text('name').notNull(),
+    stance: text('stance').notNull(),
+    seat: text('seat').notNull(),
+    blindSpot: text('blind_spot').notNull(),
+    provenance: text('provenance', { mode: 'json' }).$type<Provenance>().notNull(),
+  },
+  (t) => [index('schools_branch_idx').on(t.branchId)],
+)
+
+export const interpretations = sqliteTable(
+  'interpretations',
+  {
+    id: text('id').primaryKey(),
+    branchId: text('branch_id').notNull(),
+    eventId: text('event_id').notNull(),
+    schoolId: text('school_id').notNull(),
+    gloss: text('gloss').notNull(),
+    provenance: text('provenance', { mode: 'json' }).$type<Provenance>().notNull(),
+  },
+  (t) => [
+    index('interpretations_branch_idx').on(t.branchId),
+    index('interpretations_event_idx').on(t.eventId),
+  ],
+)
+
 /** Claims (v2/M18): regional index readings and name drift, bound to events. */
 export const claims = sqliteTable(
   'claims',

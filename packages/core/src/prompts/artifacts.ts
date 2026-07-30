@@ -1,4 +1,13 @@
-import { EncyclopediaOut, LetterOut, NewspaperOut, PosterOut } from '@uchronia/schemas'
+import {
+  ClassifiedOut,
+  EncyclopediaOut,
+  LetterOut,
+  NewspaperOut,
+  ObituaryOut,
+  PosterOut,
+  RadioOut,
+  TelegramOut,
+} from '@uchronia/schemas'
 import { HUMAN_VOICE, SENSITIVE_HISTORY_STANCE } from './fragments.js'
 import type { PromptTemplate } from './types.js'
 
@@ -139,4 +148,112 @@ ${stateSummary}
 
 Produce the poster.`,
   seedKey: ({ event }) => `poster|${event.title}|${event.year}`,
+}
+
+export const artifactTelegram: PromptTemplate<ArtifactArgs, TelegramOut> = {
+  id: 'artifact-telegram',
+  version: '1.0.0',
+  changelog: ['1.0.0 - initial template (v2/M20)'],
+  role: 'generation',
+  schemaName: 'TelegramOut',
+  schema: TelegramOut,
+  maxTokens: 1200,
+  system: ({ voice }) =>
+    ARTIFACT_SYSTEM(
+      'telegram (or its era-appropriate equivalent: despatch, semaphore signal, courier note)',
+      'A telegram is charged by the word, so every word has been paid for. Clauses, not sentences: no articles the sender could drop, no adjective that is not load-bearing, no courtesy that costs more than it buys. Each line is one clause; the renderer punctuates them. The sender is reporting or ordering, never reflecting. If the era predates the wire, produce the fastest despatch it did have, and keep the same parsimony.',
+      voice,
+    ),
+  prompt: ({ podStatement, event, stateSummary, region, distanceYears }) =>
+    `The timeline diverged ${distanceYears} years before this wire: ${podStatement}
+
+The matter being signalled, "${event.title}" (${event.dateLabel}, ${region}):
+${event.detail ?? event.summary}
+
+World-state:
+${stateSummary}
+
+Produce the telegram: the office that filed it, who sent it to whom, when, and the clauses themselves.`,
+  seedKey: ({ event }) => `wire|${event.title}|${event.year}`,
+}
+
+export const artifactRadio: PromptTemplate<ArtifactArgs, RadioOut> = {
+  id: 'artifact-radio',
+  version: '1.0.0',
+  changelog: ['1.0.0 - initial template (v2/M20)'],
+  role: 'generation',
+  schemaName: 'RadioOut',
+  schema: RadioOut,
+  maxTokens: 3000,
+  system: ({ voice }) =>
+    ARTIFACT_SYSTEM(
+      'broadcast transcript (or its era-appropriate equivalent: a crier\u2019s round, a pulpit reading, a public address taken down by a clerk)',
+      'This is a transcript, not a script: it was taken down while it happened, so it carries what a written version would have removed. A speaker who loses the thread. A phrase repeated because the line was bad. A silence somebody had to write down. Put transmission faults, interruptions, and the monitor\u2019s own notes in the annotations. Speakers are named as the monitor knew them, which is sometimes only by role.',
+      voice,
+    ),
+  prompt: ({ podStatement, event, stateSummary, region, distanceYears }) =>
+    `The timeline diverged ${distanceYears} years before this broadcast: ${podStatement}
+
+What is being broadcast, "${event.title}" (${event.dateLabel}, ${region}):
+${event.detail ?? event.summary}
+
+World-state (the listeners live inside these facts):
+${stateSummary}
+
+Produce the transcript.`,
+  seedKey: ({ event }) => `radio|${event.title}|${event.year}`,
+}
+
+export const artifactObituary: PromptTemplate<ArtifactArgs, ObituaryOut> = {
+  id: 'artifact-obituary',
+  version: '1.0.0',
+  changelog: ['1.0.0 - initial template (v2/M20)'],
+  role: 'generation',
+  schemaName: 'ObituaryOut',
+  schema: ObituaryOut,
+  maxTokens: 2500,
+  system: ({ voice }) =>
+    ARTIFACT_SYSTEM(
+      'death notice',
+      'An obituary is always partly an argument about a life, and the argument is made by what it chooses to mention. It is written by someone with a position: a paper that admired the subject, or resented them, or is being careful. Record the career in the order that position implies. Name what the subject was blamed for as well as credited with. The dead do not become admirable by dying, and the notice should not pretend otherwise.',
+      voice,
+    ),
+  prompt: ({ podStatement, event, stateSummary, region, distanceYears }) =>
+    `The timeline diverged ${distanceYears} years before this notice: ${podStatement}
+
+The death, "${event.title}" (${event.dateLabel}, ${region}):
+${event.detail ?? event.summary}
+
+World-state:
+${stateSummary}
+
+Produce the notice. If the event is not itself a death, write the notice for whoever in it most plausibly did not outlive it, and say so in the first line.`,
+  seedKey: ({ event }) => `obit|${event.title}|${event.year}`,
+}
+
+export const artifactClassified: PromptTemplate<ArtifactArgs, ClassifiedOut> = {
+  id: 'artifact-classified',
+  version: '1.0.0',
+  changelog: ['1.0.0 - initial template (v2/M20)'],
+  role: 'generation',
+  schemaName: 'ClassifiedOut',
+  schema: ClassifiedOut,
+  maxTokens: 2500,
+  system: ({ voice }) =>
+    ARTIFACT_SYSTEM(
+      'classified page',
+      'The classified page is the most honest document a society produces, because nobody writing it is trying to be read by posterity. It shows what people are short of, what they are selling because they must, who is looking for whom, and what the going rate is. Two to five sections with era-appropriate headings. Every notice is somebody\u2019s actual problem, priced. No notice explains the world; together they give it away.',
+      voice,
+    ),
+  prompt: ({ podStatement, event, stateSummary, region, distanceYears }) =>
+    `The timeline diverged ${distanceYears} years before this page: ${podStatement}
+
+What has just happened, "${event.title}" (${event.dateLabel}, ${region}):
+${event.detail ?? event.summary}
+
+World-state (these are the conditions the advertisers are living in):
+${stateSummary}
+
+Produce the classified page. The event should be legible in what people are advertising for and about, and never mentioned outright.`,
+  seedKey: ({ event }) => `ads|${event.title}|${event.year}`,
 }

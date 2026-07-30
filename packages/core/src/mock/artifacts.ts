@@ -1,4 +1,13 @@
-import type { EncyclopediaOut, LetterOut, NewspaperOut, PosterOut } from '@uchronia/schemas'
+import type {
+  ClassifiedOut,
+  EncyclopediaOut,
+  LetterOut,
+  NewspaperOut,
+  ObituaryOut,
+  PosterOut,
+  RadioOut,
+  TelegramOut,
+} from '@uchronia/schemas'
 import type { ArtifactArgs } from '../prompts/artifacts.js'
 import type { Rng } from '../rng.js'
 import { eraBucket, pickPerson, regionFlavor } from './flavor.js'
@@ -154,6 +163,136 @@ export function mockArtifactPoster(rawArgs: unknown, rng: Rng): PosterOut {
       ],
       issuer: flavor.institution.charAt(0).toUpperCase() + flavor.institution.slice(1),
       slogan: rng.pick(slogans),
+    },
+  }
+}
+
+/**
+ * The forge's second shelf, demo-side (v2/M20). Each keeps the register its
+ * form is stuck with, because that is the whole point of the form: a wire
+ * cannot afford adjectives, a transcript keeps the faults a script would
+ * remove, a notice argues about a life, and a classified page gives away
+ * what a society is short of.
+ */
+
+export function mockArtifactTelegram(rawArgs: unknown, rng: Rng): TelegramOut {
+  const { event, region } = rawArgs as ArtifactArgs
+  const flavor = regionFlavor(region, event.year)
+  const bucket = eraBucket(event.year)
+  const office =
+    bucket === 'ancient' || bucket === 'medieval'
+      ? `COURIER STATION ${flavor.city.toUpperCase()}`
+      : `${flavor.city.toUpperCase()} CENTRAL OFFICE`
+  return {
+    title: `Wire from ${flavor.city}, ${event.dateLabel}`,
+    body: {
+      kind: 'telegram',
+      office,
+      from: pickPerson(flavor, rng).name,
+      to: 'THE OFFICE OF THE SECRETARY',
+      filedAt: `${event.dateLabel}, ${rng.int(4, 11)}h`,
+      words: [
+        `MATTER CONFIRMED THIS DAY ${event.dateLabel.toUpperCase()}`,
+        `SUBSTANCE AS REPORTED ${event.title.toUpperCase()}`,
+        'LOCAL PARTIES ALREADY MOVING',
+        'REQUIRE INSTRUCTION BEFORE COMMITTING FUNDS',
+        'DELAY COSTS MORE THAN ERROR',
+      ],
+      endorsement: rng.next() < 0.5 ? 'Received and copied to the second desk.' : null,
+    },
+  }
+}
+
+export function mockArtifactRadio(rawArgs: unknown, rng: Rng): RadioOut {
+  const { event, region } = rawArgs as ArtifactArgs
+  const flavor = regionFlavor(region, event.year)
+  const announcer = pickPerson(flavor, rng).name
+  return {
+    title: `Transcript: ${flavor.city}, ${event.dateLabel}`,
+    body: {
+      kind: 'radio',
+      station: `${flavor.city} Public Transmission`,
+      programme: 'The evening report',
+      airedAt: event.dateLabel,
+      lines: [
+        { speaker: announcer, text: `We begin with the matter everyone has been waiting on.` },
+        {
+          speaker: announcer,
+          text: `${event.summary}`,
+        },
+        {
+          speaker: 'A second voice, unidentified',
+          text: 'That is not the wording we were given upstairs.',
+        },
+        {
+          speaker: announcer,
+          text: 'We will read it again as it came to us, and let the listener judge.',
+        },
+      ],
+      annotations: [
+        'Signal weak for some seconds here; the monitor has supplied what could be made out.',
+        'A pause of eleven seconds. Nobody fills it.',
+      ],
+    },
+  }
+}
+
+export function mockArtifactObituary(rawArgs: unknown, rng: Rng): ObituaryOut {
+  const { event, region } = rawArgs as ArtifactArgs
+  const flavor = regionFlavor(region, event.year)
+  const subject = pickPerson(flavor, rng).name
+  const age = rng.int(51, 79)
+  return {
+    title: `${subject}, an obituary`,
+    body: {
+      kind: 'obituary',
+      publication: `The ${flavor.city} Register`,
+      headline: `${subject}, who was in the room`,
+      subject,
+      lifespan: `${event.year - age}-${event.year}`,
+      paragraphs: [
+        `${subject} died this week, having outlived most of the arrangements they helped make.`,
+        `Their part in ${event.title.toLowerCase()} is the one the notices will lead with, and it is fair that they should: the decision was theirs to make and they made it.`,
+        `Those who worked under them describe a person who was exact about money and vague about consequences, and who did not much distinguish between being owed a thing and being right about it.`,
+        `They are survived by the office they built, which will outlast the reasons for building it.`,
+      ],
+      epitaph: rng.next() < 0.6 ? 'The ledger balanced. The rest is argument.' : null,
+    },
+  }
+}
+
+export function mockArtifactClassified(rawArgs: unknown, _rng: Rng): ClassifiedOut {
+  const { event, region } = rawArgs as ArtifactArgs
+  const flavor = regionFlavor(region, event.year)
+  const bucket = eraBucket(event.year)
+  return {
+    title: `Notices, ${flavor.city}, ${event.dateLabel}`,
+    body: {
+      kind: 'classified',
+      publication: `The ${flavor.city} Register`,
+      dateLabel: event.dateLabel,
+      sections: [
+        {
+          heading: 'Wanted',
+          notices: [
+            'Steady hands for the season, paid weekly, no questions about the last place.',
+            'Anyone with news of the northern consignment. The owner has stopped expecting it and now only wants to know.',
+          ],
+        },
+        {
+          heading: 'For sale or exchange',
+          notices: [
+            ...(NOTICES[bucket] ?? []).slice(0, 2),
+            'Household effects of a family leaving the district. Everything must go by the week end; the reason is not your business.',
+          ],
+        },
+        {
+          heading: 'Personal',
+          notices: [
+            'To the party who knows what was said at the quay: it need not go further, and it will not, if matters are settled.',
+          ],
+        },
+      ],
     },
   }
 }

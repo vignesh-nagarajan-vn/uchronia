@@ -216,6 +216,120 @@ export function ArtifactBody({ artifact }: { artifact: Artifact }) {
           </p>
         </div>
       )
+    // A wire is a form that costs money per word, so it is set in the monospace
+    // of a receiving printer, uppercase, with STOP where the sender paid for it.
+    case 'telegram':
+      return (
+        <div className="sheet px-8 py-8 sm:px-12" style={{ border: '1px solid var(--color-ink)' }}>
+          <div className="flex flex-wrap items-baseline justify-between gap-2 border-b border-ink pb-2 font-data text-[11.5px] uppercase tracking-[0.12em]">
+            <span>{body.office}</span>
+            <span className="text-ink-faded">{body.filedAt}</span>
+          </div>
+          <dl className="mt-3 grid grid-cols-[64px_1fr] gap-x-3 gap-y-1 font-data text-[12px]">
+            <dt className="text-ink-faded">FROM</dt>
+            <dd className="uppercase">{body.from}</dd>
+            <dt className="text-ink-faded">TO</dt>
+            <dd className="uppercase">{body.to}</dd>
+          </dl>
+          <p className="mt-6 font-data text-[15px] uppercase leading-[2]">
+            {body.words.join(' STOP ')} STOP
+          </p>
+          {body.endorsement && (
+            <p className="mt-8 border-t border-rule pt-3 text-[13.5px] italic text-ink-faded">
+              {body.endorsement}
+            </p>
+          )}
+        </div>
+      )
+    case 'radio':
+      return (
+        <div className="sheet px-8 py-8 sm:px-12">
+          <p className="text-center font-fell text-[22px]">{body.station}</p>
+          <p className="pt-1 text-center font-data text-[11.5px] text-ink-faded">
+            {body.programme} · {body.airedAt}
+          </p>
+          <dl className="mt-6 space-y-3">
+            {body.lines.map((line, lineIndex) => (
+              <div
+                // biome-ignore lint/suspicious/noArrayIndexKey: a transcript repeats speakers by nature
+                key={`line-${lineIndex}`}
+                className="grid gap-1 sm:grid-cols-[140px_1fr] sm:gap-4"
+              >
+                <dt className="font-data text-[11.5px] uppercase tracking-wide text-ink-faded">
+                  {line.speaker}
+                </dt>
+                <dd className="text-[15.5px] leading-relaxed">{line.text}</dd>
+              </div>
+            ))}
+          </dl>
+          {body.annotations.length > 0 && (
+            <div className="mt-7 border-t border-rule pt-3">
+              <p className="stamp text-ink-faded">the monitor's notes</p>
+              <ul className="mt-1 space-y-1">
+                {body.annotations.map((note, noteIndex) => (
+                  // biome-ignore lint/suspicious/noArrayIndexKey: static list
+                  <li key={`note-${noteIndex}`} className="text-[13.5px] italic text-ink-faded">
+                    {note}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      )
+    case 'obituary':
+      return (
+        <div className="sheet px-8 py-8 sm:px-12">
+          <p className="border-b border-ink pb-1 text-center font-data text-[11.5px] uppercase tracking-[0.14em] text-ink-faded">
+            {body.publication}
+          </p>
+          <h1 className="mt-6 font-fell text-[30px] leading-tight">{body.headline}</h1>
+          <p className="mt-1 font-data text-[12.5px] text-ink-faded">
+            {body.subject} · {body.lifespan}
+          </p>
+          <div className="mt-5 space-y-3">
+            {body.paragraphs.map((para, paraIndex) => (
+              // biome-ignore lint/suspicious/noArrayIndexKey: static prose list
+              <p key={`para-${paraIndex}`} className="text-[15.5px] leading-[1.7]">
+                {para}
+              </p>
+            ))}
+          </div>
+          {body.epitaph && (
+            <p className="mt-7 border-t border-rule pt-3 text-center font-fell text-[20px]">
+              {body.epitaph}
+            </p>
+          )}
+        </div>
+      )
+    case 'classified':
+      return (
+        <div className="sheet px-8 py-8 sm:px-12">
+          <p className="border-b border-ink pb-1 text-center font-data text-[11.5px] uppercase tracking-[0.14em] text-ink-faded">
+            {body.publication} · notices · {body.dateLabel}
+          </p>
+          <div
+            className="mt-5 gap-8 sm:columns-2"
+            style={{ columnRule: '1px solid var(--color-rule)' }}
+          >
+            {body.sections.map((section) => (
+              <section key={section.heading} className="mb-4 break-inside-avoid">
+                <h2 className="font-data text-[11.5px] uppercase tracking-[0.12em] text-ink-faded">
+                  {section.heading}
+                </h2>
+                <ul className="mt-1 space-y-2">
+                  {section.notices.map((notice, noticeIndex) => (
+                    // biome-ignore lint/suspicious/noArrayIndexKey: static list
+                    <li key={`notice-${noticeIndex}`} className="text-[13.5px] leading-snug">
+                      {notice}
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            ))}
+          </div>
+        </div>
+      )
     default:
       return null
   }

@@ -2,7 +2,19 @@ import { z } from 'zod'
 import { UlidString } from './ids.js'
 import { Provenance } from './provenance.js'
 
-export const ARTIFACT_KINDS = ['newspaper', 'letter', 'encyclopedia', 'poster'] as const
+export const ARTIFACT_KINDS = [
+  'newspaper',
+  'letter',
+  'encyclopedia',
+  'poster',
+  // The forge's second shelf (v2/M20): shorter forms, and the registers they
+  // are stuck with. A telegram cannot afford adjectives; an obituary cannot
+  // avoid a verdict; a classified page says what a society is short of.
+  'telegram',
+  'radio',
+  'obituary',
+  'classified',
+] as const
 export const ArtifactKind = z.enum(ARTIFACT_KINDS)
 export type ArtifactKind = z.infer<typeof ArtifactKind>
 
@@ -63,11 +75,84 @@ export const PosterBody = z.object({
 })
 export type PosterBody = z.infer<typeof PosterBody>
 
+/**
+ * A telegram: charged by the word, so the prose has to earn its keep.
+ * `words` are the transmitted lines, rendered with STOP between them.
+ */
+export const TelegramBody = z.object({
+  kind: z.literal('telegram'),
+  office: z.string().min(1),
+  from: z.string().min(1),
+  to: z.string().min(1),
+  filedAt: z.string().min(1),
+  /** Each line is one clause; the renderer punctuates them. */
+  words: z.array(z.string().min(1)).min(2).max(12),
+  /** The clerk's marginal note, when there is one. */
+  endorsement: z.string().nullable(),
+})
+export type TelegramBody = z.infer<typeof TelegramBody>
+
+/** A transcript of a broadcast, with the interruptions left in. */
+export const RadioBody = z.object({
+  kind: z.literal('radio'),
+  station: z.string().min(1),
+  programme: z.string().min(1),
+  airedAt: z.string().min(1),
+  lines: z
+    .array(
+      z.object({
+        speaker: z.string().min(1),
+        text: z.string().min(1),
+      }),
+    )
+    .min(2),
+  /** Transmission faults, silences, and what the monitor wrote down. */
+  annotations: z.array(z.string().min(1)),
+})
+export type RadioBody = z.infer<typeof RadioBody>
+
+/** A death notice, which is always partly an argument about a life. */
+export const ObituaryBody = z.object({
+  kind: z.literal('obituary'),
+  publication: z.string().min(1),
+  headline: z.string().min(1),
+  subject: z.string().min(1),
+  lifespan: z.string().min(1),
+  paragraphs: z.array(z.string().min(1)).min(1),
+  /** The line the notice will be remembered for, when it has one. */
+  epitaph: z.string().nullable(),
+})
+export type ObituaryBody = z.infer<typeof ObituaryBody>
+
+/**
+ * The classified page: the most honest document a society produces, because
+ * nobody writing it is trying to be read by posterity.
+ */
+export const ClassifiedBody = z.object({
+  kind: z.literal('classified'),
+  publication: z.string().min(1),
+  dateLabel: z.string().min(1),
+  sections: z
+    .array(
+      z.object({
+        heading: z.string().min(1),
+        notices: z.array(z.string().min(1)).min(1),
+      }),
+    )
+    .min(1)
+    .max(5),
+})
+export type ClassifiedBody = z.infer<typeof ClassifiedBody>
+
 export const ArtifactBody = z.discriminatedUnion('kind', [
   NewspaperBody,
   LetterBody,
   EncyclopediaBody,
   PosterBody,
+  TelegramBody,
+  RadioBody,
+  ObituaryBody,
+  ClassifiedBody,
 ])
 export type ArtifactBody = z.infer<typeof ArtifactBody>
 

@@ -9,6 +9,7 @@ import { CausalEdge } from './edge.js'
 import { Entity, EntityBiography } from './entity.js'
 import { Era } from './era.js'
 import { Event } from './event.js'
+import { HistoriographicSchool, Interpretation } from './historiography.js'
 import { PointOfDivergence } from './pod.js'
 import { Timeline } from './timeline.js'
 
@@ -34,5 +35,8 @@ export const TimelineAggregate = z.object({
   courtRecords: z.array(CourtRecord).default([]),
   /** v2/M18; defaulted so pre-claim exports import unchanged. */
   claims: z.array(Claim).default([]),
+  /** v2/M20; defaulted so pre-historiography exports import unchanged. */
+  schools: z.array(HistoriographicSchool).default([]),
+  interpretations: z.array(Interpretation).default([]),
 })
 export type TimelineAggregate = z.infer<typeof TimelineAggregate>

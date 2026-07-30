@@ -1,4 +1,4 @@
-import { loadBaseline, UchroniaError } from '@uchronia/core'
+import { armsSvg, loadBaseline, UchroniaError } from '@uchronia/core'
 import { LENSES } from '@uchronia/schemas'
 import { Hono } from 'hono'
 import type { ServerDeps } from '../deps.js'
@@ -27,6 +27,21 @@ export function metaRoutes(deps: ServerDeps): Hono {
   )
 
   app.get('/baseline', (c) => c.json(loadBaseline()))
+
+  // Procedural heraldry (v2/M20). Pure and deterministic, so it is cacheable
+  // forever and served rather than stored. The web app cannot import core
+  // (web depends on schemas only), and the static exporter embeds the same
+  // bytes, so one route feeds both surfaces.
+  app.get('/arms/:slug', (c) => {
+    const slug = c.req.param('slug').replace(/\.svg$/, '')
+    if (!/^[a-z0-9-]{1,80}$/.test(slug)) {
+      return c.text('bad slug', 400)
+    }
+    const size = Number(c.req.query('size')) || 96
+    c.header('Content-Type', 'image/svg+xml; charset=utf-8')
+    c.header('Cache-Control', 'public, max-age=31536000, immutable')
+    return c.body(armsSvg(slug, Math.max(16, Math.min(512, size))))
+  })
 
   // A deliberate 1-token spend proving the configured key works end to end.
   // Always 200: the body carries the verdict. Nothing secret ever leaves.

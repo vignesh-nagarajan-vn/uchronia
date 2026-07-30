@@ -92,6 +92,8 @@ function aggregateFor(pod: BenchPod, interpretation: PodInterpretedOut): Timelin
     biographies: [],
     courtRecords: [],
     claims: [],
+    schools: [],
+    interpretations: [],
   }
 }
 

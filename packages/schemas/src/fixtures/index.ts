@@ -636,6 +636,8 @@ export function fixtureAggregate(): TimelineAggregate {
     ],
     courtRecords: [],
     claims: [],
+    schools: [],
+    interpretations: [],
   }
   return structuredClone(aggregate)
 }
