@@ -15,9 +15,13 @@ import type {
   TimelineSettings,
   TimelineSummary,
 } from '@uchronia/schemas'
-import { count, eq, inArray } from 'drizzle-orm'
+import { and, count, desc, eq, inArray, isNull } from 'drizzle-orm'
 import type { Db } from './client.js'
 import * as t from './schema.js'
+
+export type RunTraceRow = typeof t.runTraces.$inferSelect
+export type RunTraceInsert = typeof t.runTraces.$inferInsert
+export type RunTraceSummaryRow = Omit<RunTraceRow, 'system' | 'prompt' | 'response'>
 
 type EventRow = typeof t.events.$inferSelect
 
@@ -301,6 +305,7 @@ export class Repo {
         tx.delete(t.convergencePoints).where(inArray(t.convergencePoints.branchId, branchIds)).run()
         tx.delete(t.critiqueReports).where(inArray(t.critiqueReports.branchId, branchIds)).run()
         tx.delete(t.biographies).where(inArray(t.biographies.branchId, branchIds)).run()
+        tx.delete(t.runTraces).where(inArray(t.runTraces.branchId, branchIds)).run()
         tx.delete(t.edges).where(inArray(t.edges.branchId, branchIds)).run()
         tx.delete(t.events).where(inArray(t.events.branchId, branchIds)).run()
         tx.delete(t.eras).where(inArray(t.eras.branchId, branchIds)).run()
@@ -349,6 +354,88 @@ export class Repo {
 
   insertBiography(bio: EntityBiography): void {
     this.db.insert(t.biographies).values(bio).run()
+  }
+
+  // ---- Engine Room traces (v2/M15) ----------------------------------------
+
+  insertTrace(row: RunTraceInsert): void {
+    this.db.insert(t.runTraces).values(row).run()
+  }
+
+  /** Newest first, without the heavy prompt/response columns. */
+  listTraces(branchId: string, limit = 500): RunTraceSummaryRow[] {
+    return this.db
+      .select({
+        id: t.runTraces.id,
+        branchId: t.runTraces.branchId,
+        runId: t.runTraces.runId,
+        templateId: t.runTraces.templateId,
+        templateVersion: t.runTraces.templateVersion,
+        role: t.runTraces.role,
+        model: t.runTraces.model,
+        inputTokens: t.runTraces.inputTokens,
+        outputTokens: t.runTraces.outputTokens,
+        cacheReadTokens: t.runTraces.cacheReadTokens,
+        cacheWriteTokens: t.runTraces.cacheWriteTokens,
+        attempts: t.runTraces.attempts,
+        validationIssues: t.runTraces.validationIssues,
+        ok: t.runTraces.ok,
+        error: t.runTraces.error,
+        durationMs: t.runTraces.durationMs,
+        createdAt: t.runTraces.createdAt,
+      })
+      .from(t.runTraces)
+      .where(eq(t.runTraces.branchId, branchId))
+      .orderBy(desc(t.runTraces.id))
+      .limit(limit)
+      .all()
+  }
+
+  getTrace(id: string): RunTraceRow | undefined {
+    return this.db.select().from(t.runTraces).where(eq(t.runTraces.id, id)).get()
+  }
+
+  /**
+   * Keep only the newest `keepRuns` generation runs per branch (run ids are
+   * ULIDs, so id order is time order), and cap one-off traces (null runId) at
+   * 200 per branch.
+   */
+  pruneTraces(branchId: string, keepRuns: number): void {
+    const runIds = this.db
+      .selectDistinct({ runId: t.runTraces.runId })
+      .from(t.runTraces)
+      .where(eq(t.runTraces.branchId, branchId))
+      .all()
+      .map((r) => r.runId)
+      .filter((r): r is string => r !== null)
+      .sort()
+      .reverse()
+    const stale = runIds.slice(Math.max(0, keepRuns))
+    if (stale.length > 0) {
+      this.db.delete(t.runTraces).where(inArray(t.runTraces.runId, stale)).run()
+    }
+    const oneOffs = this.db
+      .select({ id: t.runTraces.id })
+      .from(t.runTraces)
+      .where(and(eq(t.runTraces.branchId, branchId), isNull(t.runTraces.runId)))
+      .orderBy(desc(t.runTraces.id))
+      .all()
+      .slice(200)
+    if (oneOffs.length > 0) {
+      this.db
+        .delete(t.runTraces)
+        .where(
+          inArray(
+            t.runTraces.id,
+            oneOffs.map((r) => r.id),
+          ),
+        )
+        .run()
+    }
+  }
+
+  deleteTracesForBranch(branchId: string): void {
+    this.db.delete(t.runTraces).where(eq(t.runTraces.branchId, branchId)).run()
   }
 
   updateEventDetail(eventId: string, detail: string): void {
@@ -408,6 +495,7 @@ export class Repo {
       tx.delete(t.convergencePoints).where(eq(t.convergencePoints.branchId, branchId)).run()
       tx.delete(t.critiqueReports).where(eq(t.critiqueReports.branchId, branchId)).run()
       tx.delete(t.biographies).where(eq(t.biographies.branchId, branchId)).run()
+      tx.delete(t.runTraces).where(eq(t.runTraces.branchId, branchId)).run()
       tx.delete(t.events).where(eq(t.events.branchId, branchId)).run()
       tx.delete(t.eras).where(eq(t.eras.branchId, branchId)).run()
       tx.delete(t.branches).where(eq(t.branches.id, branchId)).run()

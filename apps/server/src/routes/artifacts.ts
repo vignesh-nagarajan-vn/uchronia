@@ -4,6 +4,7 @@ import { Hono } from 'hono'
 import { z } from 'zod'
 import type { ServerDeps } from '../deps.js'
 import { ApiError } from '../http-error.js'
+import { traceSink } from '../trace-sink.js'
 
 const ArtifactRequest = z.object({ kind: ArtifactKind })
 
@@ -21,7 +22,13 @@ export function artifactRoutes(deps: ServerDeps): Hono {
     const world = World.fromAggregate(aggregate)
 
     const { artifact, created } = await generateArtifact(
-      { provider: deps.provider, idgen: deps.idgen, clock: deps.clock, signal: c.req.raw.signal },
+      {
+        provider: deps.provider,
+        idgen: deps.idgen,
+        clock: deps.clock,
+        signal: c.req.raw.signal,
+        onTrace: traceSink(deps, branchId, null),
+      },
       world,
       branchId,
       c.req.param('eventId'),

@@ -71,9 +71,26 @@ export interface ScoredAnchor {
 }
 
 /**
- * Score one anchor against query tokens: title hits weigh 3, summary hits 1,
- * region-name hits 2; a year bias (when given) adds up to 3 within a century
- * and fades to nothing by five centuries out.
+ * Keyword evidence only. A specific title word ("constantinople") weighs 3; a
+ * short generic one ("sea") weighs 1, so a lone common word never outranks
+ * real evidence. Summary hits weigh 1, region-name hits 2.
+ */
+export function keywordScore(anchor: BaselineAnchor, queryTokens: readonly string[]): number {
+  const title = new Set(tokenize(anchor.title))
+  const summary = new Set(tokenize(anchor.summary))
+  const region = new Set(tokenize(anchor.region))
+  let score = 0
+  for (const token of queryTokens) {
+    if (title.has(token)) score += token.length >= 5 ? 3 : 1
+    else if (summary.has(token)) score += 1
+    if (region.has(token)) score += 2
+  }
+  return score
+}
+
+/**
+ * Full score: keyword evidence plus a year bias (when given) worth up to 3
+ * within a century, fading to nothing by five centuries out.
  */
 export function scoreAnchor(
   anchor: BaselineAnchor,
@@ -81,15 +98,7 @@ export function scoreAnchor(
   year?: number | null,
 ): number {
   if (queryTokens.length === 0 && (year === undefined || year === null)) return 0
-  const title = new Set(tokenize(anchor.title))
-  const summary = new Set(tokenize(anchor.summary))
-  const region = new Set(tokenize(anchor.region))
-  let score = 0
-  for (const token of queryTokens) {
-    if (title.has(token)) score += 3
-    else if (summary.has(token)) score += 1
-    if (region.has(token)) score += 2
-  }
+  let score = keywordScore(anchor, queryTokens)
   if (year !== undefined && year !== null) {
     const distance = Math.abs(anchor.year - year)
     if (distance <= 500) score += 3 * (1 - distance / 500) ** 2

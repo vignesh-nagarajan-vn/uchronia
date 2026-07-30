@@ -15,6 +15,13 @@
       "when": 1784869642358,
       "tag": "0001_flowery_forge",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1785387819849,
+      "tag": "0002_left_strong_guy",
+      "breakpoints": true
     }
   ]
 }

@@ -51,6 +51,14 @@ function regionRank(anchorRegion: string, podRegion: string): number {
 }
 
 /**
+ * True when two named regions are neither the same theatre, adjacent, nor
+ * global - the "distant regions" test of the v2/M15 geographic advisory.
+ */
+export function regionsAreFar(a: string, b: string): boolean {
+  return regionRank(a, b) === 2 && regionRank(b, a) === 2
+}
+
+/**
  * Anchors within ±window years of a given year. When a `region` is given,
  * same-theatre anchors rank first, adjacent theatres second, the rest last -
  * year proximity breaks ties within each tier, so off-region anchors still

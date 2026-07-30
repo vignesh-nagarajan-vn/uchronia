@@ -1,4 +1,4 @@
-import {
+﻿import {
   expandEra,
   expandEvent,
   regenerateCommittedEvent,
@@ -9,17 +9,19 @@ import { RegenerateEventRequest } from '@uchronia/schemas'
 import { Hono } from 'hono'
 import type { ServerDeps } from '../deps.js'
 import { ApiError } from '../http-error.js'
+import { traceSink } from '../trace-sink.js'
 
 /** Lazy expansion (P5): depth on demand, persisted on first fill. */
 export function expandRoutes(deps: ServerDeps): Hono {
   const app = new Hono()
   // The request's own abort signal rides into the provider: closing the tab
   // mid-expansion cancels the in-flight LLM call instead of billing it out.
-  const ctx = (signal: AbortSignal) => ({
+  const ctx = (signal: AbortSignal, branchId: string) => ({
     provider: deps.provider,
     idgen: deps.idgen,
     clock: deps.clock,
     signal,
+    onTrace: traceSink(deps, branchId, null),
   })
 
   const worldFor = (branchId: string): World => {
@@ -33,7 +35,7 @@ export function expandRoutes(deps: ServerDeps): Hono {
   app.post('/branches/:branchId/events/:eventId/expand', async (c) => {
     const world = worldFor(c.req.param('branchId'))
     const event = await expandEvent(
-      ctx(c.req.raw.signal),
+      ctx(c.req.raw.signal, c.req.param('branchId')),
       world,
       c.req.param('branchId'),
       c.req.param('eventId'),
@@ -45,7 +47,7 @@ export function expandRoutes(deps: ServerDeps): Hono {
   app.post('/branches/:branchId/eras/:eraId/expand', async (c) => {
     const world = worldFor(c.req.param('branchId'))
     const era = await expandEra(
-      ctx(c.req.raw.signal),
+      ctx(c.req.raw.signal, c.req.param('branchId')),
       world,
       c.req.param('branchId'),
       c.req.param('eraId'),
@@ -61,7 +63,7 @@ export function expandRoutes(deps: ServerDeps): Hono {
     const body = RegenerateEventRequest.parse(await c.req.json().catch(() => ({})))
     const world = worldFor(branchId)
     const event = await regenerateCommittedEvent(
-      ctx(c.req.raw.signal),
+      ctx(c.req.raw.signal, branchId),
       world,
       branchId,
       c.req.param('eventId'),
@@ -76,7 +78,7 @@ export function expandRoutes(deps: ServerDeps): Hono {
     const world = worldFor(branchId)
     const hadBiography = world.biography(branchId, c.req.param('entityId')) !== undefined
     const biography = await writeBiography(
-      ctx(c.req.raw.signal),
+      ctx(c.req.raw.signal, branchId),
       world,
       branchId,
       c.req.param('entityId'),

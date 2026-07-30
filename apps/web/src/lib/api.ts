@@ -149,4 +149,39 @@ export const api = {
     TimelineAggregate.parse(await request(`/api/timelines/${timelineId}/export.json`)),
 
   exportJsonUrl: (timelineId: string) => `/api/timelines/${timelineId}/export.json`,
+
+  traces: (branchId: string) =>
+    request<{ tracing: boolean; retainedRuns: number; traces: TraceSummary[] }>(
+      `/api/branches/${branchId}/traces`,
+    ),
+
+  trace: (id: string) => request<{ trace: TraceDetail }>(`/api/traces/${id}`),
+}
+
+/** Engine Room rows (v2/M15); shapes owned by the server's trace routes. */
+export interface TraceSummary {
+  id: string
+  branchId: string
+  runId: string | null
+  templateId: string
+  templateVersion: string
+  role: string
+  model: string
+  inputTokens: number
+  outputTokens: number
+  cacheReadTokens: number | null
+  cacheWriteTokens: number | null
+  attempts: number
+  validationIssues: string[]
+  ok: boolean
+  error: string | null
+  durationMs: number
+  createdAt: string
+  estimatedUsd: number
+}
+
+export interface TraceDetail extends TraceSummary {
+  system: string
+  prompt: string
+  response: string
 }

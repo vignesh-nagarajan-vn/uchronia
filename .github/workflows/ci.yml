@@ -57,6 +57,9 @@ jobs:
       - name: Test
         run: pnpm test
 
+      - name: Eval (mock lane)
+        run: pnpm eval
+
       - name: Build
         run: pnpm build
 

@@ -6,6 +6,7 @@ import { convergenceScan } from '../prompts/convergence-scan.js'
 import { derivePressures } from '../prompts/derive-pressures.js'
 import { eraGenerate } from '../prompts/era-generate.js'
 import { seedConsequences } from '../prompts/seed-consequences.js'
+import { geographicAdvisories } from '../validator.js'
 import type { World } from '../world.js'
 import { summarizeRecentEvents, summarizeState } from './context.js'
 import { buildCritiqueReport, type RefinedBatch, refineBatch } from './critic.js'
@@ -214,6 +215,11 @@ async function* runReviewedEra(
       `every event of era "${era.title}" was dropped by the dual review`,
       ...refined.warnings,
     ])
+  }
+
+  // Geographic advisory (v2/M15): keyword-inferred, so it warns, never drops.
+  for (const issue of geographicAdvisories(world, branchId, refined.batch.events)) {
+    yield { type: 'warning', message: issue.message }
   }
 
   // Relevance guard, machine half (v2/M14): an era none of whose events

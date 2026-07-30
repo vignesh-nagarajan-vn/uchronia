@@ -22,6 +22,9 @@ const Dossier = lazy(() => import('./views/Dossier.js').then((m) => ({ default: 
 const ArtifactReader = lazy(() =>
   import('./views/ArtifactReader.js').then((m) => ({ default: m.ArtifactReader })),
 )
+const EngineRoomView = lazy(() =>
+  import('./views/EngineRoomView.js').then((m) => ({ default: m.EngineRoomView })),
+)
 
 function NotFound() {
   return (
@@ -44,6 +47,7 @@ export function App() {
         <Route path="/t/:timelineId/compare" element={<CompareView />} />
         <Route path="/t/:timelineId/b/:branchId" element={<TimelineView />} />
         <Route path="/t/:timelineId/b/:branchId/delta" element={<DeltaView />} />
+        <Route path="/t/:timelineId/b/:branchId/engine" element={<EngineRoomView />} />
         <Route path="/t/:timelineId/b/:branchId/e/:eventId" element={<EventDetail />} />
         <Route path="/t/:timelineId/b/:branchId/entity/:entityId" element={<Dossier />} />
         <Route

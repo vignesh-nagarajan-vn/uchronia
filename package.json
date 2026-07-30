@@ -21,7 +21,11 @@
     "migrate": "pnpm --filter @uchronia/server migrate",
     "e2e": "pnpm --filter @uchronia/web e2e",
     "verify:vercel": "pnpm --filter @uchronia/server build:vercel && node scripts/verify-vercel.mjs",
-    "check:secrets": "node scripts/check-secrets.mjs"
+    "check:secrets": "node scripts/check-secrets.mjs",
+    "eval": "pnpm --filter @uchronia/evals eval",
+    "eval:report": "pnpm --filter @uchronia/evals eval:report",
+    "eval:live": "pnpm --filter @uchronia/evals eval:live",
+    "eval:critic": "pnpm --filter @uchronia/evals eval:critic"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.5",

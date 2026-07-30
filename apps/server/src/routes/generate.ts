@@ -12,6 +12,7 @@ import { Hono } from 'hono'
 import { streamSSE } from 'hono/streaming'
 import type { ServerDeps } from '../deps.js'
 import { ApiError } from '../http-error.js'
+import { traceSink } from '../trace-sink.js'
 
 /** Persist one pipeline event's mutations. Runs before the event is streamed. */
 function persistPipelineEvent(deps: ServerDeps, ev: PipelineEvent): void {
@@ -127,6 +128,7 @@ export function generateRoutes(deps: ServerDeps): Hono {
       return { usage, byModel, estimatedUsd: usd, unpricedModels: unpriced }
     }
 
+    const runId = deps.idgen.next()
     const run = runGeneration(
       {
         provider: deps.provider,
@@ -134,6 +136,7 @@ export function generateRoutes(deps: ServerDeps): Hono {
         clock: deps.clock,
         signal: controller.signal,
         onUsage,
+        onTrace: traceSink(deps, branchId, runId),
       },
       world,
       branchId,

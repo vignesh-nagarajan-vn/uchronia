@@ -1,5 +1,5 @@
 import type { BaselineAnchor, Lens, Mechanism, PodCandidate } from '@uchronia/schemas'
-import { retrieveAnchors, tokenize } from './retrieval.js'
+import { keywordScore, tokenize } from './retrieval.js'
 
 /**
  * Deterministic intake heuristics (v2/M14), shared by the demo engine and by
@@ -29,7 +29,8 @@ interface EventAlias {
   year: number
   region: string
   mechanism: Mechanism
-  candidates: PodCandidate[]
+  /** Canned candidate mechanisms; aliases without them get anchor-built ones. */
+  candidates?: PodCandidate[]
 }
 
 /**
@@ -189,6 +190,83 @@ export const EVENT_ALIASES: readonly EventAlias[] = [
     ],
   },
   {
+    pattern: /\b(operation sea ?lion|sealion)\b/i,
+    label: 'Operation Sea Lion',
+    year: 1940,
+    region: 'Europe',
+    mechanism: 'politics',
+  },
+  {
+    pattern: /\bpearl harbor\b/i,
+    label: 'the attack on Pearl Harbor',
+    year: 1941,
+    region: 'East Asia',
+    mechanism: 'politics',
+  },
+  {
+    pattern: /\b(d-day|normandy landings?|operation overlord)\b/i,
+    label: 'the Normandy landings',
+    year: 1944,
+    region: 'Europe',
+    mechanism: 'politics',
+  },
+  {
+    pattern: /\b(hiroshima|nagasaki)\b/i,
+    label: 'the atomic bombings of 1945',
+    year: 1945,
+    region: 'East Asia',
+    mechanism: 'technology',
+  },
+  {
+    pattern: /\bblack death\b/i,
+    label: 'the Black Death',
+    year: 1347,
+    region: 'Europe',
+    mechanism: 'disease',
+  },
+  {
+    pattern: /\bfall of rome\b|\brome (never )?f[ae]ll\b/i,
+    label: 'the fall of the western empire',
+    year: 476,
+    region: 'Mediterranean',
+    mechanism: 'politics',
+  },
+  {
+    pattern: /\bamerican revolution\b/i,
+    label: 'the American Revolution',
+    year: 1775,
+    region: 'North America',
+    mechanism: 'politics',
+  },
+  {
+    pattern: /\b(russian revolution|october revolution|bolshevik)\b/i,
+    label: 'the Russian Revolution',
+    year: 1917,
+    region: 'Europe',
+    mechanism: 'politics',
+  },
+  {
+    pattern: /\bindustrial revolution\b/i,
+    label: 'the Industrial Revolution',
+    year: 1760,
+    region: 'Europe',
+    mechanism: 'technology',
+  },
+  {
+    pattern: /\b(moon landing|apollo 11)\b/i,
+    label: 'the first Moon landing',
+    year: 1969,
+    region: 'North America',
+    mechanism: 'technology',
+  },
+  {
+    pattern: /\b(spanish armada|armada invencible)\b/i,
+    label: 'the Spanish Armada',
+    year: 1588,
+    region: 'Europe',
+    mechanism: 'politics',
+  },
+  {
     pattern: /\bfrench revolution\b/i,
     label: 'the French Revolution',
     year: 1789,
@@ -247,7 +325,7 @@ export const MECHANISM_KEYWORDS: ReadonlyArray<[Mechanism, RegExp]> = [
 export const REGION_KEYWORDS: ReadonlyArray<[string, RegExp]> = [
   [
     'Mediterranean',
-    /\b(alexandri|rome|roman|constantinople|byzant|greec|greek|carthage|egypt|ottoman)/i,
+    /\b(alexandri|rome|roman|constantinople|byzant|greec|greek|carthage|egypt|ottoman|caesar|rubicon|actium|ides of march)/i,
   ],
   [
     'East Asia',
@@ -322,11 +400,34 @@ export function sketchPod(text: string, anchors: readonly BaselineAnchor[]): Pod
   const keywordMechanism = MECHANISM_KEYWORDS.find(([, pattern]) => pattern.test(text))?.[0] ?? null
   const keywordRegion = REGION_KEYWORDS.find(([, pattern]) => pattern.test(text))?.[0] ?? null
 
-  // Anchor snap: only meaningful matches (score from keywords, not year bias).
-  const snapped =
-    tokenize(text).length > 0
-      ? (retrieveAnchors(anchors, text, { year: explicitYear ?? alias?.year, limit: 1 })[0] ?? null)
-      : null
+  // Anchor snap: real keyword evidence only (threshold 3 = one specific title
+  // word or accumulated corroboration) - a lone short common word or a bare
+  // year never snaps.
+  const tokens = tokenize(text)
+  const yearHint = explicitYear ?? alias?.year ?? null
+  let snapped: BaselineAnchor | null = null
+  if (tokens.length > 0) {
+    let bestScore = 0
+    for (const anchor of anchors) {
+      // A named year scopes the search: an anchor centuries away is noise
+      // however well a common word ("march") happens to match its title.
+      if (yearHint !== null && Math.abs(anchor.year - yearHint) > 150) continue
+      const score = keywordScore(anchor, tokens)
+      if (score === 0) continue
+      // Equal evidence breaks toward the year hint when there is one, else
+      // toward the later year: "Constantinople held" means the famous fall.
+      const beatsTie =
+        snapped !== null &&
+        (yearHint !== null
+          ? Math.abs(anchor.year - yearHint) < Math.abs(snapped.year - yearHint)
+          : anchor.year > snapped.year)
+      if (score > bestScore || (score === bestScore && beatsTie)) {
+        bestScore = score
+        snapped = anchor
+      }
+    }
+    if (bestScore < 3) snapped = null
+  }
 
   const year = explicitYear ?? alias?.year ?? snapped?.year ?? null
   const yearSource: PodSketch['yearSource'] =
@@ -343,7 +444,7 @@ export function sketchPod(text: string, anchors: readonly BaselineAnchor[]): Pod
     yearSource,
     region,
     mechanism,
-    aliasCandidates: alias ? alias.candidates : null,
+    aliasCandidates: alias?.candidates ?? null,
     aliasLabel: alias ? alias.label : null,
     matchedAnchor: snapped,
   }

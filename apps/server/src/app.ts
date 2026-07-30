@@ -20,6 +20,7 @@ import { forkRoutes } from './routes/fork.js'
 import { generateRoutes } from './routes/generate.js'
 import { metaRoutes } from './routes/meta.js'
 import { timelineRoutes } from './routes/timelines.js'
+import { traceRoutes } from './routes/traces.js'
 
 /** Imports are the largest legitimate bodies; a demo ledger is ~200 KB. */
 const BODY_LIMIT_BYTES = 16 * 1024 * 1024
@@ -50,6 +51,7 @@ export function createApp(deps: ServerDeps): Hono {
   app.route('/api', expandRoutes(deps))
   app.route('/api', forkRoutes(deps))
   app.route('/api', artifactRoutes(deps))
+  app.route('/api', traceRoutes(deps))
 
   // One envelope for every error: { error, message, issues? }.
   app.onError((err, c) => {

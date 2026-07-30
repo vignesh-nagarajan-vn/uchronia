@@ -55,9 +55,17 @@ export function mockPodInterpret(rawArgs: unknown, rng: Rng): PodInterpretedOut 
       rationale: anchor.summary,
     }))
     confidence =
-      sketch.yearSource === 'explicit' ? 0.82 : sketch.yearSource === 'anchor' ? 0.62 : 0.3
+      sketch.yearSource === 'explicit'
+        ? 0.82
+        : sketch.yearSource === 'alias'
+          ? 0.8
+          : sketch.yearSource === 'anchor'
+            ? 0.62
+            : 0.3
     if (candidates.length === 0) {
-      ambiguities.push('no recognizable year or named event in the ask')
+      if (sketch.yearSource === 'none') {
+        ambiguities.push('no recognizable year or named event in the ask')
+      }
       candidates = [
         {
           label: statement,

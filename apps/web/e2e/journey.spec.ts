@@ -102,6 +102,12 @@ test('the full journey, keyless', async ({ page }) => {
   await page.getByTestId('timeline-scroll').click({ position: { x: 5, y: 5 } })
   await walkUntilVisible(page, 'disputed-mark')
 
+  // 2b. The engine room recorded the run's provider calls (v2/M15).
+  await page.getByRole('link', { name: 'engine', exact: true }).click()
+  await expect(page.getByRole('heading', { name: 'The engine room' })).toBeVisible()
+  await expect(page.getByText('era-generate', { exact: false }).first()).toBeVisible()
+  await page.goBack()
+
   // 3. Open an event.
   await page.locator('[data-event-id] h3 a').first().click()
   await expect(page.getByText('causes (')).toBeVisible()

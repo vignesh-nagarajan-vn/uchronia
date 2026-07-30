@@ -402,6 +402,13 @@ export function TimelineView() {
           >
             compare
           </Link>
+          <Link
+            to={`${branchPath}/engine`}
+            className="text-ink-faded hover:text-ink"
+            title="engine room - every provider call behind this branch"
+          >
+            engine
+          </Link>
           <a
             href={api.exportJsonUrl(timelineId)}
             download

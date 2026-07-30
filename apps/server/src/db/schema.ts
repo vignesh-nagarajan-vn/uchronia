@@ -186,6 +186,39 @@ export const critiqueReports = sqliteTable(
   (t) => [index('critiques_branch_idx').on(t.branchId)],
 )
 
+/**
+ * Engine Room traces (v2/M15): one row per structured provider call - the
+ * rendered prompt, the raw response, usage, retries, and timing. Pruned to
+ * the most recent runs per branch (UCHRONIA_TRACE_RUNS).
+ */
+export const runTraces = sqliteTable(
+  'run_traces',
+  {
+    id: text('id').primaryKey(),
+    branchId: text('branch_id').notNull(),
+    /** Groups one generation run; null for one-off calls (intake, expanders). */
+    runId: text('run_id'),
+    templateId: text('template_id').notNull(),
+    templateVersion: text('template_version').notNull(),
+    role: text('role').notNull(),
+    model: text('model').notNull(),
+    system: text('system').notNull(),
+    prompt: text('prompt').notNull(),
+    response: text('response').notNull(),
+    inputTokens: integer('input_tokens').notNull(),
+    outputTokens: integer('output_tokens').notNull(),
+    cacheReadTokens: integer('cache_read_tokens'),
+    cacheWriteTokens: integer('cache_write_tokens'),
+    attempts: integer('attempts').notNull(),
+    validationIssues: text('validation_issues', { mode: 'json' }).$type<string[]>().notNull(),
+    ok: integer('ok', { mode: 'boolean' }).notNull(),
+    error: text('error'),
+    durationMs: integer('duration_ms').notNull(),
+    createdAt: text('created_at').notNull(),
+  },
+  (t) => [index('traces_branch_idx').on(t.branchId), index('traces_run_idx').on(t.runId)],
+)
+
 export const biographies = sqliteTable(
   'biographies',
   {

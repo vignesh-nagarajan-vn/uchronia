@@ -36,6 +36,12 @@ export interface ServerConfig {
    * 250 so derivations visibly ink in. Tests and CI leave it unset.
    */
   mockPaceMs: number
+  /**
+   * Engine Room retention (v2/M15): how many generation runs' traces to keep
+   * per branch. 0 disables tracing entirely. Serverless defaults low - /tmp
+   * is small and cold starts reset it anyway.
+   */
+  traceRuns: number
   /** Serve the built web app from this directory when set (production). */
   staticDir: string | undefined
   /** Comma-separated CORS origin allowlist; empty = same-origin only. */
@@ -99,6 +105,11 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): ServerConfig {
             text(env.UCHRONIA_DB) ?? (serverless ? '/tmp/uchronia.db' : './data/uchronia.db'),
           ),
     maxRunTokens: maxRunTokens !== undefined ? Math.max(0, maxRunTokens) : 3_000_000,
+    traceRuns: (() => {
+      const parsed = number(env.UCHRONIA_TRACE_RUNS)
+      if (parsed !== undefined) return Math.max(0, parsed)
+      return serverless ? 3 : 20
+    })(),
     mockPaceMs:
       mock && mockPaceMs !== undefined ? Math.max(0, mockPaceMs) : mock && onVercel ? 250 : 0,
     staticDir: text(env.UCHRONIA_STATIC_DIR),
