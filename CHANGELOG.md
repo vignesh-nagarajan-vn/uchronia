@@ -4,6 +4,17 @@ All notable changes to Uchronia. The format follows [Keep a Changelog](https://k
 
 ## [Unreleased]
 
+### Added
+
+- **M26, the public-live posture (ADR-0006).** `UCHRONIA_PUBLIC_LIVE=1` lets anonymous visitors derive on the deployment's own key, which is what a public instance needs in order to demonstrate the product rather than a canned copy of it. A per-visitor UTC-day allowance (`UCHRONIA_VISITOR_TOKEN_BUDGET`, default 150k tokens) sits on top of the existing instance ledger and per-IP rate limit, and the per-run ceiling defaults down to one visitor's allowance so a single long chronicle cannot overshoot it between gate checks. Where a passphrase is also configured it becomes an override rather than a door: an unlocked session spends no visitor's share. The composer and Settings now state the posture up front instead of failing at the first click.
+- `pnpm dev:preview:public` runs the app wearing the public posture with a placeholder key, so the allowance UI can be looked at without a real one.
+
+### Changed
+
+- **Metering moved from the generation route to the provider.** M24 charged the day's ledger inside `/generate`, which was every route anyone was expected to reach on a passphrase-gated instance. Expanding an era, asking the archivist, forging an artifact, running a pulse, interpreting a POD and forking all reach the provider too, and none of them were charging anything. The charge now wraps `LLMProvider.complete`, so a new spending route is metered the day it is written.
+- **`isOwner` split from `isUnlocked`.** The latter reports true whenever no passphrase is configured, which is right for "is anything barring this request" and wrong for "whose allowance is this". On a public instance nobody has a passphrase and everybody is a visitor, so the old field would have metered no one and told every visitor they were the owner. `/api/config` now carries both.
+- The instance daily budget and per-IP rate limit default on for any exposed instance rather than for serverless specifically, so a public-live container is capped the way Vercel is.
+
 ## [2.0.0] - 2026-07-30 - The Second Derivation
 
 v2 exists because of one failure. A user typed *"What if the Allies lost World War 2"* and got a canned alternate history set in the **1600s**: no API key meant the server silently degraded to the demo engine, and the demo engine's year regex read "World War 2" as the year 2, found nothing, and rolled a random century. The north star: **the engine answers the question asked, provably.**

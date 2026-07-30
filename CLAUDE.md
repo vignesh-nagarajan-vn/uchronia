@@ -35,7 +35,8 @@ The build is driven by a master prompt (mirrored expectations live throughout `d
 | **school** | One of 2-3 rival in-world historiographic positions derived per branch (v2/M20), each with the blind spot its rivals name |
 | **the book** | A branch compiled into a frontispiece, chapters, plates, and appendices (v2/M21), as print HTML or EPUB. Costs nothing: it arranges history already derived |
 | **pin** | A citation handle (`E3`, `A1`, `C2`) in an archivist answer or an inquiry, resolving to a row the app can open (v2/M23) |
-| **the gate** | The spending guard on a public deployment (v2/M24, ADR-0005): passphrase, per-IP rate limit, daily token ledger. On serverless, a key with no passphrase is refused and demo mode is forced |
+| **the gate** | The spending guard on a public deployment (v2/M24, ADR-0005): passphrase, per-IP rate limit, daily token ledger. On serverless, a key with neither a passphrase nor the public-live opt-in is refused and demo mode is forced |
+| **public-live** | The posture (v2.1/M26, ADR-0006) in which anonymous visitors derive on the instance's own key, each on a per-visitor daily allowance. The passphrase, where one exists, stops being a door and becomes an override: the owner is not a visitor |
 
 ## 3. Architecture map
 
@@ -97,9 +98,16 @@ packages/core      Pure engine. IO only via injected ports (provider/clock/rng/i
                      with regions/tags/magnitude/attractorStrength, assembled and
                      validated by scripts/build-baseline.mjs)
 apps/server        Hono. Routes + SSE, AnthropicProvider, Drizzle + better-sqlite3.
-  src/gate.ts        the spending gate (v2/M24, ADR-0005): constant-time
-                     passphrase, per-IP window, UTC-day token ledger; mounted
-                     in app.ts over provider-reaching routes only
+  src/gate.ts        the spending gate (v2/M24, ADR-0005; v2.1/M26, ADR-0006):
+                     constant-time passphrase, per-IP window, UTC-day instance
+                     ledger, per-visitor day ledger; isOwner (whose allowance
+                     this is) is a different question from isUnlocked (whether
+                     anything bars the request) and the two must not be
+                     conflated; mounted in app.ts over provider-reaching routes
+  src/metering.ts    every provider call charges both ledgers (v2.1/M26), by
+                     wrapping LLMProvider.complete rather than by each route
+                     remembering to; the caller rides an AsyncLocalStorage
+                     scope the gate opens, which survives into the SSE stream
   src/book.ts        compileBook + renderBookHtml + renderEpub (v2/M21)
   src/config.ts      env parsing (empty vars mean unset; serverless detection);
                      ANTHROPIC_API_KEY lives here and only here
@@ -177,6 +185,9 @@ pnpm dev:server             # server only (tsx watch)
 pnpm dev:web                # web only (vite)
 pnpm dev:preview            # demo mode with the server in-process (no tsx watch);
                             # used by .claude/launch.json for browser-pane previews
+pnpm dev:preview:public     # same, but wearing the public-live posture (v2.1/M26)
+                            # with a placeholder key, so the visitor-allowance and
+                            # posture UI can be looked at without a real one
 
 pnpm test                   # vitest, all packages
 pnpm typecheck              # tsc --noEmit, all packages
@@ -221,9 +232,11 @@ Per package: `pnpm --filter @uchronia/<schemas|core|server|web> <script>`.
 | `UCHRONIA_STATIC_DIR` | Serve built web app from server | unset (dev uses vite proxy) |
 | `UCHRONIA_CORS_ORIGINS` | CORS allowlist (comma-separated) | empty = same-origin only |
 | `UCHRONIA_SEED_DEMO` | Seed the showcases into an empty DB at boot | off locally; on under Vercel |
-| `UCHRONIA_ACCESS_TOKEN` | The passphrase that unlocks spending (v2/M24). **On serverless, a key WITHOUT this is refused: demo mode is forced and the key is dropped** | unset = ungated locally, demo-only on serverless |
-| `UCHRONIA_DAILY_TOKEN_BUDGET` | Tokens this instance may spend per UTC day; `0` disables | `0` locally; `2000000` on serverless |
-| `UCHRONIA_RATE_LIMIT` | Requests per minute per IP on spending routes; `0` disables | `0` locally; `20` on serverless |
+| `UCHRONIA_ACCESS_TOKEN` | The passphrase that unlocks spending (v2/M24). On serverless, a key needs this **or** `UCHRONIA_PUBLIC_LIVE`, else demo mode is forced and the key is dropped | unset = ungated locally, demo-only on serverless |
+| `UCHRONIA_PUBLIC_LIVE` | Anonymous visitors may derive on this instance's key (v2.1/M26, ADR-0006). Never inferred: it is how an owner says the spending is the public's. Turning it on turns on all three meters below | off = a key on serverless needs the passphrase |
+| `UCHRONIA_DAILY_TOKEN_BUDGET` | Tokens this instance may spend per UTC day; `0` disables | `0` locally; `2000000` when exposed (serverless or public-live) |
+| `UCHRONIA_VISITOR_TOKEN_BUDGET` | Tokens one anonymous caller may spend per UTC day (v2.1/M26); `0` disables. An unlocked session is not a visitor and is not charged against it | `150000` under public-live; `0` otherwise |
+| `UCHRONIA_RATE_LIMIT` | Requests per minute per IP on spending routes; `0` disables | `0` locally; `20` when exposed |
 
 Set-but-empty variables count as unset (a copied template can't silently disable defaults). `pnpm dev`/`dev:server` load a repo-root `.env` (real environment always wins); tests and the serverless entry never do.
 
@@ -243,6 +256,17 @@ Set-but-empty variables count as unset (a copied template can't silently disable
 - **Sensitive history**: every generation prompt embeds a sober historiographic register; no glorification of atrocity; the critic treats tonal violations as failures. README carries the speculative-fiction disclaimer.
 
 ## 8. Current status
+
+**M26 (2026-07-30, post-v2.0.0): the public-live posture.** ADR-0006 amends
+ADR-0005. A serverless key may now go live for anonymous visitors under
+`UCHRONIA_PUBLIC_LIVE=1`, metered by a per-visitor daily allowance on top of the
+existing instance ledger and rate limit; the passphrase, where one is also set,
+becomes an override rather than a door. Two things came out of building it that
+outlive the feature: metering moved from the generation route into a wrapper
+around `LLMProvider.complete`, because six other routes reach the provider and
+none of them were charging anything; and `isOwner` was split from `isUnlocked`,
+because the latter reports true whenever no passphrase is configured and would
+have metered nobody on exactly the instance that needed metering.
 
 **v2.0.0 "The Second Derivation" shipped 2026-07-30.** All thirteen milestones M13-M25 are complete; the full record, including everything deliberately not built, is in [docs/ROADMAP.md](docs/ROADMAP.md) and [CHANGELOG.md](CHANGELOG.md). In brief: **M13** honest demo mode, the live check, and the cost meter; **M14** POD Intake 2.0 and the relevance guard (the failure v2 exists for); **M15** the eval harness, the Engine Room, validator rules 10-11, fuzzing; **M16** Baseline 2.0 (203 anchors to 1578, corpus-derived retrieval specificity, the record room); **M17** the Symposium and the Court, dial axes; **M18** lives, deep time, Convergence 2.0, claims, the philology lens, rule 12; **M19** the pulse, the graft, cross-branch fates; **M20** four new artifact kinds, procedural heraldry, in-world historiography; **M21** the Book, in print HTML and EPUB; **M22** region-control claims, the map, the command palette; **M23** the archivist and the grand inquiry, every sentence pinned; **M24** the spending gate (ADR-0005) and prompt caching; **M25** three more showcases and the release.
 

@@ -109,9 +109,44 @@ silently suppressing every plate in a commissioned book.
 
 Build-time API spend so far: none (no key present yet; all work to date is mock-side).
 
+## M26: the public-live posture (2026-07-30, post-release)
+
+Not part of the M13-M25 program. It came out of the deployment being turned on:
+the owner set `ANTHROPIC_API_KEY` and `UCHRONIA_ACCESS_TOKEN` on Vercel, and
+every visitor, including the owner in a fresh browser, met a 401 at the first
+click. ADR-0005 could express "the key is mine, behind a passphrase" and had no
+way to express "the key is the public's, metered", so it treated the second
+intent as the first.
+
+**Shipped.** `UCHRONIA_PUBLIC_LIVE=1` as an explicit third posture (never
+inferred); a per-visitor UTC-day ledger keyed by forwarded IP; a per-run ceiling
+that defaults down to one visitor's allowance; the passphrase demoted from door
+to override where both are set; the posture stated in the composer and Settings
+before the first click rather than as the error answering it. ADR-0006 records
+the reasoning and the cost exposure. 11 new tests in `gate.test.ts`.
+
+**Two findings worth more than the feature.** First, metering was charging only
+`/generate`: `interpret`, `expand`, `biography`, `regenerate`, `artifacts`,
+`pulse`, `interpretations`, `schools`, `ask`, `inquiry` and `fork` all reach the
+provider and none of them touched the day's ledger. Correct enough on a
+passphrase instance where the only caller was the owner, a real hole the moment
+visitors could spend. The charge moved into a wrapper around
+`LLMProvider.complete`, which is the one place every route funnels through.
+Second, `isUnlocked` returns true whenever no passphrase is configured, so
+reusing it to decide "is this caller a visitor" metered nobody on precisely the
+instance that needed metering. The test suite caught this before it shipped;
+`isOwner` is now a separate question with a comment saying why.
+
+**NOT BUILT:** durable cross-instance ledgers. The limitation from ADR-0005
+carries over and matters more now (in-memory, per warm instance, so the
+effective cap is the configured one times the instance count). The layer that
+actually bounds the loss stays the provider-side account spend limit, which
+DEPLOY.md now tells the operator to set before enabling the posture.
+
 ## Open threads
 
-- Live-mode generation is wired, provider-unit-tested, and cost-capped, but still has not been exercised against the real API from this machine (no key present); mock parity is the tested path. First run with a key should start with one small timeline. (The structured-outputs model landmine above is fixed, which removes the known first-call blocker.)
+- Live-mode generation is wired, provider-unit-tested, and cost-capped, but still has not been exercised against the real API from this machine (no key present); mock parity is the tested path. First run with a key should start with one small timeline. (The structured-outputs model landmine above is fixed, which removes the known first-call blocker.) **M26 makes the deployment the place this gets exercised**: with the public posture on, the first real derivations will happen there, and the Engine Room plus the cost meter are the instruments for reading them.
+- M26's per-visitor metering is per IP, with everything that implies (shared NATs undercount, a rotating client evades). Accepted per ADR-0006 as a brake on casual abuse; revisit only if the deployment sees real abuse rather than in anticipation of it.
 - Per user direction on 2026-07-22, M9–M12 landed as a small number of consolidated commits instead of §11.1's 5–15-per-milestone grain (process deviation, not architectural; recorded here in lieu of an ADR).
 - Delta view lines run fork→horizon rather than fork→last-event (branch last-event years aren't in the compare-side payloads); honest but slightly generous.
 - Deferred deliberately from the 0.2 series: user-authored events/entities (Provenance already models `kind: 'user'`), tombstone deletion of single events (dense ordinals make it structural), import-as-copy on id conflict (server-side id remapping), CompareView row virtualization, PNG/SVG export of the spine, soft-delete undo for burns, and a real sub-768px mobile layout beyond the wrap/height pass.

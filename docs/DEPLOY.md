@@ -9,7 +9,8 @@ Uchronia is local-first: a single-user app holding an API key. That shapes every
 | Show someone a finished chronicle | **A static HTML export** | free | `GET /api/branches/:id/export.html` is a single self-contained file (typefaces embedded, no scripts). Attach it to a GitHub Release, send it as a file, or drop it on any static host you choose. Zero backend, zero risk. |
 | Let people *play* with the product | **Vercel (one click)** or a **Docker container**, both in mock mode | ~free tier | Vercel: import the repo, zero configuration, ephemeral playground. Docker: durable history via a `/data` volume, on Fly.io / Railway / Render / a VPS. Both default keyless. |
 | Generate real history for yourself | **Run it locally** (`pnpm dev`, or the container with `-e UCHRONIA_MOCK=0 -e ANTHROPIC_API_KEY=…`) | your tokens | The listener binds loopback and the key is yours. No gate, because there is no exposure. |
-| Let a few named people derive on your key | **Vercel with a key AND `UCHRONIA_ACCESS_TOKEN`** | your tokens, capped | The gate below. Without the passphrase variable the instance refuses to go live at all and serves the demo, which is the point. |
+| Let a few named people derive on your key | **Vercel with a key AND `UCHRONIA_ACCESS_TOKEN`** | your tokens, capped | Posture A below. Without one of the two posture variables the instance refuses to go live at all and serves the demo, which is the point. |
+| Let anyone who finds the URL derive for real | **Vercel with a key AND `UCHRONIA_PUBLIC_LIVE=1`** | your tokens, capped per visitor and per day | Posture B below. This is a public endpoint that bills you, on purpose. Set an account spend limit first. |
 
 ## Vercel
 
@@ -70,39 +71,69 @@ UCHRONIA_STATIC_DIR=apps/web/dist node apps/server/dist/index.js
 
 Or skip the bundle entirely and run `pnpm --filter @uchronia/server start` under a process manager; it is what the container does.
 
-## Going live on a public URL (v2/M24, ADR-0005)
+## Going live on a public URL (v2/M24, ADR-0005; v2.1/M26, ADR-0006)
 
-A public URL holding a real key is a public endpoint that bills you. Since M24
-the code will not let that happen by accident: **on a serverless runtime, a key
-with no `UCHRONIA_ACCESS_TOKEN` is refused.** `liveAllowed` goes false, the app
-forces demo mode, and the key is dropped from the resolved config so nothing
-downstream can reach for it. You will see full demo mode with the DEMO pill,
-exactly as before, until you configure a passphrase.
+A public URL holding a real key is a public endpoint that bills you. The code
+will not let that happen by accident: **on a serverless runtime, a key is
+refused unless you have also said how it is meant to be spent.** Absent that,
+`liveAllowed` goes false, the app forces demo mode, and the key is dropped from
+the resolved config so nothing downstream can reach for it. You will see full
+demo mode with the DEMO pill until you choose one of the two postures below.
 
-To actually go live, set both in the Vercel dashboard:
+`ANTHROPIC_API_KEY` is required for both. It enables live derivation and never
+appears in any response.
+
+### Posture A: the key is yours, behind a passphrase
+
+For letting a few named people derive on your account.
 
 | Variable | Value | What it does |
 | --- | --- | --- |
-| `ANTHROPIC_API_KEY` | your key | Enables live derivation. Never appears in any response. |
 | `UCHRONIA_ACCESS_TOKEN` | a passphrase you choose | Unlocks spending, per browser session. Compared in constant time; stored as an httpOnly cookie. |
 | `UCHRONIA_DAILY_TOKEN_BUDGET` | tokens per UTC day (default 2000000) | Hard stop for the day once reached. `0` disables. |
 | `UCHRONIA_RATE_LIMIT` | requests per minute per IP (default 20) | Brake on loops. `0` disables. |
-| `UCHRONIA_MAX_RUN_TOKENS` | tokens per run (default 3000000) | Unchanged: caps one derivation. |
+| `UCHRONIA_MAX_RUN_TOKENS` | tokens per run (default 3000000) | Caps one derivation. |
 
-Then open the site, go to Settings, and enter the passphrase once. Anonymous
-visitors keep full demo mode and every existing chronicle; only the routes that
-can reach the provider are gated. Reading, exporting, the book, the map, and
-the record room stay open to everyone.
+Open the site, go to Settings, enter the passphrase once. Anonymous visitors get
+full demo mode and every existing chronicle.
 
-**Know the limitation.** The rate limiter and the daily ledger are in-memory
-and per instance, so a cold start resets them and concurrent instances each
-count separately: the effective cap is the configured one times the number of
-warm instances. They are a brake on casual abuse, not a billing system. **Set a
-spend limit on your Anthropic account.** That is the layer that actually bounds
-your loss, and this codebase cannot set it for you.
+### Posture B: the key is the public's, metered
+
+For letting anyone who finds the URL derive for real. This is the posture that
+makes the deployed instance demonstrate the product rather than a canned copy
+of it, and it is the one that costs money.
+
+| Variable | Value | What it does |
+| --- | --- | --- |
+| `UCHRONIA_PUBLIC_LIVE` | `1` | Anonymous visitors may derive. Never inferred; you have to type it. |
+| `UCHRONIA_VISITOR_TOKEN_BUDGET` | tokens per visitor per UTC day (default 150000) | One visitor's share, keyed by forwarded IP. `0` disables. |
+| `UCHRONIA_DAILY_TOKEN_BUDGET` | tokens per UTC day (default 2000000) | The whole instance's day. This is the invoice; nobody bypasses it. |
+| `UCHRONIA_RATE_LIMIT` | requests per minute per IP (default 20) | Brake on loops. `0` disables. |
+| `UCHRONIA_MAX_RUN_TOKENS` | tokens per run (defaults to one visitor's allowance) | Keeps a single long chronicle from overshooting the allowance between gate checks. |
+| `UCHRONIA_ACCESS_TOKEN` | optional | Set it alongside and the passphrase becomes an override for you: an unlocked session spends no visitor's share. |
+
+Both postures gate only the routes that can reach the provider. Reading,
+exporting, the book, the map, and the record room stay open to everyone.
+
+**Understand the bill before turning on posture B.** At the default 2,000,000
+tokens per UTC day, expect on the order of ten to forty US dollars a day if the
+budget is actually consumed, depending on how much of the traffic runs the
+symposium. Pick the number deliberately.
+
+**Know the limitation.** The rate limiter and both ledgers are in-memory and per
+instance, so a cold start resets them and concurrent instances each count
+separately: the effective cap is the configured one times the number of warm
+instances. Per-visitor metering is per IP, with everything that implies. They
+are a brake on casual abuse, not a billing system. **Set a spend limit on your
+Anthropic account before you deploy posture B.** That is the layer that actually
+bounds your loss, and this codebase cannot set it for you.
+
+To look at either posture locally without a real key, `pnpm dev:preview:public`
+runs the app wearing posture B with a placeholder.
 
 ## What not to do
 
-- Don't put a live-mode server behind a public URL without `UCHRONIA_ACCESS_TOKEN` and an account spend limit. The code now refuses the first half of that on serverless; the second half is yours.
+- Don't put a live-mode server behind a public URL without either `UCHRONIA_ACCESS_TOKEN` or `UCHRONIA_PUBLIC_LIVE`, and in both cases an account spend limit. The code refuses the first half of that on serverless; the second half is yours.
+- Don't reach for `UCHRONIA_PUBLIC_LIVE` to fix a 401 you hit yourself. If the instance is meant to be yours, the passphrase in Settings is the answer; the public posture opens your account to everyone who finds the URL.
 - Don't serve the SQLite file from a network filesystem; WAL mode wants a local disk.
 - Don't strip the `/data` volume: the container treats history as durable state.
