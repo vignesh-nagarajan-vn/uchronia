@@ -20,3 +20,10 @@ export const LENSES = [
 
 export const Lens = z.enum(LENSES)
 export type Lens = z.infer<typeof Lens>
+
+/**
+ * What a new timeline starts with. Philology is filterable but not default:
+ * switching it on for every chronicle would promise a register most eras
+ * never speak in.
+ */
+export const DEFAULT_LENSES = LENSES.filter((l) => l !== 'philology') as readonly Lens[]

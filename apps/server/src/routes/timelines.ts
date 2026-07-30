@@ -12,8 +12,8 @@ import {
 import {
   type Branch,
   CreateTimelineRequest,
+  DEFAULT_LENSES,
   InterpretRequest,
-  LENSES,
   type PointOfDivergence,
   type Timeline,
   TimelineAggregate,
@@ -104,7 +104,7 @@ export function timelineRoutes(deps: ServerDeps): Hono {
         // unless the composer names a shorter road.
         horizonYears:
           body.horizonYears ?? defaultHorizonYears(pod.year, clock.now().getUTCFullYear()),
-        defaultLenses: body.lenses ?? [...LENSES],
+        defaultLenses: body.lenses ?? [...DEFAULT_LENSES],
         models: {
           generation: config.models.generation,
           critic: config.models.critic,

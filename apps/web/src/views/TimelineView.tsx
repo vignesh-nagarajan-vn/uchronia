@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import type { BaselineAnchor, BranchView, EntityView, EventView, Lens } from '@uchronia/schemas'
+import { LENSES } from '@uchronia/schemas'
 import { clsx } from 'clsx'
 import { motion, useReducedMotion } from 'motion/react'
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
@@ -458,33 +459,31 @@ export function TimelineView() {
           >
             all lenses
           </button>
-          {(['political', 'technological', 'cultural', 'economic', 'daily-life'] as Lens[]).map(
-            (lens) => (
-              <button
-                key={lens}
-                type="button"
-                onClick={() =>
-                  setLensSet((prev) => {
-                    const next = new Set(prev)
-                    if (next.has(lens)) next.delete(lens)
-                    else next.add(lens)
-                    return next
-                  })
-                }
-                aria-pressed={lensSet.has(lens)}
-                className={clsx(
-                  'rounded-[2px] border px-2 py-0.5 font-data text-[12px]',
-                  lensSet.has(lens) ? 'border-ink-faded text-ink' : 'border-rule text-ink-faded',
-                )}
-              >
-                <span
-                  className="mr-1.5 inline-block h-2.5 w-[3px] align-[-1px]"
-                  style={{ background: `var(--color-lens-${lens})` }}
-                />
-                {lens}
-              </button>
-            ),
-          )}
+          {LENSES.map((lens) => (
+            <button
+              key={lens}
+              type="button"
+              onClick={() =>
+                setLensSet((prev) => {
+                  const next = new Set(prev)
+                  if (next.has(lens)) next.delete(lens)
+                  else next.add(lens)
+                  return next
+                })
+              }
+              aria-pressed={lensSet.has(lens)}
+              className={clsx(
+                'rounded-[2px] border px-2 py-0.5 font-data text-[12px]',
+                lensSet.has(lens) ? 'border-ink-faded text-ink' : 'border-rule text-ink-faded',
+              )}
+            >
+              <span
+                className="mr-1.5 inline-block h-2.5 w-[3px] align-[-1px]"
+                style={{ background: `var(--color-lens-${lens})` }}
+              />
+              {lens}
+            </button>
+          ))}
           <input
             ref={searchRef}
             type="search"

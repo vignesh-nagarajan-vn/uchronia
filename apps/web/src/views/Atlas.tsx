@@ -7,7 +7,7 @@ import type {
   PodInterpretedOut,
   TimelineSummary,
 } from '@uchronia/schemas'
-import { LENSES, MECHANISMS } from '@uchronia/schemas'
+import { DEFAULT_LENSES, LENSES, MECHANISMS } from '@uchronia/schemas'
 import { useState } from 'react'
 import { Dialog, Heading, Modal, ModalOverlay } from 'react-aria-components'
 import { Link, useNavigate } from 'react-router'
@@ -27,7 +27,7 @@ export function Atlas() {
   const [court, setCourt] = useState(false)
   const [epilogue, setEpilogue] = useState(false)
   const [horizon, setHorizon] = useState(150)
-  const [lenses, setLenses] = useState<Lens[]>([...LENSES])
+  const [lenses, setLenses] = useState<Lens[]>([...DEFAULT_LENSES])
   const [burning, setBurning] = useState<TimelineSummary | null>(null)
   const [renaming, setRenaming] = useState<{ id: string; title: string } | null>(null)
   const [demoError, setDemoError] = useState<string | null>(null)

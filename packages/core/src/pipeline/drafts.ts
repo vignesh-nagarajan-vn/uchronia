@@ -104,10 +104,12 @@ export function resolveDrafts(ctx: DraftContext, drafts: DraftEvent[]): Resolved
         description: def.description,
         initialState: factsToRecord(def.initialState),
         introducedByEventId: eventId,
-        // Lives (v2/M18). The birth year defaults to the introducing event's:
-        // an actor with no stated beginning began where the record first has
-        // it. Succession points at the drafted slug, not the stored rename,
-        // because that is the name the rest of the batch used.
+        // Lives (v2/M18). An unstated birth year stays null rather than
+        // falling back to the introducing event: a person who walks into the
+        // record at forty was not born there, and a guessed year would be
+        // indistinguishable from an attested one downstream. Succession points
+        // at the drafted slug, not the stored rename, because that is the name
+        // the rest of the batch used.
         bornYear: def.bornYear ?? null,
         counterfactual: def.counterfactual ?? false,
         succeedsSlug: def.succeedsSlug ?? null,

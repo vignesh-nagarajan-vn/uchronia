@@ -18,7 +18,7 @@ The build is driven by a master prompt (mirrored expectations live throughout `d
 | **branch** | One derived history. The root branch descends from the POD; forks create child branches with structural sharing (no copying; parent-chain walk up to the fork event) |
 | **era** | A span of years on a branch; unit of generation (skeleton → expanded) |
 | **dial** | Determinism control 0–100: butterfly (contingency compounds) → railroad (structural attractors pull history back) |
-| **lens** | Register filter: political / technological / cultural / economic / daily-life |
+| **lens** | Register filter: political / technological / cultural / economic / daily-life, plus philology (v2/M18: the events that moved a name). All six are filterable; philology is the one lens a new chronicle does not switch on, because most eras never speak in it (`DEFAULT_LENSES`) |
 | **convergence** | A divergent event that rhymes back into a real-history baseline anchor; surfaced as first-class marks |
 | **disputed** | An event the critic kept flagging after bounded retries; kept, visibly marked, critic notes attached |
 | **record vs. ink** | *Record* = curated real history (Prussian blue, `provenance: curated`). *Ink* = generated content (iron-gall ink, full provenance: model, template id+version, timestamp, mock/live) |
@@ -79,7 +79,7 @@ packages/core      Pure engine. IO only via injected ports (provider/clock/rng/i
   src/ports.ts       Clock/IdGen ports (+ sequentialIdGen for deterministic tests)
   src/errors.ts      typed error taxonomy   src/rng.ts  seeded RNG
   src/baseline.ts    curated baseline loader; data/baseline.json (1578 curated anchors,
-                     3000 BC to 2024, 54 centuries, 367 in the twentieth; dataset v2
+                     4000 BC to 2024, 54 centuries, 367 in the twentieth; dataset v2
                      with regions/tags/magnitude/attractorStrength, assembled and
                      validated by scripts/build-baseline.mjs)
 apps/server        Hono. Routes + SSE, AnthropicProvider, Drizzle + better-sqlite3.
