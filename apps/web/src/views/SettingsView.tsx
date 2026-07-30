@@ -115,18 +115,20 @@ export function SettingsView() {
             </div>
           )}
 
-          {config.data?.gated && (
+          {(config.data?.gated || config.data?.publicLive) && (
             <div
               className="mt-4 rounded-[2px] border border-notice/60 bg-notice-wash px-3 py-2.5"
               data-testid="unlock-panel"
             >
               <p className="stamp font-medium tracking-[0.08em] text-notice">
-                {config.data.unlocked ? 'UNLOCKED' : 'LOCKED'}
+                {config.data.owner ? 'UNLOCKED' : config.data.publicLive ? 'PUBLIC' : 'LOCKED'}
               </p>
               <p className="mt-1 text-[14px] leading-snug">
-                {config.data.unlocked
-                  ? 'This session may spend on this instance. Deriving here costs its owner real tokens; the daily budget below is what is left today.'
-                  : 'This instance derives on somebody else’s account, so spending needs the passphrase. Everything else, including every chronicle already here, is open without it.'}
+                {config.data.owner
+                  ? 'This session may spend on this instance, without a visitor’s share. Deriving here costs its owner real tokens; the daily budget below is what is left today.'
+                  : config.data.publicLive
+                    ? 'This instance derives live for anyone, on its owner’s account and a shared daily budget. Each visitor gets a share of it; the passphrase, if you have it, lifts that share.'
+                    : 'This instance derives on somebody else’s account, so spending needs the passphrase. Everything else, including every chronicle already here, is open without it.'}
               </p>
               {config.data.dailyBudget && (
                 <p className="mt-1 font-data text-[11.5px] text-ink-faded">
@@ -134,7 +136,13 @@ export function SettingsView() {
                   {config.data.dailyBudget.limit.toLocaleString()} tokens spent
                 </p>
               )}
-              {!config.data.unlocked && (
+              {config.data.visitorBudget && (
+                <p className="mt-1 font-data text-[11.5px] text-ink-faded">
+                  your share: {config.data.visitorBudget.remaining.toLocaleString()} of{' '}
+                  {config.data.visitorBudget.limit.toLocaleString()} tokens left
+                </p>
+              )}
+              {config.data.gated && !config.data.owner && (
                 <form
                   className="mt-2 flex flex-wrap items-center gap-2"
                   onSubmit={(e) => {

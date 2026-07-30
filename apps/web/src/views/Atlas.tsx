@@ -224,6 +224,41 @@ export function Atlas() {
       </section>
 
       <section className="sheet mx-auto max-w-[680px] p-5" aria-label="compose a divergence">
+        {/*
+          The posture, stated before the first click rather than as the error
+          that answers it (v2.1/M26). Three mutually exclusive cases: canned
+          demo, live but locked behind a passphrase, live and open to visitors
+          on a shared allowance.
+        */}
+        {config.data?.mode === 'live' && !config.data.owner && !config.data.publicLive && (
+          <div
+            role="status"
+            data-testid="locked-banner"
+            className="mb-4 rounded-[2px] border border-notice/60 bg-notice-wash px-3 py-2.5"
+          >
+            <p className="stamp font-medium tracking-[0.08em] text-notice">PASSPHRASE REQUIRED</p>
+            <p className="mt-1 text-[14px] leading-snug">
+              This engine derives on someone else's account, so spending is behind a passphrase.{' '}
+              <Link to="/settings" className="text-notice underline underline-offset-4">
+                Unlock it
+              </Link>{' '}
+              to derive, or read the chronicles already on the shelf.
+            </p>
+          </div>
+        )}
+        {config.data?.mode === 'live' && config.data.publicLive && config.data.visitorBudget && (
+          <p
+            data-testid="visitor-allowance"
+            className="mb-4 font-data text-[13px] leading-snug text-ink-faded"
+          >
+            This engine derives live on a shared daily budget. Your share:{' '}
+            <span className="text-ink">
+              {Math.round(config.data.visitorBudget.remaining / 1000)}k
+            </span>{' '}
+            of {Math.round(config.data.visitorBudget.limit / 1000)}k tokens left today, resetting at
+            midnight UTC. A long horizon or a symposium spends a lot of it.
+          </p>
+        )}
         {config.data?.mode === 'demo' && (
           <div
             role="status"
