@@ -29,13 +29,21 @@ Per package: `pnpm --filter @uchronia/<name> test` (`test:watch`, `test:coverage
 
 ## Machine validator rules (each unit-tested)
 
-dates-monotonic · event-within-era · edge-endpoints-exist · entities-exist · deltas-apply · no-posthumous-mutation · plausibility-range · era-overlap · fork-normalized (+ store-level pre-fork immutability guards).
+dates-monotonic · event-within-era · edge-endpoints-exist · entities-exist · deltas-apply · no-posthumous-mutation · plausibility-range · era-overlap · fork-normalized (+ store-level pre-fork immutability guards) · tech-prerequisite (v2/M15: DAG-resolved absurdity floors; accelerated-but-plausible tech passes) · demographic-plausibility (v2/M15: no person active past a 110-year span). Advisory (warns, never drops): geographic-plausibility (keyword-inferred far-theatre jumps under a year, pre-telegraph).
+
+## Fuzzing (v2/M15, fast-check, runs in `pnpm test`)
+
+Demo intake never throws and always yields schema-valid output over arbitrary unicode (`core/src/intake.fuzz.test.ts`); arbitrary JSON documents and malformed bodies through import/create answer 4xx envelopes with no partial writes (`apps/server/src/import.fuzz.test.ts`).
+
+## Evals
+
+See [EVALS.md](EVALS.md): the 31-POD benchmark, the CI mock lane (also asserted inside `pnpm test` via `bench.test.ts`), the judged live lane, the critic A/B, and the release thresholds (the WW2 gate).
 
 ## CI
 
 GitHub Actions on push/PR to main, all in mock mode, no secrets:
 
 - **secrets** (ubuntu): `node scripts/check-secrets.mjs` - the tree and staged diff scanned for key material with matches redacted, and the `.env` ignore verified.
-- **checks** - a 2×2 matrix (ubuntu/windows × node 22/24): pnpm install → biome → typecheck → vitest → build.
+- **checks** - a 2×2 matrix (ubuntu/windows × node 22/24): pnpm install → biome → typecheck → vitest → **pnpm eval** (the mock lane: 31-POD intake benchmark, keyless) → build.
 - **vercel-shape** (ubuntu, node 22): `pnpm verify:vercel` (the fake-Vercel smoke above) plus the web build and root-`dist` mirror - the exact steps `vercel.json` runs, on the OS Vercel builds on.
 - **journey** (ubuntu): the Playwright chromium journey; traces upload as artifacts on failure.

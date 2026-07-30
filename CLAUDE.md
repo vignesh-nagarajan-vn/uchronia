@@ -32,10 +32,15 @@ The build is driven by a master prompt (mirrored expectations live throughout `d
 packages/schemas   Zod-first schemas + inferred types + fixtures (zero deps beyond zod)
   src/*.ts           one file per §3 type; llm.ts = draft shapes the LLM emits
   src/fixtures/      hand-built "Constantinople holds" world (import via @uchronia/schemas/fixtures)
+packages/evals     Eval harness (v2/M15): bench.ts (31-POD benchmark), mock lane
+                   (pnpm eval; CI + vitest), live lane + relevance judge + critic A/B
+                   (local-only, budget-capped, key-gated). Thresholds: docs/EVALS.md.
 packages/core      Pure engine. IO only via injected ports (provider/clock/rng/idgen).
   src/world.ts       World store: structural-sharing fork resolution, state replay,
                      derived entity endedness (endedEntities), in-place event replacement, guards
-  src/validator.ts   machine validator (9 pure rules incl. no-posthumous-mutation)
+  src/validator.ts   machine validator (11 pure rules: the v1 nine + tech-prerequisite
+                     DAG floors + demographic person-span; plus the advisory
+                     geographicAdvisories, warning-grade because event regions are inferred)
   src/pipeline/      run.ts (seed + era loop + convergence; abort-aware), plan.ts (era
                      spans, resume), critic.ts (dual review + cause glossary, bounded
                      revision fan-out), drafts.ts (LLM drafts→rows, batch-local slug
@@ -65,6 +70,8 @@ apps/server        Hono. Routes + SSE, AnthropicProvider, Drizzle + better-sqlit
   src/app.ts         app factory + CORS/body-limit + error→HTTP mapping (incl.
                      malformed-JSON 400); src/index.ts = listener (UCHRONIA_HOST,
                      loads repo-root .env, real env wins) + optional static serving
+  src/trace-sink.ts  Engine Room recorder: persists one row per provider call, prunes
+                     to UCHRONIA_TRACE_RUNS runs per branch
   src/vercel.ts      serverless entry: app + demo seed (inlined ledger) behind a
                      hand-rolled (req, res) bridge (Vercel invokes Node-style and
                      its helpers pre-consume POST bodies; the bridge rebuilds them),
@@ -76,7 +83,8 @@ apps/server        Hono. Routes + SSE, AnthropicProvider, Drizzle + better-sqlit
                      interpret (retrieval-grounded reading, creates nothing)+validated import+export),
                      branches (view + md/html export + leaf DELETE), generate (SSE;
                      persist-before-stream; per-branch lock; era healing; token ceiling),
-                     expand (event/era/entity + regenerate-in-place), fork, artifacts
+                     expand (event/era/entity + regenerate-in-place), fork, artifacts,
+                     traces (Engine Room: run-grouped summaries + full prompt/response)
   src/views.ts       assembleBranchView: World → BranchView
   src/exporters.ts   renderMarkdown + renderStaticHtml (self-contained, fonts embedded)
   src/db/            schema.ts (drizzle), client.ts (open+migrate), repo.ts
@@ -91,7 +99,9 @@ apps/web           Vite + React. RED THREAD interface (docs/DESIGN.md is binding
                      candidate chips, editable fields, Just-derive escape)+catalogue+
                      rename/burn dialogs+demo loader), TimelineView (virtualized spine, search, multi-lens,
                      stop control), EventDetail (prev/next, retell, copy link), Dossier,
-                     DeltaView, CompareView, ArtifactReader, SettingsView
+                     DeltaView, CompareView, ArtifactReader, SettingsView,
+                     EngineRoomView (per-branch trace inspector: runs, calls, prompt/
+                     response panes, per-call cost)
   public/            brand assets: the seal (uchronia-logo.png) + favicon set
   e2e/               journey.spec.ts: the §11.3 Playwright journey (mock mode)
 docs/              ARCHITECTURE, DATA_MODEL, GENERATION, DESIGN(+NOTES), TESTING,
@@ -136,6 +146,10 @@ pnpm verify:vercel          # build the serverless bundle, stage it as Vercel sh
                             # smoke it with real requests (CI runs this on ubuntu)
 pnpm check:secrets          # scan working tree + staged diff for key material
                             # (CI runs it; run before every push)
+pnpm eval                   # mock eval lane: 31-POD intake benchmark, keyless (CI runs it)
+pnpm eval:report            # same, and rewrite docs/evals/mock-lane.md
+pnpm eval:live              # judged live lane (LOCAL ONLY, needs key, budget-capped)
+pnpm eval:critic            # critic A/B vs seeded violations (LOCAL ONLY; --mock = plumbing)
 ```
 
 Node ≥ 22.13 (pnpm 11.16's own engine floor; `.nvmrc` pins 22.13).
@@ -154,6 +168,7 @@ Per package: `pnpm --filter @uchronia/<schemas|core|server|web> <script>`.
 | `UCHRONIA_HOST` | Listener bind interface | `127.0.0.1` (Docker image sets `0.0.0.0`) |
 | `UCHRONIA_DB` | SQLite file path | `./data/uchronia.db` (resolved absolute, logged at boot); `/tmp/uchronia.db` on serverless (Vercel/Lambda) |
 | `UCHRONIA_MAX_RUN_TOKENS` | Per-run token ceiling (live) | `3000000`; `0` disables |
+| `UCHRONIA_TRACE_RUNS` | Engine Room retention: traced runs kept per branch (`0` disables tracing) | `20`; `3` on serverless |
 | `UCHRONIA_MOCK_PACE_MS` | Mock demo pacing per event | `0` (`dev:mock` sets 250; 250 under Vercel) |
 | `UCHRONIA_STATIC_DIR` | Serve built web app from server | unset (dev uses vite proxy) |
 | `UCHRONIA_CORS_ORIGINS` | CORS allowlist (comma-separated) | empty = same-origin only |
@@ -178,7 +193,7 @@ Set-but-empty variables count as unset (a copied template can't silently disable
 
 ## 8. Current status
 
-**The v2.0.0 program ("The Second Derivation") is underway** (opened 2026-07-29): milestones M13-M25 toward the WW2 gate, tracked honestly in [docs/ROADMAP.md](docs/ROADMAP.md). Complete so far: **M13** (demo-mode honesty: mode field, DEMO pill, composer banner, notice-register tokens; `/api/live-check`; the per-model cost meter with `run.usage` frames and dated pricing estimates in `core/src/pricing.ts`; the CI-enforced secret scan; the in-process `dev:preview` launch path) and **M14** (POD Intake 2.0: `pod-interpret` grounded on retrieved anchors, the interpretation card, the on-divergence relevance guard, and Mock 2.0 - the demo WW2 gate passes). Live-only gates verify on the deployed instance, not this machine (ADR-0004): no key ever lands in this tree; demo-side gates stay enforced in CI.
+**The v2.0.0 program ("The Second Derivation") is underway** (opened 2026-07-29): milestones M13-M25 toward the WW2 gate, tracked honestly in [docs/ROADMAP.md](docs/ROADMAP.md). Complete so far: **M13** (demo-mode honesty: mode field, DEMO pill, composer banner, notice-register tokens; `/api/live-check`; the per-model cost meter with `run.usage` frames and dated pricing estimates in `core/src/pricing.ts`; the CI-enforced secret scan; the in-process `dev:preview` launch path), **M14** (POD Intake 2.0: `pod-interpret` grounded on retrieved anchors, the interpretation card, the on-divergence relevance guard, and Mock 2.0 - the demo WW2 gate passes), and **M15** (quality machinery: `packages/evals` with the 31-POD benchmark, CI mock lane, budget-capped live lane + judge, and critic A/B fixtures per [docs/EVALS.md](docs/EVALS.md); the Engine Room trace inspector end to end; validator rules 10-11 + the geographic advisory; fast-check fuzzing over intake and imports). Live-only gates verify on the deployed instance, not this machine (ADR-0004): no key ever lands in this tree; demo-side gates stay enforced in CI.
 
 **v1.0.0 (2026-07-26) = v0.1.0 + the 0.2 hardening series (2026-07-23) + the deployment-hardening pass (2026-07-26)**: all milestones M0–M12 complete, then a ~15-commit audit-driven pass (graph-fed generation, region-aware convergence, entity lifecycle/9th validator rule, dial-aware critic, generation locking + import validation + era healing, abort/usage/cost ceiling, lifecycle routes, web code-splitting, CI matrix, Docker), then a full line-by-line audit that rebuilt the Vercel chain on a prebundled function (`build:vercel` → `api/index.mjs`, with a body-reconstructing `(req, res)` bridge for the Node runtime's helpers), pinned the toolchain (Node ≥ 22.13, pnpm without corepack), moved the generation default to a structured-outputs-capable model (`claude-sonnet-5`), added the fake-Vercel smoke (`pnpm verify:vercel`, CI `vercel-shape` job), fixed a dozen audit-found bugs across core/server/web, and removed em dashes repo-wide. See [docs/ROADMAP.md](docs/ROADMAP.md) for the honest record and open threads (notably: live mode is provider-unit-tested and cost-capped but still unexercised against the real API from this machine). The Vercel deployment is live at <https://uchronia-server.vercel.app/> (confirmed 2026-07-26). The full mock-mode product works keyless: `pnpm dev:mock`, then "load the showcase chronicle" on the empty Atlas. Deployment posture: [docs/DEPLOY.md](docs/DEPLOY.md) + ADR-0003 (mock is public, live is local).
 
