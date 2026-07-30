@@ -69,3 +69,17 @@ Three formats, all server-rendered: full-timeline JSON (`GET /api/timelines/:id/
 ## Error taxonomy → HTTP
 
 `ApiError` (route-level) · `NotFoundError` → 404 · `IntegrityError`/`PreForkImmutableError` → 409 · `ZodError` → 400 · `GenerationAbortedError` → 400 · `GenerationValidationError` → 502 · `ProviderAuthError` → 503, other `ProviderError` → 502 · anything else → 500. One envelope everywhere: `{error, message, issues?}`. Mapping lives in `apps/server/src/app.ts`.
+
+## The spending gate (v2/M24, ADR-0005)
+
+`apps/server/src/gate.ts` holds three independent limits and `createApp` mounts them, in this order, over the routes that can reach the provider: a constant-time passphrase check (`UCHRONIA_ACCESS_TOKEN`, httpOnly cookie), a per-IP fixed window, and a UTC-day token ledger charged from `onUsage` as a run spends. Everything else, including every read, export, the book, the map, and the record room, is deliberately outside the gate: a locked instance is a fully readable one.
+
+The posture is decided in `config.ts`. On a serverless runtime a key with no access token sets `liveAllowed: false`, forces `mock: true`, and drops `apiKey` from the resolved config, so nothing downstream can reach for it. `/api/config` reports `gated`, `unlocked`, and the day's ledger, and never the passphrase.
+
+## Non-generation surfaces (v2/M19-M23)
+
+- `routes/pulse.ts`: the pulse, the graft, and the cross-branch fate table.
+- `routes/historiography.ts`: schools and interpretations, both fill-once.
+- `routes/ask.ts`: the archivist (persists nothing) and the grand inquiry (saves an `inquiry` artifact).
+- `book.ts`: `compileBook` is pure over the `World`; `renderBookHtml` and `renderEpub` render the same compiled book rather than reimplementing it. The EPUB is packaged by hand because the one rule that matters, the stored mimetype entry first, is exactly the rule a generic zip helper gets wrong.
+- `GET /api/arms/:slug`: procedural heraldry from `core/src/heraldry.ts`, immutable-cacheable. It is served rather than computed in the browser because `apps/web` depends on `@uchronia/schemas` only, and that direction is not negotiable.

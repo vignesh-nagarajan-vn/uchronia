@@ -177,3 +177,30 @@ drafts → [wildcards under the dial floor discarded]
 Every case that reaches a committed event leaves a `CourtRecord` (both briefs, the ruling, provenance from the judge's model), committed into the world and streamed as `court.completed`; the transcript reads on the event detail page. A case whose draft was ultimately dropped leaves no record: there is no event to bind it to.
 
 An entirely-dropped batch raises `GenerationValidationError` (fails loudly). A convergence-scan failure after the era has committed degrades to a streamed warning (the era stands, unscanned), since aborting would strand a half-finished era for resume to skip. Disputed events flow through the normal `event.accepted` SSE frame with `flags.disputed` set: the ledger shows the mark and the critic's notes travel with the event. Contested events (the symposium's marks) travel the same way.
+
+## Stages that are not the era loop (v2/M19-M23)
+
+None of these touch `runGeneration`. They are single calls (or none at all) over a branch that already exists, which is why each one is cheap enough to offer as a button.
+
+| Stage | Template | Tier | Calls | Persists |
+| --- | --- | --- | --- | --- |
+| Counterfactual pulse | `pulse` | generation | 1 | nothing |
+| Graft | (none) | - | 0 | events, edges, one era |
+| Cross-branch fates | (none) | - | 0 | nothing |
+| Historiographic schools | `historiography-schools` | generation | 1 per branch, ever | schools |
+| Event interpretations | `event-interpretation` | generation | 1 per event, ever | interpretations |
+| Ask the archivist | `archivist-ask` | generation | 1 | nothing |
+| Grand inquiry | `grand-inquiry` | generation | 1 | one `inquiry` artifact |
+| Commission the book | (none) | - | 0 | nothing |
+
+**The pulse** (`core/src/pipeline/pulse.ts`) is handed the event, the reader's flip, the state summary, the era's live pressures, and only the convergences at or after the pulsed event, since an earlier one cannot be broken by it. The prompt requires it to say when a flip changes very little: a forecast that everything changes is the same as no forecast.
+
+**The graft** (`core/src/pipeline/graft.ts`) takes the event plus everything it directly causes on its own branch, one hop. It refuses a target that is not a leaf, a target that already sees the event, and an asked-for event whose actors the target has never met. A *consequence* whose actors it has never met simply stays behind, reported as a soft conflict. Hard rules (dates, era membership, edge endpoints, entities, deltas, posthumous mutation, fork normalization) always refuse; `era-overlap` is soft, because a branch carrying material dated inside history it already wrote is the honest picture rather than a defect. Soft conflicts come back unapplied so the reader decides; `force: true` writes the transplant marked disputed with each conflict attached as a critic note.
+
+**The symposium and the court** are covered above. **Historiography** derives two or three schools from the branch's load-bearing events (disputed, convergent, or high-plausibility), then glosses any event through all of them in one call, because their disagreement is the point and writing them together is what makes them disagree about the same thing. Glosses match back to schools by name, falling back to position.
+
+**Interrogation** is documented in [DATA_MODEL.md](DATA_MODEL.md#interrogation-and-findings-v2m23). Both templates are told they may reason across the record but not add to it.
+
+## Region control (v2/M22)
+
+`era-generate` (1.6.0) may return `regionControl` for the macro-regions an era actually moved: a holder, a grip, and a note. `recordClaims` binds them to the era's closing event like the index readings. Silence means the map stands as it was, which is why a chronicle that never discussed control renders uncoloured rather than guessed.

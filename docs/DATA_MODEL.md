@@ -64,6 +64,8 @@ Implemented in `packages/core/src/world.ts`.
 
 `TimelineAggregate.claims` and `BranchView.claims` both default to `[]`, so a pre-M18 export re-imports unchanged. Storage is the `claims` table (body as JSON, indexed by branch and by event), added in migration `apps/server/drizzle/0004_curved_zodiak.sql`.
 
+**`RegionControlClaim` (v2/M22)** joined them: `region` (the same eleven-value taxonomy), `holder` (a polity's slug when it is on the roster, a plain name when it is not), `grip` (`contested` / `held` / `consolidated`), and a note. Only the map reads it, so a history that never discussed control renders an uncoloured map rather than a wrong one. Like the other bodies it hangs off the era's closing event, and therefore inherits branch visibility for free.
+
 ## Lives (v2/M18)
 
 Entities gained three stored fields, all defaulted so older rows and exports parse unchanged:
@@ -99,6 +101,8 @@ Three separate marks, three separate origins, all carried on the event and none 
 
 Every row carries `provenance`: `generated` (model, templateId, templateVersion, generatedAt, mock|live), `curated` (baseline dataset, gallery), or `user` (freeform POD text, hand-typed titles). IDs are ULIDs minted through the injected `IdGen` port (`sequentialIdGen` in tests/mock for determinism).
 
+Grafted events (v2/M19) carry `provenance: { kind: 'user' }` whatever produced their prose. A transplant is the reader's act, and keeping the original generated provenance would claim a derivation that never happened on the receiving branch.
+
 ## Baseline dataset
 
 `packages/core/data/baseline.json`: **1578 hand-curated real-history anchors** (4000 BC → 2024 CE, 54 centuries represented, 367 anchors in the twentieth century alone, every region) powering the record spine (F7), intake retrieval, convergence detection, and high-dial attractor hints. `provenance: "curated"`, never generated. The anchors speak in the original five lenses only: `philology` (v2/M18) describes drift a divergence produced, and the attested record has none.
@@ -117,3 +121,15 @@ node scripts/build-baseline.mjs <batch1.json> [batch2.json ...]
 ```
 
 It refuses to write anything unless every anchor in every batch passes: id matching `bl-kebab-case`; an integer year in [-4000, 2100] and never zero; title 1–90 characters; summary 20–260 characters; `region` in the taxonomy; `regions` 1–3 long, all in the taxonomy, and starting with the primary region; `lenses` 1–3 from the five-lens vocabulary; `tags` 1–6 lowercase kebab-case; `magnitude` an integer 1–5; `attractorStrength` a number in [0, 1]; no em dash in any string field; ids unique across all batches; and title+year unique across all batches. It then sorts by year (id breaking ties), writes the dataset with its `version: 2` header, and prints the histograms the coverage quotas are judged against: anchors per region, the 20th-century count, and any century holding fewer than two anchors (flagged `THIN`). Violations print (capped at 60) and exit nonzero with nothing written. The assembler is a fast gate, not the authority: `BaselineDataset.parse` in `packages/schemas` remains the contract, enforced at test time.
+
+## Interrogation and findings (v2/M23)
+
+`retrieveContext` (`core/src/pipeline/ask.ts`) builds one context pack for both interrogation modes. Every citable row gets a stable pin: `E<n>` for events, `A<n>` for artifacts, `C<n>` for claims. The pin appears in the prompt beside the row it names, and the answer is required to carry it in square brackets beside any factual sentence.
+
+Only pins the answer actually used come back to the client. An archivist answer is not persisted at all (a question belongs to the reader); a Grand Inquiry is, as an `inquiry` artifact carrying the thesis, the verdict, a confidence about the record rather than about the argument, the cited chain, the counter-considerations, and the resolved citations.
+
+`inquiry` is in `ARTIFACT_KINDS` because it lives on the shelf and in the export, but not in `FORGEABLE_ARTIFACT_KINDS`, which is what drives the forge buttons and the artifact route: it is saved from a thesis, not forged from an event.
+
+## Historiography (v2/M20)
+
+`HistoriographicSchool` rows are derived once per branch and reused; `Interpretation` rows hang off an event and a school. Both are branch-visible by the usual rule: schools resolve through the branch chain, interpretations through the branch's visible events. Every school carries a `blindSpot`, which is required rather than optional, because a school without one is a mood.

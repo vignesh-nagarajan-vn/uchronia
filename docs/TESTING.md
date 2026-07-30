@@ -3,7 +3,7 @@
 ## How to run
 
 ```sh
-pnpm test          # vitest across all packages (~281 tests)
+pnpm test          # vitest across all packages (333 tests)
 pnpm typecheck     # tsc --noEmit everywhere
 pnpm lint          # biome check
 pnpm e2e           # playwright mock-mode journey (boots both servers keyless)
@@ -56,3 +56,20 @@ GitHub Actions on push/PR to main, all in mock mode, no secrets:
 - **checks** - a 2×2 matrix (ubuntu/windows × node 22/24): pnpm install → biome → typecheck → vitest → **pnpm eval** (the mock lane: 31-POD intake benchmark, keyless) → build.
 - **vercel-shape** (ubuntu, node 22): `pnpm verify:vercel` (the fake-Vercel smoke above) plus the web build and root-`dist` mirror - the exact steps `vercel.json` runs, on the OS Vercel builds on.
 - **journey** (ubuntu): the Playwright chromium journey; traces upload as artifacts on failure.
+
+## v2/M19-M25 additions
+
+| Suite | What it pins |
+| --- | --- |
+| `packages/core/src/heraldry.test.ts` | Arms are deterministic per slug, obey the tincture rule (never colour on colour), and render a self-contained SVG with nothing that reaches the network. |
+| `apps/server/src/pulse.test.ts` | A pulse forecasts without writing anything, is deterministic in demo mode so the ghost preview does not flicker, and 404s an event the branch cannot see. The fate table reports one row per branch that can see the entity. |
+| `apps/server/src/graft.test.ts` | The transplant lands with user provenance in its own era; grafting onto a non-leaf, onto a branch that already sees the event, or across timelines refuses; soft conflicts come back unapplied and land disputed under `force`. Compare takes a third branch. |
+| `apps/server/src/literary.test.ts` | Every forgeable artifact kind produces its own body keyless; a telegram keeps clauses rather than sentences; the arms route is stable, immutable, and refuses a slug that is not one; schools disagree and are fill-once. |
+| `apps/server/src/book.test.ts` | The book carries frontispiece, chapters, plates, and appendices, marks the epilogue, honours the lens filter without leaving blank chapters, and drops plates on request. The EPUB is checked against the format: `mimetype` stored first at its byte offset, then spine to manifest to actual files. |
+| `apps/server/src/ask.test.ts` | Every citation resolves to a row the branch holds and its pin appears in the prose; no citation is returned that the answer did not use; the archivist persists nothing; an inquiry saves a finding with required counter-considerations. |
+| `apps/server/src/gate.test.ts` | The fail-safe direction (serverless + key + no passphrase = demo, key dropped), the passphrase compare including length, what is gated and what is not, that `/api/unlock` never lets its status become an oracle, and that the daily ledger rolls at the UTC date. |
+| `packages/schemas/src/lens.test.ts` | `philology` is filterable but never in `DEFAULT_LENSES`. |
+
+The Vercel shape check (`pnpm verify:vercel`) grew to nine: it now asserts that every showcase ledger arrives in the seeded database and that the WW2 chronicle is among them, because a missing one means esbuild dropped an inlined import.
+
+`node scripts/build-showcases.mjs` re-derives `demo/` from the demo engine. It is not part of `pnpm test`: the ledgers are committed artifacts, and regenerating them is a deliberate act.

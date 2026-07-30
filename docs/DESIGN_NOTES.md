@@ -39,3 +39,14 @@ Running log (§7.8). Newest first.
 - *2026-07-22 · tokens.* First token draft drifted warm (`#EDEAE0` paper). Rejected against §7.6's cream ban; re-anchored on the survey-map green-grey `#E8EAE3`. Dark-theme record blue lightened to `#7FA9D9` after a contrast check (7:1); the light-theme `#174A7C` fails on `#0F1420`.
 - *2026-07-22 · lens recoloring.* First instinct: tint whole event cards by lens. Rejected: color must keep meaning (red/blue are reserved; five tinted card families would out-shout both). Landed on 3px earth-tone tick-marks only.
 - *2026-07-22 · M0–M8.* No UI existed by design: DESIGN.md gated the first UI commit.
+
+## 2026-07-30, v2/M19-M25
+
+- **The pulse is drawn as a ghost.** Dashed thread-red border, unfilled: it has to read as something that has not happened, beside a ledger of things that have. Committing the fork is the only solid control in the card.
+- **The inquiry is deliberately not a period document.** It sits on the same shelf as the newspapers and letters, so it gets the app's own register instead of theirs: rules, monospace labels, a stated confidence, and a banner that says "a finding, not a document". Anything subtler and a reader would file it with the forgeries.
+- **The map says it is not a map.** Coarse polygons, no coastlines worth the name, and a caption that calls it a diagram. A stylized map that does not admit it is stylized is a lie with a legend. Grip decides opacity so contested ground reads as unsettled; a holder's tint is hashed from its name so a polity keeps its colour across eras. The data table is always rendered, never a fallback, and is what the SVG's aria-label points at.
+- **The command palette borrows no colour at all.** Kind labels in faded mono, the selected row marked by raised paper rather than a hue. It is chrome, and chrome that competes with the ledger is chrome that failed.
+- **The book keeps the ledger's typography and loses its furniture.** Rubricated numerals and the record-blue baseline note survive to print; the pills, threads, and stamps do not. Plates are set into the page with a hairline rule, because an artifact linked away to is not an illustration.
+- **Arms are shown at 72px in the dossier and 28px in the book's appendix.** The charge set was chosen for legibility at the smaller size, which is why five of the twelve are stroked rather than filled.
+- **The gate speaks in the notice register**, like the DEMO pill: it is the app talking about itself rather than about history. LOCKED and UNLOCKED are stated plainly, and the day's budget is shown as spent-of-limit rather than as a bar, because a bar invites optimism.
+
