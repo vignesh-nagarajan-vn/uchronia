@@ -3,6 +3,7 @@ import { APIUserAbortError } from '@anthropic-ai/sdk'
 import {
   GenerationAbortedError,
   ProviderResponseError,
+  ProviderUnknownError,
   type StructuredRequest,
 } from '@uchronia/core'
 import { describe, expect, it } from 'vitest'
@@ -112,6 +113,27 @@ describe('AnthropicProvider', () => {
       GenerationAbortedError,
     )
     expect(calls[0]?.signal).toBe(controller.signal)
+  })
+
+  it('names an unmapped SDK failure instead of letting it escape as an anonymous 500', async () => {
+    // The taxonomy's floor. A TypeError from inside the SDK is not an
+    // APIError, so it used to be re-thrown unchanged, bypass every mapped
+    // status, and reach the client with no code and nothing to debug from.
+    const { client } = fakeClient([new TypeError('x.y is not a function')])
+    const provider = new AnthropicProvider(CONFIG, client)
+    const error = await provider.complete(request()).catch((e: unknown) => e)
+    expect(error).toBeInstanceOf(ProviderUnknownError)
+    expect((error as ProviderUnknownError).code).toBe('provider-unknown')
+    expect((error as Error).message).toContain('TypeError: x.y is not a function')
+  })
+
+  it('never lets key material ride out on an unmapped failure', async () => {
+    const leaky = new Error(`request failed with header x-api-key: sk-${'a1B2c3D4e5F6g7H8'}`)
+    const { client } = fakeClient([leaky])
+    const provider = new AnthropicProvider(CONFIG, client)
+    const error = await provider.complete(request()).catch((e: unknown) => e)
+    expect((error as Error).message).toContain('[redacted]')
+    expect((error as Error).message).not.toContain('a1B2c3D4e5F6g7H8')
   })
 
   it('routes requests to the model matching their role', async () => {

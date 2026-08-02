@@ -93,3 +93,17 @@ export class ProviderResponseError extends ProviderError {
     super('provider-response', message, false)
   }
 }
+
+/**
+ * The floor of the taxonomy: a provider failure that is not an API error at
+ * all. An SDK-side TypeError, a helper rejecting a schema, a stream that never
+ * opened. These used to be re-thrown unchanged, which meant they bypassed
+ * every mapped status and surfaced as an anonymous 500 with nothing in the
+ * response to debug from. They are provider territory either way, so they get
+ * a code like the rest and carry the error's name and message (never a stack).
+ */
+export class ProviderUnknownError extends ProviderError {
+  constructor(message: string) {
+    super('provider-unknown', message, false)
+  }
+}

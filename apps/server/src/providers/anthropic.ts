@@ -9,6 +9,7 @@ import {
   ProviderOverloadedError,
   ProviderRateLimitError,
   ProviderResponseError,
+  ProviderUnknownError,
   type StructuredRequest,
   type StructuredResult,
 } from '@uchronia/core'
@@ -170,5 +171,26 @@ export function mapAnthropicError(error: unknown): Error {
   if (error instanceof Anthropic.APIError) {
     return new ProviderResponseError(`anthropic error ${error.status ?? '?'}: ${error.message}`)
   }
-  return error instanceof Error ? error : new Error(String(error))
+  // Anything else is still a provider failure, and returning it unchanged put
+  // it past every mapped status into the catch-all 500, where it arrived with
+  // no code and no description. Name it instead.
+  return new ProviderUnknownError(describeUnknown(error))
+}
+
+/** Longer than this is a stack that escaped into a message; nobody needs it. */
+const MAX_UNKNOWN_CHARS = 300
+
+/**
+ * `name: message` for an arbitrary throw, with anything key-shaped removed.
+ * The SDK does not echo credentials in its errors, but this string is bound
+ * for an HTTP response and the rule is that key material never leaves the
+ * server, not that it usually does not.
+ */
+function describeUnknown(error: unknown): string {
+  const described =
+    error instanceof Error ? `${error.name}: ${error.message}` : `non-error throw: ${String(error)}`
+  const redacted = described.replace(/sk-[A-Za-z0-9_-]{8,}/g, '[redacted]')
+  const clipped =
+    redacted.length > MAX_UNKNOWN_CHARS ? `${redacted.slice(0, MAX_UNKNOWN_CHARS)}…` : redacted
+  return `unmapped provider failure (${clipped})`
 }
